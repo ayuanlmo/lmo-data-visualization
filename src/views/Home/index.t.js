@@ -4,6 +4,9 @@ import TemplateView from '../../components/TemplateView/index.t'
 
 export default {
     name: 'lmo-home',
+    components:{
+        Header, TemplateView
+    },
     render(h) {
         return (
             h('div', {

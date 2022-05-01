@@ -1,4 +1,5 @@
 require('./style.t.scss');
+
 export default {
     name: 'lmo-header',
     render(h) {

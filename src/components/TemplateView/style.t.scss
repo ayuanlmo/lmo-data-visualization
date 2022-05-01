@@ -1,6 +1,11 @@
 .lmo-data_visualization_template_view {
   width: 100%;
   margin-top: 1vh;
+  overflow-y: auto;
   height: calc(100vh - (6vh + 1vh));
   background: #fff;
+
+  .lmo-visualization_template {
+    padding:1rem;
+  }
 }
