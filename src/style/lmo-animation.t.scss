@@ -1,0 +1,8 @@
+.lmo_t-enter-active, .lmo_t-leave-active {
+  transition: all .2s;
+}
+
+.lmo_t-enter, .lmo_t-leave-to {
+  transform: translateY(10%);
+  opacity: 0;
+}
