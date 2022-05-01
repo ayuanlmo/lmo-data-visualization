@@ -4,7 +4,7 @@ export default {
     name: 'lmo-edit',
     render(h) {
         return (
-            h('div', ['2'])
+            h('div', ['Edit'])
         )
     }
 }
