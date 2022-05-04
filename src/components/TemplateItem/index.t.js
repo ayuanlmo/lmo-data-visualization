@@ -8,7 +8,7 @@ export default {
                 class: 'lmo-template_item_content',
                 on: {
                     click: () => {
-                        this.$router.push('/edit')
+                        this.$router.push('/edit');
                     }
                 }
             }, [
@@ -44,9 +44,7 @@ export default {
                         ])
                     ])
                 ])
-
-
             ])
-        )
+        );
     }
-}
+};

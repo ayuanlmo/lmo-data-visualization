@@ -17,4 +17,3 @@ void function (doc) {
         }
     }).$mount(doc.getElementById('lmo-app') ?? '#lmo-app');
 }(document);
-

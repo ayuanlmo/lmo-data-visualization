@@ -21,6 +21,6 @@ module.exports = {
     },
     openSource: {
         github: 'https://ayuanlmo.cn',
-        gitee: 'https://ayuanlmo.cn',
+        gitee: 'https://ayuanlmo.cn'
     }
-}
+};

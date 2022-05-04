@@ -20,6 +20,6 @@ export default {
                     }, ['lmo-DataVisualization'])
                 ])
             ])
-        )
+        );
     }
-}
+};

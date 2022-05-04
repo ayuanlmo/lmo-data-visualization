@@ -1,6 +1,7 @@
 require('./style.t.scss');
-import Header from '../../components/Header/index.t'
-import TemplateView from '../../components/TemplateView/index.t'
+
+import Header from '../../components/Header/index.t';
+import TemplateView from '../../components/TemplateView/index.t';
 
 export default {
     name: 'lmo-home',
@@ -15,6 +16,6 @@ export default {
                 h(Header),
                 h(TemplateView)
             ])
-        )
+        );
     }
-}
+};

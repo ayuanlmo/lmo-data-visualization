@@ -20,6 +20,6 @@ export default {
                     h('router-view')
                 ])
             ])
-        )
+        );
     }
-}
+};
