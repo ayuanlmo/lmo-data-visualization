@@ -45,7 +45,6 @@ export default {
                                     class: ''
                                 }, [this.data.description])
                             ])
-
                         ])
                     ])
                 ])
