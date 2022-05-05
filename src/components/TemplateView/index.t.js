@@ -1,13 +1,10 @@
 require('./style.t.scss');
 import TemplateItem from '../TemplateItem/index.t';
+import TemplateData from "@/const/TemplateData";
+
 
 export default {
     name: 'lmo-template_view',
-    data() {
-        return {
-            templateList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        };
-    },
     render(h) {
         return (
             h('div', {
@@ -16,9 +13,13 @@ export default {
                 h('div', {
                     class: 'lmo-visualization_template'
                 }, [
-                    this.templateList.map(() => {
+                    TemplateData.map((i) => {
                         return (
-                            h(TemplateItem)
+                            h(TemplateItem, {
+                                props: {
+                                    data: i
+                                }
+                            })
                         );
                     })
                 ])

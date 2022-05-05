@@ -19,7 +19,17 @@ export default {
                     }, [
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_player'
-                        }),
+                        }, [
+                            h('div', {
+                                class: 'lmo-data_visualization_edit_preview_player_iframe_box'
+                            }, [
+                                h('iframe', {
+                                    attrs: {
+                                        src: '/DataVisualizationTemplate/Histogram/index.html'
+                                    }
+                                })
+                            ])
+                        ]),
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_table'
                         }, [
@@ -32,5 +42,5 @@ export default {
                 ])
             ])
         );
-    }
+    },
 };

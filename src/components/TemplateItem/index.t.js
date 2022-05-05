@@ -2,6 +2,11 @@ require('./style.t.scss');
 
 export default {
     name: 'lmo-template_item',
+    props: {
+        data: {
+            type: Object
+        }
+    },
     render(h) {
         return (
             h('div', {
@@ -23,7 +28,7 @@ export default {
                         }, [
                             h('img', {
                                 attrs: {
-                                    src: require('../../assets/background.jpg')
+                                    src: this.data.cover
                                 }
                             })
                         ]),
@@ -35,10 +40,10 @@ export default {
                             }, [
                                 h('div', {
                                     class: 'lmo-template_item_title'
-                                }, ['多柱状图']),
+                                }, [this.data.title]),
                                 h('div', {
                                     class: ''
-                                }, ['适用于多数据对比分析'])
+                                }, [this.data.description])
                             ])
 
                         ])

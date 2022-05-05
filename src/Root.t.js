@@ -2,6 +2,8 @@ require('./style/lmo-style.t.scss');
 require('./style/lmo-animation.t.scss');
 require('./style/lmo-default.t.scss');
 
+import '@/lib/PostMessage/index.t';
+
 export default {
     name: 'lmo-root',
     render(h) {
