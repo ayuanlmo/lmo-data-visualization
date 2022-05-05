@@ -2,9 +2,19 @@ require('./style.t.scss');
 
 import Header from '@/components/Header/index.t';
 import HotTable from '@/components/HotTable/index.t';
+import Player from '@/components/Player/index.t';
+import {mapState} from "vuex";
 
 export default {
     name: 'lmo-edit',
+    computed: {
+        ...mapState({
+            currentTemplate: state => state.appStore.currentTemplate
+        })
+    },
+    mounted() {
+        console.log(this.currentTemplate)
+    },
     render(h) {
         return (
             h('div', {
@@ -20,15 +30,11 @@ export default {
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_player'
                         }, [
-                            h('div', {
-                                class: 'lmo-data_visualization_edit_preview_player_iframe_box'
-                            }, [
-                                h('iframe', {
-                                    attrs: {
-                                        src: '/DataVisualizationTemplate/Histogram/index.html'
-                                    }
-                                })
-                            ])
+                            h(Player, {
+                                props: {
+                                    url: this.currentTemplate.url
+                                }
+                            })
                         ]),
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_table'

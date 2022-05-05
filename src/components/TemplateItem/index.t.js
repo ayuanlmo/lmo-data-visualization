@@ -13,7 +13,7 @@ export default {
                 class: 'lmo-template_item_content',
                 on: {
                     click: () => {
-                        this.$router.push('/edit');
+                        this.$emit('click', this.data)
                     }
                 }
             }, [

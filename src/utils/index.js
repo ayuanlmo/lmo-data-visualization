@@ -4,7 +4,7 @@
  * @param {Number} s 秒数
  * @return {String} 转换后的格式 eg：'00:00:00'
  * **/
-const {stringify, isObject} = require("@/utils/index");
+const {stringify} = require("@/utils/index");
 
 module.exports.formatTime = (s) => {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -24,9 +24,10 @@ module.exports.formatTime = (s) => {
  * @param {Object} data 秒数
  * @return {Boolean}
  * **/
-module.exports.isObject = (data = {}) => {
+const isObject = (data = {}) => {
     return typeof data === 'object' && Object.prototype.toString.call(data).toLowerCase() === '[object object]' && data.length;
 };
+module.exports.isObject = isObject;
 
 /**
  * @method isObject 判断是否为Object

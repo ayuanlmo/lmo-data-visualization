@@ -1,7 +1,7 @@
 require('./style.t.scss');
 import TemplateItem from '../TemplateItem/index.t';
-import TemplateData from "@/const/TemplateData";
-
+import TemplateData from "@/const/TemplateData.t";
+import {set} from '@/lib/Storage';
 
 export default {
     name: 'lmo-template_view',
@@ -18,6 +18,13 @@ export default {
                             h(TemplateItem, {
                                 props: {
                                     data: i
+                                },
+                                on: {
+                                    click: (i) => {
+                                        this.$store.commit('SET_CURRENT_TEMPLATE', i);
+                                        set('current_template', JSON.stringify(i));
+                                        this.$router.push('/edit');
+                                    }
                                 }
                             })
                         );

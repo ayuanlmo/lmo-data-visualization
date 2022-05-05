@@ -3,9 +3,15 @@ require('./style/lmo-animation.t.scss');
 require('./style/lmo-default.t.scss');
 
 import '@/lib/PostMessage/index.t';
+import {get} from '@/lib/Storage';
 
 export default {
     name: 'lmo-root',
+    created() {
+        const current_template = get('current_template');
+        if (current_template !== null)
+            this.$store.commit('SET_CURRENT_TEMPLATE', JSON.parse(current_template));
+    },
     render(h) {
         return (
             h('div', {
