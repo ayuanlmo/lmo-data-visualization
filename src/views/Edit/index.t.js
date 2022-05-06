@@ -12,9 +12,6 @@ export default {
             currentTemplate: state => state.appStore.currentTemplate
         })
     },
-    mounted() {
-        console.log(this.currentTemplate)
-    },
     render(h) {
         return (
             h('div', {
