@@ -11,10 +11,10 @@ module.exports.formatTime = (s) => {
 
     s -= 3600 * h;
     const m = Math.floor(s / 60) >= 10 ? Math.floor(s / 60) : '0' + Math.floor(s / 60);
-    
+
     s -= 60 * m;
     const sec = s >= 10 ? s : '0' + s;
-    
+
     return h + ':' + m + ':' + sec;
 };
 
@@ -27,6 +27,7 @@ module.exports.formatTime = (s) => {
 const isObject = (data = {}) => {
     return typeof data === 'object' && Object.prototype.toString.call(data).toLowerCase() === '[object object]' && data.length;
 };
+
 module.exports.isObject = isObject;
 
 /**

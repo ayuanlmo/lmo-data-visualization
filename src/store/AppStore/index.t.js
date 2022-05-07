@@ -8,4 +8,4 @@ export default {
     getters: {...getters},
     mutations: {...mutations},
     state: {...state}
-}
+};

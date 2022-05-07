@@ -9,6 +9,7 @@ export default {
     name: 'lmo-root',
     created() {
         const current_template = get('current_template');
+        
         if (current_template !== null)
             this.$store.commit('SET_CURRENT_TEMPLATE', JSON.parse(current_template));
     },

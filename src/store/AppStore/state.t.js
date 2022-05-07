@@ -5,7 +5,7 @@ export default {
         duration: 5000
     },
     currentTemplateDefaultData: {
-        csvData: '',
+        csvData: ''
     },
     currentTemplate: null
 };

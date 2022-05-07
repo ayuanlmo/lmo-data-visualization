@@ -1,4 +1,4 @@
-import * as Type from '@/const/MutationTypes.t'
+import * as Type from '@/const/MutationTypes.t';
 
 export default {
     [Type.set_current_template](state, data) {

@@ -8,6 +8,6 @@ export const Store = new Vuex.Store({
     modules: {
         appStore: {...appStore}
     }
-})
+});
 
 export default Store;

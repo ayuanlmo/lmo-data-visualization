@@ -6,4 +6,4 @@ export default [
         cover: '/DataVisualizationTemplate/Histogram/cover.png',
         description: '适用于多组数据对比分析'
     }
-]
+];
