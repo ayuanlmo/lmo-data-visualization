@@ -39,7 +39,7 @@ $color-white: #fff;
 
 //v-show replace
 .lmo_hide {
-  display: none;
+  display: none !important;
 }
 
 .lmo_theme_color_border {
