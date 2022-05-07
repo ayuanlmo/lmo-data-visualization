@@ -1,18 +1,50 @@
 void function (doc, global, echarts) {
+    // eslint-disable-next-line no-undef
+    const ChartConfig = window.chartConfig || chartConfig;
+
     const renderDom = doc.getElementById('canvas');
     const myChart = echarts.init(renderDom, null, {renderer: 'svg'});
 
     let data = '';
 
-    const setTitle = () => {
-        d3.select('.title_main').text(chartConfig.text.mainTitle.text).style('color', chartConfig.text.mainTitle.color);
-        d3.select('.title_sub').text(chartConfig.text.subTitle.text).style('color', chartConfig.text.subTitle.color);
-        d3.select('.data_source').text(chartConfig.text.dataSource.text).style('color', chartConfig.text.dataSource.color);
+    const onMessage = (msg) => {
+        const m = msg.data;
+
+        if (msg.origin === location.origin) {
+            if (m.type === 'UpdateData') {
+                ChartConfig.data = m.data;
+
+                const data = [];
+
+                ChartConfig.data.split('\r\n').map(i => {
+                    if (i !== '') {
+                        data.push(i);
+                    }
+                });
+                init(data, true);
+            }
+        }
     };
 
-    const init = (text) => {
+    window.addEventListener('message', onMessage);
+
+    const setTitle = () => {
+        d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.text.mainTitle.color);
+        d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.text.subTitle.color);
+        d3.select('.data_source').text(ChartConfig.text.dataSource.value).style('color', ChartConfig.text.dataSource.color);
+    };
+
+    const init = (text, update = false) => {
+
+        myChart && myChart.clear();
         const xAxisData = [];
         const seriesData = [];
+
+        let timer = null;
+
+        if (update) {
+            clearInterval(timer);
+        }
 
         text.forEach(i => {
             const t = i.split(',');
@@ -61,30 +93,34 @@ void function (doc, global, echarts) {
         myChart.setOption(option);
 
         let i = -1;
-        let timerDuration = chartConfig.duration / seriesData.length;
 
-        const timer = setInterval(() => {
+        const timerDuration = ChartConfig.duration / seriesData.length;
+
+        timer = setInterval(() => {
             if (i !== seriesData.length - 1) {
                 i += 1;
                 option.series.push(seriesData[i]);
-                console.log(option);
                 myChart.setOption(option);
             } else {
-                console.log('PlayEnd')
+                console.log('PlayEnd');
                 clearInterval(timer);
             }
 
-        }, 1000);
+        }, timerDuration);
     };
-    setTitle()
+
+    setTitle();
     fetch('data.csv').then(res => {
         return res.text();
     }).then(text => {
         data = text;
-        chartConfig.data = data;
-        chartConfig.defaultData = data;
-        parent.postMessage(chartConfig, location.origin);
-        init(data.split('\r\n'));
+        ChartConfig.data = data;
+        ChartConfig.defaultData = data;
+        parent.postMessage({
+            type: 'first',
+            data: ChartConfig
+        }, location.origin);
+        init(ChartConfig.data.split('\r\n'));
     });
 // eslint-disable-next-line no-undef
 }(document, window ?? global, echarts ?? window.echarts, d3 ?? window.d3);
