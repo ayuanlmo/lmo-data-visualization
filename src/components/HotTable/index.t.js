@@ -63,5 +63,9 @@ export default {
             });
             this.$refs.HotTable.hotInstance.loadData(hotTableData);
         }
+    },
+    mounted() {
+        if (this.csvData !== '')
+            this.initHotTableData();
     }
 };
