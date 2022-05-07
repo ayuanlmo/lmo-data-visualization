@@ -1,9 +1,11 @@
 require('./style.t.scss');
 
 import {mapState} from 'vuex';
+import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 
 export default {
-    name: 'lmo-config_item', computed: {
+    name: 'lmo-config_item',
+    computed: {
         ...mapState({
             currentConfigText: state => state.appStore.currentConfig.config.text
         })
@@ -61,7 +63,8 @@ export default {
                 })
             ]), h('div', {
                 class: 'lmo-data_visualization_config_item_card theme'
-            })])
+            }, [h(ThemeConfigItem)])
+            ])
         );
     },
     data() {

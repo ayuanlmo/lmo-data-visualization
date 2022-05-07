@@ -1,0 +1,36 @@
+.lmo-color_config_item {
+  .lmo-color_box {
+    display: inline-block;
+    margin-right: 1rem;
+
+    .lmo-color_box_content {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+
+      .lmo-color_box_label {
+
+      }
+
+      .lmo-color_box_option {
+        margin-left: 6px;
+      }
+    }
+  }
+}
+
+.el-color-picker__trigger {
+  border: none;
+  margin-right: 12px;
+  height: 20px;
+  width: 20px;
+  padding: 0;
+
+  .el-color-picker__empty {
+    display: none;
+  }
+
+  .el-color-picker__icon {
+    display: none;
+  }
+}
