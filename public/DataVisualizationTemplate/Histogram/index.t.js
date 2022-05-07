@@ -1,4 +1,4 @@
-void function (doc, global, echarts) {
+void function (doc, global, echarts, d3) {
     // eslint-disable-next-line no-undef
     const ChartConfig = window.chartConfig || chartConfig;
 
@@ -6,6 +6,8 @@ void function (doc, global, echarts) {
     const myChart = echarts.init(renderDom, null, {renderer: 'svg'});
 
     let data = '';
+
+    let timer = null;
 
     const onMessage = (msg) => {
         const m = msg.data;
@@ -35,15 +37,12 @@ void function (doc, global, echarts) {
     };
 
     const init = (text, update = false) => {
-
-        myChart && myChart.clear();
         const xAxisData = [];
         const seriesData = [];
 
-        let timer = null;
-
+        clearInterval(timer);
         if (update) {
-            clearInterval(timer);
+            myChart && myChart.clear();
         }
 
         text.forEach(i => {
@@ -105,7 +104,6 @@ void function (doc, global, echarts) {
                 console.log('PlayEnd');
                 clearInterval(timer);
             }
-
         }, timerDuration);
     };
 
