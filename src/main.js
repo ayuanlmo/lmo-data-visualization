@@ -3,6 +3,7 @@ import Root from './Root.t';
 import router from './router';
 import store from './store';
 import './lib/Element/index.t';
+import '@/components/Element/index.t';
 
 Vue.config.productionTip = false;
 

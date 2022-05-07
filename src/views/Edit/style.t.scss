@@ -43,3 +43,18 @@
     }
   }
 }
+
+.el-page-header {
+  height: 6vh;
+  background: #fff;
+  padding-left: 1rem;
+  line-height: 6vh;
+  border-bottom-right-radius: 0.5vw;
+  border-bottom-left-radius: 0.5vw;
+
+  .el-page-header__left {
+    &:hover {
+      color: #409EFF;
+    }
+  }
+}

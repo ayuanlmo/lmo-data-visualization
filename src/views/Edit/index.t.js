@@ -1,8 +1,8 @@
 require('./style.t.scss');
 
-import Header from '@/components/Header/index.t';
 import HotTable from '@/components/HotTable/index.t';
 import Player from '@/components/Player/index.t';
+import EditConfig from '@/components/EditConfig/index.t';
 import {mapState} from "vuex";
 
 export default {
@@ -17,7 +17,23 @@ export default {
             h('div', {
                 class: 'lmo-data_visualization_edit'
             }, [
-                h(Header),
+                h('el-page-header', {
+                    props: {
+                        content: this.currentTemplate.title ?? '模板编辑'
+                    },
+                    on: {
+                        back: () => {
+                            this.$confirm('此操作将不会保存您当前模板数据，是否继续？', '提示', {
+                                confirmButtonText: '确定',
+                                cancelButtonText: '取消',
+                                type: 'warning'
+                            }).then(() => {
+                                this.$router.replace('/');
+                            }).catch(() => {
+                            });
+                        }
+                    }
+                }),
                 h('div', {
                     class: 'lmo-data_visualization_edit_content'
                 }, [
@@ -41,7 +57,9 @@ export default {
                     ]),
                     h('div', {
                         class: 'lmo-data_visualization_edit_configure lmo_color_white_background'
-                    })
+                    }, [
+                        h(EditConfig)
+                    ])
                 ])
             ])
         );

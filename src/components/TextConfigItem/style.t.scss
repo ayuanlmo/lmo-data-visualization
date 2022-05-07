@@ -1,0 +1,30 @@
+.lmo-data_visualization_config_item {
+  display: flex;
+
+  .lmo-data_visualization_config_item_card {
+    width: 48vw;
+    height: 25vh;
+
+    &:nth-child(1) {
+      margin-right: 2.5rem;
+    }
+  }
+
+  .text {
+    .lmo-text_box {
+      display: inline-block;
+      margin-right: 1rem;
+
+      .lmo-text_content {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        width: 15vw;
+
+        .lmo-text_box_option {
+          margin-left: 6px;
+        }
+      }
+    }
+  }
+}

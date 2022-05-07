@@ -1,5 +1,5 @@
 import * as Type from '@/const/MutationTypes.t';
-import {set_current_template_text_setting} from "@/const/MutationTypes.t";
+import {PostMessage} from '@/lib/PostMessage/index.t';
 
 export default {
     [Type.set_current_template](state, data) {
@@ -9,6 +9,10 @@ export default {
         state.currentConfig.csvData = data;
     },
     [Type.set_current_template_text_setting](state, data) {
+        PostMessage({
+            type: 'UpdateTitle',
+            data: data
+        });
         state.currentConfig.config.text = data;
     }
 };

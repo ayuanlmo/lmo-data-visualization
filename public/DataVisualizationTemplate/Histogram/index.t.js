@@ -25,6 +25,10 @@ void function (doc, global, echarts, d3) {
                 });
                 init(data, true);
             }
+            if (m.type === 'UpdateTitle') {
+                ChartConfig.text = m.data;
+                setTitle();
+            }
         }
     };
 
