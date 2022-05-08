@@ -12,7 +12,6 @@ import InputNumber from "./components/InputNumber.t.jsx";
 import Slider from "./components/Slider.t.jsx";
 import Progress from "./components/Progress.t.jsx";
 import Alert from "./components/Alert.t.jsx";
-import Table from "./components/Table.t.vue";
 import Extend from "./components/Extend.t.jsx";
 
 Vue.component(Button.name, Button);
@@ -27,5 +26,4 @@ Vue.component(InputNumber.name, InputNumber);
 Vue.component(Slider.name, Slider);
 Vue.component(Progress.name, Progress);
 Vue.component(Alert.name, Alert);
-Vue.component(Table.name, Table);
 Vue.component(Extend.name, Extend);

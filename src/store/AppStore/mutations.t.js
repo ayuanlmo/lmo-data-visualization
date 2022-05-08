@@ -1,5 +1,6 @@
 import * as Type from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
+import {set_current_template_theme_colors} from "@/const/MutationTypes.t";
 
 export default {
     [Type.set_current_template](state, data) {
@@ -14,5 +15,8 @@ export default {
             data: data
         });
         state.currentConfig.config.text = data;
+    },
+    [Type.set_current_template_theme_colors](state, data) {
+        state.currentConfig.config.themeColors = data;
     }
 };

@@ -13,6 +13,7 @@ const OnMessage = (m) => {
         if (msg.type === 'first') {
             Store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', msg.data.text);
             Store.commit('SET_CURRENT_CSV_DATA', msg.data.defaultData);
+            Store.commit('SET_CURRENT_TEMPLATE_THEME_COLORS', msg.data.themeColors);
         }
     }
 };

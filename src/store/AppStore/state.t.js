@@ -2,7 +2,8 @@ export default {
     currentConfig: {
         csvData: '',
         config: {
-            text: null
+            text: null,
+            themeColors: []
         },
         duration: 5000
     },

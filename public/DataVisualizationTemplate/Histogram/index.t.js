@@ -7,6 +7,8 @@ void function (doc, global, echarts, d3) {
 
     let data = '';
 
+    let csvData = null;
+
     let timer = null;
 
     const onMessage = (msg) => {
@@ -23,11 +25,17 @@ void function (doc, global, echarts, d3) {
                         data.push(i);
                     }
                 });
+                csvData = data;
                 init(data, true);
             }
             if (m.type === 'UpdateTitle') {
                 ChartConfig.text = m.data;
                 setTitle();
+            }
+            if (m.type === 'UpdateThemeColor') {
+                ChartConfig.themeColorKey = m.data.index;
+                ChartConfig.themeColor = m.data.colors;
+                init(csvData, true);
             }
         }
     };
@@ -88,7 +96,7 @@ void function (doc, global, echarts, d3) {
                     }
                 }
             },
-            color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
+            color: ChartConfig.themeColor,
             animationDuration: 500,
             series: []
         };
@@ -118,11 +126,12 @@ void function (doc, global, echarts, d3) {
         data = text;
         ChartConfig.data = data;
         ChartConfig.defaultData = data;
+        csvData = ChartConfig.data.split('\r\n');
         parent.postMessage({
             type: 'first',
             data: ChartConfig
         }, location.origin);
-        init(ChartConfig.data.split('\r\n'));
+        init(csvData);
     });
 // eslint-disable-next-line no-undef
 }(document, window ?? global, echarts ?? window.echarts, d3 ?? window.d3);

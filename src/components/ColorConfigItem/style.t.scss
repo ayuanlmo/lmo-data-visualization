@@ -14,6 +14,32 @@
 
       .lmo-color_box_option {
         margin-left: 6px;
+
+        .lmo-theme_item_content {
+          display: inline-block;
+
+          .lmo-theme_item_box {
+            height: 18px;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            margin-right: 0.5rem;
+            margin-bottom: .5rem;
+
+            div {
+              width: 6px;
+              height: 100%;
+            }
+          }
+
+          .lmo-theme_item_box_activation_border {
+            border: 1px solid #409EFF;
+          }
+
+          .lmo-theme_item_box_default_border {
+            border: 1px solid #DCDFE6;
+          }
+        }
       }
     }
   }
