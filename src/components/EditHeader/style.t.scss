@@ -1,0 +1,41 @@
+.lmo-edit_header {
+  height: 6vh;
+  display: flex;
+  background: #fff;
+  padding-left: 1rem;
+  line-height: 6vh;
+  border-bottom-right-radius: 0.5vw;
+  border-bottom-left-radius: 0.5vw;
+  justify-content: space-between;
+  padding-right: 1rem;
+
+  .lmo-edit_header_left {
+    display: flex;
+    margin-right: 40px;
+    position: relative;
+
+    i {
+      align-self: center;
+      margin-right: 8px;
+    }
+
+    .lmo-edit_header_title {
+      font-size: .8vw;
+    }
+
+    .lmo-edit_header_sep {
+      position: relative;
+      width: 2px;
+      height: 16px;
+      background-color: #b3b3b3;
+      top: 2.1vh;
+      left: 1vw;
+    }
+    .lmo-edit_header_content{
+      margin-left: 2vw;
+      font-size: 1.05rem;
+      color: #303133;
+    }
+  }
+
+}

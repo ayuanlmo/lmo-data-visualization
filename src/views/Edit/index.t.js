@@ -3,6 +3,7 @@ require('./style.t.scss');
 import HotTable from '@/components/HotTable/index.t';
 import Player from '@/components/Player/index.t';
 import EditConfig from '@/components/EditConfig/index.t';
+import EditHeader from '@/components/EditHeader/index.t';
 import {mapState} from "vuex";
 
 export default {
@@ -17,11 +18,11 @@ export default {
             h('div', {
                 class: 'lmo-data_visualization_edit'
             }, [
-                h('el-page-header', {
-                    props: {
-                        content: this.currentTemplate.title ?? '模板编辑'
+                h(EditHeader,{
+                    props:{
+                        title:this.currentTemplate.title
                     },
-                    on: {
+                    on:{
                         back: () => {
                             this.$confirm('此操作将不会保存您当前模板数据，是否继续？', '提示', {
                                 confirmButtonText: '确定',
