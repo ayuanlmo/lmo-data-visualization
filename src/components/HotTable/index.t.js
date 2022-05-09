@@ -27,9 +27,8 @@ export default {
         );
     },
     watch: {
-        csvData(n) {
-            if (n !== '' && n !== undefined && n !== null)
-                this.initHotTableData();
+        csvData() {
+            this.initHotTableData();
         }
     },
     methods: {
@@ -56,12 +55,17 @@ export default {
             }
         },
         initHotTableData() {
-            const hotTableData = [];
+            if (this.csvData !== '' && this.csvData !== undefined && this.csvData !== null) {
+                const hotTableData = [];
 
-            this.csvData.split('\r\n').map((i) => {
-                hotTableData.push(i.split(','));
-            });
-            this.$refs.HotTable.hotInstance.loadData(hotTableData);
+                this.csvData.split('\r\n').map((i) => {
+                    hotTableData.push(i.split(','));
+                });
+                this.$refs.HotTable.hotInstance.loadData(hotTableData);
+            }
         }
+    },
+    mounted() {
+        this.initHotTableData();
     }
 };
