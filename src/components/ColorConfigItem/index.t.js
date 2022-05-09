@@ -8,8 +8,8 @@ export default {
     name: 'lmo-color_config_item',
     computed: {
         ...mapState({
-            currentConfigColor: state => state.appStore.currentConfig.config.text,
-            currentConfigThemeColor: state => state.appStore.currentConfig.config.themeColors
+            currentConfigColor: state => state.appStore.currentConfig.text,
+            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
         })
     },
     data() {
@@ -74,7 +74,6 @@ export default {
                                 }
                             }, [
                                 <el-radio-group onChange={(n) => {
-                                    console.log('sss', n);
                                     if (n === '拉伸')
                                         this.configTemplateBackground.arrange = '0% 0% / 100% 100%';
                                     if (n === '横铺')
@@ -87,7 +86,6 @@ export default {
                                     <el-radio-button label="横铺"/>
                                     <el-radio-button label="纵铺"/>
                                 </el-radio-group>,
-
                                 h('lmo-button', {
                                     style: {
                                         marginLeft: '1rem'
@@ -96,9 +94,7 @@ export default {
                                         text: '删除'
                                     },
                                     on: {
-                                        click: () => {
-                                            this.configTemplateBackground.image = '';
-                                        }
+                                        click: () => this.configTemplateBackground.image = ''
                                     }
                                 })
                             ])
@@ -254,7 +250,7 @@ export default {
                     type: 'UpdateBackground_image',
                     data: this.configTemplateBackground
                 });
-                console.log(this.configTemplateBackground);
+                this.setTemplateBackground();
             }
         }
     }

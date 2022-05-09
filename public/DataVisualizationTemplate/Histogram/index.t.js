@@ -42,6 +42,10 @@ void function (doc, global, echarts, d3) {
                 ChartConfig.background = m.data;
                 initBackground();
             }
+            parent.postMessage({
+                type: 'FullConfig',
+                data: ChartConfig
+            }, location.origin);
         }
     };
 

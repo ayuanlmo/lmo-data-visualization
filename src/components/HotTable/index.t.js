@@ -9,7 +9,7 @@ export default {
     name: 'lmo-hot-table',
     computed: {
         ...mapState({
-            csvData: state => state.appStore.currentConfig.csvData
+            csvData: state => state.appStore.currentConfig.data
         })
     },
     render(h) {
@@ -28,7 +28,7 @@ export default {
     },
     watch: {
         csvData(n) {
-            if (n !== '')
+            if (n !== '' && n !== undefined && n !== null)
                 this.initHotTableData();
         }
     },
@@ -63,9 +63,5 @@ export default {
             });
             this.$refs.HotTable.hotInstance.loadData(hotTableData);
         }
-    },
-    mounted() {
-        if (this.csvData !== '')
-            this.initHotTableData();
     }
 };

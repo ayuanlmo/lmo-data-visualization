@@ -7,7 +7,7 @@ export default {
     name: 'lmo-config_item',
     computed: {
         ...mapState({
-            currentConfigText: state => state.appStore.currentConfig.config.text
+            currentConfigText: state => state.appStore.currentConfig.text
         })
     },
     watch: {
