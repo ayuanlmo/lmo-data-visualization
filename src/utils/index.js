@@ -104,3 +104,17 @@ module.exports.decode = (code = '') => {
     }
     return str;
 };
+
+module.exports.toBase64 = (file) => {
+    return new Promise(function (r, e) {
+        const fr = new FileReader();
+
+        fr.readAsDataURL(file);
+        fr.onload = function (res) {
+            r(res.srcElement.result ?? res.target.result);
+        };
+        fr.onerror = (msg) => {
+            e(msg);
+        };
+    });
+};

@@ -40,6 +40,21 @@
             border: 1px solid #DCDFE6;
           }
         }
+
+        .lmo-upload_box {
+          width: 5vh;
+          display: inline-block;
+          height: 5vh;
+          border: 1px dashed #C0CCDA;
+          border-radius: 6px;
+          text-align: center;
+          line-height: 5vh;
+          font-size: 1.2vw;
+
+          &:hover{
+            border: 1px dashed #409EFF;
+          }
+        }
       }
     }
   }

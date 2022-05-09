@@ -3,6 +3,7 @@ void function (doc, global, echarts, d3) {
     const ChartConfig = window.chartConfig || chartConfig;
 
     const renderDom = doc.getElementById('canvas');
+    const appDom = doc.getElementById('app');
     const myChart = echarts.init(renderDom, null, {renderer: 'svg'});
 
     let data = '';
@@ -37,6 +38,10 @@ void function (doc, global, echarts, d3) {
                 ChartConfig.themeColor = m.data.colors;
                 init(csvData, true);
             }
+            if (m.type === 'UpdateBackground_image') {
+                ChartConfig.background = m.data;
+                initBackground();
+            }
         }
     };
 
@@ -46,6 +51,13 @@ void function (doc, global, echarts, d3) {
         d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.text.mainTitle.color);
         d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.text.subTitle.color);
         d3.select('.data_source').text(ChartConfig.text.dataSource.value).style('color', ChartConfig.text.dataSource.color);
+    };
+    const initBackground = () => {
+        if (ChartConfig.background.image !== '') {
+            appDom.style.background = `url(${ChartConfig.background.image}) ${ChartConfig.background.arrange}`;
+        } else {
+            appDom.style.background = ChartConfig.background.color;
+        }
     };
 
     const init = (text, update = false) => {
@@ -120,6 +132,7 @@ void function (doc, global, echarts, d3) {
     };
 
     setTitle();
+    initBackground();
     fetch('data.csv').then(res => {
         return res.text();
     }).then(text => {

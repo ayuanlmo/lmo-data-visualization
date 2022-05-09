@@ -1,0 +1,1 @@
+export const UploadImageTypes = ['image/png', 'image/jpg', 'image/gif', 'image/jpeg'];

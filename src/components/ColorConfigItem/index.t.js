@@ -2,6 +2,7 @@ require('./style.t.scss');
 
 import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
+import {UploadImageTypes} from "@const/Default.t";
 
 export default {
     name: 'lmo-color_config_item',
@@ -15,6 +16,12 @@ export default {
         return {
             configColor: {},
             configColorTemplate: null,
+            configTemplateBackground: {
+                color: '#fff',
+                image: '',
+                arrange: '0% 0% / 100% 100%'
+            },
+            templateBackgroundType: '拉伸',
             configThemeColorTemplate: null,
             themeColorIndex: '0',
             h: null
@@ -28,7 +35,76 @@ export default {
                 class: 'lmo-color_config_item'
             }, [
                 this.configColorTemplate,
-                this.configThemeColorTemplate
+                this.configThemeColorTemplate,
+                h('div', {
+                    class: 'lmo-color_box'
+                }, [
+                    h('div', {
+                        class: 'lmo-color_box_content'
+                    }, [
+                        h('div', {
+                            class: 'lmo-color_box_label',
+                            style: {
+                                width: '100px'
+                            }
+                        }, ['背景图片:']),
+                        h('div', {
+                            class: 'lmo-color_box_option',
+                            style: {
+                                display: 'flex'
+                            }
+                        }, [
+                            h('div', {
+                                class: 'lmo-color_box_option',
+                                on: {
+                                    click: this.selectFile
+                                }
+                            }, [
+                                h('div', {
+                                    class: 'lmo-upload_box lmo_cursor_pointer'
+                                }, [
+                                    h('i', {
+                                        class: 'el-icon-plus avatar-uploader-icon'
+                                    })
+                                ])
+                            ]),
+                            h('div', {
+                                style: {
+                                    marginLeft: '1rem'
+                                }
+                            }, [
+                                <el-radio-group onChange={(n) => {
+                                    console.log('sss', n);
+                                    if (n === '拉伸')
+                                        this.configTemplateBackground.arrange = '0% 0% / 100% 100%';
+                                    if (n === '横铺')
+                                        this.configTemplateBackground.arrange = '0% 0% / 100%';
+                                    if (n === '纵铺')
+                                        this.configTemplateBackground.arrange = '0% 0% / auto 100%';
+
+                                }} size={'mini'} v-model={this.templateBackgroundType}>
+                                    <el-radio-button label="拉伸"/>
+                                    <el-radio-button label="横铺"/>
+                                    <el-radio-button label="纵铺"/>
+                                </el-radio-group>,
+
+                                h('lmo-button', {
+                                    style: {
+                                        marginLeft: '1rem'
+                                    },
+                                    props: {
+                                        text: '删除'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.configTemplateBackground.image = '';
+                                        }
+                                    }
+                                })
+                            ])
+                        ])
+                    ])
+                ])
             ])
         );
     },
@@ -38,7 +114,6 @@ export default {
                 this.configColor[i] = this.currentConfigColor[i];
             });
             this.initConfigColorTemplate();
-            console.log(this.configColor);
         },
         initConfigColorTemplate(h = this.h) {
             this.configColorTemplate = [];
@@ -131,6 +206,32 @@ export default {
                     ])
                 ])
             ]);
+        },
+        setTemplateBackground() {
+            PostMessage({
+                type: 'UpdateBackground_image',
+                data: this.configTemplateBackground
+            });
+        },
+        selectFile() {
+            const i = document.createElement('input');
+
+            i.type = 'file';
+
+            i.addEventListener('change', () => {
+                const file = i.files[0];
+
+                if (UploadImageTypes.indexOf(file.type) !== -1) {
+                    if (file.size > 1024 * 1024 * 5)
+                        return this.$message.warning(`${file.name}文件过大，请不要超过5M。`);
+                    require('@utils/index').toBase64(file).then(res => {
+                        this.configTemplateBackground.image = res;
+                    });
+                } else
+                    this.$message.warning(`${file.name}是一个不受支援的文件。`);
+            });
+
+            i.click();
         }
     },
     watch: {
@@ -144,6 +245,16 @@ export default {
             deep: true,
             handler() {
                 this.initConfigThemeColorTemplate();
+            }
+        },
+        configTemplateBackground: {
+            deep: true,
+            handler() {
+                PostMessage({
+                    type: 'UpdateBackground_image',
+                    data: this.configTemplateBackground
+                });
+                console.log(this.configTemplateBackground);
             }
         }
     }
