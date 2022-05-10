@@ -10,6 +10,7 @@ export default {
     },
     [Type.set_current_csv_data](state, data) {
         state.currentConfig.csvData = data;
+        state.currentConfig.data = data;
     },
     [Type.set_current_template_text_setting](state, data) {
         PostMessage({

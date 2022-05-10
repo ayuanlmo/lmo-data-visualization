@@ -33,6 +33,14 @@
         top: 2vh;
         left: 1.5vw;
         overflow: auto;
+
+        .lmo-data_visualization_edit_preview_table_header {
+          .lmo-data_visualization_edit_preview_table_header_content {
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: end;
+          }
+        }
       }
     }
 

@@ -72,8 +72,8 @@ export default {
                                 style: {
                                     marginLeft: '1rem'
                                 },
-                                class:'lmo_hide',
-                                ref:'BackgroundOption'
+                                class: 'lmo_hide',
+                                ref: 'BackgroundOption'
                             }, [
                                 <el-radio-group v-model={this.templateBackgroundType} onChange={(n) => {
                                     if (n === '拉伸')
@@ -100,6 +100,31 @@ export default {
                                     }
                                 })
                             ])
+                        ])
+                    ])
+                ]),
+                h('div', {
+                    class: 'lmo-color_box'
+                }, [
+                    h('div', {
+                        class: 'lmo-color_box_content'
+                    }, [
+                        h('div', {
+                            class: 'lmo-color_box_label'
+                        }, ['背景颜色：']),
+                        h('div', {
+                            class: 'lmo-color_box_option'
+                        }, [
+                            h('el-color-picker', {
+                                props: {
+                                    value: this.configTemplateBackground.color
+                                },
+                                on: {
+                                    'active-change': (e) => {
+                                        this.configTemplateBackground.color = e;
+                                    }
+                                }
+                            })
                         ])
                     ])
                 ])

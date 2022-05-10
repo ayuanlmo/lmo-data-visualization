@@ -33,26 +33,28 @@ export default {
     },
     methods: {
         hotTableAfterChange(change, s) {
-            if (s === 'edit') {
-                let csvData = '';
+            if (s === 'edit')
+                this.updateData();
+        },
+        updateData(){
+            let csvData = '';
 
-                this.$refs.HotTable.hotInstance.getData().map(i => {
-                    if (i[0] !== null) {
-                        let txt = '';
+            this.$refs.HotTable.hotInstance.getData().map(i => {
+                if (i[0] !== null) {
+                    let txt = '';
 
-                        i.map(j => {
-                            if (j !== null)
-                                txt += j + ',';
-                        });
-                        txt = txt.slice(0, -1);
-                        csvData += txt + '\r\n';
-                    }
-                });
-                PostMessage({
-                    type: 'UpdateData',
-                    data: csvData
-                });
-            }
+                    i.map(j => {
+                        if (j !== null)
+                            txt += j + ',';
+                    });
+                    txt = txt.slice(0, -1);
+                    csvData += txt + '\r\n';
+                }
+            });
+            PostMessage({
+                type: 'UpdateData',
+                data: csvData
+            });
         },
         initHotTableData() {
             if (this.csvData !== '' && this.csvData !== undefined && this.csvData !== null) {
