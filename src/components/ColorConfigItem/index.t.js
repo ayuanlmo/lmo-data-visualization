@@ -71,9 +71,11 @@ export default {
                             h('div', {
                                 style: {
                                     marginLeft: '1rem'
-                                }
+                                },
+                                class:'lmo_hide',
+                                ref:'BackgroundOption'
                             }, [
-                                <el-radio-group onChange={(n) => {
+                                <el-radio-group v-model={this.templateBackgroundType} onChange={(n) => {
                                     if (n === '拉伸')
                                         this.configTemplateBackground.arrange = '0% 0% / 100% 100%';
                                     if (n === '横铺')
@@ -81,7 +83,7 @@ export default {
                                     if (n === '纵铺')
                                         this.configTemplateBackground.arrange = '0% 0% / auto 100%';
 
-                                }} size={'mini'} v-model={this.templateBackgroundType}>
+                                }} size={'mini'}>
                                     <el-radio-button label="拉伸"/>
                                     <el-radio-button label="横铺"/>
                                     <el-radio-button label="纵铺"/>
@@ -246,6 +248,7 @@ export default {
         configTemplateBackground: {
             deep: true,
             handler() {
+                this.$refs.BackgroundOption.className = this.configTemplateBackground.image === '' ? 'lmo_hide' : '';
                 PostMessage({
                     type: 'UpdateBackground_image',
                     data: this.configTemplateBackground
