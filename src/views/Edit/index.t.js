@@ -109,6 +109,9 @@ export default {
             i.addEventListener('change', () => {
                 const file = i.files[0];
 
+                if (file.type !== 'text/csv') {
+                    return this.$message.warning(`${file.name}是一个不受支持的文件`);
+                }
                 const fr = new FileReader();
 
                 fr.readAsText(file);

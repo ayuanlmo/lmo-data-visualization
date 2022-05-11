@@ -54,7 +54,8 @@ void function (doc, global, echarts, d3) {
     const setTitle = () => {
         d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.text.mainTitle.color);
         d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.text.subTitle.color);
-        d3.select('.data_source').text(ChartConfig.text.dataSource.value).style('color', ChartConfig.text.dataSource.color);
+        d3.select('.data_source').text(ChartConfig.text.dataSource.value);
+        d3.select('.from').style('color', ChartConfig.text.dataSource.color);
     };
     const initBackground = () => {
         if (ChartConfig.background.image !== '') {

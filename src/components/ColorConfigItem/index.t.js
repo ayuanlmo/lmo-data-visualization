@@ -3,6 +3,7 @@ require('./style.t.scss');
 import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {UploadImageTypes} from "@const/Default.t";
+import AnimateView from '@components/AnimateView/index.t';
 
 export default {
     name: 'lmo-color_config_item',
@@ -125,6 +126,22 @@ export default {
                                     }
                                 }
                             })
+                        ])
+                    ])
+                ]),
+                h('div', {
+                    class: 'lmo-color_box'
+                }, [
+                    h('div', {
+                        class: 'lmo-color_box_content'
+                    }, [
+                        h('div', {
+                            class: 'lmo-color_box_label'
+                        }, ['主标题动画：']),
+                        h('div', {
+                            class: 'lmo-color_box_option'
+                        }, [
+                            h(AnimateView)
                         ])
                     ])
                 ])
