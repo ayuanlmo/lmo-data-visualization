@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>柱状图</title>
+</head>
+<script src="./echarts.min.js"></script>
+<script src="./d3.js"></script>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        outline: none;
+    }
+
+    #app {
+        width: 1920px;
+        height: 1080px;
+        background: #fff;
+    }
+
+    #text {
+        width: 100%;
+        height: 135px;
+    }
+
+    #canvas {
+        width: 100%;
+        height: 945px;
+    }
+
+    .title_main {
+        font-size: 3rem;
+        position: absolute;
+        left: 10rem;
+        top: 1.2rem;
+    }
+
+    .title_sub {
+        font-size: 2rem;
+        position: absolute;
+        left: 23rem;
+        top: 2.2rem;
+    }
+
+    .from_source {
+        font-size: 2rem;
+        position: absolute;
+        right: 16rem;
+        top: 2.2rem;
+    }
+
+    .data_source {
+        font-size: 2rem;
+        position: absolute;
+        right: 10rem;
+        top: 2.2rem;
+    }
+
+    #app_mask {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 15;
+        top: 0;
+    }
+</style>
+<body>
+<div id="app">
+    <div id="text">
+        <div class="title">
+            <div class="title_main">主标题</div>
+            <div class="title_sub">副标题</div>
+        </div>
+        <div class="from">
+            <div class="from_source">数据来源：</div>
+            <div class="data_source">主标题</div>
+        </div>
+    </div>
+    <div id="canvas"></div>
+</div>
+<div id="app_mask"></div>
+</body>
+<script src="./conf.js"></script>
+<script src="./index.t.js"></script>
+</html>

@@ -3,7 +3,7 @@ module.exports = {
     appAuthor: 'ayuanlmo',
     title: 'lmo-Data-Visualization',
     dev: process.env.NODE_ENV === 'development',
-    publicPath: '/',
+    publicPath: '/lmo-data-visualization',
     build: {
         outputDir: 'dist',
         assetsDir: 'static',
