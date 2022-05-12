@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>柱状图</title>
+    <link rel="stylesheet" href="../../style/animate.min.css">
 </head>
 <script src="./echarts.min.js"></script>
 <script src="./d3.js"></script>
@@ -69,12 +70,18 @@
 <div id="app">
     <div id="text">
         <div class="title">
-            <div class="title_main">主标题</div>
-            <div class="title_sub">副标题</div>
+            <div class="title_main animated rubberBand" id="title_main">
+
+            </div>
+            <div class="title_sub">
+
+            </div>
         </div>
         <div class="from">
             <div class="from_source">数据来源：</div>
-            <div class="data_source">主标题</div>
+            <div class="data_source">
+
+            </div>
         </div>
     </div>
     <div id="canvas"></div>

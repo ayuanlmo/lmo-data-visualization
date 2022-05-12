@@ -1,6 +1,7 @@
 require('./style.t.scss');
 
 import AnimateList from '@/components/AnimateList/index.t';
+import {PostMessage} from "@lib/PostMessage/index.t";
 
 export default {
     name: 'lmo-animate_view',
@@ -32,6 +33,10 @@ export default {
                     ref: 'AnimateList',
                     on: {
                         selectAnimate: (e) => {
+                            PostMessage({
+                                type: 'UpdateAnimateName',
+                                data: e
+                            });
                             console.log(this.animateName);
                             this.animateName = e;
                         }

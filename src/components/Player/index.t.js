@@ -26,8 +26,11 @@ export default {
             ;
     },
     created() {
-        window.onresize = () => {
-            this.initPlayerView(this.$refs.playerIframeBox);
+        window.onload = () => {
+            this.initPlayerView();
+            window.onresize = () => {
+                this.initPlayerView();
+            };
         };
     },
     data() {
@@ -35,14 +38,9 @@ export default {
             iframeStyle: {}
         };
     },
-    mounted() {
-        this.$nextTick(() => {
-            this.initPlayerView(this.$refs.playerIframeBo);
-        });
-    },
     methods: {
         //计算iframe高宽 & 缩放比
-        initPlayerView(e) {
+        initPlayerView(e = this.$refs.playerIframeBox) {
             const _domHeight = e.offsetHeight;
             const _domWidth = e.offsetWidth;
 

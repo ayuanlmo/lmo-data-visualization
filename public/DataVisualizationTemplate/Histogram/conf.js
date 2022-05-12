@@ -24,6 +24,8 @@ const chartConfig = {
             show: true
         }
     },
+    titleAnimateName: 'rubberBand',
+    titleAnimateDuration: 2000,
     themeColor: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272'],
     themeColors: [
         {
@@ -104,7 +106,7 @@ const chartConfig = {
     background: {
         color: '#fff',
         image: '',
-        arrange:'0% 0% / 100% 100%'
+        arrange: '0% 0% / 100% 100%'
     },
     duration: 5000
 };

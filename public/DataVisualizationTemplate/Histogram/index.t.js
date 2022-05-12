@@ -42,6 +42,10 @@ void function (doc, global, echarts, d3) {
                 ChartConfig.background = m.data;
                 initBackground();
             }
+            if (m.type === 'UpdateAnimateName') {
+                ChartConfig.titleAnimateName = m.data;
+                init(csvData, true);
+            }
             parent.postMessage({
                 type: 'FullConfig',
                 data: ChartConfig
@@ -57,6 +61,14 @@ void function (doc, global, echarts, d3) {
         d3.select('.data_source').text(ChartConfig.text.dataSource.value);
         d3.select('.from').style('color', ChartConfig.text.dataSource.color);
     };
+    const setTitleAnimate = () => {
+        const el = document.getElementById('title_main');
+
+        el.className = `title_main animated  ${ChartConfig.titleAnimateName}`;
+        setTimeout(() => {
+            el.className = 'title_main';
+        }, ChartConfig.titleAnimateDuration);
+    };
     const initBackground = () => {
         if (ChartConfig.background.image !== '') {
             appDom.style.background = `url(${ChartConfig.background.image}) ${ChartConfig.background.arrange}`;
@@ -66,6 +78,7 @@ void function (doc, global, echarts, d3) {
     };
 
     const init = (text, update = false) => {
+        setTitleAnimate();
         const xAxisData = [];
         const seriesData = [];
 
