@@ -1,6 +1,7 @@
 require('./style.t.scss');
 
 import PreviewTemplateConf from '@/components/PreviewTemplateConf/index.t';
+import Preview from "@components/Preview";
 
 export default {
     name: 'lmo-edit_header',
@@ -15,6 +16,9 @@ export default {
             h('div', {
                 class: 'lmo-edit_header'
             }, [
+                h(Preview, {
+                    ref: 'Preview'
+                }),
                 h('div', {
                     class: 'lmo-edit_header_left'
                 }, [
@@ -53,6 +57,11 @@ export default {
                         h('lmo-button', {
                             props: {
                                 text: '😝 预览'
+                            },
+                            on: {
+                                click: () => {
+                                    this.$refs.Preview.show();
+                                }
                             }
                         })
                     ])
