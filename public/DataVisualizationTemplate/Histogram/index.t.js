@@ -62,11 +62,11 @@ void function (doc, global, echarts, d3) {
         d3.select('.from').style('color', ChartConfig.text.dataSource.color);
     };
     const setTitleAnimate = () => {
-        const el = document.getElementById('title_main');
+        const el = document.getElementById('text');
 
-        el.className = `title_main animated  ${ChartConfig.titleAnimateName}`;
+        el.className = `animated  ${ChartConfig.titleAnimateName}`;
         setTimeout(() => {
-            el.className = 'title_main';
+            el.className = '';
         }, ChartConfig.titleAnimateDuration);
     };
     const initBackground = () => {

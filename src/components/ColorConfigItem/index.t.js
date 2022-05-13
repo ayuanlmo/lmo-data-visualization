@@ -137,7 +137,7 @@ export default {
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label'
-                        }, ['主标题动画：']),
+                        }, ['标题动画：']),
                         h('div', {
                             class: 'lmo-color_box_option'
                         }, [
