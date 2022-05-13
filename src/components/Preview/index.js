@@ -45,7 +45,7 @@ export default {
             const _ = duration / 1000;
 
             this.percentage = 0;
-
+            cont = 0;
             timer = setInterval(() => {
                 if (cont === _)
                     clearInterval(timer);
@@ -61,8 +61,14 @@ export default {
     },
     data() {
         return {
-            visible: true,
+            visible: false,
             percentage: 0
         };
+    },
+    watch: {
+        visible() {
+            if (!this.visible)
+                clearInterval(timer);
+        }
     }
 };
