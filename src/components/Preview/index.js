@@ -1,6 +1,7 @@
 require('./style.t.scss');
 
 import {mapState} from "vuex";
+import {PostMessage} from "@lib/PostMessage/index.t";
 
 let timer = 0;
 
@@ -10,7 +11,8 @@ export default {
     name: 'lmo-preview',
     computed: {
         ...mapState({
-            url: state => state.appStore.currentTemplate.url
+            url: state => state.appStore.currentTemplate.url,
+            currentConfig: state => state.appStore.currentConfig
         })
     },
     render(h) {
@@ -26,7 +28,8 @@ export default {
                         h('div', {
                             class: 'lmo-preview_iframe_box'
                         }, [
-                            this.visible ? <iframe onLoad={this.play} src={this.url} frameBorder="0"></iframe> : '',
+                            this.visible ? <iframe onLoad={this.play} src={this.url + '?type=preview'}
+                                                   frameBorder="0"></iframe> : '',
                             h('div', {
                                 class: 'lmo-preview_progress_box'
                             }, [
@@ -41,7 +44,12 @@ export default {
     },
     methods: {
         play() {
-            const duration = this.$store.state.appStore.currentConfig.duration;
+            PostMessage({
+                    type: 'Preview',
+                    data: this.currentConfig
+                }
+            );
+            const duration = this.currentConfig.duration;
             const _ = duration / 1000;
 
             this.percentage = 0;

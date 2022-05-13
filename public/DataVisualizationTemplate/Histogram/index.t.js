@@ -1,6 +1,6 @@
 void function (doc, global, echarts, d3) {
     // eslint-disable-next-line no-undef
-    const ChartConfig = window.chartConfig || chartConfig;
+    let ChartConfig = window.chartConfig || chartConfig;
 
     const renderDom = doc.getElementById('canvas');
     const appDom = doc.getElementById('app');
@@ -45,6 +45,11 @@ void function (doc, global, echarts, d3) {
             if (m.type === 'UpdateAnimateName') {
                 ChartConfig.titleAnimateName = m.data;
                 init(csvData, true);
+            }
+            if(m.type === 'Preview'){
+                ChartConfig = m.data;
+                init(csvData ?? ChartConfig.data.split('\r\n'), true);
+                initBackground();
             }
             parent.postMessage({
                 type: 'FullConfig',

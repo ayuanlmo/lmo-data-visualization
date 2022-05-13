@@ -8,7 +8,7 @@ const OnMessage = (m) => {
     if (m.origin === location.origin) {
         const msg = m.data;
 
-        console.log('收到消息', msg);
+        // console.log('收到消息', msg);
 
         if (msg.type === 'first') {
             Store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', msg.data.text);

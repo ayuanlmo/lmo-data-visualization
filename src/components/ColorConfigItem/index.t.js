@@ -30,7 +30,7 @@ export default {
     },
     render(h) {
         this.h = h;
-        console.log(this.configColor);
+        // console.log(this.configColor);
         return (
             h('div', {
                 class: 'lmo-color_config_item'
