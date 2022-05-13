@@ -46,7 +46,7 @@ void function (doc, global, echarts, d3) {
                 ChartConfig.titleAnimateName = m.data;
                 init(csvData, true);
             }
-            if(m.type === 'Preview'){
+            if (m.type === 'Preview') {
                 ChartConfig = m.data;
                 init(csvData ?? ChartConfig.data.split('\r\n'), true);
                 initBackground();
@@ -163,11 +163,13 @@ void function (doc, global, echarts, d3) {
         ChartConfig.data = data;
         ChartConfig.defaultData = data;
         csvData = ChartConfig.data.split('\r\n');
-        parent.postMessage({
-            type: 'first',
-            data: ChartConfig
-        }, location.origin);
-        init(csvData);
+        if (location.search === '' || location.search.split('=')[1] !== 'preview') {
+            parent.postMessage({
+                type: 'first',
+                data: ChartConfig
+            }, location.origin);
+            init(csvData);
+        }
     });
 // eslint-disable-next-line no-undef
 }(document, window ?? global, echarts ?? window.echarts, d3 ?? window.d3);
