@@ -34,16 +34,15 @@ export default {
                                         i.animates.map((j) => {
                                             return (
                                                 h('div', {
-                                                    class: this.animateName === j ? 'select lmo-animates_box_item' : `lmo-animates_box_item`
-                                                    // class: 'lmo-animates_box_item' + 'animated ' + j + 'infinite'
+                                                    class: this.animateName === j ? 'select lmo-animates_box_item' : `lmo-animates_box_item` + ' lmo_cursor_pointer',
+                                                    on: {
+                                                        click: () => {
+                                                            this.animateName = j;
+                                                        }
+                                                    }
                                                 }, [
                                                     h('p', {
-                                                        class: `animated ${j} infinite`,
-                                                        on: {
-                                                            click: () => {
-                                                                this.animateName = j;
-                                                            }
-                                                        }
+                                                        class: `animated ${j} infinite`
                                                     }, [j])
                                                 ])
                                             );
