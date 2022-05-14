@@ -84,6 +84,7 @@ void function (doc, global, echarts, d3) {
 
     const init = (text, update = false) => {
         setTitleAnimate();
+        setTitle();
         const xAxisData = [];
         const seriesData = [];
 
