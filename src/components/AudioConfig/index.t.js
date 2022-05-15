@@ -1,5 +1,7 @@
 require('./style.t.scss');
 
+import {mapState} from "vuex";
+
 export default {
     name: 'lmo-audio_config',
     render(h) {
@@ -66,6 +68,11 @@ export default {
             ])
         );
     },
+    computed: {
+        ...mapState({
+            playState: state => state.appStore.templateCurrentAudioConfig.playState
+        })
+    },
     data() {
         return {
             audioName: '',
@@ -82,26 +89,39 @@ export default {
                 const fr = new FileReader();
 
                 this.audioName = file.name;
+                this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_NAME', this.audioName);
 
                 fr.readAsDataURL(file);
                 fr.onload = (r) => {
-                    this.$refs.audio.src = r.currentTarget.result;
-                    setTimeout(() => {
-                        this.play();
-                    }, 100);
+                    const result = r.currentTarget.result;
+
+                    this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', result);
+                    this.$refs.audio.src = result;
                 };
             });
             i.click();
         },
         play() {
-            if (this.audioName !== '')
+            if (this.audioName !== '') {
                 this.$refs.audio.play();
+            }
         },
         pause() {
             this.$refs.audio.pause();
         },
         sliderChange(e) {
+            const volume = (e / 100).toFixed(1);
+
+            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME', volume);
             this.$refs.audio.volume = (e / 100).toFixed(1);
+        }
+    },
+    watch: {
+        playState(n) {
+            if (n)
+                this.play();
+            else
+                this.pause();
         }
     }
 };

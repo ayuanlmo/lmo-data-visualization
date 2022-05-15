@@ -15,9 +15,13 @@ const OnMessage = (m) => {
             Store.commit('SET_CURRENT_CSV_DATA', msg.data.defaultData);
             Store.commit('SET_CURRENT_TEMPLATE_THEME_COLORS', msg.data.themeColors);
         }
-        if (msg.type === 'FullConfig') {
-            Store.commit('SET_CURRENT_TEMPLATE_DEFAULT_DATA',msg.data);
-        }
+        if (msg.type === 'FullConfig')
+            Store.commit('SET_CURRENT_TEMPLATE_DEFAULT_DATA', msg.data);
+        if (msg.type === 'Play')
+            Store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', true);
+        if (msg.type === 'PlayEnd')
+            Store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', false);
+
     }
 };
 

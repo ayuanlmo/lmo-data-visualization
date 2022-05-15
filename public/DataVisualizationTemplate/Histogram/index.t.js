@@ -85,6 +85,10 @@ void function (doc, global, echarts, d3) {
     const init = (text, update = false) => {
         setTitleAnimate();
         setTitle();
+        parent.postMessage({
+            type: 'Play',
+            data: 0
+        }, location.origin);
         const xAxisData = [];
         const seriesData = [];
 
@@ -150,6 +154,10 @@ void function (doc, global, echarts, d3) {
                 myChart.setOption(option);
             } else {
                 console.log('PlayEnd');
+                parent.postMessage({
+                    type: 'PlayEnd',
+                    data: 0
+                }, location.origin);
                 clearInterval(timer);
             }
         }, timerDuration);

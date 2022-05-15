@@ -7,6 +7,12 @@ export default {
         },
         duration: 5000
     },
+    templateCurrentAudioConfig: {
+        name: '',
+        volume: 1,
+        src: '',
+        playState: false
+    },
     currentTemplateDefaultData: {
         csvData: ''
     },
