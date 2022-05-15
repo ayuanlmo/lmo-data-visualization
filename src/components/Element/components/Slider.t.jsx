@@ -75,6 +75,7 @@ export default {
         return (
                 h('el-slider', {
                     props: {
+                        value: this.value,
                         min: this.min,
                         max: this.max,
                         disabled: this.disabled,

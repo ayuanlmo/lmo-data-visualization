@@ -1,6 +1,7 @@
 require('./style.t.scss');
 
 import TextConfigItem from '@/components/TextConfigItem/index.t';
+import AudioConfig from '@/components/AudioConfig/index.t';
 
 export default {
     name: 'lmo-edit_config',
@@ -53,6 +54,9 @@ export default {
                 }, [
                     h(TextConfigItem, {
                         class: this.tabsActiveName !== 'text_and_theme' ? 'lmo_hide' : ''
+                    }),
+                    h(AudioConfig, {
+                        class: this.tabsActiveName !== 'audio_and_duration' ? 'lmo_hide' : ''
                     })
                 ])
             ])

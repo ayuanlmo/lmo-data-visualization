@@ -1,0 +1,63 @@
+.lmo-audio_config {
+  display: flex;
+  position: relative;
+
+  .lmo-audio_config_left {
+    width: 48vw;
+    //background-color: red;
+    margin-right: 2.5rem;
+
+    .lmo-audio_config_left_audio_box {
+
+      .lmo-audio_config_left_audio_bg_box {
+        display: flex;
+
+      }
+
+      .lmo-audio_controller_slider {
+        width: 15.5vw;
+        margin-left: 2.4vh;
+      }
+
+      .lmo-audio_config_left_audio_controller {
+        display: flex;
+      }
+
+      .lmo-audio_box_label {
+
+      }
+
+      .lmo-audio_content {
+        width: 15vw;
+        height: 6vh;
+        background-color: #F5F5F5;
+        margin-left: 1rem;
+        border-radius: 8px;
+        display: flex;
+        padding: .5rem;
+        justify-content: space-between;
+
+        .lmo-audio_content_label {
+          line-height: 6vh;
+        }
+
+        .lmo-audio_content_label_no_audio {
+          color: #d7d7d7;
+        }
+
+        .lmo-audio_content_icon {
+          width: 2.5vw;
+          margin-top: .5vh;
+
+          img {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .lmo-audio_config_right {
+    width: 48vw;
+  }
+}
