@@ -1,5 +1,4 @@
 .lmo-audio_config {
-  display: flex;
   position: relative;
 
   .lmo-audio_config_left {
@@ -10,7 +9,6 @@
     .lmo-audio_config_left_audio_box {
 
       .lmo-audio_config_left_audio_bg_box {
-        display: flex;
 
       }
 
@@ -20,7 +18,7 @@
       }
 
       .lmo-audio_config_left_audio_controller {
-        display: flex;
+
       }
 
       .lmo-audio_box_label {

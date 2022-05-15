@@ -7,7 +7,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-audio_config'
+                class: 'lmo-audio_config lmo_flex_box'
             }, [
                 h('div', {
                     class: 'lmo-audio_config_left'
@@ -16,7 +16,7 @@ export default {
                         class: 'lmo-audio_config_left_audio_box'
                     }, [
                         h('div', {
-                            class: 'lmo-audio_config_left_audio_bg_box'
+                            class: 'lmo-audio_config_left_audio_bg_box lmo_flex_box'
                         }, [
                             h('div', {
                                 class: 'lmo-audio_box_label'
@@ -24,7 +24,9 @@ export default {
                             h('div', {
                                 class: 'lmo-audio_content lmo_cursor_pointer',
                                 on: {
-                                    click: this.selectAudio
+                                    click: this.selectAudio,
+                                    mouseover: this.play,
+                                    mouseout: this.pause
                                 }
                             }, [
                                 h('div', {
@@ -33,7 +35,7 @@ export default {
                                     this.audioName === '' ? '暂无音频' : this.audioName
                                 ]),
                                 h('div', {
-                                    class: 'lmo-audio_content_icon'
+                                    class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon'
                                 }, [
                                     h('img', {
                                         attrs: {
@@ -45,7 +47,7 @@ export default {
                             ])
                         ]),
                         h('div', {
-                            class: 'lmo-audio_config_left_audio_controller'
+                            class: 'lmo-audio_config_left_audio_controller lmo_flex_box'
                         }, [
                             h('div', {
                                 class: 'lmo-audio_box_label'
@@ -76,7 +78,8 @@ export default {
     data() {
         return {
             audioName: '',
-            audioVolume: 100
+            audioVolume: 100,
+            audioPlay: false
         };
     },
     methods: {
@@ -103,10 +106,12 @@ export default {
         },
         play() {
             if (this.audioName !== '') {
+                this.audioPlay = true;
                 this.$refs.audio.play();
             }
         },
         pause() {
+            this.audioPlay = false;
             this.$refs.audio.pause();
         },
         sliderChange(e) {
