@@ -75,8 +75,10 @@ export default {
     },
     watch: {
         visible() {
-            if (!this.visible)
+            if (!this.visible) {
+                this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', false);
                 clearInterval(timer);
+            }
         }
     }
 };
