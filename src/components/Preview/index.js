@@ -17,7 +17,9 @@ export default {
     },
     render(h) {
         return (
-            <el-dialog style={'background-color: #f5f5f5;'} title={'预览'} visible={this.visible} width={'1000px'}
+            <el-dialog style={{
+                'background-color': '#f5f5f5'
+            }} title={'预览'} visible={this.visible} width={'1000px'}
                        fullscreen={false} top={'5vh'} before-close={() => {
                 this.visible = false;
             }}>
@@ -26,21 +28,11 @@ export default {
                         class: 'lmo-preview'
                     }, [
                         h('div', {
-                            class: 'lmo-preview_iframe_box'
-                        }, [
-                            this.visible ? <iframe onLoad={this.play} src={this.url + '?type=preview'}
-                                                   frameBorder="0"></iframe> : '',
-                            h('div', {
-                                class: 'lmo-preview_progress_box'
-                            }, [
-                                <el-progress show-text={false} text-inside={true}
-                                             percentage={this.percentage}></el-progress>
-                            ])
-                        ]),
-                        h('div', {
                             class: [
-                                'lmo-preview_mask',
-                                this.playState ? 'lmo_hide' : ''
+                                {
+                                    'lmo-preview_mask': true,
+                                    'lmo_hide': this.playState
+                                }
                             ]
                         }, [
                             h('p', [
@@ -60,6 +52,18 @@ export default {
                                     }
                                 })
                             ])
+                        ]),
+                        h('div', {
+                            class: 'lmo-preview_iframe_box'
+                        }, [
+                            this.visible ? <iframe onLoad={this.play} src={this.url + '?type=preview'}
+                                                   frameBorder="0"/> : '',
+                            h('div', {
+                                class: 'lmo-preview_progress_box'
+                            }, [
+                                <el-progress show-text={false} text-inside={true}
+                                             percentage={this.percentage}/>
+                            ])
                         ])
                     ])
                 }
@@ -68,13 +72,13 @@ export default {
     },
     methods: {
         play() {
+            this.playState = true;
             PostMessage({
                     type: 'Preview',
                     data: this.currentConfig
                 }
             );
             clearInterval(timer);
-            this.playState = true;
             const duration = this.currentConfig.duration;
             const _ = duration / 1000;
 
