@@ -36,6 +36,30 @@ export default {
                                 <el-progress show-text={false} text-inside={true}
                                              percentage={this.percentage}></el-progress>
                             ])
+                        ]),
+                        h('div', {
+                            class: [
+                                'lmo-preview_mask',
+                                this.playState ? 'lmo_hide' : ''
+                            ]
+                        }, [
+                            h('p', [
+                                h('img', {
+                                    class: 'lmo_cursor_pointer',
+                                    attrs: {
+                                        src: require('@static/svg/play.svg')
+                                    },
+                                    on: {
+                                        click: () => {
+                                            postMessage({
+                                                type: 'Play',
+                                                data: {}
+                                            });
+                                            this.play();
+                                        }
+                                    }
+                                })
+                            ])
                         ])
                     ])
                 }
@@ -49,15 +73,18 @@ export default {
                     data: this.currentConfig
                 }
             );
+            clearInterval(timer);
+            this.playState = true;
             const duration = this.currentConfig.duration;
             const _ = duration / 1000;
 
             this.percentage = 0;
             cont = 0;
             timer = setInterval(() => {
-                if (cont === _)
+                if (cont === _) {
+                    this.playState = false;
                     clearInterval(timer);
-                else {
+                } else {
                     cont += 1;
                     this.percentage += 100 / duration * 1000;
                 }
@@ -70,7 +97,8 @@ export default {
     data() {
         return {
             visible: false,
-            percentage: 0
+            percentage: 0,
+            playState: false
         };
     },
     watch: {
