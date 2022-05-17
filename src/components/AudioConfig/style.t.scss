@@ -23,6 +23,7 @@
 
       .lmo-audio_box_label {
 
+
       }
 
       .lmo-audio_content {
@@ -57,5 +58,19 @@
 
   .lmo-audio_config_right {
     width: 48vw;
+
+    .lmo_video_config_right_item {
+      margin-bottom: 1rem;
+      .el-radio-group {
+        margin-left: 1rem;
+      }
+
+      .lmo-video_box_label {
+        i {
+          color: #E6A23C;
+        }
+      }
+    }
+
   }
 }

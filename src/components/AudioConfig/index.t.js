@@ -66,7 +66,60 @@ export default {
                 ]),
                 h('div', {
                     class: 'lmo-audio_config_right'
-                }, [])
+                }, [
+                    h('div', {
+                        class: 'lmo_video_config_right_item lmo_flex_box'
+                    }, [
+                        h('div', {
+                            class: 'lmo-video_box_label'
+                        }, [
+                            h('el-tooltip', {
+                                props: {
+                                    content: '帧率越高，合成时间越久。'
+                                }
+                            }, [
+                                h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
+                            ]),
+                            '合成帧率:'
+                        ]),
+                        h('div', {
+                            class: 'lmo-audio_controller_slide'
+                        }, [
+                            <el-radio-group v-model={this.videoConf.video.fps}>
+                                <el-radio-button label="30"></el-radio-button>
+                                <el-radio-button label="60"></el-radio-button>
+                                <el-radio-button label="90"></el-radio-button>
+                            </el-radio-group>
+                        ])
+                    ]),
+                    h('div', {
+                        class: 'lmo_video_config_right_item lmo_flex_box'
+                    }, [
+                        h('div', {
+                            class: 'lmo-video_box_label'
+                        }, [
+                            h('el-tooltip', {
+                                props: {
+                                    content: '单位：(秒)'
+                                }
+                            }, [
+                                h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
+                            ]),
+                            '持续时间'
+                        ]),
+                        h('div', {
+                            class: 'lmo-audio_controller_slide'
+                        }, [
+                            <el-radio-group v-model={this.videoConf.video.duration}>
+                                <el-radio-button label="5"></el-radio-button>
+                                <el-radio-button label="10"></el-radio-button>
+                                <el-radio-button label="20"></el-radio-button>
+                                <el-radio-button label="30"></el-radio-button>
+                                <el-radio-button label="60"></el-radio-button>
+                            </el-radio-group>
+                        ])
+                    ])
+                ])
             ])
         );
     },
@@ -79,7 +132,17 @@ export default {
         return {
             audioName: '',
             audioVolume: 100,
-            audioPlay: false
+            audioPlay: false,
+            videoConf: {
+                audio: {
+                    name: this.audioName,
+                    volume: (this.audioVolume / 100).toFixed(1)
+                },
+                video: {
+                    fps: '30',
+                    duration: 5000
+                }
+            }
         };
     },
     methods: {
