@@ -1,11 +1,5 @@
 import * as Type from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {
-    set_template_current_audio_config_name,
-    set_template_current_audio_config_play_state,
-    set_template_current_audio_config_src,
-    set_template_current_audio_config_volume
-} from "@/const/MutationTypes.t";
 
 export default {
     [Type.set_current_template_default_data](state, data) {
@@ -39,5 +33,12 @@ export default {
     },
     [Type.set_template_current_audio_config_play_state](state, data) {
         state.templateCurrentAudioConfig.playState = data;
+    },
+    [Type.set_template_current_duration](state, data) {
+        PostMessage({
+            type: 'UpdateDuration',
+            data: data * 1000
+        });
+        state.currentConfig.duration = data * 1000;
     }
 };

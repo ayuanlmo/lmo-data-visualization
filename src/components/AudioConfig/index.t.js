@@ -111,7 +111,7 @@ export default {
                             class: 'lmo-audio_controller_slide'
                         }, [
                             <el-radio-group onChange={(e) => {
-                                console.log('变化', e);
+                                this.$store.commit('SET_TEMPLATE_CURRENT_DURATION', e);
                             }} v-model={this.videoConf.video.duration}>
                                 <el-radio-button label="5"></el-radio-button>
                                 <el-radio-button label="10"></el-radio-button>

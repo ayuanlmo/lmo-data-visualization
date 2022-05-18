@@ -55,6 +55,11 @@ void function (doc, global, echarts, d3) {
                 init(csvData ?? ChartConfig.data.split('\r\n'), true);
                 initBackground();
             }
+            if (m.type === 'UpdateDuration') {
+                ChartConfig.duration = m.data;
+                init(csvData ?? ChartConfig.data.split('\r\n'), true);
+                initBackground();
+            }
             parent.postMessage({
                 type: 'FullConfig',
                 data: ChartConfig
