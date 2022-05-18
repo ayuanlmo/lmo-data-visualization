@@ -105,12 +105,14 @@ export default {
                             }, [
                                 h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
                             ]),
-                            '持续时间'
+                            '持续时间:'
                         ]),
                         h('div', {
                             class: 'lmo-audio_controller_slide'
                         }, [
-                            <el-radio-group v-model={this.videoConf.video.duration}>
+                            <el-radio-group onChange={(e) => {
+                                console.log('变化', e);
+                            }} v-model={this.videoConf.video.duration}>
                                 <el-radio-button label="5"></el-radio-button>
                                 <el-radio-button label="10"></el-radio-button>
                                 <el-radio-button label="20"></el-radio-button>
@@ -140,7 +142,7 @@ export default {
                 },
                 video: {
                     fps: '30',
-                    duration: 5000
+                    duration: 5
                 }
             }
         };

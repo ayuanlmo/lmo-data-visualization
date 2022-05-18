@@ -52,7 +52,7 @@ export default {
                             );
                         })
                     ])
-                },
+                }
                 {
                     h('span', {
                         slot: 'footer'
