@@ -3,6 +3,13 @@
     display: inline-block;
     margin-right: 1rem;
 
+    .el-color-picker__trigger {
+      height: 18px;
+      width: 18px;
+      position: relative;
+      top: 2px;
+    }
+
     .lmo-color_box_content {
       display: flex;
       justify-content: space-between;
@@ -51,7 +58,7 @@
           line-height: 5vh;
           font-size: 1.2vw;
 
-          &:hover{
+          &:hover {
             border: 1px dashed #409EFF;
           }
         }
