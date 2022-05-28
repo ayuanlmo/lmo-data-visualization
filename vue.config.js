@@ -8,6 +8,7 @@ const resolve = (dir) => {
 };
 
 require('./src/lib/CliColor/index.t');
+
 module.exports = {
     outputDir: AppConfig.build.outputDir,
     assetsDir: AppConfig.build.assetsDir,
@@ -62,5 +63,23 @@ module.exports = {
         conf.resolve.alias.set('@style', resolve('src/style'));
         conf.resolve.alias.set('@views', resolve('src/views'));
         conf.resolve.alias.set('@utils', resolve('src/utils'));
+    },
+    devServer:{
+        proxy:{
+            '/connectSocket':{
+                target:'http://localhost:3000/connect/',
+                ws:true,
+                pathRewrite: {
+                    '^/connectSocket': ''
+                }
+            },
+            '/server':{
+                target:'http://localhost:3000/',
+                ws:false,
+                pathRewrite: {
+                    '^/server': ''
+                }
+            }
+        }
     }
 };

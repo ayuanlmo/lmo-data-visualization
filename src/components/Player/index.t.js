@@ -18,7 +18,7 @@ export default {
                 h('iframe', {
                     style: this.iframeStyle,
                     attrs: {
-                        src: this.url
+                        src: `/server${this.url}`
                     }
                 })
             ])

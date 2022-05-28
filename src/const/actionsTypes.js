@@ -1,0 +1,1 @@
+export const get_template_list = 'GET_TEMPLATE_LIST';

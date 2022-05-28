@@ -1,10 +1,19 @@
 require('./style.t.scss');
 import TemplateItem from '../TemplateItem/index.t';
-import TemplateData from "@/const/TemplateData.t";
 import {set} from '@/lib/Storage';
 
 export default {
     name: 'lmo-template_view',
+    data() {
+        return {
+            TemplateData: []
+        };
+    },
+    mounted() {
+        this.$store.dispatch('GET_TEMPLATE_LIST').then(res => {
+            this.TemplateData = res.data.list;
+        });
+    },
     render(h) {
         return (
             h('div', {
@@ -13,7 +22,7 @@ export default {
                 h('div', {
                     class: 'lmo-visualization_template'
                 }, [
-                    TemplateData.map((i) => {
+                    this.TemplateData.map((i) => {
                         return (
                             h(TemplateItem, {
                                 props: {

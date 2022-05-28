@@ -1,0 +1,1 @@
+export const get_template_data = '/server/api/getTemplate/';

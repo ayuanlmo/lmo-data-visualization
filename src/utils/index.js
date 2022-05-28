@@ -18,6 +18,16 @@ module.exports.formatTime = (s) => {
     return h + ':' + m + ':' + sec;
 };
 
+module.exports.getWsUrl = (url = location.origin ?? global.location.origin) => {
+    const urls = url.split(':');
+
+    if (urls[0].indexOf('http') !== -1)
+        return urls[0] === 'https' ? `wss:${urls[1]}` : `ws:${urls[1]}`;
+    else if (urls[0] === 'wss' || urls[0] === 'ws')
+        return url;
+    return '';
+};
+
 /**
  * @method isObject 判断是否为Object
  * @author ayuanlmo

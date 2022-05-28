@@ -11,7 +11,7 @@ export default {
     name: 'lmo-preview',
     computed: {
         ...mapState({
-            url: state => state.appStore.currentTemplate.url,
+            url: state => `/server${state.appStore.currentTemplate.url}`,
             currentConfig: state => state.appStore.currentConfig
         })
     },

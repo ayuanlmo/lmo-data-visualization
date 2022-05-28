@@ -2,6 +2,7 @@
 node_modules
 /dist
 
+ffmpeg.exe
 
 # local env files
 .env.local

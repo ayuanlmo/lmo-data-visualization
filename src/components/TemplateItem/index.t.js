@@ -28,7 +28,7 @@ export default {
                         }, [
                             h('img', {
                                 attrs: {
-                                    src: this.data.cover
+                                    src: `/server${this.data.cover}`
                                 }
                             })
                         ]),
