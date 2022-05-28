@@ -51,7 +51,6 @@ export default {
         ...mapState({
             currentConfig: state => state.appStore.currentConfig
         })
-
     },
     data() {
         return {

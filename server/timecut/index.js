@@ -1,23 +1,122 @@
 const timeCut = require('timecut');
+const fs = require('fs-extra');
+const path = require('path');
 
-module.exports = {
-    synthesis: () => {
-        timeCut({
-            url: 'http://localhost:8080/DataVisualizationTemplate/Histogram/index.html',
-            viewport: {
-                width: 1920,// sets the viewport (window size) to 800x600
-                height: 1080
-            },
-            selector: '#app',// crops each frame to the bounding box of '#container'
-            left: 0,
-            top: 0,// further crops the left by 20px, and the top by 40px
-            right: 0,
-            bottom: 0,// and the right by 6px, and the bottom by 30px
-            fps: 24,// saves 30 frames for each virtual second
-            duration: 1,// for 20 virtual seconds
-            output: 'video.mp4'// to video.mp4 of the current working directory
-        }).then(function () {
-            console.log('Done!');
+class TC {
+    constructor(ws = {}, data = {}) {
+        this.ws = ws;//获得socket对象
+        this.data = data;//获得数据
+        this.taskName = `lmo_${new Date().getTime()}`;//创建任务名称
+        //下发任务状态
+        this.ws.send(require('../funcs')._stringify({
+            type: 'task_pending',
+            data: {
+                cmd: 'task_pending',
+                taskName: this.taskName
+            }
+        }));
+        this._init();//初始化
+    }
+
+    _init() {
+        this._copyTemplate();
+    }
+
+    _copyTemplate() {
+        const dir = `../server/static/temp/${this.taskName}`;
+
+        //判断文件夹是否存在
+        if (!fs.existsSync(dir)) {
+            fs.mkdir(dir);
+            this._copyFile('../server/static/DataVisualizationTemplate/Histogram', dir);
+
+            setTimeout(() => {
+                const str = 'const chartConfig = ';
+
+                //替换 配置文件对象
+                fs.writeFile(`${dir}/conf.js`, `${str}${JSON.stringify(this.data['templateConfig'])};`, e => {
+                    if (e) {
+                        console.log('模板配置文件替换失败');
+                    } else {
+                        //开始合成视频
+                        this._synthesis();
+                    }
+                });
+            }, 1000);
+        }
+    }
+
+    //复制
+    _copyFile(dir, to) {
+        const sourceFile = fs.readdirSync(dir, {withFileTypes: true});//获取源文件
+
+        sourceFile.forEach(i => {
+            const n = path.resolve(dir, i.name);
+            const t = path.resolve(to, i.name);
+
+            fs.copyFileSync(n, t);
         });
     }
-};
+
+    //合成
+    _synthesis(fps = 30, duration = 1) {
+        const _data = this.data['config'];
+
+        timeCut({
+                url: `http://localhost:3000/static/temp/${this.taskName}/index.html`,
+                viewport: {width: 1920, height: 1080},
+                selector: '#app',
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                fps: parseInt(_data.video.fps),
+                duration: _data.video.duration,
+                output: `static/output/'${this.taskName}.mp4`,
+                preparePageForScreenshot: async () => {
+                    this.ws.send(require('../funcs')._stringify({
+                        type: 'task_processing',
+                        data: {
+                            cmd: 'task_processing',
+                            state: this.taskName
+                        }
+                    }));
+                }
+            }
+        ).then(() => {
+            this.ws.send(require('../funcs')._stringify(
+                {
+                    type: 'task_end',
+                    data: {
+                        cmd: 'task_processing',
+                        state: 'success',
+                        task: 'Done',
+                        path: `/static/output/'${this.taskName}.mp4`
+                    }
+                }
+            ));
+            //删除临时目录
+            this._delTempFile(`${path.resolve(`../server/static/temp/${this.taskName}`)}`);
+        });
+    }
+
+    _delTempFile(_path) {
+        let files = [];
+
+        if(fs.existsSync(_path)){
+            files = fs.readdirSync(_path);
+            files.forEach((file, index) => {
+                const curPath = _path + "/" + file;
+                
+                if(fs.statSync(curPath).isDirectory()){
+                    this._delTempFile(curPath); //递归删除文件夹
+                } else {
+                    fs.unlinkSync(curPath); //删除文件
+                }
+            });
+            fs.rmdirSync(_path);
+        }
+    }
+}
+
+module.exports.tc = TC;

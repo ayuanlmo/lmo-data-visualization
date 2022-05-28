@@ -27,5 +27,8 @@ module.exports = {
                 })
             );
         });
+    },
+    _stringify(data = {}) {
+        return JSON.stringify(data);
     }
 };

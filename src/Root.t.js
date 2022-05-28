@@ -5,14 +5,17 @@ require('../public/style/animate.min.css');
 
 import '@/lib/PostMessage/index.t';
 import {get} from '@/lib/Storage';
-// import Socket from '@/lib/Socket/index.t';
+import Socket from '@/lib/Socket/index.t';
+import Vue from 'vue';
+
+Vue.prototype.ws = new Socket(`ws://${location.host}/connectSocket`, (msg) => {
+    //console.log('收到消息', msg);
+},2);
 
 export default {
     name: 'lmo-root',
     created() {
-        // new Socket(`ws://${location.host}/connectSocket`, (msg) => {
-        //     console.log('收到消息', msg);
-        // });
+        console.log('ws',this.ws);
 
         const current_template = get('current_template');
 

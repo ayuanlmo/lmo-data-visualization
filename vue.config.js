@@ -67,7 +67,7 @@ module.exports = {
     devServer:{
         proxy:{
             '/connectSocket':{
-                target:'http://localhost:3000/connect/',
+                target:'http://localhost:3000/ws/connect',
                 ws:true,
                 pathRewrite: {
                     '^/connectSocket': ''

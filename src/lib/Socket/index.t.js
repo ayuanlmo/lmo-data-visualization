@@ -46,8 +46,7 @@ export default class Socket {
     }
 
     onMessage(msg) {
-        if (msg !== 'pong')
-            this.callback(msg);
+        this.callback(msg === 'pong' ? 'pong' : msg);
     }
 
     onError() {

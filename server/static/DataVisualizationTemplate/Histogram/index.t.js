@@ -67,7 +67,7 @@ void function (doc, global, echarts, d3) {
         }
     };
 
-    window.addEventListener('message', onMessage);
+
 
     const setTitle = () => {
         d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.text.mainTitle.color);
@@ -171,6 +171,12 @@ void function (doc, global, echarts, d3) {
             }
         }, timerDuration);
     };
+
+    if(ChartConfig.isCustom === 0){
+        init(csvData ?? ChartConfig.data.split('\r\n'), true);
+    }else{
+        window.addEventListener('message', onMessage);
+    }
 
     setTitle();
     initBackground();

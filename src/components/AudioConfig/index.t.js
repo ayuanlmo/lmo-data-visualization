@@ -120,6 +120,23 @@ export default {
                                 <el-radio-button label="60"></el-radio-button>
                             </el-radio-group>
                         ])
+                    ]),
+                    h('div', {
+                        class: 'lmo_video_config_right_item lmo_flex_box'
+                    }, [
+                        h('div', {
+                            class: 'lmo-video_box_label'
+                        }, [
+                            h('lmo-button', {
+                                props: {
+                                    text: '立即合成',
+                                    plain: true
+                                },
+                                on: {
+                                    click: this.startSynthesis
+                                }
+                            })
+                        ])
                     ])
                 ])
             ])
@@ -127,7 +144,8 @@ export default {
     },
     computed: {
         ...mapState({
-            playState: state => state.appStore.templateCurrentAudioConfig.playState
+            playState: state => state.appStore.templateCurrentAudioConfig.playState,
+            currentConfig: state => state.appStore.currentConfig
         })
     },
     data() {
@@ -137,8 +155,8 @@ export default {
             audioPlay: false,
             videoConf: {
                 audio: {
-                    name: this.audioName,
-                    volume: (this.audioVolume / 100).toFixed(1)
+                    name: '',
+                    volume: 100
                 },
                 video: {
                     fps: '30',
@@ -184,6 +202,30 @@ export default {
 
             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME', volume);
             this.$refs.audio.volume = (e / 100).toFixed(1);
+        },
+        startSynthesis() {
+            this.$confirm('您确定要开始合成吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                console.log(this.ws);
+                this.ws.send(JSON.stringify(
+                    {
+                        cmd: 'synthesis',
+                        data: {
+                            templateConfig: {
+                                isCustom: 0,
+                                ...this.currentConfig
+                            },
+                            config: {
+                                ...this.videoConf
+                            }
+                        }
+                    }
+                ));
+            }).catch(() => {
+            });
         }
     },
     watch: {
