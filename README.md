@@ -6,8 +6,14 @@
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">lmo-DataVisualization</h1>
 <p align="center">
-	<img src="https://badgen.net/badge/D3.js/5.16.0/green" alt="D3">
     <img src="https://badgen.net/badge/ApacheEcharts/5.0" alt="ApacheEcharts">
+    <img src="https://badgen.net/badge/timecut/0.3.3" alt="timecut">
+    <img src="https://badgen.net/badge/express/4.18.1" alt="express">
+    <img src="https://badgen.net/badge/express-ws/5.0.2" alt="express-ws">
+    <img src="https://badgen.net/badge/D3.js/5.16.0/green" alt="D3">
+    <img src="https://badgen.net/badge/Animate.css/3.5.1/green" alt="Animate">
+    <img src="https://badgen.net/badge/Nprogress/0.2.0/green" alt="Nprogress">
+    <img src="https://badgen.net/badge/vue-json-views/1.3.0/green" alt="vue-json-views">
     <img src="https://badgen.net/badge/Vue/2.6.11/green" alt="Vue">
     <img src="https://badgen.net/badge/axios/0.25.0/green" alt="axios">
     <img src="https://badgen.net/badge/lmo-storage/1.0.3/green" alt="lmo-storage">
@@ -35,17 +41,18 @@ lmo-DataVisualization，一款开源可视化数据制作工具。可将各种�
 3. 音频 / 时间
     - 背景音乐
     - 设置背景音乐音量
-    - 合成帧率设置
-    - 持续时间配置
-
+4. 合成
+   - 合成帧率设置
+   - 持续时间配置
 ## 开发
-本项目服务端文件在public/server目录下，在开发时，会自动启动。
-发布时会会将server打包到dist下。
+本项目服务端文件在/server目录下。 合成需要ffmpeg支持，<a href="https://ffmpeg.org/download.html">点击这里下载</a>
+
+Github、Gitee同步更新，如果您无法从和GitHub获取代码，请尝试从Gitee。
 ```bash
 #clone
-git clone https://gitee.com/ayuanlmo/lmo-data-visualization
+git clone https://github.com/ayuanlmo/lmo-data-visualization
 #安装模块
-yarn install
+yarn
 #启动项目
 yarn serve
 ```
