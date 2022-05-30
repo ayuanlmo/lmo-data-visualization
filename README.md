@@ -6,19 +6,19 @@
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">lmo-DataVisualization</h1>
 <p align="center">
-    <img src="https://badgen.net/badge/ApacheEcharts/5.0" alt="ApacheEcharts">
-    <img src="https://badgen.net/badge/timecut/0.3.3" alt="timecut">
-    <img src="https://badgen.net/badge/express/4.18.1" alt="express">
-    <img src="https://badgen.net/badge/express-ws/5.0.2" alt="express-ws">
-    <img src="https://badgen.net/badge/D3.js/5.16.0/green" alt="D3">
-    <img src="https://badgen.net/badge/Animate.css/3.5.1/green" alt="Animate">
-    <img src="https://badgen.net/badge/Nprogress/0.2.0/green" alt="Nprogress">
-    <img src="https://badgen.net/badge/vue-json-views/1.3.0/green" alt="vue-json-views">
-    <img src="https://badgen.net/badge/Vue/2.6.11/green" alt="Vue">
-    <img src="https://badgen.net/badge/axios/0.25.0/green" alt="axios">
-    <img src="https://badgen.net/badge/lmo-storage/1.0.3/green" alt="lmo-storage">
-    <img src="https://badgen.net/badge/vue-router/3.2.0/green" alt="vue-router">
-    <img src="https://badgen.net/badge/Vuex/3.4.0/green" alt="Vuex">
+    <img src="https://img.shields.io/badge/ApacheEcharts-5.0 -blue.svg" alt="ApacheEcharts">
+    <img src="https://img.shields.io/badge/timecut-0.3.3 -blue.svg" alt="timecut">
+    <img src="https://img.shields.io/badge/Express-4.18.1 -blue.svg" alt="express">
+    <img src="https://img.shields.io/badge/Express_ws-5.0.2 -blue.svg" alt="express_ws">
+    <img src="https://img.shields.io/badge/D3.js-5.16.0 -blue.svg" alt="D3.js">
+    <img src="https://img.shields.io/badge/Animate.css-3.5.1 -green.svg" alt="Animate.css">
+    <img src="https://img.shields.io/badge/Nprogress-0.2.0 -green.svg" alt="Nprogress">
+    <img src="https://img.shields.io/badge/vue_json_views-1.3.0 -green.svg" alt="vue_json_views">
+    <img src="https://img.shields.io/badge/Vue-2.6.11 -green.svg" alt="Vue">
+    <img src="https://img.shields.io/badge/axios-0.25.0 -green.svg" alt="axios">
+    <img src="https://img.shields.io/badge/Vue_Router-3.2.0 -green.svg" alt="vue_router">
+    <img src="https://img.shields.io/badge/Vuex-3.4.0 -green.svg" alt="Vuex">
+    <img src="https://img.shields.io/badge/lmo_storage-1.0.3 -green.svg" alt="lmo_storage">
 </p>
 
 ---
