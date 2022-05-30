@@ -1,29 +1,34 @@
 /**
  * Data-Visualization Server
  * **/
-const express = require('express');
-const _App = express();
 
-require('express-ws')(_App);
-_App.use(express.urlencoded({extended: false}));
-_App.use('/static', express.static(__dirname + '/static'));
-_App.ws('/ws/connect', (ws, request) => {
-    ws.on('message', msg => {
-        if (msg === 'ping') return ws.send('pong');
-        const m = JSON.parse(msg);
+(() => {
+    const express = require('express');
+    const _App = express();
+    const _Router = require('./const/routers');
+    const _Func = require('./funcs');
+    const _Conf = require('./conf/ServerConfig');
+    const _Cmd = require('./const/cmd');
+    const _Net = require('./lib/net');
 
-        if (m['cmd'] === 'synthesis') {
-            new (require('./timecut/index')).tc(ws, m.data);
-        }
+    require('express-ws')(_App);
+
+    _App.use(express.urlencoded({extended: false}));
+    _App.use(_Conf.__STATIC_PATH, express.static(`${__dirname}${_Conf.__STATIC_PATH}`));
+    _App.ws(_Router.__SOCKET_CONNECT, (ws, request) => {
+        ws.on('message', msg => {
+            if (msg === _Conf.__SOCKET_PONG_KEY) return ws.send(_Conf.__SOCKET_PONG_MESSAGE);
+            const m = JSON.parse(msg);
+
+            if (m['cmd'] === _Cmd.__SYNTHESIS)
+                new (require('./timecut/index')).tc(ws, m.data);
+        });
     });
-});
-_App.post('/api/getTemplate', (req, res) => {
-    require('./funcs')._getTemplateList(res);
-});
-_App.post('/api/getMedia', (req, res) => {
-    require('./funcs')._getMedia(res);
-});
-
-_App.listen(3000, () => {
-    console.log(`\n服务启动\n http://localhost:${3000}/ \n http://127.0.0.1:${3000}/`);
-});
+    _App.post(_Router.__GET_TEMPLATE, (req, res) => {
+        _Func._getTemplateList(res);
+    });
+    _App.post(_Router.__GET_MEDIA, (req, res) => {
+        _Func._getMedia(res);
+    });
+    _Net.__START_SERVER(_App);
+})();
