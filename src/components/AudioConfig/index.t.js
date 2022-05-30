@@ -145,7 +145,8 @@ export default {
     computed: {
         ...mapState({
             playState: state => state.appStore.templateCurrentAudioConfig.playState,
-            currentConfig: state => state.appStore.currentConfig
+            currentConfig: state => state.appStore.currentConfig,
+            currentTemplate: state => state.appStore.currentTemplate
         })
     },
     data() {
@@ -209,7 +210,6 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                console.log(this.ws);
                 this.ws.send(JSON.stringify(
                     {
                         cmd: 'synthesis',
@@ -220,7 +220,8 @@ export default {
                             },
                             config: {
                                 ...this.videoConf
-                            }
+                            },
+                            template: this.currentTemplate.template
                         }
                     }
                 ));

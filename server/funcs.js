@@ -17,6 +17,7 @@ module.exports = {
                         id: `lmo_data_visualization_template_${i}`,
                         url: `/static/DataVisualizationTemplate/${i}/index.html`,
                         cover: `/static/DataVisualizationTemplate/${i}/cover.png`,
+                        template: `${i}`,
                         ...require('./const/templateIndex')[i]
                     }
                 );

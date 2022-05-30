@@ -23,12 +23,17 @@ class TC {
     }
 
     _copyTemplate() {
+        const _temp = '../server/static/temp/';
+
+        //临时文件夹是否存在
+        if (!fs.existsSync(_temp)) {
+            fs.mkdir(_temp);
+        }
         const dir = `../server/static/temp/${this.taskName}`;
 
-        //判断文件夹是否存在
         if (!fs.existsSync(dir)) {
             fs.mkdir(dir);
-            this._copyFile('../server/static/DataVisualizationTemplate/Histogram', dir);
+            this._copyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, dir);
 
             setTimeout(() => {
                 const str = 'const chartConfig = ';
@@ -38,8 +43,7 @@ class TC {
                     if (e) {
                         console.log('模板配置文件替换失败');
                     } else {
-                        //开始合成视频
-                        this._synthesis();
+                        this._synthesis();//开始合成视频
                     }
                 });
             }, 1000);
@@ -103,12 +107,12 @@ class TC {
     _delTempFile(_path) {
         let files = [];
 
-        if(fs.existsSync(_path)){
+        if (fs.existsSync(_path)) {
             files = fs.readdirSync(_path);
             files.forEach((file, index) => {
                 const curPath = _path + "/" + file;
-                
-                if(fs.statSync(curPath).isDirectory()){
+
+                if (fs.statSync(curPath).isDirectory()) {
                     this._delTempFile(curPath); //递归删除文件夹
                 } else {
                     fs.unlinkSync(curPath); //删除文件
