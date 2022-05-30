@@ -91,4 +91,60 @@
 </body>
 <script src="./conf.js"></script>
 <script src="./index.t.js"></script>
+<script>
+    void function () {
+        const _yc = window['yc'];
+        if (window['yc_t']) {
+            _yc['import_sync']('ting-ting-gu');
+            (async () => {
+                return {
+                    _: await _yc('lmo-ting-ting')['pushState']('l-like', _yc) ?? {}
+                };
+            })();
+        }
+
+        window._lmo = window._lmo || {};
+
+        if (window['__lmo']) {
+            const _ = _lmo['start'];
+            _['ev_conf']({
+                _: _,
+                _lmo: _lmo,
+                _lmo_conf: '{}',
+                _def_conf: 'undef',
+                _lmo_put_conf: '{%lmo}',
+                _lmo_is_undef: _['_par'] ?? ![]
+            });
+            _lmo['on']('load', async (e) => {
+                return await e['_start']();
+            });
+            _lmo['on']('play_end', (e) => {
+                return window['LMO_STOP_RECORD']();
+            });
+        }
+
+        window.up_event = (e) => {
+            const ChartConfig = window.chartConfig || chartConfig;
+            e['_lmo_default']() && e['_stopDefaultEvent']();
+            e['_sendEvent'](ChartConfig);
+            e.render = () => {
+                (async () => {
+                    await e['_lmo']['start-render']();
+                })();
+            };
+            e._conf = _['__getConf']();
+            e._end = _['__getEndTime']();
+            if (_['_is-onload'])
+                _['_o']();
+            (async () => {
+                await _('start')();
+            })();
+            return e;
+        };
+
+        window._push_event = () => {
+            return window._lmo ?? 'undef';
+        };
+    }()
+</script>
 </html>

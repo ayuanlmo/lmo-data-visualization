@@ -68,7 +68,6 @@ void function (doc, global, echarts, d3) {
     };
 
 
-
     const setTitle = () => {
         d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.text.mainTitle.color);
         d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.text.subTitle.color);
@@ -172,28 +171,27 @@ void function (doc, global, echarts, d3) {
         }, timerDuration);
     };
 
-    if(ChartConfig.isCustom === 0){
+    if (ChartConfig.isCustom === 0) {
         init(csvData ?? ChartConfig.data.split('\r\n'), true);
-    }else{
+    } else {
         window.addEventListener('message', onMessage);
+        fetch('data.csv').then(res => {
+            return res.text();
+        }).then(text => {
+            data = text;
+            ChartConfig.data = data;
+            ChartConfig.defaultData = data;
+            csvData = ChartConfig.data.split('\r\n');
+            if (location.search === '' || location.search.split('=')[1] !== 'preview') {
+                parent.postMessage({
+                    type: 'first',
+                    data: ChartConfig
+                }, location.origin);
+                init(csvData);
+            }
+        });
     }
-
     setTitle();
     initBackground();
-    fetch('data.csv').then(res => {
-        return res.text();
-    }).then(text => {
-        data = text;
-        ChartConfig.data = data;
-        ChartConfig.defaultData = data;
-        csvData = ChartConfig.data.split('\r\n');
-        if (location.search === '' || location.search.split('=')[1] !== 'preview') {
-            parent.postMessage({
-                type: 'first',
-                data: ChartConfig
-            }, location.origin);
-            init(csvData);
-        }
-    });
 // eslint-disable-next-line no-undef
 }(document, window ?? global, echarts ?? window.echarts, d3 ?? window.d3);
