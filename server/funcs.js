@@ -29,6 +29,25 @@ module.exports = {
             );
         });
     },
+    _getMedia: (r) => {
+        require('fs').readdir('./static/output', (err, data) => {
+            const _ = [];
+
+            data.forEach(i => {
+                if (i.split('.')[1] === 'mp4') {
+                    _.push({
+                        name: i,
+                        path: `/static/output/${i}`
+                    });
+                }
+            });
+            r.json(
+                require('./funcs')._getSuccessMessage({
+                    list: _
+                })
+            );
+        });
+    },
     _stringify(data = {}) {
         return JSON.stringify(data);
     }

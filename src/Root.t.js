@@ -7,15 +7,19 @@ import '@/lib/PostMessage/index.t';
 import {get} from '@/lib/Storage';
 import Socket from '@/lib/Socket/index.t';
 import Vue from 'vue';
+import Store from './store/index';
 
 Vue.prototype.ws = new Socket(`ws://${location.host}/connectSocket`, (msg) => {
-    //console.log('收到消息', msg);
-},2);
+    Store.commit('SET_SERVER_PUSH_MESSAGE', {
+        currentTime: '',
+        msg: JSON.stringify(msg)
+    });
+}, 2);
 
 export default {
     name: 'lmo-root',
     created() {
-        console.log('ws',this.ws);
+        console.log('ws', this.ws);
 
         const current_template = get('current_template');
 

@@ -12,13 +12,16 @@ _App.ws('/ws/connect', (ws, request) => {
         if (msg === 'ping') return ws.send('pong');
         const m = JSON.parse(msg);
 
-        if (m['cmd'] === 'synthesis'){
+        if (m['cmd'] === 'synthesis') {
             new (require('./timecut/index')).tc(ws, m.data);
         }
     });
 });
-_App.post('/api/getTemplate', (re1, res) => {
+_App.post('/api/getTemplate', (req, res) => {
     require('./funcs')._getTemplateList(res);
+});
+_App.post('/api/getMedia', (req, res) => {
+    require('./funcs')._getMedia(res);
 });
 
 _App.listen(3000, () => {

@@ -16,5 +16,6 @@ export default {
     currentTemplateDefaultData: {
         csvData: ''
     },
+    serverPushMessage: [],
     currentTemplate: null
 };

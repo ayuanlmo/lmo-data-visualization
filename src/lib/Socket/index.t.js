@@ -9,6 +9,8 @@
  * Created by ayuanlmo on 2022/02
  * **/
 
+import {Notification} from "element-ui";
+
 export default class Socket {
     constructor(url = location.origin, callback = () => {
     }, maximumNumberOfReconnects = 5) {
@@ -25,17 +27,17 @@ export default class Socket {
         this.ws && this.ws.close();
         if (!this.ws) {
             this.ws = new WebSocket(this.url);
-            this.ws.onopen = () => {
-                this.onOpen();
+            this.ws.onopen = (e) => {
+                this.onOpen(e);
             };
-            this.ws.onmessage = () => {
-                this.onMessage();
+            this.ws.onmessage = (msg) => {
+                this.onMessage(msg);
             };
-            this.ws.onerror = () => {
-                this.onError();
+            this.ws.onerror = (e) => {
+                this.onError(e);
             };
-            this.ws.onclose = () => {
-                this.onClose();
+            this.ws.onclose = (e) => {
+                this.onClose(e);
             };
         }
     }
@@ -46,8 +48,25 @@ export default class Socket {
     }
 
     onMessage(msg) {
-        if (msg !== 'pong')
-            this.callback(JSON.parse(msg));
+        if (msg.data !== 'pong') {
+            this.callback(JSON.parse(msg.data));
+            const _msg = JSON.parse(msg.data);
+
+            if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing') {
+                Notification({
+                    title: '系统消息',
+                    message: `[${_msg.data['taskName']}] 合成完毕`,
+                    type: 'success'
+                });
+            }
+            if (_msg.type === 'task_pending') {
+                Notification({
+                    title: '系统消息',
+                    message: `[${_msg.data['taskName']}] 开始合成`,
+                    type: 'success'
+                });
+            }
+        }
     }
 
     onError() {

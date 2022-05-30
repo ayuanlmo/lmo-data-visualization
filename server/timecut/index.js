@@ -76,7 +76,7 @@ class TC {
                 bottom: 0,
                 fps: parseInt(_data.video.fps),
                 duration: _data.video.duration,
-                output: `static/output/'${this.taskName}.mp4`,
+                output: `static/output/${this.taskName}.mp4`,
                 preparePageForScreenshot: async () => {
                     this.ws.send(require('../funcs')._stringify({
                         type: 'task_processing',
@@ -94,7 +94,7 @@ class TC {
                     data: {
                         cmd: 'task_processing',
                         state: 'success',
-                        task: 'Done',
+                        taskName: this.taskName,
                         path: `/static/output/'${this.taskName}.mp4`
                     }
                 }

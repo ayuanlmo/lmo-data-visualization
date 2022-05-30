@@ -3,6 +3,8 @@ node_modules
 /dist
 
 ffmpeg.exe
+/temp
+/output
 
 # local env files
 .env.local

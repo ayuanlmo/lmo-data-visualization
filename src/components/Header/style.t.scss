@@ -4,6 +4,8 @@
   background-color: #fff;
   border-bottom-right-radius: .5vw;
   border-bottom-left-radius: .5vw;
+  display: flex;
+  justify-content: space-between;
 
   h3 {
     font-size: 1.2vw;
@@ -11,7 +13,12 @@
     line-height: 6vh;
   }
 
-  img {
-    width:3vw;
+  .lmo_data_visualization_header_option {
+    position: relative;
+    top: 1.5vh;
+
+    button {
+      margin-right: .5rem;
+    }
   }
 }

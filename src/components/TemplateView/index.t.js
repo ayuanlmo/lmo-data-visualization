@@ -22,22 +22,23 @@ export default {
                 h('div', {
                     class: 'lmo-visualization_template'
                 }, [
-                    this.TemplateData.map((i) => {
-                        return (
-                            h(TemplateItem, {
-                                props: {
-                                    data: i
-                                },
-                                on: {
-                                    click: (i) => {
-                                        this.$store.commit('SET_CURRENT_TEMPLATE', i);
-                                        set('current_template', JSON.stringify(i));
-                                        this.$router.push('/edit');
+                    this.TemplateData.length === 0 ? <el-empty description="这里暂时啥也没有"></el-empty> :
+                        this.TemplateData.map((i) => {
+                            return (
+                                h(TemplateItem, {
+                                    props: {
+                                        data: i
+                                    },
+                                    on: {
+                                        click: (i) => {
+                                            this.$store.commit('SET_CURRENT_TEMPLATE', i);
+                                            set('current_template', JSON.stringify(i));
+                                            this.$router.push('/edit');
+                                        }
                                     }
-                                }
-                            })
-                        );
-                    })
+                                })
+                            );
+                        })
                 ])
             ])
         );

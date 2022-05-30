@@ -8,3 +8,4 @@ export const set_template_current_audio_config_volume = 'SET_TEMPLATE_CURRENT_AU
 export const set_template_current_audio_config_src = 'SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC';//设置当前模板背景音乐地址
 export const set_template_current_audio_config_play_state = 'SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE';//设置当前模板背景音乐播放状态
 export const set_template_current_duration = 'SET_TEMPLATE_CURRENT_DURATION';//设置当前模板背景音乐播放状态
+export const set_server_push_message = 'SET_SERVER_PUSH_MESSAGE';

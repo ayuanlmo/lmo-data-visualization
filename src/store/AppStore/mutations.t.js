@@ -1,5 +1,6 @@
 import * as Type from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
+import {set_server_push_message} from "@/const/MutationTypes.t";
 
 export default {
     [Type.set_current_template_default_data](state, data) {
@@ -33,6 +34,9 @@ export default {
     },
     [Type.set_template_current_audio_config_play_state](state, data) {
         state.templateCurrentAudioConfig.playState = data;
+    },
+    [Type.set_server_push_message](state, data) {
+        state.serverPushMessage.push(data);
     },
     [Type.set_template_current_duration](state, data) {
         PostMessage({
