@@ -12,9 +12,11 @@
 import {Notification} from "element-ui";
 
 export default class Socket {
-    constructor(url = location.origin, callback = () => {
+    constructor(url, callback = () => {
     }, maximumNumberOfReconnects = 5) {
-        this.url = require('@utils').getWsUrl(url);
+        console.log('init', `${location.origin}${url}`);
+        this.url = require('@utils').getWsUrl(`${url}`);
+        console.log(this.url);
         this.maximumNumberOfReconnects = maximumNumberOfReconnects;
         this.currentNumberOfReconnects = 0;
         this.ws = null;
@@ -26,7 +28,13 @@ export default class Socket {
     init() {
         this.ws && this.ws.close();
         if (!this.ws) {
-            this.ws = new WebSocket(this.url);
+            if ('WebSocket' in window)
+                this.ws = new WebSocket(this.url);
+            else if ('__CreateWebSocket' in window['__lmo'])
+                this.ws = new window['__lmo']['__CreateWebSocket'];
+            else
+                this.ws = new window['__ting']['__ConnectSocket'];
+
             this.ws.onopen = (e) => {
                 this.onOpen(e);
             };
@@ -43,7 +51,6 @@ export default class Socket {
     }
 
     onOpen() {
-        console.log(this);
         this.ping();
     }
 
@@ -52,20 +59,18 @@ export default class Socket {
             this.callback(JSON.parse(msg.data));
             const _msg = JSON.parse(msg.data);
 
-            if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing') {
-                Notification({
+            if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing')
+                return Notification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 合成完毕`,
                     type: 'success'
                 });
-            }
-            if (_msg.type === 'task_pending') {
-                Notification({
+            if (_msg.type === 'task_pending')
+                return Notification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 开始合成`,
                     type: 'success'
                 });
-            }
         }
     }
 

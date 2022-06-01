@@ -19,13 +19,11 @@ module.exports.formatTime = (s) => {
 };
 
 module.exports.getWsUrl = (url = location.origin ?? global.location.origin) => {
-    const urls = url.split(':');
+    const urls = location.origin.split(':');
+    const origin = location.host;
 
     if (urls[0].indexOf('http') !== -1)
-        return urls[0] === 'https' ? `wss:${urls[1]}` : `ws:${urls[1]}`;
-    else if (urls[0] === 'wss' || urls[0] === 'ws')
-        return url;
-    return '';
+        return urls[0] === 'https' ? `wss:${origin}${url}` : `ws:${origin}${url}`;
 };
 
 /**
@@ -40,12 +38,6 @@ const isObject = (data = {}) => {
 
 module.exports.isObject = isObject;
 
-/**
- * @method isObject 判断是否为Object
- * @author ayuanlmo
- * @param {Object} data 秒数
- * @return {string|string}
- * **/
 module.exports.stringify = (data = null) => {
     return data === null ? 'null' : JSON.stringify(data);
 };
