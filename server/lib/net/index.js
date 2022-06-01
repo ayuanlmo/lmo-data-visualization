@@ -44,13 +44,13 @@ const _ = {
     },
     __PRINT_NETWORK_INTO: () => {
         console.log('\n\n=========================================');
-        console.log('\n Server running at:            \n');
+        console.log(_Clc.red('\n Server running at:\n'));
         console.log(`   -Local: ${_Clc.blue(`  http://localhost:${_Port}`)}`);
         _.__LOCAL_NETWORK_INTERFACES().map(i => {
-            console.log(`   -NetWork: ${_Clc.blue(`${i}:${_Port}`)}`);
+            console.log(`   -NetWork: ${_Clc.blue(`http://${i}:${_Port}`)}`);
         });
         console.log('\n=========================================');
-        console.log(_Clc.bgGreen('Done'));
+        console.log(_Clc.bgGreen(' SERVER START '));
     }
 };
 

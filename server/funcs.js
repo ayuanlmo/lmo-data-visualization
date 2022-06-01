@@ -1,3 +1,5 @@
+const fs = require('fs-extra');
+
 module.exports = {
     _getSuccessMessage: (data = {}) => {
         return {
@@ -7,8 +9,8 @@ module.exports = {
             _t: new Date().getTime()
         };
     },
-    _getTemplateList: async (r) => {
-        await require('fs').readdir('./static/DataVisualizationTemplate', (err, data) => {
+    async _getTemplateList(r) {
+        await fs.readdir('./static/DataVisualizationTemplate', (err, data) => {
             const _ = [];
 
             data.forEach(i => {
@@ -30,7 +32,12 @@ module.exports = {
         });
     },
     _getMedia: (r) => {
-        require('fs').readdir('./static/output', (err, data) => {
+        const _outputDir = './static/output';
+
+        if (!fs.existsSync(_outputDir)) {
+            fs.mkdir(_outputDir);
+        }
+        fs.readdir('./static/output', (err, data) => {
             const _ = [];
 
             data.forEach(i => {
