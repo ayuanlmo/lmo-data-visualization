@@ -23,7 +23,7 @@ export default {
         //大小   可选： large, small
         size: {
             type: String,
-            default: ''
+            default: 'mini'
         },
         //控制按钮
         controls: {
@@ -48,32 +48,57 @@ export default {
     },
     render(h) {
         return (
-            h('el-input-number', {
-                props: {
-                    value: this.value,
-                    min: this.min,
-                    max: this.max,
-                    step: this.step,
-                    size: this.size,
-                    controls: this.controls,
-                    debounce: this.debounce,
-                    name: this.name,
-                    label: this.label
-                },
-                on: {
-                    change: (e) => {
-                        this.$emit('change', e);
-                    },
-                    blur: (e) => {
-                        this.$emit('blur', e);
-                    },
-                    focus: (e) => {
-                        this.$emit('focus', e);
-                    }
-                },
-                ref: 'inputNumber'
-            })
+                <el-input-number
+                        v-model={this.num}
+                        min={this.min}
+                        max={this.max}
+                        step={this.step}
+                        size={this.size}
+                        controls={this.controls}
+                        debounce={this.debounce}
+                        name={this.name}
+                        label={this.label}
+                        ref={'inputNumber'}
+                        onChange={(e) => {
+                            this.$emit('change', e);
+                        }}
+                        onblur={(e) => {
+                            this.$emit('blur', e);
+                        }}
+                        onfocus={(e) => {
+                            this.$emit('focus', e);
+                        }}
+                />
+                // h('el-input-number', {
+                //     props: {
+                //         value: this.num,
+                //         min: this.min,
+                //         max: this.max,
+                //         step: this.step,
+                //         size: this.size,
+                //         controls: this.controls,
+                //         debounce: this.debounce,
+                //         name: this.name,
+                //         label: this.label
+                //     },
+                //     on: {
+                //         change: (e) => {
+                //
+                //         },
+                //         blur: (e) => {
+                //
+                //         },
+                //         focus: (e) => {
+                //         }
+                //     },
+                //     ref: 'inputNumber'
+                // })
         );
+    },
+    data() {
+        return {
+            num: this.value
+        };
     },
     methods: {
         focus() {

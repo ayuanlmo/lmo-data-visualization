@@ -49,26 +49,27 @@ export default {
     },
     render(h) {
         return (
-            h('el-switch', {
-                props: {
-                    activeColor: this.activeColor,
-                    inactiveColor: this.inactiveColor,
-                    value: this.value,
-                    activeText: this.activeText,
-                    inactiveText: this.inactiveText,
-                    disabled: this.disabled,
-                    name: this.name,
-                    activeIconClass: this.activeIconClass,
-                    inactiveIconClass: this.inactiveIconClass
-                },
-                ref: 'switch',
-                on: {
-                    click: e => {
-                        this.$emit('click', e);
-                    }
-                }
-            }, [this.text])
+                <el-switch
+                        v-model={this.select}
+                        activeColor={this.activeColor}
+                        inactiveColor={this.inactiveColor}
+                        activeText={this.activeText}
+                        inactiveText={this.inactiveText}
+                        disabled={this.disabled}
+                        name={this.name}
+                        activeIconClass={this.activeIconClass}
+                        inactiveIconClass={this.inactiveIconClass}
+                        ref={'switch'}
+                        onChange={(e) => {
+                            this.$emit('change',e);
+                        }}
+                />
         );
+    },
+    data() {
+        return {
+            select: this.value
+        };
     },
     methods: {
         focus() {

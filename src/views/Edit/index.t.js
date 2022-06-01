@@ -16,7 +16,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-data_visualization_edit'
+                class: 'lmo-data_visualization_edit lmo_none_user_select'
             }, [
                 h(EditHeader, {
                     props: {

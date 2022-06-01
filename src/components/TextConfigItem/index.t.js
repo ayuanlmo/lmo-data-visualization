@@ -5,19 +5,6 @@ import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 
 export default {
     name: 'lmo-config_item',
-    computed: {
-        ...mapState({
-            currentConfigText: state => state.appStore.currentConfig.text
-        })
-    },
-    watch: {
-        currentConfigText: {
-            deep: true,
-            handler() {
-                this.initConfigText();
-            }
-        }
-    },
     render(h) {
         console.log(this.currentConfigText);
         return (
@@ -32,7 +19,7 @@ export default {
                             class: 'lmo-text_box'
                         }, [
                             h('div', {
-                                class: 'lmo-text_content'
+                                class: 'lmo-text_content lmo_flex_box'
                             }, [
                                 h('div', {
                                     class: 'lmo-text_box_label'
@@ -42,19 +29,11 @@ export default {
                                 h('div', {
                                     class: 'lmo-text_box_option'
                                 }, [
-                                    h('lmo-input', {
-                                        props: {
-                                            value: this.configText[i].value
-                                        },
-                                        on: {
-                                            blur: () => {
-                                                this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configText);
-                                            },
-                                            change: e => {
-                                                this.configText[i].value = e;
-                                            }
-                                        }
-                                    })
+                                    h('div',{
+                                        class:'lmo-text_box_option_lmo-component'
+                                    },[
+                                        this.renderComponent(i, h)
+                                    ])
                                 ])
                             ])
 
@@ -77,6 +56,67 @@ export default {
             Object.keys(this.currentConfigText).map((i) => {
                 this.configText[i] = this.currentConfigText[i];
             });
+        },
+        renderComponent(i, h) {
+            const _component = this.configText[i].type;
+
+            if (_component === 'lmo-input') {
+                return h(_component, {
+                    props: {
+                        value: this.configText[i].value
+                    },
+                    on: {
+                        blur: () => {
+                            this.emitConfig();
+                        },
+                        change: e => {
+                            this.configText[i].value = e;
+                        }
+                    }
+                });
+            }
+            if (_component === 'lmo-switch') {
+                return h(_component, {
+                    props: {
+                        value: this.configText[i].value
+                    },
+                    on: {
+                        change: (e) => {
+                            this.configText[i].value = e;
+                            this.emitConfig();
+                        }
+                    }
+                });
+            }
+            if (_component === 'lmo-input-number') {
+                return h(_component, {
+                    props: {
+                        value: this.configText[i].value
+                    },
+                    on: {
+                        change: (e) => {
+                            this.configText[i].value = e;
+                            this.emitConfig();
+                        }
+                    }
+                });
+            }
+        },
+        emitConfig() {
+            this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configText);
+        }
+    },
+    computed: {
+        ...mapState({
+            currentConfigText: state => state.appStore.currentConfig.text
+        })
+    },
+    watch: {
+        currentConfigText: {
+            deep: true,
+            handler() {
+                this.initConfigText();
+            }
         }
     }
 };

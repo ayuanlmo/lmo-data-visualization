@@ -16,10 +16,16 @@
       margin-right: 1rem;
 
       .lmo-text_content {
-        display: flex;
-        justify-content: space-between;
         margin-bottom: 1rem;
         width: 15vw;
+
+        .lmo-text_box_label {
+          width: 7vw;
+        }
+
+        .lmo-text_box_option_lmo-component {
+          width: 7vw;
+        }
 
         .lmo-text_box_option {
           margin-left: 6px;

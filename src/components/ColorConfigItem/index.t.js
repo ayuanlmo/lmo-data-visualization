@@ -158,34 +158,36 @@ export default {
         initConfigColorTemplate(h = this.h) {
             this.configColorTemplate = [];
             Object.keys(this.configColor).map(i => {
-                this.configColorTemplate.push(
-                    h('div', {
-                        class: 'lmo-color_box'
-                    }, [
+                if ('color' in this.configColor[i]) {
+                    this.configColorTemplate.push(
                         h('div', {
-                            class: 'lmo-color_box_content'
+                            class: 'lmo-color_box'
                         }, [
                             h('div', {
-                                class: 'lmo-color_box_label'
-                            }, [`${this.configColor[i].label}颜色:`]),
-                            h('div', {
-                                class: 'lmo-color_box_option'
+                                class: 'lmo-color_box_content'
                             }, [
-                                h('el-color-picker', {
-                                    props: {
-                                        value: this.configColor[i].color
-                                    },
-                                    on: {
-                                        'active-change': (e) => {
-                                            this.configColor[i].color = e;
-                                            this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configColor);
+                                h('div', {
+                                    class: 'lmo-color_box_label'
+                                }, [`${this.configColor[i].label}颜色:`]),
+                                h('div', {
+                                    class: 'lmo-color_box_option'
+                                }, [
+                                    h('el-color-picker', {
+                                        props: {
+                                            value: this.configColor[i].color
+                                        },
+                                        on: {
+                                            'active-change': (e) => {
+                                                this.configColor[i].color = e;
+                                                this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configColor);
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                ])
                             ])
                         ])
-                    ])
-                );
+                    );
+                }
             });
         },
         initConfigThemeColorTemplate(h = this.h) {

@@ -1,5 +1,3 @@
-import da from "element-ui/src/locale/lang/da";
-
 require('./style.t.scss');
 
 export default {
@@ -20,10 +18,12 @@ export default {
                     attrs: {
                         src: `/server${this.url}`
                     }
+                }),
+                h('div',{
+                    class:'lmo-data_visualization_edit_preview_mask'
                 })
             ])
-        )
-            ;
+        );
     },
     created() {
         window.onload = () => {
