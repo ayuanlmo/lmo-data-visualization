@@ -14,9 +14,7 @@ import {Notification} from "element-ui";
 export default class Socket {
     constructor(url, callback = () => {
     }, maximumNumberOfReconnects = 5) {
-        console.log('init', `${location.origin}${url}`);
         this.url = require('@utils').getWsUrl(`${url}`);
-        console.log(this.url);
         this.maximumNumberOfReconnects = maximumNumberOfReconnects;
         this.currentNumberOfReconnects = 0;
         this.ws = null;

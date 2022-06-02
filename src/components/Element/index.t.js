@@ -13,6 +13,7 @@ import Slider from "./components/Slider.t.jsx";
 import Progress from "./components/Progress.t.jsx";
 import Alert from "./components/Alert.t.jsx";
 import Extend from "./components/Extend.t.jsx";
+import ColorPicker from "@components/Element/components/ColorPicker";
 
 Vue.component(Button.name, Button);
 Vue.component(Checkbox.name, Checkbox);
@@ -27,3 +28,4 @@ Vue.component(Slider.name, Slider);
 Vue.component(Progress.name, Progress);
 Vue.component(Alert.name, Alert);
 Vue.component(Extend.name, Extend);
+Vue.component(ColorPicker.name, ColorPicker);

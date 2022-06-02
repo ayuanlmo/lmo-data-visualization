@@ -6,9 +6,19 @@ import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 export default {
     name: 'lmo-config_item',
     render(h) {
-        console.log(this.currentConfigText);
         return (
-            h('div', {
+            this.renderTemplate
+        );
+    },
+    data() {
+        return {
+            configText: {},
+            renderTemplate: null
+        };
+    },
+    methods: {
+        initRender(h = this.$createElement) {
+            this.renderTemplate = h('div', {
                 class: 'lmo-data_visualization_config_item'
             }, [h('div', {
                 class: 'lmo-data_visualization_config_item_card text'
@@ -29,9 +39,9 @@ export default {
                                 h('div', {
                                     class: 'lmo-text_box_option'
                                 }, [
-                                    h('div',{
-                                        class:'lmo-text_box_option_lmo-component'
-                                    },[
+                                    h('div', {
+                                        class: 'lmo-text_box_option_lmo-component'
+                                    }, [
                                         this.renderComponent(i, h)
                                     ])
                                 ])
@@ -43,19 +53,13 @@ export default {
             ]), h('div', {
                 class: 'lmo-data_visualization_config_item_card theme'
             }, [h(ThemeConfigItem)])
-            ])
-        );
-    },
-    data() {
-        return {
-            configText: {}
-        };
-    },
-    methods: {
+            ]);
+        },
         initConfigText() {
             Object.keys(this.currentConfigText).map((i) => {
                 this.configText[i] = this.currentConfigText[i];
             });
+            this.initRender();
         },
         renderComponent(i, h) {
             const _component = this.configText[i].type;

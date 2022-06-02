@@ -7,30 +7,7 @@ import AnimateView from '@components/AnimateView/index.t';
 
 export default {
     name: 'lmo-color_config_item',
-    computed: {
-        ...mapState({
-            currentConfigColor: state => state.appStore.currentConfig.text,
-            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
-        })
-    },
-    data() {
-        return {
-            configColor: {},
-            configColorTemplate: null,
-            configTemplateBackground: {
-                color: '#fff',
-                image: '',
-                arrange: '0% 0% / 100% 100%'
-            },
-            templateBackgroundType: '拉伸',
-            configThemeColorTemplate: null,
-            themeColorIndex: '0',
-            h: null
-        };
-    },
     render(h) {
-        this.h = h;
-        // console.log(this.configColor);
         return (
             h('div', {
                 class: 'lmo-color_config_item'
@@ -116,12 +93,12 @@ export default {
                         h('div', {
                             class: 'lmo-color_box_option'
                         }, [
-                            h('el-color-picker', {
+                            h('lmo-color-picker', {
                                 props: {
                                     value: this.configTemplateBackground.color
                                 },
                                 on: {
-                                    'active-change': (e) => {
+                                    change: (e) => {
                                         this.configTemplateBackground.color = e;
                                     }
                                 }
@@ -155,7 +132,7 @@ export default {
             });
             this.initConfigColorTemplate();
         },
-        initConfigColorTemplate(h = this.h) {
+        initConfigColorTemplate(h = this.$createElement) {
             this.configColorTemplate = [];
             Object.keys(this.configColor).map(i => {
                 if ('color' in this.configColor[i]) {
@@ -172,12 +149,12 @@ export default {
                                 h('div', {
                                     class: 'lmo-color_box_option'
                                 }, [
-                                    h('el-color-picker', {
+                                    h('lmo-color-picker', {
                                         props: {
                                             value: this.configColor[i].color
                                         },
                                         on: {
-                                            'active-change': (e) => {
+                                            change: (e) => {
                                                 this.configColor[i].color = e;
                                                 this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configColor);
                                             }
@@ -190,7 +167,7 @@ export default {
                 }
             });
         },
-        initConfigThemeColorTemplate(h = this.h) {
+        initConfigThemeColorTemplate(h = this.$createElement) {
             this.configThemeColorTemplate = h('div', {
                 class: 'lmo-color_box'
             }, [
@@ -275,6 +252,30 @@ export default {
 
             i.click();
         }
+    },
+    computed: {
+        ...mapState({
+            currentConfigColor: state => state.appStore.currentConfig.text,
+            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
+        })
+    },
+    data() {
+        return {
+            configColor: {},
+            configColorTemplate: null,
+            configTemplateBackground: {
+                color: '#fff',
+                image: '',
+                arrange: '0% 0% / 100% 100%'
+            },
+            templateBackgroundType: '拉伸',
+            configThemeColorTemplate: null,
+            themeColorIndex: '0'
+        };
+    },
+    mounted() {
+      this.initConfigColor();
+      this.initConfigThemeColorTemplate();
     },
     watch: {
         currentConfigColor: {
