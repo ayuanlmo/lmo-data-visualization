@@ -1,6 +1,7 @@
 require('./style.t.scss');
 
 import {mapState} from "vuex";
+import {UploadAudioTypes} from '@/const/Default.t';
 
 export default {
     name: 'lmo-audio_config',
@@ -61,8 +62,6 @@ export default {
                             ])
                         ])
                     ])
-
-
                 ]),
                 h('div', {
                     class: 'lmo-audio_config_right'
@@ -142,30 +141,6 @@ export default {
             ])
         );
     },
-    computed: {
-        ...mapState({
-            playState: state => state.appStore.templateCurrentAudioConfig.playState,
-            currentConfig: state => state.appStore.currentConfig,
-            currentTemplate: state => state.appStore.currentTemplate
-        })
-    },
-    data() {
-        return {
-            audioName: '',
-            audioVolume: 100,
-            audioPlay: false,
-            videoConf: {
-                audio: {
-                    name: '',
-                    volume: 100
-                },
-                video: {
-                    fps: '30',
-                    duration: 5
-                }
-            }
-        };
-    },
     methods: {
         selectAudio() {
             const i = document.createElement('input');
@@ -175,9 +150,11 @@ export default {
                 const file = i.files[0];
                 const fr = new FileReader();
 
+                if (!UploadAudioTypes.includes(file.type))
+                    return this.$message.warning(`${file.name}是一个不受支持的音频文件`);
+
                 this.audioName = file.name;
                 this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_NAME', this.audioName);
-
                 fr.readAsDataURL(file);
                 fr.onload = (r) => {
                     const result = r.currentTarget.result;
@@ -202,7 +179,7 @@ export default {
             const volume = (e / 100).toFixed(1);
 
             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME', volume);
-            this.$refs.audio.volume = (e / 100).toFixed(1);
+            this.$refs.audio.volume = volume;
         },
         startSynthesis() {
             this.$confirm('您确定要开始合成吗?', '提示', {
@@ -228,6 +205,30 @@ export default {
             }).catch(() => {
             });
         }
+    },
+    computed: {
+        ...mapState({
+            playState: state => state.appStore.templateCurrentAudioConfig.playState,
+            currentConfig: state => state.appStore.currentConfig,
+            currentTemplate: state => state.appStore.currentTemplate
+        })
+    },
+    data() {
+        return {
+            audioName: '',
+            audioVolume: 100,
+            audioPlay: false,
+            videoConf: {
+                audio: {
+                    name: '',
+                    volume: 100
+                },
+                video: {
+                    fps: '30',
+                    duration: 5
+                }
+            }
+        };
     },
     watch: {
         playState(n) {
