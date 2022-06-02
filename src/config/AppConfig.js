@@ -19,7 +19,7 @@ module.exports = {
         namespace: '_lmo_',
         storage: 'local'
     },
-    specialThanks: ['糖兮兮', 'YC SEMI', 'Yc Core'],
+    specialThanks: ['糖兮兮', '游游', 'YC SEMI', 'Yc Core'],
     openSource: {
         github: 'https://github.com/ayuanlmo/lmo-data-visualization',
         gitee: 'https://gitee.com/ayuanlmo/lmo-data-visualization'

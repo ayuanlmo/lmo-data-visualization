@@ -5,23 +5,40 @@ const chartConfig = {
         mainTitle: {
             color: '#000',
             value: '主标题',
-            type: 'input',
-            label: '主标题',
-            show: true
+            type: 'lmo-input',
+            label: '主标题'
         },
         subTitle: {
             color: '#000',
             value: '副标题',
-            type: 'input',
-            label: '副标题',
-            show: true
+            type: 'lmo-input',
+            label: '副标题'
         },
         dataSource: {
             color: '#000',
             value: '某学校',
-            type: 'input',
-            label: '数据来源',
-            show: true
+            type: 'lmo-input',
+            label: '数据来源'
+        },
+        xAxisFontSize: {
+            type: 'lmo-input-number',
+            label: 'X轴字体大小',
+            value: '24'
+        },
+        yAxisFontSize: {
+            type: 'lmo-input-number',
+            label: 'Y轴字体大小',
+            value: '24'
+        },
+        xAxisLabel: {
+            type: 'lmo-switch',
+            label: 'X轴标签',
+            value: true
+        },
+        yAxisLabel: {
+            type: 'lmo-switch',
+            label: 'Y轴标签',
+            value: true
         }
     },
     titleAnimateName: 'rubberBand',

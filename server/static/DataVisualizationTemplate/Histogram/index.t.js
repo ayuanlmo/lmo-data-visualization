@@ -31,7 +31,7 @@ void function (doc, global, echarts, d3) {
             }
             if (m.type === 'UpdateTitle') {
                 ChartConfig.text = m.data;
-                setTitle();
+                init(csvData,false);
             }
             if (m.type === 'UpdateThemeColor') {
                 ChartConfig.themeColorKey = m.data.index;
@@ -131,16 +131,18 @@ void function (doc, global, echarts, d3) {
                 type: 'category',
                 data: xAxisData,
                 axisLabel: {
+                    show: ChartConfig.text.xAxisLabel.value,
                     textStyle: {
-                        fontSize: 24
+                        fontSize: ChartConfig.text.xAxisFontSize.value
                     }
                 }
             },
             yAxis: {
                 type: 'value',
                 axisLabel: {
+                    show: ChartConfig.text.yAxisLabel.value,
                     textStyle: {
-                        fontSize: 24
+                        fontSize: ChartConfig.text.yAxisFontSize.value
                     }
                 }
             },
