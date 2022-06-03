@@ -4,7 +4,8 @@ node_modules
 
 ffmpeg.exe
 /temp
-/output
+/output*
+*.mp4*
 
 # local env files
 .env.local
