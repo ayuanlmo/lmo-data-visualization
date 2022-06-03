@@ -29,9 +29,14 @@ void function (doc, global, echarts, d3) {
                 csvData = data;
                 init(data, true);
             }
-            if (m.type === 'UpdateTitle') {
+            if (m.type === 'UpdateText') {
                 ChartConfig.text = m.data;
                 init(csvData,false);
+            }
+            if (m.type === 'UpdateColor') {
+                ChartConfig.color = m.data;
+                setTitle();
+                // init(csvData,false);
             }
             if (m.type === 'UpdateThemeColor') {
                 ChartConfig.themeColorKey = m.data.index;
@@ -69,10 +74,10 @@ void function (doc, global, echarts, d3) {
 
 
     const setTitle = () => {
-        d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.text.mainTitle.color);
-        d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.text.subTitle.color);
+        d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.color.mainTitle.value);
+        d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.color.subTitle.value);
         d3.select('.data_source').text(ChartConfig.text.dataSource.value);
-        d3.select('.from').style('color', ChartConfig.text.dataSource.color);
+        d3.select('.from').style('color', ChartConfig.color.dataSource.value);
     };
     const setTitleAnimate = () => {
         const el = document.getElementById('text');
@@ -125,7 +130,6 @@ void function (doc, global, echarts, d3) {
                 }()
             });
         });
-
         const option = {
             xAxis: {
                 type: 'category',

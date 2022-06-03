@@ -135,7 +135,7 @@ export default {
         initConfigColorTemplate(h = this.$createElement) {
             this.configColorTemplate = [];
             Object.keys(this.configColor).map(i => {
-                if ('color' in this.configColor[i]) {
+                if ('value' in this.configColor[i]) {
                     this.configColorTemplate.push(
                         h('div', {
                             class: 'lmo-color_box'
@@ -145,27 +145,35 @@ export default {
                             }, [
                                 h('div', {
                                     class: 'lmo-color_box_label'
-                                }, [`${this.configColor[i].label}颜色:`]),
+                                }, [`${this.configColor[i].label}:`]),
                                 h('div', {
                                     class: 'lmo-color_box_option'
                                 }, [
-                                    h('lmo-color-picker', {
-                                        props: {
-                                            value: this.configColor[i].color
-                                        },
-                                        on: {
-                                            change: (e) => {
-                                                this.configColor[i].color = e;
-                                                this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configColor);
-                                            }
-                                        }
-                                    })
+                                    this.renderComponent(i)
+
                                 ])
                             ])
                         ])
                     );
                 }
             });
+        },
+        renderComponent(i) {
+            const _Component = this.configColor[i]['type'];
+            const h = this.$createElement;
+
+            if (_Component === 'lmo-color-picker')
+                return h(_Component, {
+                    props: {
+                        value: this.configColor[i].value
+                    },
+                    on: {
+                        change: (e) => {
+                            this.configColor[i].value = e;
+                            this.$store.commit('SET_CURRENT_TEMPLATE_COLOR_SETTING', this.configColor);
+                        }
+                    }
+                });
         },
         initConfigThemeColorTemplate(h = this.$createElement) {
             this.configThemeColorTemplate = h('div', {
@@ -255,7 +263,7 @@ export default {
     },
     computed: {
         ...mapState({
-            currentConfigColor: state => state.appStore.currentConfig.text,
+            currentConfigColor: state => state.appStore.currentConfig.color,
             currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
         })
     },
@@ -274,8 +282,8 @@ export default {
         };
     },
     mounted() {
-      this.initConfigColor();
-      this.initConfigThemeColorTemplate();
+        this.initConfigColor();
+        this.initConfigThemeColorTemplate();
     },
     watch: {
         currentConfigColor: {

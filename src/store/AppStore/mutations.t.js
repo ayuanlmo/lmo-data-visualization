@@ -1,6 +1,6 @@
 import * as Type from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {set_server_push_message} from "@/const/MutationTypes.t";
+import {set_current_template_color_setting, set_server_push_message} from "@/const/MutationTypes.t";
 
 export default {
     [Type.set_current_template_default_data](state, data) {
@@ -15,10 +15,17 @@ export default {
     },
     [Type.set_current_template_text_setting](state, data) {
         PostMessage({
-            type: 'UpdateTitle',
+            type: 'UpdateText',
             data: data
         });
         state.currentConfig.text = data;
+    },
+    [Type.set_current_template_color_setting](state, data){
+        PostMessage({
+            type: 'UpdateColor',
+            data: data
+        });
+        state.currentConfig.color = data;
     },
     [Type.set_current_template_theme_colors](state, data) {
         state.currentConfig.themeColors = data;
