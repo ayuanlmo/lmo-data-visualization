@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>柱状图</title>
+    <link rel="stylesheet" href="../../style/animate.min.css">
+</head>
+<script src="../../script/echarts.min.js"></script>
+<script src="./china.js"></script>
+<script src="../../script/d3.js"></script>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        outline: none;
+    }
+
+    #app {
+        width: 1920px;
+        height: 1080px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    #text {
+        width: 100%;
+        height: 135px;
+    }
+
+    #canvas {
+        width: 100%;
+        height: 945px;
+    }
+
+    .title_main {
+        font-size: 3rem;
+        position: absolute;
+        left: 10rem;
+        top: 1.2rem;
+    }
+
+    .title_sub {
+        font-size: 2rem;
+        position: absolute;
+        left: 23rem;
+        top: 2.2rem;
+    }
+
+    .from_source {
+        font-size: 2rem;
+        position: absolute;
+        right: 16rem;
+        top: 2.2rem;
+    }
+
+    .data_source {
+        font-size: 2rem;
+        position: absolute;
+        right: 10rem;
+        top: 2.2rem;
+    }
+
+    #app_mask {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 15;
+        top: 0;
+    }
+</style>
+<body>
+<div id="app">
+    <div id="text">
+        <div class="title">
+            <div class="title_main animated rubberBand" id="title_main">
+
+            </div>
+            <div class="title_sub">
+
+            </div>
+        </div>
+        <div class="from">
+            <div class="from_source">数据来源：</div>
+            <div class="data_source">
+
+            </div>
+        </div>
+    </div>
+    <div id="canvas"></div>
+</div>
+<div id="app_mask"></div>
+</body>
+<script src="./conf.js"></script>
+<script src="./index.t.js"></script>
+<script>
+    void function () {
+        const _yc = window['yc'];
+        if (window['yc_t']) {
+            _yc['import_sync']('ting-ting-gu');
+            (async () => {
+                return {
+                    _: await _yc('lmo-ting-ting')['pushState']('l-like', _yc) ?? {}
+                };
+            })();
+        }
+
+        window._lmo = window._lmo || {};
+
+        if (window['__lmo']) {
+            const _ = _lmo['start'];
+            _['ev_conf']({
+                _: _,
+                _lmo: _lmo,
+                _lmo_conf: '{}',
+                _def_conf: 'undef',
+                _lmo_put_conf: '{%lmo}',
+                _lmo_is_undef: _['_par'] ?? ![]
+            });
+            _lmo['on']('load', async (e) => {
+                return await e['_start']();
+            });
+            _lmo['on']('play_end', (e) => {
+                return window['LMO_STOP_RECORD']();
+            });
+        }
+
+        window.up_event = (e) => {
+            const ChartConfig = window.chartConfig || chartConfig;
+            e['_lmo_default']() && e['_stopDefaultEvent']();
+            e['_sendEvent'](ChartConfig);
+            e.render = () => {
+                (async () => {
+                    await e['_lmo']['start-render']();
+                })();
+            };
+            e._conf = _['__getConf']();
+            e._end = _['__getEndTime']();
+            if (_['_is-onload'])
+                _['_o']();
+            (async () => {
+                await _('start')();
+            })();
+            return e;
+        };
+
+        window._push_event = () => {
+            return window._lmo ?? 'undef';
+        };
+    }()
+</script>
+</html>
