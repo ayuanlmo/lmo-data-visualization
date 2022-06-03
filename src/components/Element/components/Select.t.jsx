@@ -11,7 +11,7 @@ export default {
             type: String,
             default: 'text'
         },
-        disabled: {
+        disabled:{
             type: Boolean,
             default: false
         }
@@ -26,11 +26,11 @@ export default {
     },
     render() {
         return (
-                <el-select v-model={this.data} on-change={e => {
-                    this.$emit('change', e);
-                }}>
-                    <slot></slot>
-                </el-select>
+            <el-select v-model={this.data} on-change={e => {
+                this.$emit('change', e);
+            }}>
+                <slot></slot>
+            </el-select>
         );
     }
 };

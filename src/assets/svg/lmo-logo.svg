@@ -2,22 +2,22 @@
     <defs>
         <style>
             .cls-1{
-            fill:#fff0;
+                fill:#fff0;
             }
             .cls-2{
-            fill:#409eff;
+                fill:#409eff;
             }
             .cls-3,.cls-4{
-            fill:none;
-            stroke:#409eff;
-            stroke-linecap:round;
-            stroke-miterlimit:10;
+                fill:none;
+                stroke:#409eff;
+                stroke-linecap:round;
+                stroke-miterlimit:10;
             }
             .cls-3{
-            stroke-width:4px;
+                stroke-width:4px;
             }
             .cls-4{
-            stroke-width:2px;
+                stroke-width:2px;
             }
         </style>
     </defs>

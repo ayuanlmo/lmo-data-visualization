@@ -1,5 +1,5 @@
 export default {
-    name: 'lmo-extend',
+    name:'lmo-extend',
     props: {
         params: {
             type: Object

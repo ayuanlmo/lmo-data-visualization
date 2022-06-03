@@ -110,6 +110,11 @@ export default {
             this.$store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', this.configText);
         }
     },
+    computed: {
+        ...mapState({
+            currentConfigText: state => state.appStore.currentConfig.text
+        })
+    },
     watch: {
         currentConfigText: {
             deep: true,
@@ -117,10 +122,5 @@ export default {
                 this.initConfigText();
             }
         }
-    },
-    computed: {
-        ...mapState({
-            currentConfigText: state => state.appStore.currentConfig.text
-        })
     }
 };

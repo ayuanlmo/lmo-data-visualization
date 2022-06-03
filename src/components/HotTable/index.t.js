@@ -1,13 +1,17 @@
 import {HotTable} from '@handsontable/vue';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
-import {UPDATE_DATA} from "@const/MessageType";
 import 'handsontable/dist/handsontable.full.css';
 
 const HotTableConfig = require('@/config/HotTable');
 
 export default {
     name: 'lmo-hot-table',
+    computed: {
+        ...mapState({
+            csvData: state => state.appStore.currentConfig.data
+        })
+    },
     render(h) {
         return (
             h(HotTable, {
@@ -22,15 +26,17 @@ export default {
             })
         );
     },
-    mounted() {
-        this.initHotTableData();
+    watch: {
+        csvData() {
+            this.initHotTableData();
+        }
     },
     methods: {
         hotTableAfterChange(change, s) {
             if (s === 'edit')
                 this.updateData();
         },
-        updateData() {
+        updateData(){
             let csvData = '';
 
             this.$refs.HotTable.hotInstance.getData().map(i => {
@@ -46,7 +52,7 @@ export default {
                 }
             });
             PostMessage({
-                type: UPDATE_DATA,
+                type: 'UpdateData',
                 data: csvData
             });
         },
@@ -61,14 +67,7 @@ export default {
             }
         }
     },
-    watch: {
-        csvData() {
-            this.initHotTableData();
-        }
-    },
-    computed: {
-        ...mapState({
-            csvData: state => state.appStore.currentConfig.data
-        })
+    mounted() {
+        this.initHotTableData();
     }
 };

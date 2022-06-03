@@ -47,6 +47,11 @@ export default {
             ])
         );
     },
+    computed: {
+        ...mapState({
+            currentConfig: state => state.appStore.currentConfig
+        })
+    },
     data() {
         return {
             previewType: 'JSON',
@@ -57,10 +62,5 @@ export default {
         show() {
             this.visible = !this.visible;
         }
-    },
-    computed: {
-        ...mapState({
-            currentConfig: state => state.appStore.currentConfig
-        })
     }
 };

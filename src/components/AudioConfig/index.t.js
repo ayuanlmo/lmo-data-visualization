@@ -141,23 +141,6 @@ export default {
             ])
         );
     },
-    data() {
-        return {
-            audioName: '',
-            audioVolume: 100,
-            audioPlay: false,
-            videoConf: {
-                audio: {
-                    name: '',
-                    volume: 100
-                },
-                video: {
-                    fps: '30',
-                    duration: 5
-                }
-            }
-        };
-    },
     methods: {
         selectAudio() {
             const i = document.createElement('input');
@@ -223,6 +206,30 @@ export default {
             });
         }
     },
+    computed: {
+        ...mapState({
+            playState: state => state.appStore.templateCurrentAudioConfig.playState,
+            currentConfig: state => state.appStore.currentConfig,
+            currentTemplate: state => state.appStore.currentTemplate
+        })
+    },
+    data() {
+        return {
+            audioName: '',
+            audioVolume: 100,
+            audioPlay: false,
+            videoConf: {
+                audio: {
+                    name: '',
+                    volume: 100
+                },
+                video: {
+                    fps: '30',
+                    duration: 5
+                }
+            }
+        };
+    },
     watch: {
         playState(n) {
             if (n)
@@ -230,12 +237,5 @@ export default {
             else
                 this.pause();
         }
-    },
-    computed: {
-        ...mapState({
-            playState: state => state.appStore.templateCurrentAudioConfig.playState,
-            currentConfig: state => state.appStore.currentConfig,
-            currentTemplate: state => state.appStore.currentTemplate
-        })
     }
 };

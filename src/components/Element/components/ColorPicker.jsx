@@ -8,7 +8,7 @@ export default {
                     },
                     on: {
                         'active-change': (e) => {
-                            this.$emit('change', e);
+                            this.$emit('change',e);
                         }
                     }
                 })

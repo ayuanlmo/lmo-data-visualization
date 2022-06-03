@@ -1,3 +1,3 @@
 module.exports = {
-    __SYNTHESIS: 'synthesis'
+    __SYNTHESIS:'synthesis'
 };

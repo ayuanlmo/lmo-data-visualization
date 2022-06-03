@@ -2,6 +2,11 @@ require('./style.t.scss');
 
 export default {
     name: 'lmo-template_item',
+    props: {
+        data: {
+            type: Object
+        }
+    },
     render(h) {
         return (
             h('div', {
@@ -45,10 +50,5 @@ export default {
                 ])
             ])
         );
-    },
-    props: {
-        data: {
-            type: Object
-        }
     }
 };

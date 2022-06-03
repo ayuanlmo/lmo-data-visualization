@@ -34,20 +34,20 @@ export default {
     },
     render(h) {
         return (
-                h('el-checkbox', {
-                    props: {
-                        label: this.label,
-                        disabled: this.disabled,
-                        name: this.name,
-                        value: this.select
-                    },
-                    on: {
-                        change: e => {
-                            this.select = e;
-                            this.$emit('change', e);
-                        }
+            h('el-checkbox', {
+                props: {
+                    label: this.label,
+                    disabled: this.disabled,
+                    name: this.name,
+                    value: this.select
+                },
+                on: {
+                    change: e => {
+                        this.select = e;
+                        this.$emit('change', e);
                     }
-                }, [this.text])
+                }
+            }, [this.text])
         );
     }
 };

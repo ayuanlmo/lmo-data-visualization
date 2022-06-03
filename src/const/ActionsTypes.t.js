@@ -1,2 +1,0 @@
-export const GET_TEMPLATE_LIST = 'GET_TEMPLATE_LIST';
-export const GET_MEDIA = 'GET_MEDIA';

@@ -23,13 +23,13 @@ export default {
     },
     render(h) {
         return (
-                h('el-tag', {
-                    props: {
-                        type: this.type,
-                        closable: this.closable,
-                        color: this.color
-                    }
-                }, [this.text])
+            h('el-tag', {
+                props: {
+                    type: this.type,
+                    closable: this.closable,
+                    color: this.color
+                }
+            }, [this.text])
         );
     }
 };

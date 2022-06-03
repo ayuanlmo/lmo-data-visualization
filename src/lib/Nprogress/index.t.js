@@ -6,7 +6,6 @@
  * **/
 
 import Nprogress from 'nprogress';
-
 require('./style.t.scss');
 
 export const start = (d = 0.1) => {

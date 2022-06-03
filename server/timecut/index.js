@@ -1,58 +1,49 @@
-/**
- * timeCut module
- * @author ayuanlmo
- * @module timecut
- * @module fs-extra
- * @module path
- * Created by ayuanlmo on 2022/06
- * **/
-
 const timeCut = require('timecut');
 const fs = require('fs-extra');
 const path = require('path');
 
 class TC {
-    constructor(_WS = {}, _DATA = {}) {
-        this._WS = _WS;//获得socket对象
-        this._DATA = _DATA;//获得数据
-        this._TASK_NAME = `lmo_${new Date().getTime()}`;//创建任务名称
+    constructor(ws = {}, data = {}) {
+        this.ws = ws;//获得socket对象
+        this.data = data;//获得数据
+        this.taskName = `lmo_${new Date().getTime()}`;//创建任务名称
         //下发任务状态
-        this._WS.send(require('../funcs').__STRINGIFY({
+        this.ws.send(require('../funcs')._stringify({
             type: 'task_pending',
             data: {
                 cmd: 'task_pending',
-                taskName: this._TASK_NAME
+                taskName: this.taskName
             }
         }));
-        this.__INIT();//初始化
+        this._init();//初始化
     }
 
-    __INIT() {
-        this.__copyTemplate();
+    _init() {
+        this._copyTemplate();
     }
 
-    __copyTemplate() {
+    _copyTemplate() {
         const _temp = '../server/static/temp/';
 
         //临时文件夹是否存在
         if (!fs.existsSync(_temp)) {
             fs.mkdir(_temp);
         }
-        const _DIR = `../server/static/temp/${this._TASK_NAME}`;
+        const dir = `../server/static/temp/${this.taskName}`;
 
-        if (!fs.existsSync(_DIR)) {
-            fs.mkdir(_DIR);
-            this.__COPYFILE(`../server/static/DataVisualizationTemplate/${this._DATA.template}`, _DIR);
+        if (!fs.existsSync(dir)) {
+            fs.mkdir(dir);
+            this._copyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, dir);
 
             setTimeout(() => {
                 const str = 'const chartConfig = ';
 
                 //替换 配置文件对象
-                fs.writeFile(`${_DIR}/conf.js`, `${str}${JSON.stringify(this._DATA['templateConfig'])};`, e => {
+                fs.writeFile(`${dir}/conf.js`, `${str}${JSON.stringify(this.data['templateConfig'])};`, e => {
                     if (e) {
                         console.log('模板配置文件替换失败');
                     } else {
-                        this.__SYNTHESIS();//开始合成视频
+                        this._synthesis();//开始合成视频
                     }
                 });
             }, 1000);
@@ -60,60 +51,60 @@ class TC {
     }
 
     //复制
-    __COPYFILE(_DIR, _TO) {
-        const _SOURCE_FILE = fs.readdirSync(_DIR, {withFileTypes: true});//获取源文件
+    _copyFile(dir, to) {
+        const sourceFile = fs.readdirSync(dir, {withFileTypes: true});//获取源文件
 
-        _SOURCE_FILE.forEach(i => {
-            const n = path.resolve(_DIR, i.name);
-            const t = path.resolve(_TO, i.name);
+        sourceFile.forEach(i => {
+            const n = path.resolve(dir, i.name);
+            const t = path.resolve(to, i.name);
 
             fs.copyFileSync(n, t);
         });
     }
 
     //合成
-    __SYNTHESIS(_FPS = 30, _DURATION = 1) {
-        const _DATA = this._DATA['config'];
+    _synthesis(fps = 30, duration = 1) {
+        const _data = this.data['config'];
 
         timeCut({
-                url: `http://localhost:3000/static/temp/${this._TASK_NAME}/index.html`,
+                url: `http://localhost:3000/static/temp/${this.taskName}/index.html`,
                 viewport: {width: 1920, height: 1080},
                 selector: '#app',
                 left: 0,
                 top: 0,
                 right: 0,
                 bottom: 0,
-                fps: parseInt(_DATA.video.fps),
-                duration: _DATA.video.duration,
-                output: `static/output/${this._TASK_NAME}.mp4`,
+                fps: parseInt(_data.video.fps),
+                duration: _data.video.duration,
+                output: `static/output/${this.taskName}.mp4`,
                 preparePageForScreenshot: async () => {
-                    this._WS.send(require('../funcs').__STRINGIFY({
+                    this.ws.send(require('../funcs')._stringify({
                         type: 'task_processing',
                         data: {
                             cmd: 'task_processing',
-                            state: this._TASK_NAME
+                            state: this.taskName
                         }
                     }));
                 }
             }
         ).then(() => {
-            this._WS.send(require('../funcs').__STRINGIFY(
+            this.ws.send(require('../funcs')._stringify(
                 {
                     type: 'task_end',
                     data: {
                         cmd: 'task_processing',
                         state: 'success',
-                        taskName: this._TASK_NAME,
-                        path: `/static/output/'${this._TASK_NAME}.mp4`
+                        taskName: this.taskName,
+                        path: `/static/output/'${this.taskName}.mp4`
                     }
                 }
             ));
             //删除临时目录
-            this.__DEL_TEMP_FILE(`${path.resolve(`../server/static/temp/${this._TASK_NAME}`)}`);
+            this._delTempFile(`${path.resolve(`../server/static/temp/${this.taskName}`)}`);
         });
     }
 
-    __DEL_TEMP_FILE(_path) {
+    _delTempFile(_path) {
         let files = [];
 
         if (fs.existsSync(_path)) {
@@ -122,7 +113,7 @@ class TC {
                 const curPath = _path + "/" + file;
 
                 if (fs.statSync(curPath).isDirectory()) {
-                    this.__DEL_TEMP_FILE(curPath); //递归删除文件夹
+                    this._delTempFile(curPath); //递归删除文件夹
                 } else {
                     fs.unlinkSync(curPath); //删除文件
                 }

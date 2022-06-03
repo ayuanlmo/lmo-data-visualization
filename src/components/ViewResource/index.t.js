@@ -4,6 +4,13 @@ import VideoPlayer from '@/components/VideoPlayer/index.t';
 
 export default {
     name: 'lmo-view_resource',
+    data() {
+        return {
+            visible: false,
+            list: [],
+            playerUrl: ''
+        };
+    },
     render(h) {
         return (
             <div>
@@ -54,15 +61,11 @@ export default {
             </div>
         );
     },
-    data() {
-        return {
-            visible: false,
-            list: [],
-            playerUrl: ''
-        };
-    },
-    mounted() {
-        this.getList();
+    watch: {
+        visible(n) {
+            if (n)
+                this.getList();
+        }
     },
     methods: {
         show() {
@@ -76,10 +79,7 @@ export default {
             });
         }
     },
-    watch: {
-        visible(n) {
-            if (n)
-                this.getList();
-        }
+    mounted() {
+        this.getList();
     }
 };

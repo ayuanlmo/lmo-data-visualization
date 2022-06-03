@@ -1,10 +1,16 @@
 require('./style.t.scss');
 
 import PreviewTemplateConf from '@/components/PreviewTemplateConf/index.t';
-import Preview from "@components/Preview/index.t";
+import Preview from "@components/Preview";
 
 export default {
     name: 'lmo-edit_header',
+    props: {
+        title: {
+            type: String,
+            default: '编辑模板'
+        }
+    },
     render(h) {
         return (
             h('div', {
@@ -65,11 +71,5 @@ export default {
                 })
             ])
         );
-    },
-    props: {
-        title: {
-            type: String,
-            default: '编辑模板'
-        }
     }
 };

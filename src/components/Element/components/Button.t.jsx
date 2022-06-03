@@ -49,23 +49,23 @@ export default {
     },
     render(h) {
         return (
-                h('el-button', {
-                    props: {
-                        type: this.type,
-                        disabled: this.disabled,
-                        nativeType: this.nativeType,
-                        icon: this.iconClass,
-                        loading: this.loading,
-                        round: this.round,
-                        plain: this.plain,
-                        size: this.size
-                    },
-                    on: {
-                        click: e => {
-                            this.$emit('click', e);
-                        }
+            h('el-button', {
+                props: {
+                    type: this.type,
+                    disabled: this.disabled,
+                    nativeType: this.nativeType,
+                    icon: this.iconClass,
+                    loading: this.loading,
+                    round: this.round,
+                    plain: this.plain,
+                    size: this.size
+                },
+                on: {
+                    click: e => {
+                        this.$emit('click', e);
                     }
-                }, [this.text], h(this.$slots.default))
+                }
+            }, [this.text], h(this.$slots.default))
         );
     }
 };

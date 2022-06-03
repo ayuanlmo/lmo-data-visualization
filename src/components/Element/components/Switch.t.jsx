@@ -61,7 +61,7 @@ export default {
                         inactiveIconClass={this.inactiveIconClass}
                         ref={'switch'}
                         onChange={(e) => {
-                            this.$emit('change', e);
+                            this.$emit('change',e);
                         }}
                 />
         );

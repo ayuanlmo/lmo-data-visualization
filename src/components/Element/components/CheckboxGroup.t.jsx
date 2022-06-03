@@ -12,17 +12,17 @@ export default {
     },
     render(h) {
         return (
-                h('el-checkbox-group ', {
-                    props: {
-                        value: this.value,
-                        disabled: this.disabled
-                    },
-                    on: {
-                        change: e => {
-                            this.$emit('change', e);
-                        }
+            h('el-checkbox-group ', {
+                props: {
+                    value: this.value,
+                    disabled: this.disabled
+                },
+                on: {
+                    change: e => {
+                        this.$emit('change', e);
                     }
-                }, [this.text])
+                }
+            }, [this.text])
         );
     }
 };
