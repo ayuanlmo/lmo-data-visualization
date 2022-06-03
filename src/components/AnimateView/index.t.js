@@ -2,15 +2,10 @@ require('./style.t.scss');
 
 import AnimateList from '@/components/AnimateList/index.t';
 import {PostMessage} from "@lib/PostMessage/index.t";
+import {UPDATE_ANIMATE_NAME} from "@const/MessageType";
 
 export default {
     name: 'lmo-animate_view',
-    data() {
-        return {
-            visible: true,
-            animateName: 'rubberBand'
-        };
-    },
     render(h) {
         return (
             h('div', {
@@ -33,7 +28,7 @@ export default {
                     on: {
                         selectAnimate: (e) => {
                             PostMessage({
-                                type: 'UpdateAnimateName',
+                                type: UPDATE_ANIMATE_NAME,
                                 data: e
                             });
                             console.log(this.animateName);
@@ -43,5 +38,11 @@ export default {
                 })
             ])
         );
+    },
+    data() {
+        return {
+            visible: true,
+            animateName: 'rubberBand'
+        };
     }
 };

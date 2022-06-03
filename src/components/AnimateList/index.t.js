@@ -1,15 +1,9 @@
 require('./style.t.scss');
 
-import AnimateNames from "@const/AnimateNames";
+import AnimateNames from "@const/AnimateNames.t";
 
 export default {
     name: 'lmo-animate_list',
-    data() {
-        return {
-            visible: false,
-            animateName: ''
-        };
-    },
     render(h) {
         return (
             <el-dialog beforeClose={() => {
@@ -72,6 +66,12 @@ export default {
                 }
             </el-dialog>
         );
+    },
+    data() {
+        return {
+            visible: false,
+            animateName: ''
+        };
     },
     methods: {
         show() {

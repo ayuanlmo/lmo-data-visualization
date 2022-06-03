@@ -1,7 +1,15 @@
-const fs = require('fs-extra');
+/**
+ * Functions
+ * @author ayuanlmo
+ * @module fs-extra
+ * @module path
+ * Created by ayuanlmo on 2022/06
+ * **/
+
+const _FS = require('fs-extra');
 
 module.exports = {
-    _getSuccessMessage: (data = {}) => {
+    __GET_SUCCESS_MESSAGE: (data = {}) => {
         return {
             data: data,
             message: 'success',
@@ -9,8 +17,8 @@ module.exports = {
             _t: new Date().getTime()
         };
     },
-    async _getTemplateList(r) {
-        await fs.readdir('./static/DataVisualizationTemplate', (err, data) => {
+    async __GET_TEMPLATE_LIST(r) {
+        await _FS.readdir('./static/DataVisualizationTemplate', (err, data) => {
             const _ = [];
 
             data.forEach(i => {
@@ -25,19 +33,19 @@ module.exports = {
                 );
             });
             r.json(
-                require('./funcs')._getSuccessMessage({
+                require('./funcs').__GET_SUCCESS_MESSAGE({
                     list: _
                 })
             );
         });
     },
-    _getMedia: (r) => {
+    __GET_MEDIA: (r) => {
         const _outputDir = './static/output';
 
-        if (!fs.existsSync(_outputDir)) {
-            fs.mkdir(_outputDir);
+        if (!_FS.existsSync(_outputDir)) {
+            _FS.mkdir(_outputDir);
         }
-        fs.readdir('./static/output', (err, data) => {
+        _FS.readdir('./static/output', (err, data) => {
             const _ = [];
 
             data.forEach(i => {
@@ -49,13 +57,13 @@ module.exports = {
                 }
             });
             r.json(
-                require('./funcs')._getSuccessMessage({
+                require('./funcs').__GET_SUCCESS_MESSAGE({
                     list: _
                 })
             );
         });
     },
-    _stringify(data = {}) {
+    __STRINGIFY(data = {}) {
         return JSON.stringify(data);
     }
 };

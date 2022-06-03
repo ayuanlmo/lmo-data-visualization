@@ -4,6 +4,7 @@ import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {UploadImageTypes} from "@const/Default.t";
 import AnimateView from '@components/AnimateView/index.t';
+import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from "@const/MessageType";
 
 export default {
     name: 'lmo-color_config_item',
@@ -125,6 +126,20 @@ export default {
             ])
         );
     },
+    data() {
+        return {
+            configColor: {},
+            configColorTemplate: null,
+            configTemplateBackground: {
+                color: '#fff',
+                image: '',
+                arrange: '0% 0% / 100% 100%'
+            },
+            templateBackgroundType: '拉伸',
+            configThemeColorTemplate: null,
+            themeColorIndex: '0'
+        };
+    },
     methods: {
         initConfigColor() {
             Object.keys(this.currentConfigColor).map((i) => {
@@ -200,7 +215,7 @@ export default {
                                             if (this.themeColorIndex !== i.value) {
                                                 this.themeColorIndex = i.value;
                                                 PostMessage({
-                                                    type: 'UpdateThemeColor',
+                                                    type: UPDATE_THEME_COLOR,
                                                     data: {
                                                         index: this.themeColorIndex,
                                                         colors: i.colors
@@ -236,7 +251,7 @@ export default {
         },
         setTemplateBackground() {
             PostMessage({
-                type: 'UpdateBackground_image',
+                type: UPDATE_BACKGROUND_IMAGE,
                 data: this.configTemplateBackground
             });
         },
@@ -261,26 +276,6 @@ export default {
             i.click();
         }
     },
-    computed: {
-        ...mapState({
-            currentConfigColor: state => state.appStore.currentConfig.color,
-            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
-        })
-    },
-    data() {
-        return {
-            configColor: {},
-            configColorTemplate: null,
-            configTemplateBackground: {
-                color: '#fff',
-                image: '',
-                arrange: '0% 0% / 100% 100%'
-            },
-            templateBackgroundType: '拉伸',
-            configThemeColorTemplate: null,
-            themeColorIndex: '0'
-        };
-    },
     mounted() {
         this.initConfigColor();
         this.initConfigThemeColorTemplate();
@@ -303,11 +298,17 @@ export default {
             handler() {
                 this.$refs.BackgroundOption.className = this.configTemplateBackground.image === '' ? 'lmo_hide' : '';
                 PostMessage({
-                    type: 'UpdateBackground_image',
+                    type: UPDATE_BACKGROUND_IMAGE,
                     data: this.configTemplateBackground
                 });
                 this.setTemplateBackground();
             }
         }
+    },
+    computed: {
+        ...mapState({
+            currentConfigColor: state => state.appStore.currentConfig.color,
+            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
+        })
     }
 };

@@ -1,1 +1,10 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1652594130697" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3932" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><defs><style type="text/css"></style></defs><path d="M96 336h64v384H96zM0 451h64v186H0zM224 272h64v512h-64zM352 448h64v160h-64zM480 400h64v256h-64zM608 336h64v384h-64zM736 464h64v128h-64zM864 400h64v256h-64zM960 448h64v160h-64z" p-id="3933" fill="#409EFF"></path></svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg t="1652594130697" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3932"
+     width="200" height="200">
+    <defs>
+        <style type="text/css"></style>
+    </defs>
+    <path d="M96 336h64v384H96zM0 451h64v186H0zM224 272h64v512h-64zM352 448h64v160h-64zM480 400h64v256h-64zM608 336h64v384h-64zM736 464h64v128h-64zM864 400h64v256h-64zM960 448h64v160h-64z"
+          p-id="3933" fill="#409EFF"></path>
+</svg>

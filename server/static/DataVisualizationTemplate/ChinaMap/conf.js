@@ -13,7 +13,7 @@ const chartConfig = {
             label: '副标题'
         },
         dataSource: {
-            value: '某学校',
+            value: '某机构',
             type: 'lmo-input',
             label: '数据来源'
         },

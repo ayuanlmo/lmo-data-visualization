@@ -8,11 +8,6 @@ import {mapState} from "vuex";
 
 export default {
     name: 'lmo-edit',
-    computed: {
-        ...mapState({
-            currentTemplate: state => state.appStore.currentTemplate
-        })
-    },
     render(h) {
         return (
             h('div', {
@@ -92,6 +87,11 @@ export default {
                 ])
             ])
         );
+    },
+    computed: {
+        ...mapState({
+            currentTemplate: state => state.appStore.currentTemplate
+        })
     },
     methods: {
         downloadDefaultCSV() {

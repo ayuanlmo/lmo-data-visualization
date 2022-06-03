@@ -1,10 +1,14 @@
 /**
  * Data-Visualization Server
+ * @author ayuanlmo
+ * @module express
+ * @module express-ws
+ * Created by ayuanlmo on 2022/06
  * **/
 
 (() => {
-    const express = require('express');
-    const _App = express();
+    const _Express = require('express');
+    const _App = _Express();
     const _Router = require('./const/routers');
     const _Func = require('./funcs');
     const _Conf = require('./conf/ServerConfig');
@@ -12,9 +16,9 @@
     const _Net = require('./lib/net');
 
     require('express-ws')(_App);
-    _App.use(express.urlencoded({extended: false}));
-    _App.use(_Conf.__STATIC_PATH, express.static(`${__dirname}${_Conf.__STATIC_PATH}`));
-    _App.use(_Conf.__STATIC_PATH, express.static(`../dist`));
+    _App.use(_Express.urlencoded({extended: false}));
+    _App.use(_Conf.__STATIC_PATH, _Express.static(`${__dirname}${_Conf.__STATIC_PATH}`));
+    _App.use(_Conf.__STATIC_PATH, _Express.static(`../dist`));
     _App.ws(_Router.__SOCKET_CONNECT, (ws, request) => {
         ws.on('message', msg => {
             if (msg === _Conf.__SOCKET_PONG_KEY) return ws.send(_Conf.__SOCKET_PONG_MESSAGE);
@@ -25,10 +29,10 @@
         });
     });
     _App.post(_Router.__GET_TEMPLATE, (req, res) => {
-        return _Func._getTemplateList(res);
+        return _Func.__GET_TEMPLATE_LIST(res);
     });
     _App.post(_Router.__GET_MEDIA, (req, res) => {
-        _Func._getMedia(res);
+        _Func.__GET_MEDIA(res);
     });
     _App.get('*', (req, res) => {
         res.json({data: {}, code: 404, message: 'No Found'});

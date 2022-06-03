@@ -1,12 +1,6 @@
 require('./style.t.scss');
 
 export default {
-    props: {
-        url: {
-            type: String,
-            default: ''
-        }
-    },
     render(h) {
         return (
             h('div', {
@@ -19,8 +13,8 @@ export default {
                         src: `/server${this.url}`
                     }
                 }),
-                h('div',{
-                    class:'lmo-data_visualization_edit_preview_mask'
+                h('div', {
+                    class: 'lmo-data_visualization_edit_preview_mask'
                 })
             ])
         );
@@ -31,11 +25,6 @@ export default {
             window.onresize = () => {
                 this.initPlayerView();
             };
-        };
-    },
-    data() {
-        return {
-            iframeStyle: {}
         };
     },
     methods: {
@@ -57,5 +46,16 @@ export default {
                 height: _domHeight
             };
         }
+    },
+    props: {
+        url: {
+            type: String,
+            default: ''
+        }
+    },
+    data() {
+        return {
+            iframeStyle: {}
+        };
     }
 };

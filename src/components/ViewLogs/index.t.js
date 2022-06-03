@@ -35,14 +35,14 @@ export default {
             visible: false
         };
     },
-    computed: {
-        ...mapState({
-            serverPushMessage: state => state.appStore.serverPushMessage
-        })
-    },
     methods: {
         show() {
             this.visible = !this.visible;
         }
+    },
+    computed: {
+        ...mapState({
+            serverPushMessage: state => state.appStore.serverPushMessage
+        })
     }
 };

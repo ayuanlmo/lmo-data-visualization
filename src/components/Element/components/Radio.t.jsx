@@ -37,18 +37,18 @@ export default {
     },
     render(h) {
         return (
-            h('el-radio', {
-                props: {
-                    value: this.radio_value,
-                    disabled: this.disabled,
-                    border: this.border
-                },
-                on: {
-                    change: e => {
-                        this.$emit('change', e);
+                h('el-radio', {
+                    props: {
+                        value: this.radio_value,
+                        disabled: this.disabled,
+                        border: this.border
+                    },
+                    on: {
+                        change: e => {
+                            this.$emit('change', e);
+                        }
                     }
-                }
-            })
+                })
         );
     }
 };
