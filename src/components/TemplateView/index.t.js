@@ -1,19 +1,10 @@
 require('./style.t.scss');
-import TemplateItem from '../TemplateItem/index.t';
+
+import TemplateItem from '@/components/TemplateItem/index.t';
 import {set} from '@/lib/Storage';
 
 export default {
     name: 'lmo-template_view',
-    data() {
-        return {
-            TemplateData: []
-        };
-    },
-    mounted() {
-        this.$store.dispatch('GET_TEMPLATE_LIST').then(res => {
-            this.TemplateData = res.data.list;
-        });
-    },
     render(h) {
         return (
             h('div', {
@@ -42,5 +33,15 @@ export default {
                 ])
             ])
         );
+    },
+    data() {
+        return {
+            TemplateData: []
+        };
+    },
+    mounted() {
+        this.$store.dispatch('GET_TEMPLATE_LIST').then(res => {
+            this.TemplateData = res.data.list;
+        });
     }
 };

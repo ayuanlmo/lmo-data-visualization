@@ -1,6 +1,6 @@
 require('./style.t.scss');
 
-const AppConfig = require('@config/AppConfig');
+const AppConfig = require('@/config/AppConfig');
 
 export default {
     name: 'lmo-about',

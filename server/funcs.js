@@ -31,26 +31,26 @@ module.exports = {
             );
         });
     },
-    _getMedia: (r) => {
-        const _outputDir = './static/output';
+                    _getMedia: (r) => {
+                        const _outputDir = './static/output';
 
-        if (!fs.existsSync(_outputDir)) {
-            fs.mkdir(_outputDir);
-        }
-        fs.readdir('./static/output', (err, data) => {
-            const _ = [];
+                        if (!fs.existsSync(_outputDir)) {
+                            fs.mkdir(_outputDir);
+                        }
+                        fs.readdir('./static/output', (err, data) => {
+                            const _ = [];
 
-            data.forEach(i => {
-                if (i.split('.')[1] === 'mp4') {
-                    _.push({
-                        name: i,
-                        path: `/static/output/${i}`
-                    });
-                }
-            });
-            r.json(
-                require('./funcs')._getSuccessMessage({
-                    list: _
+                            data.forEach(i => {
+                                if (i.split('.')[1] === 'mp4') {
+                                    _.push({
+                                        name: i,
+                                        path: `/static/output/${i}`
+                                    });
+                                }
+                            });
+                            r.json(
+                                require('./funcs')._getSuccessMessage({
+                                    list: _
                 })
             );
         });

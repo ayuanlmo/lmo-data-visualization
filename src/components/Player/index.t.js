@@ -1,12 +1,6 @@
 require('./style.t.scss');
 
 export default {
-    props: {
-        url: {
-            type: String,
-            default: ''
-        }
-    },
     render(h) {
         return (
             h('div', {
@@ -19,19 +13,17 @@ export default {
                         src: `/server${this.url}`
                     }
                 }),
-                h('div',{
-                    class:'lmo-data_visualization_edit_preview_mask'
+                h('div', {
+                    class: 'lmo-data_visualization_edit_preview_mask'
                 })
             ])
         );
     },
-    created() {
-        window.onload = () => {
-            this.initPlayerView();
-            window.onresize = () => {
-                this.initPlayerView();
-            };
-        };
+    props: {
+        url: {
+            type: String,
+            default: ''
+        }
     },
     data() {
         return {
@@ -57,5 +49,13 @@ export default {
                 height: _domHeight
             };
         }
+    },
+    created() {
+        window.onload = () => {
+            this.initPlayerView();
+            window.onresize = () => {
+                this.initPlayerView();
+            };
+        };
     }
 };

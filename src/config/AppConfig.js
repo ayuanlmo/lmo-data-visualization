@@ -8,7 +8,15 @@ module.exports = {
         outputDir: 'dist',
         assetsDir: 'static',
         indexPath: 'index.html',
-        gzip: true
+        gzip: true,
+        productionSourceMap: false,
+        cssSourceMap: false
+    },
+    devProxy: {
+        defaultAddress: 'http://localhost:3000/',
+        ws: '/connectSocket',
+        wsPath: 'ws/connect',
+        http: '/server'
     },
     router: {
         keep: true,

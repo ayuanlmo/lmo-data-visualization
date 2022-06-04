@@ -5,21 +5,6 @@ import AudioConfig from '@/components/AudioConfig/index.t';
 
 export default {
     name: 'lmo-edit_config',
-    data() {
-        return {
-            tabsActiveName: 'text_and_theme',
-            tabs: [
-                {
-                    name: 'text_and_theme',
-                    label: '文字 / 主题'
-                },
-                {
-                    name: 'audio_and_duration',
-                    label: '音频 / 时间'
-                }
-            ]
-        };
-    },
     render(h) {
         return (
             h('div', {
@@ -61,5 +46,20 @@ export default {
                 ])
             ])
         );
+    },
+    data() {
+        return {
+            tabsActiveName: 'text_and_theme',
+            tabs: [
+                {
+                    name: 'text_and_theme',
+                    label: '文字 / 主题'
+                },
+                {
+                    name: 'audio_and_duration',
+                    label: '音频 / 时间'
+                }
+            ]
+        };
     }
 };

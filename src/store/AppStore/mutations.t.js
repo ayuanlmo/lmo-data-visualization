@@ -1,55 +1,55 @@
-import * as Type from '@/const/MutationTypes.t';
+import * as TYPE from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {set_current_template_color_setting, set_server_push_message} from "@/const/MutationTypes.t";
+import {UPDATE_COLOR,UPDATE_TEXT,UPDATE_DURATION} from '@/const/MessageType.t';
 
 export default {
-    [Type.set_current_template_default_data](state, data) {
+    [TYPE.SET_CURRENT_TEMPLATE_DEFAULT_DATA](state, data) {
         state.currentConfig = data;
     },
-    [Type.set_current_template](state, data) {
+    [TYPE.SET_CURRENT_TEMPLATE](state, data) {
         state.currentTemplate = data;
     },
-    [Type.set_current_csv_data](state, data) {
+    [TYPE.SET_CURRENT_CSV_DATA](state, data) {
         state.currentConfig.csvData = data;
         state.currentConfig.data = data;
     },
-    [Type.set_current_template_text_setting](state, data) {
+    [TYPE.SET_CURRENT_TEMPLATE_TEXT_SETTING](state, data) {
         PostMessage({
-            type: 'UpdateText',
+            type: UPDATE_TEXT,
             data: data
         });
         state.currentConfig.text = data;
     },
-    [Type.set_current_template_color_setting](state, data){
+    [TYPE.SET_CURRENT_TEMPLATE_COLOR_SETTING](state, data){
         PostMessage({
-            type: 'UpdateColor',
+            type: UPDATE_COLOR,
             data: data
         });
         state.currentConfig.color = data;
     },
-    [Type.set_current_template_theme_colors](state, data) {
+    [TYPE.SET_CURRENT_TEMPLATE_THEME_COLORS](state, data) {
         state.currentConfig.themeColors = data;
     },
-    [Type.set_template_current_audio_config_name](state, data) {
+    [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_NAME](state, data) {
         state.templateCurrentAudioConfig.name = data;
     },
-    [Type.set_template_current_audio_config_volume](state, data) {
+    [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME](state, data) {
         state.templateCurrentAudioConfig.volume = data;
     },
-    [Type.set_template_current_audio_config_src](state, data) {
+    [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC](state, data) {
         state.templateCurrentAudioConfig.src = data;
     },
-    [Type.set_template_current_audio_config_play_state](state, data) {
+    [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE](state, data) {
         state.templateCurrentAudioConfig.playState = data;
     },
-    [Type.set_server_push_message](state, data) {
-        state.serverPushMessage.push(data);
-    },
-    [Type.set_template_current_duration](state, data) {
+    [TYPE.SET_TEMPLATE_CURRENT_DURATION](state, data) {
         PostMessage({
-            type: 'UpdateDuration',
+            type: UPDATE_DURATION,
             data: data * 1000
         });
         state.currentConfig.duration = data * 1000;
+    },
+    [TYPE.SET_SERVER_PUSH_MESSAGE](state, data) {
+        state.serverPushMessage.push(data);
     }
 };

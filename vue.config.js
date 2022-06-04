@@ -2,7 +2,6 @@ const AppConfig = require('./src/config/AppConfig');
 const CompressionPlugin = require('compression-webpack-plugin');
 const GzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
 const TimeStamp = new Date().getTime();
-
 const resolve = (dir) => {
     return require('path').join(__dirname, dir);
 };
@@ -12,13 +11,13 @@ require('./src/lib/CliColor/index.t');
 module.exports = {
     outputDir: AppConfig.build.outputDir,
     assetsDir: AppConfig.build.assetsDir,
-    filenameHashing: true,
     publicPath: AppConfig.publicPath,
     indexPath: AppConfig.build.indexPath,
+    productionSourceMap: AppConfig.build.productionSourceMap,
+    filenameHashing: true,
     runtimeCompiler: false,
-    productionSourceMap: false,
     css: {
-        sourceMap: false,
+        sourceMap: AppConfig.build.cssSourceMap,
         extract: {
             filename: `css/lmo-css_[name].${TimeStamp}.t.css`,
             chunkFilename: `css/lmo-css_[name].${TimeStamp}.t.css`
@@ -64,22 +63,9 @@ module.exports = {
         conf.resolve.alias.set('@views', resolve('src/views'));
         conf.resolve.alias.set('@utils', resolve('src/utils'));
     },
-    devServer:{
-        proxy:{
-            '/connectSocket':{
-                target:'http://localhost:3000/ws/connect',
-                ws:true,
-                pathRewrite: {
-                    '^/connectSocket': ''
-                }
-            },
-            '/server':{
-                target:'http://localhost:3000/',
-                ws:false,
-                pathRewrite: {
-                    '^/server': ''
-                }
-            }
+    devServer: {
+        proxy: {
+            ...require('./src/config/DevProxy')
         }
     }
 };

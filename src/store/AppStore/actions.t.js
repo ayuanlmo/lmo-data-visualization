@@ -1,13 +1,13 @@
-import {post} from '@/lib/Request/index.t';
+import {_POST} from '@/lib/Request/index.t';
 
-import * as Type from '@/const/actionsTypes';
-import * as URL from '@/const/interfaceUrls';
+import * as TYPE from '@const/ActionsTypes.t';
+import * as URL from '@const/InterfaceUrls';
 
 export default {
-    [Type.get_template_list]({commit}) {
-        return post(URL.get_template_data);
+    [TYPE.GET_TEMPLATE_LIST]({commit}) {
+        return _POST(URL.GET_TEMPLATE_DATA);
     },
-    [Type.get_media]({commit}) {
-        return post(URL.get_media);
+    [TYPE.GET_MEDIA]({commit}) {
+        return _POST(URL.GET_MEDIA);
     }
 };

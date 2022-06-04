@@ -5,6 +5,7 @@
  * @return {String} 转换后的格式 eg：'00:00:00'
  * **/
 const {stringify} = require("@/utils/index");
+const {UploadImageTypes} = require("@const/Default.t");
 
 module.exports.formatTime = (s) => {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -26,12 +27,6 @@ module.exports.getWsUrl = (url = location.origin ?? global.location.origin) => {
         return urls[0] === 'https' ? `wss:${origin}${url}` : `ws:${origin}${url}`;
 };
 
-/**
- * @method isObject 判断是否为Object
- * @author ayuanlmo
- * @param {Object} data 秒数
- * @return {Boolean}
- * **/
 const isObject = (data = {}) => {
     return typeof data === 'object' && Object.prototype.toString.call(data).toLowerCase() === '[object object]' && data.length;
 };
@@ -42,12 +37,6 @@ module.exports.stringify = (data = null) => {
     return data === null ? 'null' : JSON.stringify(data);
 };
 
-/**
- * @method toString 将任意格式数据转换为String
- * @author ayuanlmo
- * @param {Object|Boolean|String|Number|Array|any} data 转换的数据
- * @return {string|string}
- * **/
 module.exports.toString = (data) => {
     if (typeof data === 'boolean')
         return `${data}`;
@@ -60,12 +49,6 @@ module.exports.toString = (data) => {
     return '';
 };
 
-/**
- * @method isArray 是否为Array
- * @author ayuanlmo
- * @param {Array|Object} arr
- * @return {boolean}
- * **/
 module.exports.isArray = (arr = []) => {
     return Object.prototype.toString.call(arr) === "[object Array]";
 };
@@ -75,12 +58,6 @@ module.exports.isString = (str = '') => {
     return typeof str === 'string';
 };
 
-/**
- * @method encode 编码
- * @author ayuanlmo
- * @param {String} str
- * @return {string|String}
- * **/
 module.exports.encode = (str = '') => {
     let code = '_lmo_ting^';
 
@@ -90,12 +67,6 @@ module.exports.encode = (str = '') => {
     return code.slice(0, code.length - 1);
 };
 
-/**
- * @method decode 解码
- * @author ayuanlmo
- * @param {String} code
- * @return {string|String}
- * **/
 module.exports.decode = (code = '') => {
     const codeTemplate = '_lmo_ting^';
 
@@ -118,5 +89,17 @@ module.exports.toBase64 = (file) => {
         fr.onerror = (msg) => {
             e(msg);
         };
+    });
+};
+
+module.exports.selectFile = () => {
+    return new Promise((resolve, reject) => {
+        const i = document.createElement('input');
+
+        i.type = 'file';
+        i.addEventListener('change', () => {
+            resolve(i.files[0]);
+        });
+        i.click();
     });
 };

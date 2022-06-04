@@ -2,8 +2,9 @@ require('./style.t.scss');
 
 import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {UploadImageTypes} from "@const/Default.t";
-import AnimateView from '@components/AnimateView/index.t';
+import {UploadImageTypes} from "@/const/Default.t";
+import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from '@/const/MessageType.t';
+import AnimateView from '@/components/AnimateView/index.t';
 
 export default {
     name: 'lmo-color_config_item',
@@ -125,6 +126,20 @@ export default {
             ])
         );
     },
+    data() {
+        return {
+            configColor: {},
+            configColorTemplate: null,
+            configTemplateBackground: {
+                color: '#fff',
+                image: '',
+                arrange: '0% 0% / 100% 100%'
+            },
+            templateBackgroundType: '拉伸',
+            configThemeColorTemplate: null,
+            themeColorIndex: '0'
+        };
+    },
     methods: {
         initConfigColor() {
             Object.keys(this.currentConfigColor).map((i) => {
@@ -200,7 +215,7 @@ export default {
                                             if (this.themeColorIndex !== i.value) {
                                                 this.themeColorIndex = i.value;
                                                 PostMessage({
-                                                    type: 'UpdateThemeColor',
+                                                    type: UPDATE_THEME_COLOR,
                                                     data: {
                                                         index: this.themeColorIndex,
                                                         colors: i.colors
@@ -236,18 +251,12 @@ export default {
         },
         setTemplateBackground() {
             PostMessage({
-                type: 'UpdateBackground_image',
+                type: UPDATE_BACKGROUND_IMAGE,
                 data: this.configTemplateBackground
             });
         },
         selectFile() {
-            const i = document.createElement('input');
-
-            i.type = 'file';
-
-            i.addEventListener('change', () => {
-                const file = i.files[0];
-
+            require('@/utils/index').selectFile().then(file => {
                 if (UploadImageTypes.indexOf(file.type) !== -1) {
                     if (file.size > 1024 * 1024 * 5)
                         return this.$message.warning(`${file.name}文件过大，请不要超过5M。`);
@@ -257,29 +266,7 @@ export default {
                 } else
                     this.$message.warning(`${file.name}是一个不受支援的文件。`);
             });
-
-            i.click();
         }
-    },
-    computed: {
-        ...mapState({
-            currentConfigColor: state => state.appStore.currentConfig.color,
-            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
-        })
-    },
-    data() {
-        return {
-            configColor: {},
-            configColorTemplate: null,
-            configTemplateBackground: {
-                color: '#fff',
-                image: '',
-                arrange: '0% 0% / 100% 100%'
-            },
-            templateBackgroundType: '拉伸',
-            configThemeColorTemplate: null,
-            themeColorIndex: '0'
-        };
     },
     mounted() {
         this.initConfigColor();
@@ -303,11 +290,17 @@ export default {
             handler() {
                 this.$refs.BackgroundOption.className = this.configTemplateBackground.image === '' ? 'lmo_hide' : '';
                 PostMessage({
-                    type: 'UpdateBackground_image',
+                    type: UPDATE_BACKGROUND_IMAGE,
                     data: this.configTemplateBackground
                 });
                 this.setTemplateBackground();
             }
         }
+    },
+    computed: {
+        ...mapState({
+            currentConfigColor: state => state.appStore.currentConfig.color,
+            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
+        })
     }
 };

@@ -9,15 +9,20 @@ export default {
             </el-dialog>
         );
     },
+    props: {
+        path: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             visible: false
         };
     },
-    props: {
-        path: {
-            type: String,
-            default: ''
+    methods: {
+        show() {
+            this.visible = true;
         }
     },
     watch: {
@@ -31,11 +36,6 @@ export default {
                 setTimeout(async () => {
                     this.$refs.video.play();
                 }, 500);
-        }
-    },
-    methods: {
-        show() {
-            this.visible = true;
         }
     }
 };

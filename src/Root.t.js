@@ -5,12 +5,11 @@ require('../public/style/animate.min.css');
 
 import '@/lib/PostMessage/index.t';
 import {get} from '@/lib/Storage';
-import {connect_socket} from "@const/interfaceUrls";
 import Socket from '@/lib/Socket/index.t';
 import Vue from 'vue';
 import Store from './store/index';
 
-Vue.prototype.ws = new Socket(connect_socket, (msg) => {
+Vue.prototype.ws = new Socket(require('@/config/AppConfig').devProxy.ws, (msg) => {
     Store.commit('SET_SERVER_PUSH_MESSAGE', {
         currentTime: new Date().getTime(),
         msg: JSON.stringify(msg)

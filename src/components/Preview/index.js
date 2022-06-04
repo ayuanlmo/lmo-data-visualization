@@ -2,6 +2,7 @@ require('./style.t.scss');
 
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
+import {PREVIEW} from '@/const/MessageType.t';
 
 let timer = 0;
 
@@ -9,12 +10,6 @@ let cont = 0;
 
 export default {
     name: 'lmo-preview',
-    computed: {
-        ...mapState({
-            url: state => `/server${state.appStore.currentTemplate.url}`,
-            currentConfig: state => state.appStore.currentConfig
-        })
-    },
     render(h) {
         return (
             <el-dialog style={{
@@ -70,11 +65,18 @@ export default {
             </el-dialog>
         );
     },
+    data() {
+        return {
+            visible: false,
+            percentage: 0,
+            playState: false
+        };
+    },
     methods: {
         play() {
             this.playState = true;
             PostMessage({
-                    type: 'Preview',
+                    type: PREVIEW,
                     data: this.currentConfig
                 }
             );
@@ -98,13 +100,6 @@ export default {
             this.visible = !this.visible;
         }
     },
-    data() {
-        return {
-            visible: false,
-            percentage: 0,
-            playState: false
-        };
-    },
     watch: {
         visible() {
             if (!this.visible) {
@@ -112,5 +107,11 @@ export default {
                 clearInterval(timer);
             }
         }
+    },
+    computed: {
+        ...mapState({
+            url: state => `/server${state.appStore.currentTemplate.url}`,
+            currentConfig: state => state.appStore.currentConfig
+        })
     }
 };

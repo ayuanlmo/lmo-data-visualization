@@ -8,11 +8,6 @@ import {mapState} from "vuex";
 
 export default {
     name: 'lmo-edit',
-    computed: {
-        ...mapState({
-            currentTemplate: state => state.appStore.currentTemplate
-        })
-    },
     render(h) {
         return (
             h('div', {
@@ -102,30 +97,24 @@ export default {
             a.click();
         },
         importLocalData() {
-            const i = document.createElement('input');
-
-            i.type = 'file';
-
-            i.addEventListener('change', () => {
-                const file = i.files[0];
-
-                if (file.type !== 'text/csv') {
-                    return this.$message.warning(`${file.name}是一个不受支持的文件`);
-                }
+            require('@/utils/index').selectFile().then(file => {
+                if (file.type !== 'text/csv')
+                    return this.$message.warning(`[${file.name}]是一个不受支持的文件`);
                 const fr = new FileReader();
 
                 fr.readAsText(file);
                 fr.onload = (res) => {
-                    const data = res.srcElement.result ?? res.target.result;
-
-                    this.$store.commit('SET_CURRENT_CSV_DATA', data);
+                    this.$store.commit('SET_CURRENT_CSV_DATA', res.srcElement.result ?? res.target.result);
                     setTimeout(() => {
                         this.$refs.ht.updateData();
                     }, 500);
                 };
             });
-
-            i.click();
         }
+    },
+    computed: {
+        ...mapState({
+            currentTemplate: state => state.appStore.currentTemplate
+        })
     }
 };
