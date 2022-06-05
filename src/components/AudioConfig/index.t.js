@@ -223,6 +223,12 @@ export default {
                 this.play();
             else
                 this.pause();
+        },
+        currentConfig: {
+            deep: true,
+            handler() {
+                this.videoConf.video.duration = this.currentConfig.duration / 1000;
+            }
         }
     },
     computed: {
