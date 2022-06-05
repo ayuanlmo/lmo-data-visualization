@@ -2,19 +2,20 @@ require('./style.t.scss');
 
 import PreviewTemplateConf from '@/components/PreviewTemplateConf/index.t';
 import Preview from "@/components/Preview";
+import {mapState} from "vuex";
 
 export default {
     name: 'lmo-edit_header',
     render(h) {
         return (
             h('div', {
-                class: 'lmo-edit_header'
+                class: 'lmo-edit_header lmo_flex_box'
             }, [
                 h(Preview, {
                     ref: 'Preview'
                 }),
                 h('div', {
-                    class: 'lmo-edit_header_left'
+                    class: 'lmo-edit_header_left lmo_position_relative lmo_flex_box'
                 }, [
                     h('p', {
                         class: 'lmo-edit_header_title lmo_cursor_pointer lmo_hover_theme_color',
@@ -30,7 +31,7 @@ export default {
                         '返回'
                     ]),
                     h('div', {
-                        class: 'lmo-edit_header_sep'
+                        class: 'lmo-edit_header_sep lmo_position_relative'
                     }),
                     h('div', {
                         class: 'lmo-edit_header_content'
@@ -57,6 +58,14 @@ export default {
                                     this.$refs.Preview.show();
                                 }
                             }
+                        }),
+                        h('lmo-button', {
+                            props: {
+                                text: '🤞合成'
+                            },
+                            on: {
+                                click: this.startSynthesis
+                            }
                         })
                     ])
                 ]),
@@ -71,5 +80,33 @@ export default {
             type: String,
             default: '编辑模板'
         }
+    },
+    methods: {
+        startSynthesis() {
+            this.$confirm('您确定要开始合成吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.ws.send(JSON.stringify({
+                    templateConfig: {
+                        isCustom: 0,
+                        ...this.currentConfig
+                    },
+                    config: {
+                        ...this.currentTemplateVideoConfig
+                    },
+                    template: this.currentTemplate.template
+                }));
+            }).catch(() => {
+            });
+        }
+    },
+    computed: {
+        ...mapState({
+            currentConfig: state => state.appStore.currentConfig,
+            currentTemplateVideoConfig: state => state.appStore.currentTemplateVideoConfig,
+            currentTemplate: state => state.appStore.currentTemplate
+        })
     }
 };

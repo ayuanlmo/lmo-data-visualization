@@ -34,10 +34,10 @@ export default {
                     class: 'lmo-data_visualization_edit_content'
                 }, [
                     h('div', {
-                        class: 'lmo-data_visualization_edit_preview lmo_color_white_background lmo_flex_box'
+                        class: 'lmo-data_visualization_edit_preview lmo_color_white_background lmo_flex_box lmo_position_relative'
                     }, [
                         h('div', {
-                            class: 'lmo-data_visualization_edit_preview_player'
+                            class: 'lmo-data_visualization_edit_preview_player lmo_position_relative'
                         }, [
                             h(Player, {
                                 props: {
@@ -46,7 +46,7 @@ export default {
                             })
                         ]),
                         h('div', {
-                            class: 'lmo-data_visualization_edit_preview_table'
+                            class: 'lmo-data_visualization_edit_preview_table lmo_position_relative'
                         }, [
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_header'
@@ -74,9 +74,13 @@ export default {
                                     })
                                 ])
                             ]),
-                            h(HotTable, {
-                                ref: 'ht'
-                            })
+                            h('div', {
+                                class: 'lmo-data_visualization_edit_preview_table_content'
+                            }, [
+                                h(HotTable, {
+                                    ref: 'ht'
+                                })
+                            ])
                         ])
                     ]),
                     h('div', {

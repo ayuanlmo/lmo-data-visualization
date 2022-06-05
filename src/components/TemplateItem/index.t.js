@@ -5,7 +5,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-template_item_content',
+                class: 'lmo-template_item_content lmo_cursor_pointer',
                 on: {
                     click: () => {
                         this.$emit('click', this.data);
@@ -13,13 +13,13 @@ export default {
                 }
             }, [
                 h('div', {
-                    class: 'lmo-template_item_content_card'
+                    class: 'lmo-template_item_content_card lmo_position_relative'
                 }, [
                     h('div', {
-                        class: 'lmo-template_item_content_img_box'
+                        class: 'lmo-template_item_content_img_box lmo_position_absolute'
                     }, [
                         h('div', {
-                            class: 'lmo-template_item_content_img'
+                            class: 'lmo-template_item_content_img lmo_position_absolute'
                         }, [
                             h('img', {
                                 attrs: {
@@ -28,7 +28,7 @@ export default {
                             })
                         ]),
                         h('div', {
-                            class: 'lmo-template_item_content_title'
+                            class: 'lmo-template_item_content_title lmo_position_absolute'
                         }, [
                             h('div', {
                                 class: 'lmo-template_item_content_title_box'

@@ -1,21 +1,25 @@
 export default {
+    //当前模板配置信息
     currentConfig: {
         csvData: '',
-        config: {
-            text: null,
-            themeColors: []
-        },
+        config: {},
         duration: 5000
     },
+    //当前模板音频配置信息
     templateCurrentAudioConfig: {
         name: '',
         volume: 1,
         src: '',
         playState: false
     },
+    //当前模板默认数据
     currentTemplateDefaultData: {
         csvData: ''
     },
+    //当前模板视频配置信息(合成时)
+    currentTemplateVideoConfig:{},
+    //服务器推送的消息
     serverPushMessage: [],
+    //当前模板信息
     currentTemplate: null
 };

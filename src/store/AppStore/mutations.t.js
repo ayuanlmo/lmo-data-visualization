@@ -1,6 +1,6 @@
 import * as TYPE from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {UPDATE_COLOR,UPDATE_TEXT,UPDATE_DURATION} from '@/const/MessageType.t';
+import {UPDATE_COLOR, UPDATE_DURATION, UPDATE_TEXT} from '@/const/MessageType.t';
 
 export default {
     [TYPE.SET_CURRENT_TEMPLATE_DEFAULT_DATA](state, data) {
@@ -20,7 +20,7 @@ export default {
         });
         state.currentConfig.text = data;
     },
-    [TYPE.SET_CURRENT_TEMPLATE_COLOR_SETTING](state, data){
+    [TYPE.SET_CURRENT_TEMPLATE_COLOR_SETTING](state, data) {
         PostMessage({
             type: UPDATE_COLOR,
             data: data
@@ -51,5 +51,8 @@ export default {
     },
     [TYPE.SET_SERVER_PUSH_MESSAGE](state, data) {
         state.serverPushMessage.push(data);
+    },
+    [TYPE.SET_CURRENT_TEMPLATE_VIDEO_CONFIG](state, data = {}) {
+        state.currentTemplateVideoConfig = data;
     }
 };

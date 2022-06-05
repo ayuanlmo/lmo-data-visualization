@@ -5,16 +5,22 @@ export default {
         return (
             h('div', {
                 ref: 'playerIframeBox',
-                class: 'lmo-data_visualization_edit_preview_player_iframe_box'
+                class: 'lmo-data_visualization_edit_preview_player_iframe_box lmo_position_relative'
             }, [
                 h('iframe', {
+                    class:'lmo_position_absolute',
                     style: this.iframeStyle,
                     attrs: {
                         src: `/server${this.url}`
+                    },
+                    on: {
+                        load: () => {
+                            console.log('加载完毕');
+                        }
                     }
                 }),
                 h('div', {
-                    class: 'lmo-data_visualization_edit_preview_mask'
+                    class: 'lmo-data_visualization_edit_preview_mask lmo_position_absolute'
                 })
             ])
         );

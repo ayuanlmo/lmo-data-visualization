@@ -2,26 +2,24 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background: #ddd;
+  background: #f7f7f7;
   overflow: hidden;
 
   .lmo-data_visualization_edit_content {
     width: 100vw;
-    //margin-top: 1vw;
-    margin: 1vw 0;
+    margin: 1vh 0;
     border-radius: 0.4vw;
     height: calc(100vh - (6vh + 1vh));
 
     .lmo-data_visualization_edit_preview {
-      width: 1000%;
+      width: 100vw;
       height: 60vh;
-      position: relative;
+      border-radius: .5vw;
 
       .lmo-data_visualization_edit_preview_player {
         width: 48vw;
         height: 27vw;
-        background: #dddddd;
-        position: relative;
+        background: #f7f7f7;
         top: 2vh;
         left: 1vw;
       }
@@ -29,10 +27,8 @@
       .lmo-data_visualization_edit_preview_table {
         width: 50vw;
         height: 27vw;
-        position: relative;
         top: 2vh;
         left: 1.5vw;
-        overflow: auto;
 
         .lmo-data_visualization_edit_preview_table_header {
           .lmo-data_visualization_edit_preview_table_header_content {
@@ -41,13 +37,20 @@
             justify-content: end;
           }
         }
+
+        .lmo-data_visualization_edit_preview_table_content {
+          width: auto;
+          height: 50vh;
+          overflow-x: hidden;
+        }
       }
     }
 
     .lmo-data_visualization_edit_configure {
       width: 1000%;
-      height: 30vh;
-      margin-top: 2vh;
+      height: 32vh;
+      margin-top: 1vh;
+      border-radius: .5vw;
     }
   }
 }

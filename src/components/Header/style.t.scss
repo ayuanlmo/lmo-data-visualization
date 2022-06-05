@@ -4,7 +4,6 @@
   background-color: #fff;
   border-bottom-right-radius: .5vw;
   border-bottom-left-radius: .5vw;
-  display: flex;
   justify-content: space-between;
 
   h3 {
@@ -14,7 +13,6 @@
   }
 
   .lmo_data_visualization_header_option {
-    position: relative;
     top: 1.5vh;
 
     button {

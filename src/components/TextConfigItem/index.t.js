@@ -19,7 +19,7 @@ export default {
     methods: {
         initRender(h = this.$createElement) {
             this.renderTemplate = h('div', {
-                class: 'lmo-data_visualization_config_item'
+                class: 'lmo-data_visualization_config_item lmo_flex_box'
             }, [h('div', {
                 class: 'lmo-data_visualization_config_item_card text'
             }, [

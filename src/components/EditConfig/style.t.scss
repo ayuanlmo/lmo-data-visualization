@@ -1,13 +1,11 @@
 .lmo-edit_config {
   .lmo-edit_config_tabs {
-    position: absolute;
     left: 50%;
     transform: translateX(-50%);
     height: 4.5vh;
   }
 
   .lmo-edit_config_content {
-    position: relative;
     top: 55px;
     padding: 0 1rem;
     overflow-y: auto;

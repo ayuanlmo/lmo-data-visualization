@@ -1,6 +1,5 @@
 .lmo-edit_header {
   height: 6vh;
-  display: flex;
   background: #fff;
   padding-left: 1rem;
   line-height: 6vh;
@@ -10,9 +9,7 @@
   padding-right: 1rem;
 
   .lmo-edit_header_left {
-    display: flex;
     margin-right: 40px;
-    position: relative;
 
     i {
       align-self: center;
@@ -24,7 +21,6 @@
     }
 
     .lmo-edit_header_sep {
-      position: relative;
       width: 2px;
       height: 16px;
       background-color: #b3b3b3;

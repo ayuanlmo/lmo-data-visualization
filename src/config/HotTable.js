@@ -4,8 +4,8 @@ module.exports = {
     settings: {
         colHeaders: true,
         rowHeaders: true,
-        minRows: 21,
-        minCols: 18,
+        minRows: 19,
+        minCols: 17,
         manualColumnFreeze: true,
         manualColumnMove: true,
         manualRowMove: true,

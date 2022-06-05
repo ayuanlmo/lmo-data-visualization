@@ -11,7 +11,7 @@ export default {
                 class: 'lmo-edit_config'
             }, [
                 h('div', {
-                    class: 'lmo-edit_config_tabs'
+                    class: 'lmo-edit_config_tabs lmo_position_absolute'
                 }, [
                     h('el-tabs', {
                         props: {
@@ -35,7 +35,7 @@ export default {
                     ])
                 ]),
                 h('div', {
-                    class: 'lmo-edit_config_content'
+                    class: 'lmo-edit_config_content lmo_position_relative'
                 }, [
                     h(TextConfigItem, {
                         class: this.tabsActiveName !== 'text_and_theme' ? 'lmo_hide' : ''

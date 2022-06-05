@@ -1,3 +1,5 @@
+require('./style.t.scss');
+
 import {HotTable} from '@handsontable/vue';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";

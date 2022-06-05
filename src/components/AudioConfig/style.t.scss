@@ -1,9 +1,7 @@
 .lmo-audio_config {
-  position: relative;
 
   .lmo-audio_config_left {
     width: 48vw;
-    //background-color: red;
     margin-right: 2.5rem;
 
     .lmo-audio_config_left_audio_box {
@@ -23,7 +21,6 @@
 
       .lmo-audio_box_label {
 
-
       }
 
       .lmo-audio_content {
@@ -32,7 +29,6 @@
         background-color: #F5F5F5;
         margin-left: 1rem;
         border-radius: 8px;
-        display: flex;
         padding: .5rem;
         justify-content: space-between;
 
@@ -61,6 +57,7 @@
 
     .lmo_video_config_right_item {
       margin-bottom: 1rem;
+
       .el-radio-group {
         margin-left: 1rem;
       }
@@ -71,6 +68,5 @@
         }
       }
     }
-
   }
 }

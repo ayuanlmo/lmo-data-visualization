@@ -26,7 +26,8 @@ export default {
                             class: [
                                 {
                                     'lmo-preview_mask': true,
-                                    'lmo_hide': this.playState
+                                    'lmo_hide': this.playState,
+                                    'lmo_position_absolute': true
                                 }
                             ]
                         }, [

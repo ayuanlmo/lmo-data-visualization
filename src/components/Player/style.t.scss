@@ -4,18 +4,16 @@
   background-color: #EEEEEE;
   box-shadow: 0 0 4px 0 #d8d8d8;
   overflow: hidden;
-  position: relative;
+  border-radius: .5vw;
 
   iframe {
     width: 1920px;
     height: 1080px;
     transform: scale(0.48);
-    position: absolute;
     transform-origin: 0 0;
   }
 
   .lmo-data_visualization_edit_preview_mask {
-    position: absolute;
     width: 100%;
     height: 100%;
   }

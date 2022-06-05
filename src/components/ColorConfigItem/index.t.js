@@ -19,7 +19,7 @@ export default {
                     class: 'lmo-color_box'
                 }, [
                     h('div', {
-                        class: 'lmo-color_box_content'
+                        class: 'lmo-color_box_content lmo_flex_box'
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label',
@@ -86,7 +86,7 @@ export default {
                     class: 'lmo-color_box'
                 }, [
                     h('div', {
-                        class: 'lmo-color_box_content'
+                        class: 'lmo-color_box_content lmo_flex_box'
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label'
@@ -111,7 +111,7 @@ export default {
                     class: 'lmo-color_box'
                 }, [
                     h('div', {
-                        class: 'lmo-color_box_content'
+                        class: 'lmo-color_box_content lmo_flex_box'
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label'
@@ -156,7 +156,7 @@ export default {
                             class: 'lmo-color_box'
                         }, [
                             h('div', {
-                                class: 'lmo-color_box_content'
+                                class: 'lmo-color_box_content lmo_flex_box'
                             }, [
                                 h('div', {
                                     class: 'lmo-color_box_label'
@@ -195,7 +195,7 @@ export default {
                 class: 'lmo-color_box'
             }, [
                 h('div', {
-                    class: 'lmo-color_box_content'
+                    class: 'lmo-color_box_content lmo_flex_box'
                 }, [
                     h('div', {
                         class: 'lmo-color_box_label',
@@ -228,7 +228,7 @@ export default {
                                 }, [
                                     h('div', {
                                         class: [
-                                            'lmo-theme_item_box',
+                                            'lmo-theme_item_box lmo_flex_box',
                                             this.themeColorIndex === i.value ? 'lmo-theme_item_box_activation_border' : 'lmo-theme_item_box_default_border'
                                         ]
                                     }, [

@@ -9,7 +9,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-data_visualization_header'
+                class: 'lmo-data_visualization_header lmo_flex_box'
             }, [
                 h('div', {
                     class: 'lmo_flex_box'
@@ -25,7 +25,7 @@ export default {
                     }, [require('@config/AppConfig').appName])
                 ]),
                 h('div', {
-                    class: 'lmo_data_visualization_header_option'
+                    class: 'lmo_data_visualization_header_option lmo_position_relative'
                 }, [
                     h(ViewResource, {ref: 'ViewResource'}),
                     h('lmo-button', {

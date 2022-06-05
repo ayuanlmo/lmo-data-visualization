@@ -8,7 +8,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-audio_config lmo_flex_box'
+                class: 'lmo-audio_config lmo_flex_box lmo_position_relative'
             }, [
                 h('div', {
                     class: 'lmo-audio_config_left'
@@ -23,7 +23,7 @@ export default {
                                 class: 'lmo-audio_box_label'
                             }, ['背景音乐:']),
                             h('div', {
-                                class: 'lmo-audio_content lmo_cursor_pointer',
+                                class: 'lmo-audio_content lmo_cursor_pointer lmo_flex_box',
                                 on: {
                                     click: this.selectAudio,
                                     mouseover: this.play,
@@ -119,23 +119,6 @@ export default {
                                 <el-radio-button label="60"></el-radio-button>
                             </el-radio-group>
                         ])
-                    ]),
-                    h('div', {
-                        class: 'lmo_video_config_right_item lmo_flex_box'
-                    }, [
-                        h('div', {
-                            class: 'lmo-video_box_label'
-                        }, [
-                            h('lmo-button', {
-                                props: {
-                                    text: '立即合成',
-                                    plain: true
-                                },
-                                on: {
-                                    click: this.startSynthesis
-                                }
-                            })
-                        ])
                     ])
                 ])
             ])
@@ -191,31 +174,10 @@ export default {
 
             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME', volume);
             this.$refs.audio.volume = volume;
-        },
-        startSynthesis() {
-            this.$confirm('您确定要开始合成吗?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                this.ws.send(JSON.stringify(
-                    {
-                        cmd: 'synthesis',
-                        data: {
-                            templateConfig: {
-                                isCustom: 0,
-                                ...this.currentConfig
-                            },
-                            config: {
-                                ...this.videoConf
-                            },
-                            template: this.currentTemplate.template
-                        }
-                    }
-                ));
-            }).catch(() => {
-            });
         }
+    },
+    mounted() {
+        this.$store.commit('SET_CURRENT_TEMPLATE_VIDEO_CONFIG', this.videoConf);
     },
     watch: {
         playState(n) {
@@ -229,13 +191,18 @@ export default {
             handler() {
                 this.videoConf.video.duration = this.currentConfig.duration / 1000;
             }
+        },
+        videoConf: {
+            deep: true,
+            handler() {
+                this.$store.commit('SET_CURRENT_TEMPLATE_VIDEO_CONFIG', this.videoConf);
+            }
         }
     },
     computed: {
         ...mapState({
             playState: state => state.appStore.templateCurrentAudioConfig.playState,
-            currentConfig: state => state.appStore.currentConfig,
-            currentTemplate: state => state.appStore.currentTemplate
+            currentConfig: state => state.appStore.currentConfig
         })
     }
 };
