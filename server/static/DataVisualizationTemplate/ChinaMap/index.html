@@ -20,16 +20,21 @@
         height: 1080px;
         background: #fff;
         overflow: hidden;
+        position: absolute;
     }
 
     #text {
         width: 100%;
         height: 135px;
+        position: absolute;
+        z-index: 5;
     }
 
     #canvas {
         width: 100%;
-        height: 945px;
+        height: 1080px;
+        position: absolute;
+        top: 0;
     }
 
     .title_main {
@@ -67,6 +72,12 @@
         z-index: 15;
         top: 0;
     }
+    .value{
+        position: absolute;
+        top: 200px;
+        left: 170px;
+        z-index: 5;
+    }
 </style>
 <body>
 <div id="app">
@@ -85,6 +96,9 @@
 
             </div>
         </div>
+    </div>
+    <div>
+        <h1 class="value"></h1>
     </div>
     <div id="canvas"></div>
 </div>

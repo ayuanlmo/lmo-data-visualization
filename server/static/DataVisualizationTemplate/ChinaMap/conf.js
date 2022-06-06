@@ -1,4 +1,4 @@
-const chartConfig = {
+window.chartConfig = {
     data: null,
     defaultData: null,
     text: {
@@ -13,9 +13,19 @@ const chartConfig = {
             label: '副标题'
         },
         dataSource: {
-            value: '某学校',
+            value: '某网站',
             type: 'lmo-input',
             label: '数据来源'
+        },
+        legend1: {
+            value: '示例图例1',
+            type: 'lmo-input',
+            label: '图例1'
+        },
+        legend2: {
+            value: '示例图例2',
+            type: 'lmo-input',
+            label: '图例2'
         },
         labelFontSize: {
             type: 'lmo-input-number',
@@ -25,7 +35,12 @@ const chartConfig = {
         showLabel: {
             type: 'lmo-switch',
             label: '显示标签',
-            value: true
+            value: false
+        },
+        visualMap: {
+            type: 'lmo-switch',
+            label: '视觉地图',
+            value: false
         }
     },
     color: {
@@ -139,5 +154,5 @@ const chartConfig = {
         image: '',
         arrange: '0% 0% / 100% 100%'
     },
-    duration: 5000
+    duration: 10000
 };

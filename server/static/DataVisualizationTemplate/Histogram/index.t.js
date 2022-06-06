@@ -1,7 +1,5 @@
 void function (doc, global, echarts, d3) {
-    // eslint-disable-next-line no-undef
-    let ChartConfig = window.chartConfig || chartConfig;
-
+    let ChartConfig = window['chartConfig'] || window.chartConfig;
     const renderDom = doc.getElementById('canvas');
     const appDom = doc.getElementById('app');
     const myChart = echarts.init(renderDom, null, {renderer: 'svg'});
@@ -11,32 +9,28 @@ void function (doc, global, echarts, d3) {
     let csvData = null;
 
     let timer = null;
-
     const onMessage = (msg) => {
         const m = msg.data;
 
         if (msg.origin === location.origin) {
             if (m.type === 'UpdateData') {
                 ChartConfig.data = m.data;
-
                 const data = [];
 
                 ChartConfig.data.split('\r\n').map(i => {
-                    if (i !== '') {
+                    if (i !== '')
                         data.push(i);
-                    }
                 });
                 csvData = data;
                 init(data, true);
             }
             if (m.type === 'UpdateText') {
                 ChartConfig.text = m.data;
-                init(csvData,false);
+                init(csvData, false);
             }
             if (m.type === 'UpdateColor') {
                 ChartConfig.color = m.data;
                 setTitle();
-                // init(csvData,false);
             }
             if (m.type === 'UpdateThemeColor') {
                 ChartConfig.themeColorKey = m.data.index;
@@ -88,11 +82,10 @@ void function (doc, global, echarts, d3) {
         }, ChartConfig.titleAnimateDuration);
     };
     const initBackground = () => {
-        if (ChartConfig.background.image !== '') {
+        if (ChartConfig.background.image !== '')
             appDom.style.background = `url(${ChartConfig.background.image}) ${ChartConfig.background.arrange}`;
-        } else {
+        else
             appDom.style.background = ChartConfig.background.color;
-        }
     };
 
     const init = (text, update = false) => {
@@ -106,10 +99,8 @@ void function (doc, global, echarts, d3) {
         const seriesData = [];
 
         clearInterval(timer);
-        if (update) {
+        if (update)
             myChart && myChart.clear();
-        }
-
         text.forEach(i => {
             const t = i.split(',');
 
@@ -154,11 +145,8 @@ void function (doc, global, echarts, d3) {
             animationDuration: 500,
             series: []
         };
-
         myChart.setOption(option);
-
         let i = -1;
-
         const timerDuration = ChartConfig.duration / seriesData.length;
 
         timer = setInterval(() => {
@@ -177,9 +165,9 @@ void function (doc, global, echarts, d3) {
         }, timerDuration);
     };
 
-    if (ChartConfig.isCustom === 0) {
+    if (ChartConfig.isCustom === 0)
         init(csvData ?? ChartConfig.data.split('\r\n'), true);
-    } else {
+    else {
         window.addEventListener('message', onMessage);
         fetch('data.csv').then(res => {
             return res.text();
@@ -199,5 +187,4 @@ void function (doc, global, echarts, d3) {
     }
     setTitle();
     initBackground();
-// eslint-disable-next-line no-undef
-}(document, window ?? global, echarts ?? window.echarts, d3 ?? window.d3);
+}(document, window ?? global, window['echarts'] ?? window.echarts, window['d3'] ?? window.d3);

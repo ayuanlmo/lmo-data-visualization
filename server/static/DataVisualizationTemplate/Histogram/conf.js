@@ -1,4 +1,4 @@
-const chartConfig = {
+window.chartConfig = {
     data: null,
     defaultData: null,
     text: {
