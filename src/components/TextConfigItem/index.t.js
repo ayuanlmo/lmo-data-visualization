@@ -1,6 +1,7 @@
 require('./style.t.scss');
 
 import {mapState} from 'vuex';
+import {TextConfigComponent} from "@const/Default.t";
 import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 
 export default {
@@ -62,10 +63,14 @@ export default {
             this.initRender();
         },
         renderComponent(i, h) {
-            const _component = this.configText[i].type;
+            const _Component = this.configText[i].type;
 
-            if (_component === 'lmo-input') {
-                return h(_component, {
+            if (!TextConfigComponent.includes(_Component)) {
+                this.$message.warning(`[${_Component}不是一个受支援的组件]`);
+                return h('span');
+            }
+            if (_Component === 'lmo-input') {
+                return h(_Component, {
                     props: {
                         value: this.configText[i].value
                     },
@@ -79,8 +84,8 @@ export default {
                     }
                 });
             }
-            if (_component === 'lmo-switch') {
-                return h(_component, {
+            if (_Component === 'lmo-switch') {
+                return h(_Component, {
                     props: {
                         value: this.configText[i].value
                     },
@@ -92,8 +97,8 @@ export default {
                     }
                 });
             }
-            if (_component === 'lmo-input-number') {
-                return h(_component, {
+            if (_Component === 'lmo-input-number') {
+                return h(_Component, {
                     props: {
                         value: this.configText[i].value
                     },

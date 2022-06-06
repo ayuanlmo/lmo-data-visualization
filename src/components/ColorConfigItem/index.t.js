@@ -4,6 +4,7 @@ import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {UploadImageTypes} from "@/const/Default.t";
 import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from '@/const/MessageType.t';
+import {ColorConfigComponent} from "@/const/Default.t";
 import AnimateView from '@/components/AnimateView/index.t';
 
 export default {
@@ -165,7 +166,6 @@ export default {
                                     class: 'lmo-color_box_option'
                                 }, [
                                     this.renderComponent(i)
-
                                 ])
                             ])
                         ])
@@ -176,6 +176,11 @@ export default {
         renderComponent(i) {
             const _Component = this.configColor[i]['type'];
             const h = this.$createElement;
+
+            if (!ColorConfigComponent.includes(_Component)){
+                this.$message.warning(`[${_Component}不是一个受支援的组件]`);
+                return h('span');
+            }
 
             if (_Component === 'lmo-color-picker')
                 return h(_Component, {
