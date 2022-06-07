@@ -71,18 +71,12 @@
 <div id="app">
     <div id="text">
         <div class="title">
-            <div class="title_main animated rubberBand" id="title_main">
-
-            </div>
-            <div class="title_sub">
-
-            </div>
+            <div class="title_main animated rubberBand" id="title_main"></div>
+            <div class="title_sub"></div>
         </div>
         <div class="from">
             <div class="from_source">数据来源：</div>
-            <div class="data_source">
-
-            </div>
+            <div class="data_source"></div>
         </div>
     </div>
     <div id="canvas"></div>
@@ -92,59 +86,63 @@
 <script src="./conf.js"></script>
 <script src="./index.t.js"></script>
 <script>
-    void function () {
-        const _yc = window['yc'];
-        if (window['yc_t']) {
-            _yc['import_sync']('ting-ting-gu');
+    void function (__GLOBAL, __FACTORY) {
+        __GLOBAL['__LMO__'] = __FACTORY();
+    }(this, () => {
+        window['__'] = '${{{__GLOBAL}}}##' ?? ['__GLOBAL_LMO__'];
+        window['chartConfig'] = '${{{%Conf}}}';
+        if (window['YC']) {
             (async () => {
+                window['YC']['_IMPORT_SYNC'](['_ting_ting-gu', '_ting_ting-com', '_ting_ting-ws']);
                 return {
-                    _: await _yc('lmo-ting-ting')['pushState']('l-like', _yc) ?? {}
+                    '_': await _YC('lmo_ting_ting')['__PUSH_STATE']('L-LIKE', _YC) ?? {},
+                    '_WS': await _YC('lmo_ting_ting')['__WEB_SOCKET']['__CREATE_SOCKET']()['__OPEN']()['__CONNECT_SOCKET'](),
+                    '_CON': () => _YC('ting-ting-com')['_COMM'](E => {
+                        return E['_'];
+                    })
                 };
             })();
         }
+        window['_LMO'] = window['YC'] ?? 'undef';
+        if (window['_LMO'] !== 'undef') {
+            const _ = _LMO['__START'];
 
-        window._lmo = window._lmo || {};
-
-        if (window['__lmo']) {
-            const _ = _lmo['start'];
-            _['ev_conf']({
+            _['EV_CONF']({
                 _: _,
-                _lmo: _lmo,
-                _lmo_conf: '{}',
-                _def_conf: 'undef',
-                _lmo_put_conf: '{%lmo}',
-                _lmo_is_undef: _['_par'] ?? ![]
+                _LMO: _LMO,
+                _LMO_CONF: '{}',
+                _DEF_CONF: 'UNDEF',
+                _LMO_PUT_CONF: '{%LMO}',
+                _LMO_IS_UNDEF: _['_PAR'] ?? ![]
             });
-            _lmo['on']('load', async (e) => {
-                return await e['_start']();
+            _LMO['ON']('LOAD', async (E) => {
+                return await E['_START']()();
             });
-            _lmo['on']('play_end', (e) => {
-                return window['LMO_STOP_RECORD']();
+            _LMO['ON']('PLAY_END', (E) => {
+                return window['LMO_STOP_RECORD'](E);
             });
         }
-
-        window.up_event = (e) => {
-            const ChartConfig = window.chartConfig || chartConfig;
-            e['_lmo_default']() && e['_stopDefaultEvent']();
-            e['_sendEvent'](ChartConfig);
-            e.render = () => {
+        window.UP_EVENT = (e) => {
+            e['__LMO_DEFAULT']() && e['__STOP_DEFAULT_EVENT']();
+            e['__SEND_EVENT'](window['chartConfig'] ?? chartConfig);
+            e['__RENDER'] = () => {
                 (async () => {
-                    await e['_lmo']['start-render']();
+                    return await e['__LMO']['__START_RENDER']();
                 })();
             };
-            e._conf = _['__getConf']();
-            e._end = _['__getEndTime']();
-            if (_['_is-onload'])
-                _['_o']();
-            (async () => {
-                await _('start')();
-            })();
+            e._conf = _['__GET_CONF']();
+            e._end = _['__GET_END_TIME']();
+            if (_['__IS-ONLOAD']) {
+                _['__O']();
+                (async () => {
+                    await _('__START')(window['__LMO']);
+                })();
+            }
             return e;
-        };
-
-        window._push_event = () => {
-            return window._lmo ?? 'undef';
-        };
-    }()
+        }
+        window['_PUSH_EVENT'] = () => {
+            return window['_LMO'] ?? __ ?? 'undef';
+        }
+    });
 </script>
 </html>

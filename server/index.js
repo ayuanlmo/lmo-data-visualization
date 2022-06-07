@@ -21,7 +21,7 @@
             const m = JSON.parse(msg);
 
             if (m['cmd'] === _Cmd.__SYNTHESIS)
-                new (require('./timecut/index')).tc(ws, m.data);
+                new (require('./timecut/index')).TC(ws, m.data);
         });
     });
     _App.post(_Router.__GET_TEMPLATE, (req, res) => {

@@ -3,9 +3,11 @@ const fs = require('fs-extra');
 const path = require('path');
 
 class TC {
-    constructor(ws = {}, data = {}) {
+    constructor(ws = {}, data) {
         this.ws = ws;//获得socket对象
         this.data = data;//获得数据
+        console.log('初始化',this.data)
+        console.log('初始化', typeof  this.data);
         this.taskName = `lmo_${new Date().getTime()}`;//创建任务名称
         //下发任务状态
         this.ws.send(require('../funcs')._stringify({
@@ -36,7 +38,7 @@ class TC {
             this._copyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, dir);
 
             setTimeout(() => {
-                const str = 'const chartConfig = ';
+                const str = 'window.chartConfig = ';
 
                 //替换 配置文件对象
                 fs.writeFile(`${dir}/conf.js`, `${str}${JSON.stringify(this.data['templateConfig'])};`, e => {
@@ -76,6 +78,7 @@ class TC {
                 bottom: 0,
                 fps: parseInt(_data.video.fps),
                 duration: _data.video.duration,
+                // pixFmt: 'yuv420p',
                 output: `static/output/${this.taskName}.mp4`,
                 preparePageForScreenshot: async () => {
                     this.ws.send(require('../funcs')._stringify({
@@ -123,4 +126,4 @@ class TC {
     }
 }
 
-module.exports.tc = TC;
+module.exports.TC = TC;

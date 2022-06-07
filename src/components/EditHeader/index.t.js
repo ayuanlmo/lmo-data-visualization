@@ -89,14 +89,17 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.ws.send(JSON.stringify({
-                    templateConfig: {
-                        isCustom: 0,
-                        ...this.currentConfig
-                    },
-                    config: {
-                        ...this.currentTemplateVideoConfig
-                    },
-                    template: this.currentTemplate.template
+                    cmd: 'synthesis',
+                    data: {
+                        templateConfig: {
+                            isCustom: 0,
+                            ...this.currentConfig
+                        },
+                        config: {
+                            ...this.currentTemplateVideoConfig
+                        },
+                        template: this.currentTemplate.template
+                    }
                 }));
             }).catch(() => {
             });

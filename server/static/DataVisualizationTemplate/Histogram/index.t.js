@@ -145,6 +145,7 @@ void function (doc, global, echarts, d3) {
             animationDuration: 500,
             series: []
         };
+
         myChart.setOption(option);
         let i = -1;
         const timerDuration = ChartConfig.duration / seriesData.length;
