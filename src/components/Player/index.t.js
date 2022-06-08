@@ -7,20 +7,18 @@ export default {
                 ref: 'playerIframeBox',
                 class: 'lmo-data_visualization_edit_preview_player_iframe_box lmo_position_relative'
             }, [
+                <div v-loading={this.iframeLoading}
+                     class={'lmo-data_visualization_edit_preview_mask lmo_position_absolute'}/>,
                 h('iframe', {
-                    class:'lmo_position_absolute',
+                    class: 'lmo_position_absolute',
                     style: this.iframeStyle,
                     attrs: {
-                        src: `/server${this.url}`
+                        src: `/server${this.url}`,
+                        id: 'lmo-player_iframe_box'
                     },
                     on: {
-                        load: () => {
-                            console.log('加载完毕');
-                        }
+                        load: () => this.iframeLoading = false
                     }
-                }),
-                h('div', {
-                    class: 'lmo-data_visualization_edit_preview_mask lmo_position_absolute'
                 })
             ])
         );
@@ -28,7 +26,8 @@ export default {
     props: {
         url: {
             type: String,
-            default: ''
+            default: '',
+            iframeLoading: true
         }
     },
     data() {
@@ -38,7 +37,7 @@ export default {
     },
     methods: {
         //计算iframe高宽 & 缩放比
-        initPlayerView(e = this.$refs.playerIframeBox) {
+        initPlayerView(e = this.$refs.playerIframeBox ?? document.getElementById('lmo-player_iframe_box')) {
             const _domHeight = e.offsetHeight;
             const _domWidth = e.offsetWidth;
 
@@ -56,12 +55,18 @@ export default {
             };
         }
     },
-    created() {
-        window.onload = () => {
+    mounted() {
+        setTimeout(async () => {
+            await this.initPlayerView();
+        }, 200);
+        addEventListener('resize', () => {
             this.initPlayerView();
-            window.onresize = () => {
-                this.initPlayerView();
-            };
+        });
+        onresize = () => {
+            this.initPlayerView();
         };
+    },
+    destroyed() {
+        onresize = null;
     }
 };
