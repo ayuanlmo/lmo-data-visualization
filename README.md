@@ -101,6 +101,15 @@ yarn build
 [![Gitee Star](https://gitee.com/ayuanlmo/lmo-data-visualization/badge/star.svg?theme=dark)](https://gitee.com/ayuanlmo/lmo-data-visualization/stargazers)
 [![Gitee Fork](https://gitee.com/ayuanlmo/lmo-data-visualization/badge/fork.svg?theme=dark)](https://gitee.com/ayuanlmo/lmo-data-visualization/members)
 
+---
+
+## 特别感谢
+感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了开发工具的[许可证](https://www.jetbrains.com/community/opensource/)支持
+
+![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
+
+---
+
 ## 感谢贡献
 
 - 糖兮兮
