@@ -1,3 +1,12 @@
+<p align="center">
+	<img alt="logo" src="https://cdn.ayuanlmo.cn/lmo_loso_r.png">
+</p>
+<p align="center">
+	Hi, there👋
+</p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;color:#409fee;">lmo-DataVisualization</h1>
+
+
 ## 介绍
 
 这是与 <a href="https://github.com/ayuanlmo/lmo-data-visualization">lmo-Data-Visualization</a>配套的服务端。

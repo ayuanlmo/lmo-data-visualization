@@ -104,7 +104,7 @@ yarn build
 ---
 
 ## 特别感谢
-感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了开发工具的[许可证](https://www.jetbrains.com/community/opensource/)支持
+感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了免费的开源[许可证](https://www.jetbrains.com/community/opensource/)
 
 ![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
 
