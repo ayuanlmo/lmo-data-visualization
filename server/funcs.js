@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const T_DB = new (require('./lib/sqlite/index').T_DB);
 
 module.exports = {
     _getSuccessMessage: (data = {}) => {
@@ -13,44 +14,45 @@ module.exports = {
         await fs.readdir('./static/DataVisualizationTemplate', (err, data) => {
             const _ = [];
 
-            data.forEach(i => {
-                _.push(
-                    {
-                        id: `lmo_data_visualization_template_${i}`,
-                        url: `/static/DataVisualizationTemplate/${i}/index.html`,
-                        cover: `/static/DataVisualizationTemplate/${i}/cover.png`,
-                        template: `${i}`,
-                        ...require('./const/templateIndex')[i]
-                    }
+            T_DB._QUERY_TEMPLATE_LIST().then(res => {
+                res.map(i => {
+                    _.push({
+                        id: i['T_Id'],
+                        url: i['T_Path'],
+                        cover: `/static/DataVisualizationTemplate/${i['T_Name']}/cover.png`,
+                        template: i['T_Name'],
+                        title:i['T_Title'],
+                        description:i['T_Description']
+                    });
+                });
+                r.json(
+                    require('./funcs')._getSuccessMessage({
+                        list: _
+                    })
                 );
+            });
+        });
+    },
+    _getMedia: (r) => {
+        const _outputDir = './static/output';
+
+        if (!fs.existsSync(_outputDir)) {
+            fs.mkdir(_outputDir);
+        }
+        fs.readdir('./static/output', (err, data) => {
+            const _ = [];
+
+            data.forEach(i => {
+                if (i.split('.')[1] === 'mp4') {
+                    _.push({
+                        name: i,
+                        path: `/static/output/${i}`
+                    });
+                }
             });
             r.json(
                 require('./funcs')._getSuccessMessage({
                     list: _
-                })
-            );
-        });
-    },
-                    _getMedia: (r) => {
-                        const _outputDir = './static/output';
-
-                        if (!fs.existsSync(_outputDir)) {
-                            fs.mkdir(_outputDir);
-                        }
-                        fs.readdir('./static/output', (err, data) => {
-                            const _ = [];
-
-                            data.forEach(i => {
-                                if (i.split('.')[1] === 'mp4') {
-                                    _.push({
-                                        name: i,
-                                        path: `/static/output/${i}`
-                                    });
-                                }
-                            });
-                            r.json(
-                                require('./funcs')._getSuccessMessage({
-                                    list: _
                 })
             );
         });
