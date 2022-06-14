@@ -2,9 +2,13 @@ const _SQLITE = require('sqlite3');
 const _FS = require("fs-extra");
 const _TEMPLATE_INDEX = require('../../const/templateIndex');
 
-
 class T_DB {
     constructor() {
+        this._ = null;
+        this._OPEN();
+    }
+
+    _OPEN() {
         this._ = new _SQLITE.Database(`${__dirname}/db/db.ting.db`, (e) => {
                 if (e)
                     console.log('数据库打开失败', e);
@@ -16,6 +20,11 @@ class T_DB {
                     });
             }
         );
+    }
+
+    _CLOSE() {
+        if (this._ !== null)
+            this._.close();
     }
 
     //查询模板
@@ -50,11 +59,12 @@ class T_DB {
                                 T_Type: '0'
                             });
 
-                            this._.run(_SQL, (e) => {
-                                if (e) {
-                                    console.log('数据写入失败', e);
-                                }
-                            });
+                            if (_SQL !== '')
+                                this._.run(_SQL, (e) => {
+                                    if (e) {
+                                        console.log('数据写入失败', e);
+                                    }
+                                });
                         });
                     }
                 });
@@ -63,7 +73,8 @@ class T_DB {
     }
 
     //获取插入模板表SQL
-    _GET_INSERT_TEMPLATE_TABLE_SQL(DATA) {
+    _GET_INSERT_TEMPLATE_TABLE_SQL(DATA = null) {
+        if (DATA === null) return '';
         return `INSERT INTO "Template" ( T_Name, T_Id, T_Title, T_Description, T_Path, T_Type ) 
                 VALUES('${DATA.T_Name}','${DATA.T_Id}','${DATA.T_Title}','${DATA.T_Description}','${DATA.T_Path}','${DATA.T_Type}');`;
     }

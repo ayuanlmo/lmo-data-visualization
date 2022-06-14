@@ -1,5 +1,4 @@
 const fs = require('fs-extra');
-const T_DB = new (require('./lib/sqlite/index').T_DB);
 
 module.exports = {
     _getSuccessMessage: (data = {}) => {
@@ -13,6 +12,7 @@ module.exports = {
     async _getTemplateList(r) {
         await fs.readdir('./static/DataVisualizationTemplate', (err, data) => {
             const _ = [];
+            const T_DB = new (require('./lib/sqlite/index').T_DB);
 
             T_DB._QUERY_TEMPLATE_LIST().then(res => {
                 res.map(i => {
@@ -21,8 +21,8 @@ module.exports = {
                         url: i['T_Path'],
                         cover: `/static/DataVisualizationTemplate/${i['T_Name']}/cover.png`,
                         template: i['T_Name'],
-                        title:i['T_Title'],
-                        description:i['T_Description']
+                        title: i['T_Title'],
+                        description: i['T_Description']
                     });
                 });
                 r.json(
@@ -30,6 +30,7 @@ module.exports = {
                         list: _
                     })
                 );
+                T_DB._CLOSE();
             });
         });
     },
