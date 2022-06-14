@@ -53,7 +53,6 @@ module.exports.isArray = (arr = []) => {
     return Object.prototype.toString.call(arr) === "[object Array]";
 };
 
-
 module.exports.isString = (str = '') => {
     return typeof str === 'string';
 };

@@ -10,6 +10,7 @@
     "cli-color": "^2.0.2",
     "express": "4.18.1",
     "express-ws": "5.0.2",
+    "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.1.0",
     "net": "^1.0.2",
     "sqlite3": "^5.0.8",
