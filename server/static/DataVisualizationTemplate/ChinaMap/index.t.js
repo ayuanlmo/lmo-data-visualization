@@ -92,50 +92,54 @@ void function (doc, global, echarts, d3) {
 
     };
     const init = (text, update = false) => {
+        console.log('themeColor', ChartConfig.themeColor);
         option = {
             visualMap: {
                 x: '450',
                 y: '820',
                 show: ChartConfig.text.visualMap.value,
                 splitList: [
-                    {
-                        start: 1500
-                    },
-                    {
-                        start: 900,
-                        end: 1500
-                    },
-                    {
-                        start: 310,
-                        end: 1000
-                    },
-                    {
-                        start: 200,
-                        end: 300
-                    },
-                    {
-                        start: 10,
-                        end: 200
-                    },
-                    {
-                        end: 10
-                    }
+                    // {
+                    //     start: 1500
+                    // },
+                    // {
+                    //     start: 900,
+                    //     end: 1500
+                    // },
+                    // {
+                    //     start: 310,
+                    //     end: 1000
+                    // },
+                    // {
+                    //     start: 200,
+                    //     end: 300
+                    // },
+                    // {
+                    //     start: 10,
+                    //     end: 200
+                    // },
+                    // {
+                    //     end: 10
+                    // }
                 ],
-                inRange: {
-                    color: ChartConfig.themeColor
-                }
+                color: ChartConfig.themeColor
+                // inRange: {
+                //     colors: ChartConfig.themeColor
+                // }
             },
             roamController: {
                 show: true,
                 x: 'right',
                 mapTypeControl: {
                     'china': true
-                }
+                },
+                color: ChartConfig.themeColor
             },
             text: [ChartConfig.text.legend1.value, ChartConfig.text.legend2.value],
             animationDuration: 500,
             series: [{
                 zoom: 1.2,
+                color: ChartConfig.themeColor,
                 type: 'map',
                 mapType: 'china',
                 label: {
@@ -198,6 +202,7 @@ void function (doc, global, echarts, d3) {
             myChart.setOption(option);
         }, timerDuration);
     };
+
     if (ChartConfig.isCustom === 0) {
         init(csvData ?? ChartConfig.data.split('\r\n'), true);
     } else {
