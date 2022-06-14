@@ -102,3 +102,13 @@ module.exports.selectFile = () => {
         i.click();
     });
 };
+
+module.exports.downloadFile = (conf) => {
+    const a = document.createElement('a');
+
+    return new Promise((resolve, reject) => {
+        a.download = `${conf.download}${new Date().getTime()}`;
+        a.href = require('@/config/AppConfig').devProxy.http + conf.href;
+        resolve(a);
+    });
+};

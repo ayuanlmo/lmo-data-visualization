@@ -94,11 +94,12 @@ export default {
     },
     methods: {
         downloadDefaultCSV() {
-            const a = document.createElement('a');
-
-            a.download = `${this.currentTemplate.title}${new Date().getTime()}`;
-            a.href = this.currentTemplate.url.split('index.html')[0] + 'data.csv';
-            a.click();
+            require('@/utils').downloadFile({
+                download: this.currentTemplate.title,
+                href: this.currentTemplate.url.split('index.html')[0] + 'data.csv'
+            }).then(a => {
+                a.click();
+            });
         },
         importLocalData() {
             require('@/utils/index').selectFile().then(file => {
