@@ -15,6 +15,7 @@ const _ = {
             _test_server.close();
             setTimeout(async () => {
                 _app.listen(_Port, () => {
+                    global.__SSERVER_PORT = _Port;
                     _.__PRINT_NETWORK_INTO();
                 });
             });

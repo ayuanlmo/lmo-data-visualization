@@ -20,7 +20,7 @@
       }
 
       .lmo-audio_box_label {
-
+        min-width: 5rem;
       }
 
       .lmo-audio_content {
@@ -63,6 +63,8 @@
       }
 
       .lmo-video_box_label {
+        min-width: 5vw;
+
         i {
           color: #E6A23C;
         }

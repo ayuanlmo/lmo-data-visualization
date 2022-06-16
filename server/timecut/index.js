@@ -6,8 +6,6 @@ class TC {
     constructor(ws = {}, data) {
         this.ws = ws;//获得socket对象
         this.data = data;//获得数据
-        console.log('初始化',this.data)
-        console.log('初始化', typeof  this.data);
         this.taskName = `lmo_${new Date().getTime()}`;//创建任务名称
         //下发任务状态
         this.ws.send(require('../funcs')._stringify({
@@ -40,8 +38,15 @@ class TC {
             setTimeout(() => {
                 const str = 'window.chartConfig = ';
 
+                const data = {
+                    ...this.data['templateConfig'],
+                    _video: {
+                        ...this.data['config']['video']
+                    }
+                };
+
                 //替换 配置文件对象
-                fs.writeFile(`${dir}/conf.js`, `${str}${JSON.stringify(this.data['templateConfig'])};`, e => {
+                fs.writeFile(`${dir}/conf.js`, `${str}${JSON.stringify(data)};`, e => {
                     if (e) {
                         console.log('模板配置文件替换失败');
                     } else {
@@ -65,32 +70,34 @@ class TC {
     }
 
     //合成
-    _synthesis(fps = 30, duration = 1) {
+    _synthesis() {
         const _data = this.data['config'];
 
-        timeCut({
-                url: `http://localhost:3000/static/temp/${this.taskName}/index.html`,
-                viewport: {width: 1920, height: 1080},
-                selector: '#app',
-                left: 0,
-                top: 0,
-                right: 0,
-                bottom: 0,
-                fps: parseInt(_data.video.fps),
-                duration: _data.video.duration,
-                // pixFmt: 'yuv420p',
-                output: `static/output/${this.taskName}.mp4`,
-                preparePageForScreenshot: async () => {
-                    this.ws.send(require('../funcs')._stringify({
-                        type: 'task_processing',
-                        data: {
-                            cmd: 'task_processing',
-                            state: this.taskName
-                        }
-                    }));
-                }
+        const _conf = {
+            url: `http://localhost:${global.__SSERVER_PORT}/static/temp/${this.taskName}/index.html`,
+            viewport: {
+                ...this._getVideoClarity(_data.video.clarity)
+            },
+            selector: '#app',
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            fps: parseInt(_data.video.fps),
+            duration: _data.video.duration,
+            output: `static/output/${this.taskName}.mp4`,
+            preparePageForScreenshot: async () => {
+                this.ws.send(require('../funcs')._stringify({
+                    type: 'task_processing',
+                    data: {
+                        cmd: 'task_processing',
+                        state: this.taskName
+                    }
+                }));
             }
-        ).then(() => {
+        };
+
+        timeCut(_conf).then((conf) => {
             this.ws.send(require('../funcs')._stringify(
                 {
                     type: 'task_end',
@@ -123,6 +130,24 @@ class TC {
             });
             fs.rmdirSync(_path);
         }
+    }
+
+    _getVideoClarity(k, s = 'w') {
+        if (k === '1080P')
+            return {
+                width: 1920,
+                height: 1080
+            };
+        if (k === '2K')
+            return {
+                width: 2560,
+                height: 1440
+            };
+        if (k === '4K')
+            return {
+                width: 4096,
+                height: 2160
+            };
     }
 }
 

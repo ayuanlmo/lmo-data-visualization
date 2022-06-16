@@ -4,6 +4,30 @@ void function (doc, global, echarts, d3) {
     let option = {};
     const renderDom = doc.getElementById('canvas');
     const appDom = doc.getElementById('app');
+
+    if ('_video' in ChartConfig) {
+        const clarity = ChartConfig['_video']['clarity'];
+
+        if (clarity === '1080P') {
+            renderDom.style.height = '1080px';
+            appDom.style.width = '1920px';
+            appDom.style.height = '1080px';
+        }
+        if (clarity === '2K') {
+            renderDom.style.height = '1440px';
+            appDom.style.width = '2560px';
+            appDom.style.height = '1440px';
+        }
+        if (clarity === '4K') {
+            renderDom.style.height = '2160px';
+            appDom.style.width = '4096px';
+            appDom.style.height = '2160px';
+        }
+    } else {
+        renderDom.style.height = '1080px';
+        appDom.style.width = '1920px';
+        appDom.style.height = '1080px';
+    }
     const myChart = echarts.init(renderDom, null, {renderer: 'svg'});
 
     let data = '';

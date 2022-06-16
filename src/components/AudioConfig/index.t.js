@@ -112,11 +112,36 @@ export default {
                             <el-radio-group onChange={(e) => {
                                 this.$store.commit('SET_TEMPLATE_CURRENT_DURATION', e);
                             }} v-model={this.videoConf.video.duration}>
-                                <el-radio-button label="5"></el-radio-button>
-                                <el-radio-button label="10"></el-radio-button>
-                                <el-radio-button label="20"></el-radio-button>
-                                <el-radio-button label="30"></el-radio-button>
-                                <el-radio-button label="60"></el-radio-button>
+                                <el-radio-button label="5"/>
+                                <el-radio-button label="10"/>
+                                <el-radio-button label="20"/>
+                                <el-radio-button label="30"/>
+                                <el-radio-button label="60"/>
+                            </el-radio-group>
+                        ])
+                    ]),
+                    h('div', {
+                        class: 'lmo_video_config_right_item lmo_flex_box'
+                    }, [
+                        h('div', {
+                            class: 'lmo-video_box_label'
+                        }, [
+                            h('el-tooltip', {
+                                props: {
+                                    content: '清晰度越高，效果越好'
+                                }
+                            }, [
+                                h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
+                            ]),
+                            '清晰度:'
+                        ]),
+                        h('div', {
+                            class: 'lmo-audio_controller_slide'
+                        }, [
+                            <el-radio-group v-model={this.videoConf.video.clarity}>
+                                <el-radio-button label="1080P"/>
+                                <el-radio-button label="2K"/>
+                                <el-radio-button label="4K"/>
                             </el-radio-group>
                         ])
                     ])
@@ -136,7 +161,8 @@ export default {
                 },
                 video: {
                     fps: '30',
-                    duration: 5
+                    duration: 5,
+                    clarity: '1080P'
                 }
             }
         };
