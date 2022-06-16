@@ -1,121 +1,12 @@
 void function (doc, global, echarts, d3) {
-    let ChartConfig = window['chartConfig'] || window.chartConfig;
-    const renderDom = doc.getElementById('canvas');
-    const appDom = doc.getElementById('app');
-
-    if ('_video' in ChartConfig) {
-        const clarity = ChartConfig['_video']['clarity'];
-
-        if (clarity === '1080P') {
-            renderDom.style.height = '1080px';
-            appDom.style.width = '1920px';
-            appDom.style.height = '1080px';
-        }
-        if (clarity === '2K') {
-            renderDom.style.height = '1440px';
-            appDom.style.width = '2560px';
-            appDom.style.height = '1440px';
-        }
-        if (clarity === '4K') {
-            renderDom.style.height = '2160px';
-            appDom.style.width = '4096px';
-            appDom.style.height = '2160px';
-        }
-    } else {
-        renderDom.style.height = '1080px';
-        appDom.style.width = '1920px';
-        appDom.style.height = '1080px';
-    }
-
-    const myChart = echarts.init(renderDom, null, {renderer: 'svg'});
-
-    let data = '';
-
-    let csvData = null;
+    const ChartConfig = window['chartConfig'] || window.chartConfig;
 
     let timer = null;
-    const onMessage = (msg) => {
-        const m = msg.data;
 
-        if (msg.origin === location.origin) {
-            if (m.type === 'UpdateData') {
-                ChartConfig.data = m.data;
-                const data = [];
+    // eslint-disable-next-line no-undef
+    new TempLate(ChartConfig, render);
 
-                ChartConfig.data.split('\r\n').map(i => {
-                    if (i !== '')
-                        data.push(i);
-                });
-                csvData = data;
-                init(data, true);
-            }
-            if (m.type === 'UpdateText') {
-                ChartConfig.text = m.data;
-                init(csvData, false);
-            }
-            if (m.type === 'UpdateColor') {
-                ChartConfig.color = m.data;
-                setTitle();
-            }
-            if (m.type === 'UpdateThemeColor') {
-                ChartConfig.themeColorKey = m.data.index;
-                ChartConfig.themeColor = m.data.colors;
-                init(csvData, true);
-            }
-            if (m.type === 'UpdateBackground_image') {
-                ChartConfig.background = m.data;
-                initBackground();
-            }
-            if (m.type === 'UpdateAnimateName') {
-                ChartConfig.titleAnimateName = m.data;
-                init(csvData, true);
-            }
-            if (m.type === 'Preview') {
-                ChartConfig = m.data;
-                init(csvData ?? ChartConfig.data.split('\r\n'), true);
-                initBackground();
-            }
-            if (m.type === 'Play') {
-                init(csvData ?? ChartConfig.data.split('\r\n'), true);
-                initBackground();
-            }
-            if (m.type === 'UpdateDuration') {
-                ChartConfig.duration = m.data;
-                init(csvData ?? ChartConfig.data.split('\r\n'), true);
-                initBackground();
-            }
-            parent.postMessage({
-                type: 'FullConfig',
-                data: ChartConfig
-            }, location.origin);
-        }
-    };
-
-
-    const setTitle = () => {
-        d3.select('.title_main').text(ChartConfig.text.mainTitle.value).style('color', ChartConfig.color.mainTitle.value);
-        d3.select('.title_sub').text(ChartConfig.text.subTitle.value).style('color', ChartConfig.color.subTitle.value);
-        d3.select('.data_source').text(ChartConfig.text.dataSource.value);
-        d3.select('.from').style('color', ChartConfig.color.dataSource.value);
-    };
-    const setTitleAnimate = () => {
-        const el = document.getElementById('text');
-
-        el.className = `animated  ${ChartConfig.titleAnimateName}`;
-        setTimeout(() => {
-            el.className = '';
-        }, ChartConfig.titleAnimateDuration);
-    };
-    const initBackground = () => {
-        if (ChartConfig.background.image !== '')
-            appDom.style.background = `url(${ChartConfig.background.image}) ${ChartConfig.background.arrange}`;
-        else
-            appDom.style.background = ChartConfig.background.color;
-    };
-
-    const init = (text, update = false) => {
-        setTitleAnimate();
-        setTitle();
+    function render(text, update = false) {
         parent.postMessage({
             type: 'Play',
             data: 0
@@ -125,7 +16,7 @@ void function (doc, global, echarts, d3) {
 
         clearInterval(timer);
         if (update)
-            myChart && myChart.clear();
+            this.chart && this.chart.clear();
         text.forEach(i => {
             const t = i.split(',');
 
@@ -171,7 +62,7 @@ void function (doc, global, echarts, d3) {
             series: []
         };
 
-        myChart.setOption(option);
+        this.chart.setOption(option);
         let i = -1;
         const timerDuration = ChartConfig.duration / seriesData.length;
 
@@ -179,7 +70,7 @@ void function (doc, global, echarts, d3) {
             if (i !== seriesData.length - 1) {
                 i += 1;
                 option.series.push(seriesData[i]);
-                myChart.setOption(option);
+                this.chart.setOption(option);
             } else {
                 console.log('PlayEnd');
                 parent.postMessage({
@@ -189,28 +80,5 @@ void function (doc, global, echarts, d3) {
                 clearInterval(timer);
             }
         }, timerDuration);
-    };
-
-    if (ChartConfig.isCustom === 0)
-        init(csvData ?? ChartConfig.data.split('\r\n'), true);
-    else {
-        window.addEventListener('message', onMessage);
-        fetch('data.csv').then(res => {
-            return res.text();
-        }).then(text => {
-            data = text;
-            ChartConfig.data = data;
-            ChartConfig.defaultData = data;
-            csvData = ChartConfig.data.split('\r\n');
-            if (location.search === '' || location.search.split('=')[1] !== 'preview') {
-                parent.postMessage({
-                    type: 'first',
-                    data: ChartConfig
-                }, location.origin);
-                init(csvData);
-            }
-        });
     }
-    setTitle();
-    initBackground();
 }(document, window ?? global, window['echarts'] ?? window.echarts, window['d3'] ?? window.d3);
