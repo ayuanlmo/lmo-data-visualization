@@ -92,47 +92,18 @@ void function (doc, global, echarts, d3) {
 
     };
     const init = (text, update = false) => {
-        console.log('themeColor', ChartConfig.themeColor);
         option = {
             visualMap: {
                 x: '450',
                 y: '820',
                 show: ChartConfig.text.visualMap.value,
-                splitList: [
-                    // {
-                    //     start: 1500
-                    // },
-                    // {
-                    //     start: 900,
-                    //     end: 1500
-                    // },
-                    // {
-                    //     start: 310,
-                    //     end: 1000
-                    // },
-                    // {
-                    //     start: 200,
-                    //     end: 300
-                    // },
-                    // {
-                    //     start: 10,
-                    //     end: 200
-                    // },
-                    // {
-                    //     end: 10
-                    // }
-                ],
+                splitList: [],
                 color: ChartConfig.themeColor
-                // inRange: {
-                //     colors: ChartConfig.themeColor
-                // }
             },
             roamController: {
                 show: true,
                 x: 'right',
-                mapTypeControl: {
-                    'china': true
-                },
+                mapTypeControl: {'china': true},
                 color: ChartConfig.themeColor
             },
             text: [ChartConfig.text.legend1.value, ChartConfig.text.legend2.value],
@@ -183,15 +154,22 @@ void function (doc, global, echarts, d3) {
         option.series[0].data = [];
         myChart.setOption(option);
         let i = -1;
+        const dynamicTags = d3.select('.value');
 
+        dynamicTags.style('display', ChartConfig.text.dynamicTags.value ? 'block' : 'none');
+        dynamicTags.style('color', ChartConfig.color.dynamicTagsColor.value);
         timer = setInterval(() => {
             i += 1;
-            if (i === text.length - 1)
+            if (i === text.length - 1) {
+                console.log('PlayEnd');
+                dynamicTags.style('display', 'none');
                 return clearInterval(timer);
+            }
             const _tempData = textData[i].split(',');
 
-            d3.select('.value').transition().tween('text', () => {
+            dynamicTags.transition().tween('text', () => {
                 return function (t) {
+                    if (_tempData[0] === '') return;
                     this.textContent = _tempData[0] + d3.interpolateRound(0, _tempData[1])(t);
                 };
             }).duration(timerDuration);

@@ -40,7 +40,12 @@ window.chartConfig = {
         visualMap: {
             type: 'lmo-switch',
             label: '视觉地图',
-            value: false
+            value: true
+        },
+        dynamicTags: {
+            type: 'lmo-switch',
+            label: '动态标签',
+            value: true
         }
     },
     color: {
@@ -64,9 +69,14 @@ window.chartConfig = {
             label: '地图边框颜色',
             type: 'lmo-color-picker'
         },
-        mapLabelColor:{
+        mapLabelColor: {
             value: '#12cd16',
             label: '地图标签颜色',
+            type: 'lmo-color-picker'
+        },
+        dynamicTagsColor: {
+            value: '#000',
+            label: '动态标签颜色',
             type: 'lmo-color-picker'
         }
     },
