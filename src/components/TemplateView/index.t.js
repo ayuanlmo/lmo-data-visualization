@@ -21,10 +21,11 @@ export default {
                                         data: i
                                     },
                                     on: {
-                                        click: (i) => {
+                                        click: async (i) => {
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
-                                            set('current_template', JSON.stringify(i));
-                                            this.$router.push('/edit');
+                                            this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
+                                            await set('current_template', JSON.stringify(i));
+                                            await this.$router.push('/edit');
                                         }
                                     }
                                 })

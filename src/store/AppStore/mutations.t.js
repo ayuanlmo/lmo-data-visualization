@@ -54,5 +54,12 @@ export default {
     },
     [TYPE.SET_CURRENT_TEMPLATE_VIDEO_CONFIG](state, data = {}) {
         state.currentTemplateVideoConfig = data;
+    },
+    [TYPE.RESET_CURRENT_TEMPLATE_CONFIG](state) {
+        state.currentConfig = {
+            csvData: '',
+            config: {},
+            duration: 5000
+        };
     }
 };
