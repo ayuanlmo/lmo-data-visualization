@@ -1,5 +1,7 @@
 require('./style.t.scss');
 
+import {PostMessage} from "@lib/PostMessage/index.t";
+
 export default {
     render(h) {
         return (
@@ -19,7 +21,24 @@ export default {
                     on: {
                         load: () => this.iframeLoading = false
                     }
-                })
+                }),
+                h('div', {
+                    class: 'data_visualization_edit_preview_play_button lmo_position_absolute lmo_cursor_pointer',
+                    on: {
+                        click: () => {
+                            PostMessage({
+                                type: 'Play',
+                                data: {}
+                            });
+                        }
+                    }
+                }, [
+                    h('img', {
+                        attrs: {
+                            src: require('@/assets/svg/play_btn.svg')
+                        }
+                    })
+                ])
             ])
         );
     },
