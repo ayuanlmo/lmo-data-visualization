@@ -83,12 +83,11 @@ export default {
             );
             clearInterval(timer);
             const duration = this.currentConfig.duration;
-            const _ = duration / 1000;
 
             this.percentage = 0;
             cont = 0;
             timer = setInterval(() => {
-                if (cont === _) {
+                if (cont === duration / 1000) {
                     this.playState = false;
                     clearInterval(timer);
                 } else {

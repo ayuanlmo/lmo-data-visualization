@@ -64,7 +64,7 @@ void function (doc, global, echarts, d3) {
 
         this.chart.setOption(option);
         let i = -1;
-        const timerDuration = ChartConfig.duration / seriesData.length;
+        const timerDuration = this.conf.duration / seriesData.length;
 
         timer = setInterval(() => {
             if (i !== seriesData.length - 1) {

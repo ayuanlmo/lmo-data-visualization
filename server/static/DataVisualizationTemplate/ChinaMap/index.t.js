@@ -62,7 +62,7 @@ void function (echarts, d3) {
             type: 'Play',
             data: 0
         }, location.origin);
-        const timerDuration = ChartConfig.duration / textData.length;//每条持续时间
+        const timerDuration = this.conf.duration / textData.length;//每条持续时间
 
         clearInterval(timer);
         this.chart && this.chart.clear();
