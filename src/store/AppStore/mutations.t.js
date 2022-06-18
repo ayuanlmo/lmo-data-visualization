@@ -1,6 +1,7 @@
 import * as TYPE from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {UPDATE_COLOR, UPDATE_DURATION, UPDATE_TEXT} from '@/const/MessageType.t';
+import {SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE} from "@/const/MutationTypes.t";
 
 export default {
     [TYPE.SET_CURRENT_TEMPLATE_DEFAULT_DATA](state, data) {
@@ -33,6 +34,9 @@ export default {
     [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_NAME](state, data) {
         state.templateCurrentAudioConfig.name = data;
     },
+    [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE](state, data) {
+        state.templateCurrentAudioConfig.complete = data;
+    },
     [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME](state, data) {
         state.templateCurrentAudioConfig.volume = data;
     },
@@ -55,6 +59,9 @@ export default {
     [TYPE.SET_CURRENT_TEMPLATE_VIDEO_CONFIG](state, data = {}) {
         state.currentTemplateVideoConfig = data;
     },
+    [TYPE.SET_DEV_MODE](state, data) {
+        state.devMode = data;
+    },
     [TYPE.RESET_CURRENT_TEMPLATE_CONFIG](state) {
         state.currentConfig = {
             csvData: '',
@@ -62,7 +69,13 @@ export default {
             duration: 5000
         };
     },
-    [TYPE.SET_DEV_MODE](state, data) {
-        state.devMode = data;
+    [TYPE.RESET_TEMPLATE_CURRENT_AUDIO_CONFIG](state) {
+        state.templateCurrentAudioConfig = {
+            name: '',
+            volume: 1,
+            src: '',
+            complete: false,
+            playState: false
+        };
     }
 };

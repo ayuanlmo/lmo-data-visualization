@@ -10,6 +10,7 @@ export default {
         name: '',
         volume: 1,
         src: '',
+        complete: false,
         playState: false
     },
     //当前模板默认数据

@@ -24,6 +24,7 @@ export default {
                                         click: async (i) => {
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
+                                            this.$store.commit('RESET_TEMPLATE_CURRENT_AUDIO_CONFIG');
                                             await set('current_template', JSON.stringify(i));
                                             await require('@/utils').routerPush(this.$router,'/edit','push');
                                         }

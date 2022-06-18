@@ -1,6 +1,7 @@
 const timeCut = require('timecut');
 const fs = require('fs-extra');
 const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
 
 class TC {
     constructor(ws = {}, data) {
@@ -71,8 +72,8 @@ class TC {
 
     //合成
     _synthesis() {
+        let audioPath = '';
         const _data = this.data['config'];
-
         const _conf = {
             url: `http://localhost:${global.__SSERVER_PORT}/static/temp/${this.taskName}/index.html`,
             viewport: {
@@ -97,21 +98,59 @@ class TC {
             }
         };
 
+        //判断音频是否存在
+        if (_data['audio']['src'] !== '') {
+            const buffer = Buffer.from(_data['audio']['src'].replace('data:audio/x-m4a;base64,', ''), 'base64');
+
+            fs.writeFile(`../server/static/temp/${this.taskName}.m4a`, buffer, (e) => {
+                if (e)
+                    console.log('音频保存失败');
+                else
+                    audioPath = `../server/static/temp/${this.taskName}.m4a`;
+            });
+        }
+
         timeCut(_conf).then((conf) => {
-            this.ws.send(require('../funcs')._stringify(
-                {
-                    type: 'task_end',
-                    data: {
-                        cmd: 'task_processing',
-                        state: 'success',
-                        taskName: this.taskName,
-                        path: `/static/output/'${this.taskName}.mp4`
+            //合成完成 处理音频
+            this._processAudio(_data['audio']['src'] !== '' ? `static/output/${this.taskName}.mp4` : '', audioPath).then(() => {
+                this.ws.send(require('../funcs')._stringify(
+                    {
+                        type: 'task_end',
+                        data: {
+                            cmd: 'task_processing',
+                            state: 'success',
+                            taskName: this.taskName,
+                            path: `/static/output/'${this.taskName}.mp4`
+                        }
                     }
-                }
-            ));
-            //删除临时目录
-            this._delTempFile(`${path.resolve(`../server/static/temp/${this.taskName}`)}`);
+                ));
+                //删除临时目录
+                this._delTempFile(`${path.resolve(`../server/static/temp/${this.taskName}`)}`);
+            });
         });
+    }
+
+    _processAudio(src, audio) {
+        return new Promise((resolve, reject) => {
+            if (src === '')
+                return resolve();
+            const f = ffmpeg(src);
+
+            f.videoCodec('libx264');//兼容Chrome的H.264视频编码
+            f.input(audio);
+            f.audioFilters(`volume=${this.data['config']['audio']['volume']}`);
+            f.audioBitrate('128k');
+            if (!this.data['config']['audio']['complete'])
+                f.duration(this.data['config']['video']['duration']);
+            f.output(`static/output/${this.taskName}264.mp4`);
+            f.on('end', function () {
+                fs.unlinkSync(src);
+                fs.unlinkSync(audio);
+                resolve();
+            });
+            f.run();
+        });
+
     }
 
     _delTempFile(_path) {
@@ -122,11 +161,10 @@ class TC {
             files.forEach((file, index) => {
                 const curPath = _path + "/" + file;
 
-                if (fs.statSync(curPath).isDirectory()) {
+                if (fs.statSync(curPath).isDirectory())
                     this._delTempFile(curPath); //递归删除文件夹
-                } else {
+                else
                     fs.unlinkSync(curPath); //删除文件
-                }
             });
             fs.rmdirSync(_path);
         }

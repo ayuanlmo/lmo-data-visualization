@@ -60,6 +60,36 @@ export default {
                                     this.sliderChange(e);
                                 }}/>
                             ])
+                        ]),
+                        h('div', {
+                            class: 'lmo-audio_config_left_audio_controller lmo_flex_box'
+                        }, [
+                            h('div', {
+                                class: 'lmo-audio_box_label'
+                            }, [
+                                h('el-tooltip', {
+                                    props: {
+                                        content: '开启后视频时长 = 音频时长(动画持续时间不受该选项控制)'
+                                    }
+                                }, [
+                                    h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
+                                ]),
+                                '完整的音频:'
+                            ]),
+                            h('div', {
+                                class: 'lmo-audio_controller_slider'
+                            }, [
+                                h('lmo-switch', {
+                                    props: {
+                                        value: false
+                                    },
+                                    on: {
+                                        change: (e) => {
+                                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE', e);
+                                        }
+                                    }
+                                })
+                            ])
                         ])
                     ])
                 ]),

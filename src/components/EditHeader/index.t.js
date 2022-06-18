@@ -96,7 +96,10 @@ export default {
                             ...this.currentConfig
                         },
                         config: {
-                            ...this.currentTemplateVideoConfig
+                            ...this.currentTemplateVideoConfig,
+                            audio: {
+                                ...this.templateCurrentAudioConfig
+                            }
                         },
                         template: this.currentTemplate.template
                     }
@@ -110,7 +113,8 @@ export default {
             devMode: state => state.appStore.devMode,
             currentConfig: state => state.appStore.currentConfig,
             currentTemplateVideoConfig: state => state.appStore.currentTemplateVideoConfig,
-            currentTemplate: state => state.appStore.currentTemplate
+            currentTemplate: state => state.appStore.currentTemplate,
+            templateCurrentAudioConfig: state => state.appStore.templateCurrentAudioConfig
         })
     }
 };
