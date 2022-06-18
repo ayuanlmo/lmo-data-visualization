@@ -101,7 +101,7 @@ export default {
                 return h(_Component, {
                     props: {
                         option: this.configText[i].values,
-                        value: this.configText[i].values[0].value
+                        value: this.configText[i].value
                     },
                     on: {
                         change: (e) => {

@@ -25,7 +25,7 @@ export default {
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
                                             await set('current_template', JSON.stringify(i));
-                                            await this.$router.push('/edit');
+                                            await require('@/utils').routerPush(this.$router,'/edit','push');
                                         }
                                     }
                                 })

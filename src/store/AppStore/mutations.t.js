@@ -61,5 +61,8 @@ export default {
             config: {},
             duration: 5000
         };
+    },
+    [TYPE.SET_DEV_MODE](state, data) {
+        state.devMode = data;
     }
 };

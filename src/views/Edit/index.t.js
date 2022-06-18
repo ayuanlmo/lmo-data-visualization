@@ -24,7 +24,7 @@ export default {
                                 cancelButtonText: '取消',
                                 type: 'warning'
                             }).then(() => {
-                                this.$router.replace('/');
+                                require('@/utils').routerPush(this.$router,'/','replace');
                             }).catch(() => {
                             });
                         }

@@ -103,6 +103,38 @@ module.exports.selectFile = () => {
     });
 };
 
+const getRouterQuery = () => {
+    const _ = [];
+    const query = {};
+
+    location.search.split('?').map(i => {
+        if (i !== '') {
+            _.push(i);
+        }
+    });
+
+    _.map(i => {
+        i.split('&').map(i => {
+            const __ = i.split('=');
+
+            query[__[0]] = __[1];
+
+        });
+    });
+    return query;
+};
+
+module.exports.getRouterQuery = getRouterQuery;
+
+module.exports.routerPush = (r, to, t = 'push') => {
+    t === 'push' ? r['push']({
+        path: to,
+        query: {
+            ...getRouterQuery()
+        }
+    }) : r['replace'](to);
+};
+
 module.exports.downloadFile = (conf) => {
     const a = document.createElement('a');
 

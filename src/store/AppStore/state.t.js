@@ -17,9 +17,11 @@ export default {
         csvData: ''
     },
     //当前模板视频配置信息(合成时)
-    currentTemplateVideoConfig:{},
+    currentTemplateVideoConfig: {},
     //服务器推送的消息
     serverPushMessage: [],
     //当前模板信息
-    currentTemplate: null
+    currentTemplate: null,
+    //开发者模式
+    devMode: false
 };

@@ -24,8 +24,18 @@ class TempLate {
     }
 
     setChart() {
-        if (this.chartType === 'echarts') {
+        if (this.chartType === 'echarts')
             this.chart = this.echarts.init(this.getRenderDom(), null, {renderer: 'svg'});
+    }
+
+    tryRender(d, t) {
+        try {
+            this.render(d, t);
+        } catch (e) {
+            parent.postMessage({
+                type: 'RenderError',
+                data: e
+            }, location.origin);
         }
     }
 
@@ -35,27 +45,27 @@ class TempLate {
             const clarity = this.conf['_video']['clarity'];
 
             if (clarity === '1080P') {
-                this.renderDom.style.height = '1080px';
+                this.renderDom.style.height = 1080 - 135 + 'px';
                 this.appDom.style.width = '1920px';
                 this.appDom.style.height = '1080px';
             }
             if (clarity === '2K') {
-                this.renderDom.style.height = '1440px';
+                this.renderDom.style.height = 1440 - 135 + 'px';
                 this.appDom.style.width = '2560px';
                 this.appDom.style.height = '1440px';
             }
             if (clarity === '4K') {
-                this.renderDom.style.height = '2160px';
+                this.renderDom.style.height = 2160 - 135 + 'px';
                 this.appDom.style.width = '4096px';
                 this.appDom.style.height = '2160px';
             }
         } else {
-            this.renderDom.style.height = '1080px';
+            this.renderDom.style.height = 1080 - 135 + 'px';
             this.appDom.style.width = '1920px';
             this.appDom.style.height = '1080px';
         }
         if (this.conf['isCustom'] === 0)
-            this.render(this.csvData ?? this.conf.data.split('\r\n'), true);
+            this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
         else {
             addEventListener('message', (e) => {
                 this.onMessage(e);
@@ -97,7 +107,6 @@ class TempLate {
         const m = msg.data;
 
         if (msg.origin === location.origin) {
-            //更新图表数据
             if (m.type === 'UpdateData') {
                 this.conf.data = m.data;
                 const data = [];
@@ -107,55 +116,46 @@ class TempLate {
                         data.push(i);
                 });
                 this.csvData = data;
-                this.render(this.csvData, true);
+                this.tryRender(this.csvData, true);
             }
-            //更新文本相关配置
             if (m.type === 'UpdateText') {
                 this.conf.text = m.data;
                 this.initTitle();
-                this.render(this.csvData, false);
+                this.tryRender(this.csvData, false);
             }
-            //更新颜色相关配置
             if (m.type === 'UpdateColor') {
                 this.conf.color = m.data;
                 this.initTitle();
-                this.render(this.csvData, false);
+                this.tryRender(this.csvData, false);
             }
-            //更新主题颜色
             if (m.type === 'UpdateThemeColor') {
                 this.conf.themeColorKey = m.data.index;
                 this.conf.themeColor = m.data.colors;
-                this.render(this.csvData, false);
+                this.tryRender(this.csvData, false);
             }
-            //更新背景
             if (m.type === 'UpdateBackground_image') {
                 this.conf.background = m.data;
                 this.initBackground();
             }
-            //更新标题动画
             if (m.type === 'UpdateAnimateName') {
                 this.conf.titleAnimateName = m.data;
                 this.setTitleAnimate();
-                this.render(this.csvData, true);
+                this.tryRender(this.csvData, true);
             }
-            //触发预览
             if (m.type === 'Preview') {
                 this.conf = m.data;
                 this.initBackground();
-                this.render(this.csvData ?? this.conf.data.split('\r\n'), true);
+                this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
             }
-            //触发播放
             if (m.type === 'Play') {
-                this.render(this.csvData ?? this.conf.data.split('\r\n'), true);
+                this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
                 this.initBackground();
             }
-            //更新动画时长
             if (m.type === 'UpdateDuration') {
                 this.conf.duration = m.data;
                 this.initBackground();
-                this.render(this.csvData ?? this.conf.data.split('\r\n'), true);
+                this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
             }
-            //发送当前模板所有配置文件
             parent.postMessage({
                 type: 'FullConfig',
                 data: this.conf
@@ -173,7 +173,6 @@ class TempLate {
                 type: 'first',
                 data: this.conf
             }, location.origin);
-            this.render(this.csvData);
         });
     }
 }

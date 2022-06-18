@@ -1,4 +1,5 @@
 import Store from "@/store";
+import {Notification} from "element-ui";
 
 export const PostMessage = (message = {}) => {
     document.querySelector('iframe').contentWindow.postMessage(message, location.origin);
@@ -19,7 +20,12 @@ const OnMessage = (m) => {
             Store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', true);
         if (msg.type === 'PlayEnd')
             Store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', false);
-
+        if (msg.type === 'RenderError')
+            return Notification({
+                title: '模板渲染错误',
+                type: 'error',
+                message: msg.data
+            });
     }
 };
 

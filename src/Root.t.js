@@ -23,6 +23,8 @@ export default {
 
         if (current_template !== null)
             this.$store.commit('SET_CURRENT_TEMPLATE', JSON.parse(current_template));
+
+        this.$store.commit('SET_DEV_MODE', require('@/config/AppConfig').dev);
     },
     render(h) {
         return (
