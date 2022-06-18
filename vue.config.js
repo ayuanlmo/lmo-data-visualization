@@ -1,3 +1,6 @@
+require('./src/lib/CliColor/index.t');
+require('./server/index');
+
 const AppConfig = require('./src/config/AppConfig');
 const CompressionPlugin = require('compression-webpack-plugin');
 const GzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
@@ -5,8 +8,6 @@ const TimeStamp = new Date().getTime();
 const resolve = (dir) => {
     return require('path').join(__dirname, dir);
 };
-
-require('./src/lib/CliColor/index.t');
 
 module.exports = {
     outputDir: AppConfig.build.outputDir,
