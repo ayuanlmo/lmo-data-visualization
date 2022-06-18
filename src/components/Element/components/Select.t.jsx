@@ -11,9 +11,15 @@ export default {
             type: String,
             default: 'text'
         },
-        disabled:{
+        disabled: {
             type: Boolean,
             default: false
+        },
+        option: {
+            type: Array,
+            default: function () {
+                return [];
+            }
         }
     },
     data() {
@@ -26,11 +32,17 @@ export default {
     },
     render() {
         return (
-            <el-select v-model={this.data} on-change={e => {
-                this.$emit('change', e);
-            }}>
-                <slot></slot>
-            </el-select>
+                <el-select size={'mini'} v-model={this.data} on-change={e => {
+                    this.$emit('change', e);
+                }}>
+                    {
+                        this.option.map(i => {
+                            return (
+                                    <el-option key={i.value} label={i.label} value={i.value} />
+                            );
+                        })
+                    }
+                </el-select>
         );
     }
 };

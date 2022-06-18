@@ -97,6 +97,21 @@ export default {
                     }
                 });
             }
+            if (_Component === 'lmo-select') {
+                return h(_Component, {
+                    props: {
+                        option: this.configText[i].values,
+                        value: this.configText[i].values[0].value
+                    },
+                    on: {
+                        change: (e) => {
+                            this.configText[i].value = e;
+                            this.emitConfig();
+                            console.log(e);
+                        }
+                    }
+                });
+            }
             if (_Component === 'lmo-input-number') {
                 return h(_Component, {
                     props: {
