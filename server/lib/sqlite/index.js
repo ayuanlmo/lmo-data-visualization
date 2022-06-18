@@ -1,6 +1,6 @@
 const _SQLITE = require('sqlite3');
 const _FS = require("fs-extra");
-const _TEMPLATE_INDEX = require('../../const/templateIndex');
+const _TEMPLATE_INDEX = global.dbConf.index;
 
 class T_DB {
     constructor() {
@@ -9,7 +9,7 @@ class T_DB {
     }
 
     _OPEN() {
-        this._ = new _SQLITE.Database(`${__dirname}/db/db.ting.db`, (e) => {
+        this._ = new _SQLITE.Database(global.dbConf._path, (e) => {
                 if (e)
                     console.log('数据库打开失败', e);
                 else
@@ -47,7 +47,7 @@ class T_DB {
                 console.log('初始化模板失败', e);
             else {
                 //写入模板数据
-                _FS.readdir('../../static/DataVisualizationTemplate', (e, data) => {
+                _FS.readdir(global.dbConf._template, (e, data) => {
                     if (!e) {
                         data.map(i => {
                             const _SQL = this._GET_INSERT_TEMPLATE_TABLE_SQL({

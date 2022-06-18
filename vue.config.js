@@ -1,5 +1,4 @@
 require('./src/lib/CliColor/index.t');
-require('./server/index');
 
 const AppConfig = require('./src/config/AppConfig');
 const CompressionPlugin = require('compression-webpack-plugin');

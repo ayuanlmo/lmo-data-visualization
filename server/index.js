@@ -10,8 +10,16 @@
     const _Conf = require('./conf/ServerConfig');
     const _Cmd = require('./const/cmd');
     const _Net = require('./lib/net');
+    const _Path = require('path');
 
     require('express-ws')(_App);
+    global.dbConf = {
+        _path: _Path.resolve(__dirname + '/lib/sqlite/db/db.ting.db'),
+        _template: _Path.resolve(__dirname + '/static/DataVisualizationTemplate'),
+        index: require('./const/templateIndex')
+    };
+    new (require('./lib/sqlite/index').T_DB);
+
     _App.use(express.urlencoded({extended: false}));
     _App.use(_Conf.__STATIC_PATH, express.static(`${__dirname}${_Conf.__STATIC_PATH}`));
     _App.use(_Conf.__STATIC_PATH, express.static(`../dist`));
