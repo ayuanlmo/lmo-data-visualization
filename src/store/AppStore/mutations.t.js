@@ -1,7 +1,6 @@
 import * as TYPE from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {UPDATE_COLOR, UPDATE_DURATION, UPDATE_TEXT} from '@/const/MessageType.t';
-import {SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE} from "@/const/MutationTypes.t";
+import {UPDATE_COLOR, UPDATE_DURATION, UPDATE_TEXT, UPDATE_COLOR_MODE} from '@/const/MessageType.t';
 
 export default {
     [TYPE.SET_CURRENT_TEMPLATE_DEFAULT_DATA](state, data) {
@@ -27,6 +26,13 @@ export default {
             data: data
         });
         state.currentConfig.color = data;
+    },
+    [TYPE.SET_CURRENT_TEMPLATE_COLOR_MODE](state, data) {
+        state.currentConfig.color['type'] = data;
+        PostMessage({
+            type: UPDATE_COLOR_MODE,
+            data: data
+        });
     },
     [TYPE.SET_CURRENT_TEMPLATE_THEME_COLORS](state, data) {
         state.currentConfig.themeColors = data;

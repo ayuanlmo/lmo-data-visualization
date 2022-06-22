@@ -4,7 +4,7 @@ import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {UploadImageTypes} from "@/const/Default.t";
 import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from '@/const/MessageType.t';
-import {ColorConfigComponent} from "@/const/Default.t";
+import {ColorConfigComponent, ColorOption, renderColorOptionExcludeKey} from "@/const/Default.t";
 import AnimateView from '@/components/AnimateView/index.t';
 
 export default {
@@ -144,7 +144,8 @@ export default {
     methods: {
         initConfigColor() {
             Object.keys(this.currentConfigColor).map((i) => {
-                this.configColor[i] = this.currentConfigColor[i];
+                if (!renderColorOptionExcludeKey.includes(i))
+                    this.configColor[i] = this.currentConfigColor[i];
             });
             this.initConfigColorTemplate();
         },
@@ -177,11 +178,10 @@ export default {
             const _Component = this.configColor[i]['type'];
             const h = this.$createElement;
 
-            if (!ColorConfigComponent.includes(_Component)){
+            if (!ColorConfigComponent.includes(_Component)) {
                 this.$message.warning(`[${_Component}不是一个受支援的组件]`);
                 return h('span');
             }
-
             if (_Component === 'lmo-color-picker')
                 return h(_Component, {
                     props: {
@@ -251,8 +251,42 @@ export default {
                             );
                         })
                     ])
-                ])
+                ]),
+                this.renderMoreColorOption()
             ]);
+        },
+        renderMoreColorOption(h = this.$createElement) {
+            if ('more' in this.currentConfigThemeColor)
+                if ('type' in this.currentConfigThemeColor['more'])
+                    return (
+                        h('div', {
+                            class: 'lmo-color_box_content lmo_flex_box'
+                        }, [
+                            h('div', {
+                                class: 'lmo-color_box_label',
+                                style: {
+                                    width: '100px'
+                                }
+                            }, ['颜色模式:']),
+                            h('div', {
+                                class: 'lmo-color_box_option'
+                            }, [
+                                h('lmo-select', {
+                                    props: {
+                                        value: this.currentConfigThemeColor['type'] ?? 'Theme',
+                                        option: [
+                                            ...ColorOption
+                                        ]
+                                    },
+                                    on: {
+                                        change: (e) => {
+                                            this.$store.commit('SET_CURRENT_TEMPLATE_COLOR_MODE', e);
+                                        }
+                                    }
+                                })
+                            ])
+                        ])
+                    );
         },
         setTemplateBackground() {
             PostMessage({
@@ -294,10 +328,6 @@ export default {
             deep: true,
             handler() {
                 this.$refs.BackgroundOption.className = this.configTemplateBackground.image === '' ? 'lmo_hide' : '';
-                PostMessage({
-                    type: UPDATE_BACKGROUND_IMAGE,
-                    data: this.configTemplateBackground
-                });
                 this.setTemplateBackground();
             }
         }
