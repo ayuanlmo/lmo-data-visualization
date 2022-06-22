@@ -4,70 +4,11 @@
     <meta charset="UTF-8">
     <title>单柱状图</title>
     <link rel="stylesheet" href="../../style/animate.min.css">
+    <link rel="stylesheet" href="../../style/default.css">
 </head>
-<script src="../../script/echarts.min.js"></script>
 <script src="../../script/d3.js"></script>
+<script src="../../script/global.t.js"></script>
 <script src="../../script/lmo.t.js"></script>
-<style>
-    * {
-        padding: 0;
-        margin: 0;
-        outline: none;
-    }
-
-    #app {
-        width: 1920px;
-        height: 1080px;
-        background: #fff;
-        overflow: hidden;
-    }
-
-    #text {
-        width: 100%;
-        height: 135px;
-    }
-
-    #canvas {
-        width: 100%;
-        height: 945px;
-    }
-
-    .title_main {
-        font-size: 3rem;
-        position: absolute;
-        left: 10rem;
-        top: 1.2rem;
-    }
-
-    .title_sub {
-        font-size: 2rem;
-        position: absolute;
-        left: 23rem;
-        top: 2.2rem;
-    }
-
-    .from_source {
-        font-size: 2rem;
-        position: absolute;
-        right: 16rem;
-        top: 2.2rem;
-    }
-
-    .data_source {
-        font-size: 2rem;
-        position: absolute;
-        right: 10rem;
-        top: 2.2rem;
-    }
-
-    #app_mask {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: 15;
-        top: 0;
-    }
-</style>
 <body>
 <div id="app">
     <div id="text">
@@ -86,64 +27,4 @@
 </body>
 <script src="./conf.js"></script>
 <script src="./index.t.js"></script>
-<script>
-    void function (__GLOBAL, __FACTORY) {
-        __GLOBAL['__LMO__'] = __FACTORY();
-    }(this, () => {
-        window['__'] = '${{{__GLOBAL}}}##' ?? ['__GLOBAL_LMO__'];
-        window['chartConfig'] = '${{{%Conf}}}';
-        if (window['YC']) {
-            (async () => {
-                window['YC']['_IMPORT_SYNC'](['_ting_ting-gu', '_ting_ting-com', '_ting_ting-ws']);
-                return {
-                    '_': await _YC('lmo_ting_ting')['__PUSH_STATE']('L-LIKE', _YC) ?? {},
-                    '_WS': await _YC('lmo_ting_ting')['__WEB_SOCKET']['__CREATE_SOCKET']()['__OPEN']()['__CONNECT_SOCKET'](),
-                    '_CON': () => _YC('ting-ting-com')['_COMM'](E => {
-                        return E['_'];
-                    })
-                };
-            })();
-        }
-        window['_LMO'] = window['YC'] ?? 'undef';
-        if (window['_LMO'] !== 'undef') {
-            const _ = _LMO['__START'];
-
-            _['EV_CONF']({
-                _: _,
-                _LMO: _LMO,
-                _LMO_CONF: '{}',
-                _DEF_CONF: 'UNDEF',
-                _LMO_PUT_CONF: '{%LMO}',
-                _LMO_IS_UNDEF: _['_PAR'] ?? ![]
-            });
-            _LMO['ON']('LOAD', async (E) => {
-                return await E['_START']()();
-            });
-            _LMO['ON']('PLAY_END', (E) => {
-                return window['LMO_STOP_RECORD'](E);
-            });
-        }
-        window.UP_EVENT = (e) => {
-            e['__LMO_DEFAULT']() && e['__STOP_DEFAULT_EVENT']();
-            e['__SEND_EVENT'](window['chartConfig'] ?? chartConfig);
-            e['__RENDER'] = () => {
-                (async () => {
-                    return await e['__LMO']['__START_RENDER']();
-                })();
-            };
-            e._conf = _['__GET_CONF']();
-            e._end = _['__GET_END_TIME']();
-            if (_['__IS-ONLOAD']) {
-                _['__O']();
-                (async () => {
-                    await _('__START')(window['__LMO']);
-                })();
-            }
-            return e;
-        }
-        window['_PUSH_EVENT'] = () => {
-            return window['_LMO'] ?? __ ?? 'undef';
-        }
-    });
-</script>
 </html>
