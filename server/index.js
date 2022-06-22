@@ -11,8 +11,9 @@
     const _Cmd = require('./const/cmd');
     const _Net = require('./lib/net');
     const _Path = require('path');
+    const _WsApp = require('express-ws')(_App);
+    const _Pool = _WsApp.getWss('_Router.__SOCKET_CONNECT');
 
-    require('express-ws')(_App);
     global.dbConf = {
         _path: _Path.resolve(__dirname + '/lib/sqlite/db/db.ting.db'),
         _template: _Path.resolve(__dirname + '/static/DataVisualizationTemplate'),
@@ -29,7 +30,7 @@
             const m = JSON.parse(msg);
 
             if (m['cmd'] === _Cmd.__SYNTHESIS)
-                new (require('./timecut/index')).TC(ws, m.data);
+                new (require('./timecut/index')).TC(_Pool, m.data);
         });
     });
     _App.post(_Router.__GET_TEMPLATE, (req, res) => {

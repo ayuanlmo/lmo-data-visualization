@@ -4,18 +4,14 @@ const path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 
 class TC {
-    constructor(ws = {}, data) {
+    constructor(ws = null, data) {
         this.ws = ws;//获得socket对象
         this.data = data;//获得数据
         this.taskName = `lmo_${new Date().getTime()}`;//创建任务名称
         //下发任务状态
-        this.ws.send(require('../funcs')._stringify({
-            type: 'task_pending',
-            data: {
-                cmd: 'task_pending',
-                taskName: this.taskName
-            }
-        }));
+        this._sendMessage('task_pending', 'task_pending', {
+            taskName: this.taskName
+        });
         this._init();//初始化
     }
 
@@ -27,12 +23,12 @@ class TC {
         const _temp = '../server/static/temp/';
 
         //临时文件夹是否存在
-        if (!fs.existsSync(_temp)) {
-            fs.mkdir(_temp);
+        if (!fs['existsSync'](_temp)) {
+            fs['mkdir'](_temp);
         }
         const dir = `../server/static/temp/${this.taskName}`;
 
-        if (!fs.existsSync(dir)) {
+        if (!fs['existsSync'](dir)) {
             fs.mkdir(dir);
             this._copyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, dir);
 
@@ -60,13 +56,13 @@ class TC {
 
     //复制
     _copyFile(dir, to) {
-        const sourceFile = fs.readdirSync(dir, {withFileTypes: true});//获取源文件
+        const sourceFile = fs['readdirSync'](dir, {withFileTypes: true});//获取源文件
 
         sourceFile.forEach(i => {
             const n = path.resolve(dir, i.name);
             const t = path.resolve(to, i.name);
 
-            fs.copyFileSync(n, t);
+            fs['copyFileSync'](n, t);
         });
     }
 
@@ -88,13 +84,9 @@ class TC {
             duration: _data.video.duration,
             output: `static/output/${this.taskName}.mp4`,
             preparePageForScreenshot: async () => {
-                this.ws.send(require('../funcs')._stringify({
-                    type: 'task_processing',
-                    data: {
-                        cmd: 'task_processing',
-                        state: this.taskName
-                    }
-                }));
+                this._sendMessage('task_processing', 'task_processing', {
+                    state: this.taskName
+                });
             }
         };
 
@@ -102,7 +94,7 @@ class TC {
         if (_data['audio']['src'] !== '') {
             const buffer = Buffer.from(_data['audio']['src'].replace('data:audio/x-m4a;base64,', ''), 'base64');
 
-            fs.writeFile(`../server/static/temp/${this.taskName}.m4a`, buffer, (e) => {
+            fs['writeFile'](`../server/static/temp/${this.taskName}.m4a`, buffer, (e) => {
                 if (e)
                     console.log('音频保存失败');
                 else
@@ -111,19 +103,16 @@ class TC {
         }
 
         timeCut(_conf).then((conf) => {
+            this._sendMessage('task_end', 'task_processing', {
+                state: 'success',
+                taskName: this.taskName,
+                path: `/static/output/'${this.taskName}.mp4`
+            });
             //合成完成 处理音频
             this._processAudio(_data['audio']['src'] !== '' ? `static/output/${this.taskName}.mp4` : '', audioPath).then(() => {
-                this.ws.send(require('../funcs')._stringify(
-                    {
-                        type: 'task_end',
-                        data: {
-                            cmd: 'task_processing',
-                            state: 'success',
-                            taskName: this.taskName,
-                            path: `/static/output/'${this.taskName}.mp4`
-                        }
-                    }
-                ));
+                this._sendMessage('task_pro', 'task_pro_success', {
+                    taskName: this.taskName
+                });
                 //删除临时目录
                 this._delTempFile(`${path.resolve(`../server/static/temp/${this.taskName}`)}`);
             });
@@ -132,6 +121,9 @@ class TC {
 
     _processAudio(src, audio) {
         return new Promise((resolve, reject) => {
+            this._sendMessage('task_pro', 'task_pro_ready', {
+                taskName: this.taskName
+            });
             if (src === '')
                 return resolve();
             const f = ffmpeg(src);
@@ -143,30 +135,55 @@ class TC {
             if (!this.data['config']['audio']['complete'])
                 f.duration(this.data['config']['video']['duration']);
             f.output(`static/output/${this.taskName}264.mp4`);
-            f.on('end', function () {
-                fs.unlinkSync(src);
-                fs.unlinkSync(audio);
+            f.on('end', () => {
+                fs['unlinkSync'](src);
+                fs['unlinkSync'](audio);
                 resolve();
+            });
+            f.on('error', (e) => {
+                this._sendMessage('task_pro', 'task_pro_error', {
+                    message: e.message
+                });
+            });
+            f.on('stderr', (msg) => {
+                this._sendMessage('task_processing', 'task_processing', {
+                    taskName: this.taskName,
+                    message: msg
+                });
             });
             f.run();
         });
 
     }
 
+    _sendMessage(type, cmd, data = {}) {
+        this.ws.clients.forEach(i => {
+            i.send(require('../funcs')._stringify(
+                {
+                    type: type,
+                    data: {
+                        cmd: cmd,
+                        ...data
+                    }
+                }
+            ));
+        });
+    }
+
     _delTempFile(_path) {
         let files = [];
 
-        if (fs.existsSync(_path)) {
-            files = fs.readdirSync(_path);
+        if (fs['existsSync'](_path)) {
+            files = fs['readdirSync'](_path);
             files.forEach((file, index) => {
                 const curPath = _path + "/" + file;
 
-                if (fs.statSync(curPath).isDirectory())
+                if (fs['statSync'](curPath).isDirectory())
                     this._delTempFile(curPath); //递归删除文件夹
                 else
-                    fs.unlinkSync(curPath); //删除文件
+                    fs['unlinkSync'](curPath); //删除文件
             });
-            fs.rmdirSync(_path);
+            fs['rmdirSync'](_path);
         }
     }
 

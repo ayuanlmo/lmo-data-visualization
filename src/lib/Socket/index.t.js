@@ -53,6 +53,7 @@ export default class Socket {
     }
 
     onMessage(msg) {
+        Notification.close();
         if (msg.data !== 'pong') {
             this.callback(JSON.parse(msg.data));
             const _msg = JSON.parse(msg.data);
@@ -67,6 +68,24 @@ export default class Socket {
                 return Notification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 开始合成`,
+                    type: 'success'
+                });
+            if (_msg.type === 'task_pro' && _msg.data['cmd'] === 'task_pro_ready')
+                return Notification({
+                    title: '系统消息',
+                    message: `[${_msg.data['taskName']}] 开始转码`,
+                    type: 'success'
+                });
+            if (_msg.type === 'task_pro' && _msg.data['cmd'] === 'task_pro_error')
+                return Notification({
+                    title: '系统消息',
+                    message: `[${_msg.data['taskName']}] 转码失败`,
+                    type: 'error'
+                });
+            if (_msg.type === 'task_pro' && _msg.data['cmd'] === 'task_pro_success')
+                return Notification({
+                    title: '系统消息',
+                    message: `[${_msg.data['taskName']}] 转码完成`,
                     type: 'success'
                 });
         }
