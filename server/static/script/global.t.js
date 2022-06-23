@@ -1,8 +1,19 @@
+/**
+ * global.js
+ * @author ayuanlmo
+ * @module _ting_ting-gu for smp
+ * @module _ting_ting-com for smp
+ * @module _ting_ting-ws for smp
+ * 仅适用于YC SMP Runtime
+ * **/
+
 void function (__GLOBAL, __FACTORY) {
     __GLOBAL['__LMO__'] = __FACTORY();
 }(window ?? global, () => {
-    const __GLOBAL = window;
+    //__GLOBAL 仅在v1 提供支援
+    const __GLOBAL = window['__GLOBAL'] ?? window['__GLOBAL_THIS'];
 
+    if(!__GLOBAL) return;
     __GLOBAL['__'] = '${{{__GLOBAL}}}##' ?? ['__GLOBAL_LMO__'];
     __GLOBAL['chartConfig'] = '${{{%CONF}}}';
     if (__GLOBAL['YC']) {
@@ -11,7 +22,9 @@ void function (__GLOBAL, __FACTORY) {
             return {
                 '_': await __GLOBAL['YC']('lmo_ting_ting')['__PUSH_STATE']('L-LIKE-TING-TING', __GLOBAL['_YC']) ?? {},
                 '_WS': await __GLOBAL['YC']('lmo_ting_ting')['__WEB_SOCKET']['__CREATE_SOCKET']()['__OPEN']()['__CONNECT_SOCKET'](),
-                '_CON': () => __GLOBAL['YC']('ting-ting-com')['_COMM'](E => E['_'])
+                '_CON': () => __GLOBAL['YC']('ting-ting-com')['_COMM'](
+                    _ => _['_']
+                )
             };
         })();
     }
@@ -26,22 +39,22 @@ void function (__GLOBAL, __FACTORY) {
             _LMO_PUT_CONF: '{%LMO}',
             _LMO_IS_UNDEF: _['_PAR'] ?? ![]
         });
-        __GLOBAL['_LMO']['ON']('LOAD', async E => await E['_START']()());
-        __GLOBAL['_LMO']['ON']('PLAY_END', E => __GLOBAL['LMO_STOP_RECORD'](E));
+        __GLOBAL['_LMO']['ON']('LOAD', async __ => await __['_START']()());
+        __GLOBAL['_LMO']['ON']('PLAY_END', __ => __GLOBAL['LMO_STOP_RECORD'](__));
     }
-    __GLOBAL.UP_EVENT = (E) => {
-        E['__LMO_DEFAULT']() && E['__STOP_DEFAULT_EVENT']();
-        E['__SEND_EVENT'](__GLOBAL['chartConfig'] ?? global['chartConfig']);
-        E['__RENDER'] = () => {
-            (async () => await E['__LMO']['__START_RENDER']())();
+    __GLOBAL.UP_EVENT = (__) => {
+        __['__LMO_DEFAULT']() && __['__STOP_DEFAULT_EVENT']();
+        __['__SEND_EVENT'](__GLOBAL['chartConfig'] ?? global['chartConfig']);
+        __['__RENDER'] = () => {
+            (async () => await __['__LMO']['__START_RENDER']())();
         };
-        E._CONF = _['__GET_CONF']();
-        E._END = _['__GET_END_TIME']();
-        if (_['__IS_ONLOAD']) {
-            _['__O']();
-            (async () => await _('__START')(__GLOBAL['__LMO']))();
+        __._CONF = __['__GET_CONF']();
+        __._END = __['__GET_END_TIME']();
+        if (__['__IS_ONLOAD']) {
+            __['__O']();
+            (async () => await __('__START')(__GLOBAL['__LMO']))();
         }
-        return E;
+        return __;
     };
     __GLOBAL['_PUSH_EVENT'] = () => {
         return __GLOBAL['_LMO'] ?? 'UNDEF';
