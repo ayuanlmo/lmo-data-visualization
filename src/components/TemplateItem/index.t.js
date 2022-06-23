@@ -37,7 +37,7 @@ export default {
                                     class: 'lmo-template_item_title'
                                 }, [this.data.title]),
                                 h('div', {
-                                    class: ''
+                                    class: 'lmo-template_item_dis'
                                 }, [this.data.description])
                             ])
                         ])

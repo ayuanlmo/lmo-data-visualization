@@ -2,6 +2,7 @@ require('./style/lmo-style.t.scss');
 require('./style/lmo-animation.t.scss');
 require('./style/lmo-default.t.scss');
 require('../public/style/animate.min.css');
+require('./style/element.scss');
 
 import '@/lib/PostMessage/index.t';
 import {get} from '@/lib/Storage';

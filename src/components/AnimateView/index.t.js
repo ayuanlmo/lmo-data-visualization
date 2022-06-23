@@ -31,7 +31,6 @@ export default {
                                 type: UPDATE_ANIMATE_NAME,
                                 data: e
                             });
-                            console.log(this.animateName);
                             this.animateName = e;
                         }
                     }

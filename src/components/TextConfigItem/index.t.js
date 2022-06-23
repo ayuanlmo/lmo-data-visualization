@@ -107,7 +107,6 @@ export default {
                         change: (e) => {
                             this.configText[i].value = e;
                             this.emitConfig();
-                            console.log(e);
                         }
                     }
                 });

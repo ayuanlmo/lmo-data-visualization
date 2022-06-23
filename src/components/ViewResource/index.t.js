@@ -33,7 +33,8 @@ export default {
                                             h('el-col', {
                                                 props: {
                                                     span: 6
-                                                }
+                                                },
+                                                class: 'lmo-view_resource_item'
                                             }, [
                                                 h('div', {
                                                     class: 'lmo-view_resource_media_item lmo_cursor_pointer',
@@ -68,8 +69,6 @@ export default {
         getList() {
             this.$store.dispatch('GET_MEDIA').then(res => {
                 this.list = res.data.list;
-            }).catch(e => {
-                console.log(e);
             });
         }
     },
