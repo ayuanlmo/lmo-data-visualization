@@ -1,22 +1,28 @@
-const fs = require('fs-extra');
+/***
+ * fun's.js
+ * @author ayuanlmo
+ * 一些函数
+ * */
+
+const _Fs = require('fs-extra');
 
 module.exports = {
-    _getSuccessMessage: (data = {}) => {
+    _GetSuccessMessage: (data = {}) => {
         return {
             data: data,
             message: 'success',
             code: 200,
-            _t: new Date().getTime()
+            _t: new Date()['getTime']()
         };
     },
-    async _getTemplateList(r) {
-        await fs.readdir('./static/DataVisualizationTemplate', (err, data) => {
-            const _ = [];
-            const T_DB = new (require('./lib/sqlite/index').T_DB);
+    async _GetTemplateList(_) {
+        await _Fs['readdir']('./static/DataVisualizationTemplate', () => {
+            const __ = [];
+            const _T_DB = new (require('./lib/sqlite/index')['T_DB']);
 
-            T_DB._QUERY_TEMPLATE_LIST().then(res => {
-                res.map(i => {
-                    _.push({
+            _T_DB['_QUERY_TEMPLATE_LIST']()['then'](res => {
+                res['map'](i => {
+                    __['push']({
                         id: i['T_Id'],
                         url: i['T_Path'],
                         cover: `/static/DataVisualizationTemplate/${i['T_Name']}/cover.png`,
@@ -25,40 +31,39 @@ module.exports = {
                         description: i['T_Description']
                     });
                 });
-                r.json(
-                    require('./funcs')._getSuccessMessage({
-                        list: _
+                _['json'](
+                    require('./funcs')['_GetSuccessMessage']({
+                        list: __
                     })
                 );
-                T_DB._CLOSE();
+                _T_DB['_CLOSE']();
             });
         });
     },
-    _getMedia: (r) => {
+    _GetMedia: (_) => {
         const _outputDir = './static/output';
 
-        if (!fs.existsSync(_outputDir)) {
-            fs.mkdir(_outputDir);
-        }
-        fs.readdir('./static/output', (err, data) => {
-            const _ = [];
+        if (!_Fs['existsSync'](_outputDir))
+            _Fs['mkdir'](_outputDir);
+        _Fs['readdir']('./static/output', (_e, _d) => {
+            const __ = [];
 
-            data.forEach(i => {
-                if (i.split('.')[1] === 'mp4') {
-                    _.push({
+            _d['forEach'](i => {
+                if (i['split']('.')[1] === 'mp4') {
+                    __['push']({
                         name: i,
                         path: `/static/output/${i}`
                     });
                 }
             });
-            r.json(
-                require('./funcs')._getSuccessMessage({
-                    list: _
+            _['json'](
+                require('./funcs')['_GetSuccessMessage']({
+                    list: __
                 })
             );
         });
     },
-    _stringify(data = {}) {
-        return JSON.stringify(data);
+    _Stringify(data = {}) {
+        return JSON['stringify'](data);
     }
 };

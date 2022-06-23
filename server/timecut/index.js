@@ -1,164 +1,142 @@
-const timeCut = require('timecut');
-const fs = require('fs-extra');
-const path = require('path');
+const _TimeCut = require('timecut');
+const _Fs = require('fs-extra');
+const _Path = require('path');
 const ffmpeg = require('fluent-ffmpeg');
 
 class TC {
     constructor(ws = null, data) {
-        this.ws = ws;//获得socket对象
-        this.data = data;//获得数据
-        this.taskName = `lmo_${new Date().getTime()}`;//创建任务名称
-        //下发任务状态
-        this._sendMessage('task_pending', 'task_pending', {
-            taskName: this.taskName
+        this['ws'] = ws;
+        this['data'] = data;
+        this['taskName'] = `lmo_${new Date()['getTime']()}`;
+        this['_SendMessage']('task_pending', 'task_pending', {
+            taskName: this['taskName']
         });
-        this._init();//初始化
+        this['_Init']();
     }
 
-    _init() {
-        this._copyTemplate();
+    _Init() {
+        this['_CopyTemplate']();
     }
 
-    _copyTemplate() {
+    _CopyTemplate() {
         const _temp = '../server/static/temp/';
+        const _ = `../server/static/temp/${this['taskName']}`;
 
-        //临时文件夹是否存在
-        if (!fs['existsSync'](_temp)) {
-            fs['mkdir'](_temp);
-        }
-        const dir = `../server/static/temp/${this.taskName}`;
-
-        if (!fs['existsSync'](dir)) {
-            fs.mkdir(dir);
-            this._copyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, dir);
-
+        if (!_Fs['existsSync'](_temp))
+            _Fs['mkdir'](_temp);
+        if (!_Fs['existsSync'](_)) {
+            _Fs['mkdir'](_);
+            this['_CopyFile'](`../server/static/DataVisualizationTemplate/${this['data']['template']}`, _);
             setTimeout(() => {
-                const str = 'window.chartConfig = ';
-
-                const data = {
-                    ...this.data['templateConfig'],
+                _Fs['writeFile'](`${_}/conf.js`, `window.chartConfig = ${JSON['stringify']({
+                    ...this['data']['templateConfig'],
                     _video: {
-                        ...this.data['config']['video']
+                        ...this['data']['config']['video']
                     }
-                };
-
-                //替换 配置文件对象
-                fs.writeFile(`${dir}/conf.js`, `${str}${JSON.stringify(data)};`, e => {
-                    if (e) {
+                })};`, e => {
+                    if (e)
                         console.log('模板配置文件替换失败');
-                    } else {
-                        this._synthesis();//开始合成视频
-                    }
+                    else
+                        this['_Synthesis']();
                 });
             }, 1000);
         }
     }
 
-    //复制
-    _copyFile(dir, to) {
-        const sourceFile = fs['readdirSync'](dir, {withFileTypes: true});//获取源文件
-
-        sourceFile.forEach(i => {
-            const n = path.resolve(dir, i.name);
-            const t = path.resolve(to, i.name);
-
-            fs['copyFileSync'](n, t);
+    _CopyFile(dir, to) {
+        _Fs['readdirSync'](dir, {withFileTypes: true})['forEach'](i => {
+            _Fs['copyFileSync'](_Path['resolve'](dir, i['name']), _Path['resolve'](to, i['name']));
         });
     }
 
-    //合成
-    _synthesis() {
+    _Synthesis() {
         let audioPath = '';
-        const _data = this.data['config'];
+        const _ = this['data']['config'];
         const _conf = {
-            url: `http://localhost:${global.__SSERVER_PORT}/static/temp/${this.taskName}/index.html`,
+            url: `http://localhost:${global['__SERVER_PORT']}/static/temp/${this['taskName']}/index.html`,
             viewport: {
-                ...this._getVideoClarity(_data.video.clarity)
+                ...this['_GetVideoClarity'](_['video']['clarity'])
             },
             selector: '#app',
             left: 0,
             top: 0,
             right: 0,
             bottom: 0,
-            fps: parseInt(_data.video.fps),
-            duration: _data.video.duration,
-            output: `static/output/${this.taskName}.mp4`,
+            fps: parseInt(_['video']['fps']),
+            duration: _['video']['duration'],
+            output: `static/output/${this['taskName']}.mp4`,
             preparePageForScreenshot: async () => {
-                this._sendMessage('task_processing', 'task_processing', {
-                    state: this.taskName
+                this['_SendMessage']('task_processing', 'task_processing', {
+                    state: this['taskName']
                 });
             }
         };
 
-        //判断音频是否存在
-        if (_data['audio']['src'] !== '') {
-            const buffer = Buffer.from(_data['audio']['src'].replace('data:audio/x-m4a;base64,', ''), 'base64');
+        if (_['audio']['src'] !== '') {
+            const buffer = Buffer['from'](_['audio']['src']['replace']('data:audio/x-m4a;base64,', ''), 'base64');
 
-            fs['writeFile'](`../server/static/temp/${this.taskName}.m4a`, buffer, (e) => {
+            _Fs['writeFile'](`../server/static/temp/${this['taskName']}.m4a`, buffer, (e) => {
                 if (e)
                     console.log('音频保存失败');
                 else
-                    audioPath = `../server/static/temp/${this.taskName}.m4a`;
+                    audioPath = `../server/static/temp/${this['taskName']}.m4a`;
             });
         }
 
-        timeCut(_conf).then((conf) => {
-            this._sendMessage('task_end', 'task_processing', {
+        _TimeCut(_conf).then(() => {
+            this['_SendMessage']('task_end', 'task_processing', {
                 state: 'success',
-                taskName: this.taskName,
-                path: `/static/output/'${this.taskName}.mp4`
+                taskName: this['taskName'],
+                path: `/static/output/'${this['taskName']}.mp4`
             });
-            //合成完成 处理音频
-            this._processAudio(_data['audio']['src'] !== '' ? `static/output/${this.taskName}.mp4` : '', audioPath).then(() => {
-                this._sendMessage('task_pro', 'task_pro_success', {
-                    taskName: this.taskName
+            this['_ProcessAudio'](_['audio']['src'] !== '' ? `static/output/${this['taskName']}.mp4` : '', audioPath).then(() => {
+                this['_SendMessage']('task_pro', 'task_pro_success', {
+                    taskName: this['taskName']
                 });
-                //删除临时目录
-                this._delTempFile(`${path.resolve(`../server/static/temp/${this.taskName}`)}`);
+                this['_DelTempFile'](`${_Path['resolve'](`../server/static/temp/${this['taskName']}`)}`);
             });
         });
     }
 
-    _processAudio(src, audio) {
-        return new Promise((resolve, reject) => {
-            this._sendMessage('task_pro', 'task_pro_ready', {
-                taskName: this.taskName
+    _ProcessAudio(src, audio) {
+        return new Promise((resolve) => {
+            this['_SendMessage']('task_pro', 'task_pro_ready', {
+                taskName: this['taskName']
             });
             if (src === '')
                 return resolve();
-            const f = ffmpeg(src);
+            const _ = ffmpeg(src);
 
-            f.videoCodec('libx264');//兼容Chrome的H.264视频编码
-            f.input(audio);
-            f.audioFilters(`volume=${this.data['config']['audio']['volume']}`);
-            f.audioBitrate('128k');
-            if (!this.data['config']['audio']['complete'])
-                f.duration(this.data['config']['video']['duration']);
-            f.output(`static/output/${this.taskName}264.mp4`);
-            f.on('end', () => {
-                fs['unlinkSync'](src);
-                fs['unlinkSync'](audio);
+            _['videoCodec']('libx264');//兼容Chrome的H.264视频编码
+            _['input'](audio);
+            _['audioFilters'](`volume=${this['data']['config']['audio']['volume']}`);
+            _['audioBitrate']('128k');
+            if (!this['data']['config']['audio']['complete'])
+                _['duration'](this['data']['config']['video']['duration']);
+            _['output'](`static/output/${this['taskName']}264.mp4`);
+            _['on']('end', () => {
+                _Fs['unlinkSync'](src);
+                _Fs['unlinkSync'](audio);
                 resolve();
             });
-            f.on('error', (e) => {
-                this._sendMessage('task_pro', 'task_pro_error', {
-                    message: e.message
+            _['on']('error', (_e) => {
+                this['_SendMessage']('task_pro', 'task_pro_error', {
+                    message: _e['message']
                 });
             });
-            f.on('stderr', (msg) => {
-                this._sendMessage('task_processing', 'task_processing', {
-                    taskName: this.taskName,
+            _['on']('stderr', (msg) => {
+                this['_SendMessage']('task_processing', 'task_processing', {
+                    taskName: this['taskName'],
                     message: msg
                 });
             });
-            f.run();
+            _['run']();
         });
-
     }
 
-    _sendMessage(type, cmd, data = {}) {
-        this.ws.clients.forEach(i => {
-            i.send(require('../funcs')._stringify(
+    _SendMessage(type, cmd, data = {}) {
+        this['ws']['clients']['forEach'](i => {
+            i['send'](require('../funcs')['_Stringify'](
                 {
                     type: type,
                     data: {
@@ -170,24 +148,24 @@ class TC {
         });
     }
 
-    _delTempFile(_path) {
-        let files = [];
+    _DelTempFile(_path) {
+        let _ = [];
 
-        if (fs['existsSync'](_path)) {
-            files = fs['readdirSync'](_path);
-            files.forEach((file, index) => {
-                const curPath = _path + "/" + file;
+        if (_Fs['existsSync'](_path)) {
+            _ = _Fs['readdirSync'](_path);
+            _['forEach']((_f) => {
+                const __ = _path + "/" + _f;
 
-                if (fs['statSync'](curPath).isDirectory())
-                    this._delTempFile(curPath); //递归删除文件夹
+                if (_Fs['statSync'](__)['isDirectory']())
+                    this['_DelTempFile'](__);
                 else
-                    fs['unlinkSync'](curPath); //删除文件
+                    _Fs['unlinkSync'](__);
             });
-            fs['rmdirSync'](_path);
+            _Fs['rmdirSync'](_path);
         }
     }
 
-    _getVideoClarity(k, s = 'w') {
+    _GetVideoClarity(k) {
         if (k === '1080P')
             return {
                 width: 1920,
