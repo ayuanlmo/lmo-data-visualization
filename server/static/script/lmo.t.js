@@ -21,6 +21,12 @@ class TempLate {
         this.appDom = document.getElementById('app');
         this.setChart();
         this.init();
+        addEventListener('load', () => {
+            parent.postMessage({
+                type: 'FullConfig',
+                data: this.conf
+            }, location.origin);
+        });
     }
 
     setChart() {
@@ -156,10 +162,6 @@ class TempLate {
                 this.initBackground();
                 this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
             }
-            parent.postMessage({
-                type: 'FullConfig',
-                data: this.conf
-            }, location.origin);
         }
     }
 
