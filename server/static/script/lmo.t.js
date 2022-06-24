@@ -175,6 +175,10 @@ class TempLate {
                 type: 'first',
                 data: this.conf
             }, location.origin);
+            parent.postMessage({
+                type: 'FullConfig',
+                data: this.conf
+            }, location.origin);
         });
     }
 }
