@@ -8,6 +8,10 @@
 <p align="center">
     <img src="https://img.shields.io/badge/ApacheEcharts-5.0 -blue.svg" alt="ApacheEcharts">
     <img src="https://img.shields.io/badge/timecut-0.3.3 -blue.svg" alt="timecut">
+    <img src="https://img.shields.io/badge/fluent_ffmpeg-2.1.2 -blue.svg" alt="fluent-ffmpeg">
+    <img src="https://img.shields.io/badge/fs_extra-10.1.0 -blue.svg" alt="fs-extra">
+    <img src="https://img.shields.io/badge/net-1.0.2 -blue.svg" alt="net">
+    <img src="https://img.shields.io/badge/sqlite3-5.0.8 -blue.svg" alt="sqlite3">
     <img src="https://img.shields.io/badge/Express-4.18.1 -blue.svg" alt="express">
     <img src="https://img.shields.io/badge/Express_ws-5.0.2 -blue.svg" alt="express_ws">
     <img src="https://img.shields.io/badge/D3.js-5.16.0 -blue.svg" alt="D3.js">
@@ -122,6 +126,10 @@ yarn build
 
 ---
 
+## 有问题吗？
+可通过[YouTrack](https://ayuanlmo.youtrack.cloud/)向我们提问，或者您可以发送issues
+
+![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
 ## 感谢贡献
 
 - 糖兮兮
