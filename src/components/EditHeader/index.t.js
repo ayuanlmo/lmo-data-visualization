@@ -45,7 +45,7 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    this.$refs.PreviewTemplateConf.show();
+                                    this.$refs.PreviewTemplateConf['show']();
                                 }
                             }
                         }) : h(''),
@@ -55,7 +55,7 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    this.$refs.Preview.show();
+                                    this.$refs.Preview['show']();
                                 }
                             }
                         }),

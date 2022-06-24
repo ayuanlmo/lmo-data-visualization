@@ -32,7 +32,7 @@ export default {
         updateData() {
             let csvData = '';
 
-            this.$refs.HotTable.hotInstance.getData().map(i => {
+            this.$refs.HotTable['hotInstance'].getData().map(i => {
                 if (i[0] !== null) {
                     let txt = '';
 
@@ -56,7 +56,7 @@ export default {
                 this.csvData.split('\r\n').map((i) => {
                     hotTableData.push(i.split(','));
                 });
-                this.$refs.HotTable.hotInstance.loadData(hotTableData);
+                this.$refs.HotTable['hotInstance'].loadData(hotTableData);
             }
         }
     },

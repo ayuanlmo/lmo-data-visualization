@@ -19,7 +19,7 @@ export default {
                         class: 'lmo_theme_color lmo_cursor_pointer lmo_none_user_select',
                         on: {
                             click: () => {
-                                this.$refs.about.show();
+                                this.$refs.about['show']();
                             }
                         }
                     }, [require('@config/AppConfig').appName])
@@ -36,7 +36,7 @@ export default {
                         },
                         on: {
                             click: () => {
-                                this.$refs.ViewResource.show();
+                                this.$refs.ViewResource['show']();
                             }
                         }
                     }),
@@ -50,7 +50,7 @@ export default {
                         },
                         on: {
                             click: () => {
-                                this.$refs.ViewLogs.show();
+                                this.$refs.ViewLogs['show']();
                             }
                         }
                     })

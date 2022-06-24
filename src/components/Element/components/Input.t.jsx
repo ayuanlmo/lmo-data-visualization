@@ -81,7 +81,7 @@ export default {
                     size: this.size
                 },
                 attrs: {
-                    placeholder: this.i18n ? this.$t(this.placeholder) : this.placeholder
+                    placeholder: this.i18n ? this['$t'](this.placeholder) : this.placeholder
                 },
                 on: {
                     input: e => {
@@ -103,7 +103,7 @@ export default {
     },
     methods: {
         focus() {
-            this.$refs.input.focus();
+            this.$refs.input['focus']();
         }
     }
 };

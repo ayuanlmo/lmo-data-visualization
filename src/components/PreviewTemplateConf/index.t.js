@@ -14,7 +14,7 @@ export default {
                     withHeader: false
                 },
                 on: {
-                    close: (close) => {
+                    close: () => {
                         this.visible = false;
                     }
                 }
@@ -29,8 +29,8 @@ export default {
                         class: 'lmo-preview_template_conf_preview_type_box'
                     }, [
                         h('span', ['预览方式：']),
-                        <el-radio v-model={this.previewType} label="JSON">JSON</el-radio>,
-                        <el-radio v-model={this.previewType} label="text">文本</el-radio>,
+                        <el-radio v-model={this['previewType']} label="JSON">JSON</el-radio>,
+                        <el-radio v-model={this['previewType']} label="text">文本</el-radio>,
                         h('div', [
                             h(JSON_VIEW, {
                                 class: this.previewType === 'JSON' ? '' : 'lmo_hide',
@@ -39,7 +39,7 @@ export default {
                                     deep: 3
                                 }
                             }),
-                            <el-input rows={50} class={this.previewType === 'text' ? '' : 'lmo_hide'} type={'textarea'}
+                            <el-input rows={50} class={this['previewType'] === 'text' ? '' : 'lmo_hide'} type={'textarea'}
                                       value={JSON.stringify(this.currentConfig)}/>
                         ])
                     ])

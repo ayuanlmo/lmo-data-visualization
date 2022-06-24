@@ -55,7 +55,7 @@ export default {
                                 class: 'lmo_hide',
                                 ref: 'BackgroundOption'
                             }, [
-                                <el-radio-group v-model={this.templateBackgroundType} onChange={(n) => {
+                                <el-radio-group v-model={this['templateBackgroundType']} onChange={(n) => {
                                     if (n === '拉伸')
                                         this.configTemplateBackground.arrange = '0% 0% / 100% 100%';
                                     if (n === '横铺')

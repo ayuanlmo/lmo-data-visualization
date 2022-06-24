@@ -56,7 +56,7 @@ export default {
                             h('div', {
                                 class: 'lmo-audio_controller_slider'
                             }, [
-                                <el-slider v-model={this.audioVolume} min={0} max={100} onChange={(e) => {
+                                <el-slider v-model={this['audioVolume']} min={0} max={100} onChange={(e) => {
                                     this.sliderChange(e);
                                 }}/>
                             ])
@@ -218,12 +218,12 @@ export default {
         play() {
             if (this.audioName !== '') {
                 this.audioPlay = true;
-                this.$refs.audio.play();
+                this.$refs.audio['play']();
             }
         },
         pause() {
             this.audioPlay = false;
-            this.$refs.audio.pause();
+            this.$refs.audio['pause']();
         },
         sliderChange(e) {
             const volume = (e / 100).toFixed(1);

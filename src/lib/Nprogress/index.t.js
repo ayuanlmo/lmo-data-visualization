@@ -9,14 +9,14 @@ import Nprogress from 'nprogress';
 require('./style.t.scss');
 
 export const start = (d = 0.1) => {
-    Nprogress.set(d);
+    Nprogress['set'](d);
     setTimeout(async () => {
-        await Nprogress.start();
+        await Nprogress['start']();
     });
 };
 
 export const done = () => {
     setTimeout(async () => {
-        await Nprogress.done();
+        await Nprogress['done']();
     });
 };

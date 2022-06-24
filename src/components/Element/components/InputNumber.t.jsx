@@ -46,7 +46,7 @@ export default {
             default: ''
         }
     },
-    render(h) {
+    render() {
         return (
                 <el-input-number
                         v-model={this.num}
@@ -102,7 +102,7 @@ export default {
     },
     methods: {
         focus() {
-            this.$refs.inputNumber.focus();
+            this.$refs.inputNumber['focus']();
         }
     }
 };

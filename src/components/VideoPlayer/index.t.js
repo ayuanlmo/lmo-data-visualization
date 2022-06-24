@@ -10,7 +10,7 @@ export default {
                     if (this.visible)
                         this.$refs.video['play']();
                     this.videoConf.duration = parseInt(this.$refs.video['duration']);
-                }} onTimeupdate={(e) => {
+                }} onTimeupdate={() => {
                     this.videoConf.currentTime = this.$refs.video['currentTime'];
                     this.videoConf.percent = parseInt((this.videoConf.currentTime / this.videoConf.duration * 100).toFixed(2)) + 1;
                     this.sliderValue = this.videoConf.percent;

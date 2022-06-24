@@ -6,7 +6,7 @@ import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 
 export default {
     name: 'lmo-config_item',
-    render(h) {
+    render() {
         return (
             this.renderTemplate
         );

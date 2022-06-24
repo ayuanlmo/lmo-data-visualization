@@ -47,7 +47,7 @@ export default {
             default: ''
         }
     },
-    render(h) {
+    render() {
         return (
                 <el-switch
                         v-model={this.select}
@@ -73,7 +73,7 @@ export default {
     },
     methods: {
         focus() {
-            this.$refs.switch.focus();
+            this.$refs.switch['focus']();
         }
     }
 };

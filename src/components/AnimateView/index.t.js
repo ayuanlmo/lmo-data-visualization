@@ -15,7 +15,7 @@ export default {
                     class: 'lmo-animate_view_content lmo_theme_color lmo_cursor_pointer lmo_none_user_select',
                     on: {
                         click: () => {
-                            this.$refs.AnimateList.show();
+                            this.$refs.AnimateList['show']();
                         }
                     }
                 }, [

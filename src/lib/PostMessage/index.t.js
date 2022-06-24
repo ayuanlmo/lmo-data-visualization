@@ -2,7 +2,9 @@ import Store from "@/store";
 import {Notification} from "element-ui";
 
 export const PostMessage = (message = {}) => {
-    document.querySelector('iframe').contentWindow.postMessage(message, location.origin);
+    const _ = document.querySelector('iframe').contentWindow;
+
+    _.postMessage(message, location.origin);
 };
 
 const OnMessage = (m) => {
