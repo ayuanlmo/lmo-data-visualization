@@ -182,3 +182,44 @@ class TempLate {
         });
     }
 }
+
+/***
+ * @method getDiffColor
+ * @author ayuanlmo
+ * @param start {unknown[]} not null
+ * @param end {number[]} not null
+ * @param step {menubar}
+ * @param gamma {number}
+ * **/
+function getDiffColor(start, end, step, gamma) {
+    const _pc = (_hs) => {
+        return _hs.length === 4 ? _hs.substr(1).split('').map(_ => {
+            return 0x11 * parseInt(_, 16);
+        }) : [_hs.substr(1, 2), _hs.substr(3, 2), _hs.substr(5, 2)].map((_) => {
+            return parseInt(_, 16);
+        });
+    };
+    const _p = (_) => {
+        return _.length === 1 ? '0' + _ : _;
+    };
+    const normalize = (_) => {
+        return Math.pow(_ / 255, gamma);
+    };
+    const output = [];
+    const so = [];
+
+    let i = 0, j = 0, ms = 0, me = 0;
+
+    gamma = gamma || 1;
+    start = _pc(start).map(normalize);
+    end = _pc(end).map(normalize);
+    for (i = 0; i < step; i += 1) {
+        ms = i / (step - 1);
+        me = 1 - ms;
+        for (j = 0; j < 3; j += 1) {
+            so[j] = _p(Math.round(Math.pow(start[j] * me + end[j] * ms, 1 / gamma) * 255).toString(16));
+        }
+        output.push(`#${so.join('')}`);
+    }
+    return output;
+}
