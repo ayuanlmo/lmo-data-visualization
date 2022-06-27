@@ -28,6 +28,7 @@
 ---
 
 ## 介绍
+
 lmo-DataVisualization，一款开源可视化数据制作工具。 根据提供的模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
 
 ## 内置功能
@@ -37,11 +38,11 @@ lmo-DataVisualization，一款开源可视化数据制作工具。 根据提供�
     - 上传本地数据
     - 可导出模板示例数据
 2. 文字 / 主题相关
-   - 支持配置标题信息、颜色
-   - 配置图表主题颜色
-   - 背景颜色
-   - 标题动画
-   - 背景图片
+    - 支持配置标题信息、颜色
+    - 配置图表主题颜色
+    - 背景颜色
+    - 标题动画
+    - 背景图片
 3. 音频 / 时间相关
     - 背景音乐
     - 设置音量大小
@@ -60,6 +61,8 @@ PS：不同的模板配置项可能有些差别，这是根据模板内部提供
 | 添加音频     |            视频动画的音频 |  完成  |
 | 保存为自定义模板 |      将当前模板保存为自定义配置 | 进行中  |
 | 部署文档     | 该应用程序在不同操作系统中的部署方式 | 进行中  |
+
+*注 ： 由于合成服务无法模拟Animate.css提供的动画，后续将会采用纯JavaScript进行对Animate.css动画的模拟。
 
 ## 开发
 
@@ -120,6 +123,7 @@ yarn build
 ---
 
 ## 特别感谢
+
 感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了免费的开源[许可证](https://www.jetbrains.com/community/opensource/)
 
 ![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
@@ -127,9 +131,11 @@ yarn build
 ---
 
 ## 有问题吗？
+
 可通过[YouTrack](https://ayuanlmo.youtrack.cloud/)向我们提问，或者您可以发送issues
 
 ![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
+
 ## 感谢贡献
 
 - 糖兮兮
