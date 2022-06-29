@@ -55,8 +55,8 @@ export default {
         };
     },
     methods: {
-        //计算iframe高宽 & 缩放比
         initPlayerView(e = this.$refs.playerIframeBox ?? document.getElementById('lmo-player_iframe_box')) {
+            if (!e) return;
             const _domHeight = e.offsetHeight;
             const _domWidth = e.offsetWidth;
 
@@ -74,18 +74,11 @@ export default {
             };
         }
     },
-    mounted() {
-        setTimeout(async () => {
-            await this.initPlayerView();
-        }, 200);
-        addEventListener('resize', () => {
-            this.initPlayerView();
-        });
-        onresize = () => {
-            this.initPlayerView();
-        };
+    async mounted() {
+        await this.initPlayerView();
+        await addEventListener('resize', this.initPlayerView);
     },
-    destroyed() {
-        onresize = null;
+    async destroyed() {
+        await removeEventListener('resize', this.initPlayerView);
     }
 };
