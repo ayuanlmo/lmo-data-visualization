@@ -110,7 +110,7 @@ export default class Socket {
         }
     }
 
-    ping(duration = 10000, str = 'ping') {
+    ping(duration = 20000, str = 'ping') {
         clearInterval(this.timer);
         this.ws.send(str);
         this.timer = setInterval(async () => {

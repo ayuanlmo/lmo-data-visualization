@@ -1,5 +1,4 @@
 import {_POST} from '@/lib/Request/index.t';
-
 import * as TYPE from '@const/ActionsTypes.t';
 import * as URL from '@const/InterfaceUrls';
 

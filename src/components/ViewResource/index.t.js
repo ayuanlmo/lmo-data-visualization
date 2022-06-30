@@ -6,18 +6,16 @@ export default {
     name: 'lmo-view_resource',
     render(h) {
         return (
-            <div>
-                {
-                    h(VideoPlayer, {
-                        ref: 'VideoPlayer',
-                        props: {
-                            path: this.playerUrl
-                        }
-                    })
-                }
+            h('div', [
+                h(VideoPlayer, {
+                    ref: 'VideoPlayer',
+                    props: {
+                        path: this.playerUrl
+                    }
+                }),
                 <el-dialog before-close={() => {
                     this.visible = false;
-                }} width={'40vw'} title={'资源库'} visible={this.visible}>
+                }} width={'40vw'} title={'资源库'} visible={this['visible']}>
                     {
                         h('div', {
                             class: 'lmo-view_resource'
@@ -52,7 +50,7 @@ export default {
                         ])
                     }
                 </el-dialog>
-            </div>
+            ])
         );
     },
     data() {

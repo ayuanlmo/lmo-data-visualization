@@ -22,7 +22,5 @@ export default {
     //服务器推送的消息
     serverPushMessage: [],
     //当前模板信息
-    currentTemplate: null,
-    //开发者模式
-    devMode: false
+    currentTemplate: null
 };

@@ -6,7 +6,7 @@
  * @param {String} type Storage medium type
  * **/
 
-class Store {
+export default class Store {
     constructor(type = 'local', win = window ?? global) {
         this.Storage = type === 'local' ? win.localStorage : win.sessionStorage;
     }
@@ -14,7 +14,9 @@ class Store {
     set(key, val, sync = ![]) {
         if (key !== '') {
             if (sync) return new Promise((resolve, reject) => {
-                if (this.Storage.setItem(key, require('@/utils').toString(val)) === undefined) resolve(true);
+                const _ = this.Storage.setItem(key, require('@/utils').toString(val)) ?? null;
+
+                if (!_) resolve(true);
                 else reject(this);
             });
             this.Storage.setItem(key, require('@/utils').toString(val));
@@ -75,5 +77,3 @@ class Store {
         this.Storage.clear();
     }
 }
-
-export default Store;

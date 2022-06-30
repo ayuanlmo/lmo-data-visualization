@@ -70,9 +70,6 @@ export default {
     [TYPE.SET_CURRENT_TEMPLATE_VIDEO_CONFIG](state, data = {}) {
         state.currentTemplateVideoConfig = data;
     },
-    [TYPE.SET_DEV_MODE](state, data) {
-        state.devMode = data;
-    },
     [TYPE.RESET_CURRENT_TEMPLATE_CONFIG](state) {
         state.currentConfig = {
             csvData: '',

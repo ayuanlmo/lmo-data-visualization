@@ -1,43 +1,45 @@
-/**
- * @method formatTime 将秒 转换为 : '00:00:00'格式
- * @author ayuanlmo
- * @param {Number} s 秒数
- * @return {String} 转换后的格式 eg：'00:00:00'
- * **/
-const {stringify} = require("@/utils/index");
-const {UploadImageTypes} = require("@const/Default.t");
+module.exports.formatTime = formatTime;
+module.exports.getWsUrl = getWsUrl;
+module.exports.isObject = isObject;
+module.exports.stringify = stringify;
+module.exports.toString = toString;
+module.exports.isArray = isArray;
+module.exports.isString = isString;
+module.exports.encode = encode;
+module.exports.decode = decode;
+module.exports.toBase64 = toBase64;
+module.exports.selectFile = selectFile;
+module.exports.getRouterQuery = getRouterQuery;
+module.exports.routerPush = routerPush;
+module.exports.downloadFile = downloadFile;
 
-module.exports.formatTime = (s) => {
+function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
 
     s -= 3600 * h;
     const m = Math.floor(s / 60) >= 10 ? Math.floor(s / 60) : '0' + Math.floor(s / 60);
 
     s -= 60 * m;
-    const sec = s >= 10 ? s : '0' + s;
+    return h + ':' + m + ':' + `${s >= 10 ? s : '0' + s}`;
+}
 
-    return h + ':' + m + ':' + sec;
-};
-
-module.exports.getWsUrl = (url = location.origin ?? global.location.origin) => {
+function getWsUrl(url = location.origin ?? global.location.origin) {
     const urls = location.origin.split(':');
     const origin = location.host;
 
     if (urls[0].indexOf('http') !== -1)
         return urls[0] === 'https' ? `wss:${origin}${url}` : `ws:${origin}${url}`;
-};
+}
 
-const isObject = (data = {}) => {
+function isObject(data = {}) {
     return typeof data === 'object' && Object.prototype.toString.call(data).toLowerCase() === '[object object]' && data.length;
-};
+}
 
-module.exports.isObject = isObject;
-
-module.exports.stringify = (data = null) => {
+function stringify(data = null) {
     return data === null ? 'null' : JSON.stringify(data);
-};
+}
 
-module.exports.toString = (data) => {
+function toString(data) {
     if (typeof data === 'boolean')
         return `${data}`;
     if (typeof data === 'string')
@@ -47,26 +49,26 @@ module.exports.toString = (data) => {
     if (typeof data === 'object' && isObject(data))
         return stringify(data);
     return '';
-};
+}
 
-module.exports.isArray = (arr = []) => {
+function isArray(arr = []) {
     return Object.prototype.toString.call(arr) === "[object Array]";
-};
+}
 
-module.exports.isString = (str = '') => {
+function isString(str = '') {
     return typeof str === 'string';
-};
+}
 
-module.exports.encode = (str = '') => {
+function encode(str = '') {
     let code = '_lmo_ting^';
 
     for (const i of str.split('')) {
         code += i.charCodeAt() + '-';
     }
     return code.slice(0, code.length - 1);
-};
+}
 
-module.exports.decode = (code = '') => {
+function decode(code = '') {
     const codeTemplate = '_lmo_ting^';
 
     let str = '';
@@ -75,9 +77,9 @@ module.exports.decode = (code = '') => {
         if (i !== codeTemplate) str += String.fromCharCode(i);
     }
     return str;
-};
+}
 
-module.exports.toBase64 = (file) => {
+function toBase64(file) {
     return new Promise(function (r, e) {
         const fr = new FileReader();
 
@@ -89,9 +91,9 @@ module.exports.toBase64 = (file) => {
             e(msg);
         };
     });
-};
+}
 
-module.exports.selectFile = () => {
+function selectFile() {
     return new Promise((resolve, reject) => {
         const i = document.createElement('input');
 
@@ -101,9 +103,9 @@ module.exports.selectFile = () => {
         });
         i.click();
     });
-};
+}
 
-const getRouterQuery = () => {
+function getRouterQuery() {
     const _ = [];
     const query = {};
 
@@ -122,20 +124,18 @@ const getRouterQuery = () => {
         });
     });
     return query;
-};
+}
 
-module.exports.getRouterQuery = getRouterQuery;
-
-module.exports.routerPush = (r, to, t = 'push') => {
+function routerPush(r, to, t = 'push') {
     t === 'push' ? r['push']({
         path: to,
         query: {
             ...getRouterQuery()
         }
     }) : r['replace'](to);
-};
+}
 
-module.exports.downloadFile = (conf) => {
+function downloadFile(conf) {
     const a = document.createElement('a');
 
     return new Promise((resolve, reject) => {
@@ -143,4 +143,4 @@ module.exports.downloadFile = (conf) => {
         a.href = require('@/config/AppConfig').devProxy.http + conf.href;
         resolve(a);
     });
-};
+}
