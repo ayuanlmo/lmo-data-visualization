@@ -78,6 +78,10 @@ window.chartConfig = {
             value: '#000',
             label: '动态标签颜色',
             type: 'lmo-color-picker'
+        },
+        more: {
+            type: 'Theme',
+            config: {}
         }
     },
     titleAnimateName: 'rubberBand',

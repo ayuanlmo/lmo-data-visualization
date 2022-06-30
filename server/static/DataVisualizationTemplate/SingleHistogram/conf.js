@@ -33,16 +33,16 @@ window.chartConfig = {
             value: 'bounce',
             values: [
                 {
-                    value:'bounce',
-                    label:'弹性碰撞'
+                    value: 'bounce',
+                    label: '弹性碰撞'
                 },
                 {
-                    value:'elastic',
-                    label:'弹性伸缩'
+                    value: 'elastic',
+                    label: '弹性伸缩'
                 },
                 {
-                    value:'cubic-in-out',
-                    label:'慢入'
+                    value: 'cubic-in-out',
+                    label: '慢入'
                 }
             ]
         },
@@ -67,6 +67,10 @@ window.chartConfig = {
             value: '#000',
             label: '值颜色',
             type: 'lmo-color-picker'
+        },
+        more: {
+            type: 'Theme',
+            config: {}
         }
     },
     titleAnimateName: 'rubberBand',

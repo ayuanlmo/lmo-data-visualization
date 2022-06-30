@@ -51,7 +51,7 @@ window.chartConfig = {
         },
         dataSource: {
             value: '#000',
-            label:'数据来源颜色',
+            label: '数据来源颜色',
             type: 'lmo-color-picker'
         }
     },

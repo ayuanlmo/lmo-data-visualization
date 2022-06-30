@@ -21,6 +21,14 @@
       .lmo-color_box_option {
         margin-left: 6px;
 
+        .lmo-color_box_option_mode {
+          display: flex;
+
+          .lmo-color_box_option_mode_picker {
+            margin-left: 1rem;
+          }
+        }
+
         .lmo-theme_item_content {
           display: inline-block;
 

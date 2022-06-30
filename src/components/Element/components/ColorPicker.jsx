@@ -4,11 +4,12 @@ export default {
         return (
                 h('el-color-picker', {
                     props: {
-                        value: this.value
+                        value: this.value,
+                        'color-format': 'hex'
                     },
                     on: {
                         'active-change': (e) => {
-                            this.$emit('change',e);
+                            this.$emit('change', e);
                         }
                     }
                 })

@@ -6,6 +6,7 @@ import {UploadImageTypes} from "@/const/Default.t";
 import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from '@/const/MessageType.t';
 import {ColorConfigComponent, ColorOption, renderColorOptionExcludeKey} from "@/const/Default.t";
 import AnimateView from '@/components/AnimateView/index.t';
+import ColorMode from '@/components/ColorMode/index.t';
 
 export default {
     name: 'lmo-color_config_item',
@@ -136,6 +137,18 @@ export default {
                 image: '',
                 arrange: '0% 0% / 100% 100%'
             },
+            colorModeTemplate: null,
+            colorMode: {
+                type: 'Theme',
+                config: {
+                    Monotone: {
+                        color: '#fff'
+                    },
+                    Gradient: {
+                        color: ['#88D085FF', '#88d085']
+                    }
+                }
+            },
             templateBackgroundType: '拉伸',
             configThemeColorTemplate: null,
             themeColorIndex: '0'
@@ -219,6 +232,7 @@ export default {
                                         click: () => {
                                             if (this.themeColorIndex !== i.value) {
                                                 this.themeColorIndex = i.value;
+                                                this.$store.commit('SET_CURRENT_THEME_COLORS', i.colors);
                                                 PostMessage({
                                                     type: UPDATE_THEME_COLOR,
                                                     data: {
@@ -256,8 +270,8 @@ export default {
             ]);
         },
         renderMoreColorOption(h = this.$createElement) {
-            if ('more' in this.currentConfigThemeColor)
-                if ('type' in this.currentConfigThemeColor['more'])
+            if ('more' in this.currentConfigColor)
+                if ('type' in this.currentConfigColor['more'])
                     return (
                         h('div', {
                             class: 'lmo-color_box_content lmo_flex_box'
@@ -271,22 +285,40 @@ export default {
                             h('div', {
                                 class: 'lmo-color_box_option'
                             }, [
-                                h('lmo-select', {
-                                    props: {
-                                        value: this.currentConfigThemeColor['type'] ?? 'Theme',
-                                        option: [
-                                            ...ColorOption
-                                        ]
-                                    },
-                                    on: {
-                                        change: (e) => {
-                                            this.$store.commit('SET_CURRENT_TEMPLATE_COLOR_MODE', e);
+                                h('div', {
+                                    class: 'lmo-color_box_option_mode'
+                                }, [
+                                    h('lmo-select', {
+                                        props: {
+                                            value: this.currentConfigColor['type'] ?? 'Theme',
+                                            option: [
+                                                ...ColorOption
+                                            ]
+                                        },
+                                        on: {
+                                            change: (e) => {
+                                                this.colorMode.type = e;
+                                                this.$store.commit('SET_CURRENT_TEMPLATE_COLOR_MODE', this.colorMode);
+                                            }
                                         }
-                                    }
-                                })
+                                    }),
+                                    h('div', {
+                                        class: 'lmo-color_box_option_mode_picker'
+                                    }, [
+                                        h(ColorMode, {
+                                            on: {
+                                                change: (e) => {
+                                                    this.colorMode.config = e;
+                                                    this.$store.commit('SET_CURRENT_TEMPLATE_COLOR_MODE', this.colorMode);
+                                                }
+                                            }
+                                        })
+                                    ])
+                                ])
                             ])
                         ])
                     );
+            return h('');
         },
         setTemplateBackground() {
             PostMessage({

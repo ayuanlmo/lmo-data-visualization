@@ -1,6 +1,11 @@
 import * as TYPE from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {UPDATE_COLOR, UPDATE_DURATION, UPDATE_TEXT, UPDATE_COLOR_MODE} from '@/const/MessageType.t';
+import {
+    UPDATE_COLOR,
+    UPDATE_DURATION,
+    UPDATE_TEXT,
+    UPDATE_COLOR_MODE
+} from '@/const/MessageType.t';
 
 export default {
     [TYPE.SET_CURRENT_TEMPLATE_DEFAULT_DATA](state, data) {
@@ -10,32 +15,32 @@ export default {
         state.currentTemplate = data;
     },
     [TYPE.SET_CURRENT_CSV_DATA](state, data) {
-        state.currentConfig.csvData = data;
-        state.currentConfig.data = data;
+        state.currentConfig['csvData'] = data;
+        state.currentConfig['data'] = data;
     },
     [TYPE.SET_CURRENT_TEMPLATE_TEXT_SETTING](state, data) {
         PostMessage({
             type: UPDATE_TEXT,
             data: data
         });
-        state.currentConfig.text = data;
+        state.currentConfig['text'] = data;
     },
     [TYPE.SET_CURRENT_TEMPLATE_COLOR_SETTING](state, data) {
         PostMessage({
             type: UPDATE_COLOR,
             data: data
         });
-        state.currentConfig.color = data;
+        state.currentConfig['color'] = data;
     },
     [TYPE.SET_CURRENT_TEMPLATE_COLOR_MODE](state, data) {
-        state.currentConfig.color['type'] = data;
+        state.currentConfig['color']['more'] = data;
         PostMessage({
             type: UPDATE_COLOR_MODE,
             data: data
         });
     },
     [TYPE.SET_CURRENT_TEMPLATE_THEME_COLORS](state, data) {
-        state.currentConfig.themeColors = data;
+        state.currentConfig['themeColors'] = data;
     },
     [TYPE.SET_TEMPLATE_CURRENT_AUDIO_CONFIG_NAME](state, data) {
         state.templateCurrentAudioConfig.name = data;
@@ -57,7 +62,7 @@ export default {
             type: UPDATE_DURATION,
             data: data * 1000
         });
-        state.currentConfig.duration = data * 1000;
+        state.currentConfig['duration'] = data * 1000;
     },
     [TYPE.SET_SERVER_PUSH_MESSAGE](state, data) {
         state.serverPushMessage.push(data);
@@ -83,5 +88,8 @@ export default {
             complete: false,
             playState: false
         };
+    },
+    [TYPE.SET_CURRENT_THEME_COLORS](state, data) {
+        state.currentConfig['themeColor'] = data;
     }
 };

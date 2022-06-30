@@ -109,6 +109,23 @@ class TempLate {
             this.appDom.style.background = this.conf.background.color;
     }
 
+    initThemeColor(__ = []) {
+        const _ = this.conf.color.more;
+
+        if (_ !== undefined)
+            if ('type' in _) {
+                if (_.type === 'Theme')
+                    this.conf.themeColor = this.conf.themeColors[this.conf.themeColorKey].colors;
+                if (_.type === 'Monotone')
+                    this.conf.themeColor = [_.config.Monotone.color];
+                if (_.type === 'Gradient')
+                    this.conf.themeColor = getDiffColor(rgbToHex(_.config.Gradient.color[0]), rgbToHex(_.config.Gradient.color[1]), this.csvData.length, 1);
+            }
+        if (__.length !== 0)
+            this.conf.themeColor = __;
+        this.tryRender(this.csvData, true);
+    }
+
     onMessage(msg) {
         const m = msg.data;
 
@@ -129,6 +146,10 @@ class TempLate {
                 this.initTitle();
                 this.tryRender(this.csvData, false);
             }
+            if (m.type === 'UpdateColorMode') {
+                this.conf.color.more = m.data;
+                this.initThemeColor();
+            }
             if (m.type === 'UpdateColor') {
                 this.conf.color = m.data;
                 this.initTitle();
@@ -136,7 +157,7 @@ class TempLate {
             }
             if (m.type === 'UpdateThemeColor') {
                 this.conf.themeColorKey = m.data.index;
-                this.conf.themeColor = m.data.colors;
+                this.initThemeColor(m.data.colors);
                 this.tryRender(this.csvData, false);
             }
             if (m.type === 'UpdateBackground_image') {
@@ -184,12 +205,13 @@ class TempLate {
 }
 
 /***
- * @method getDiffColor
+ * @method getDiffColor 获取差异颜色
  * @author ayuanlmo
- * @param start {unknown[]} not null
- * @param end {number[]} not null
- * @param step {menubar}
- * @param gamma {number}
+ * @param start {string} not null 开始
+ * @param end {string} not null 结束
+ * @param step {number} 长度
+ * @param gamma {number}    伽马
+ * @return {array}
  * **/
 function getDiffColor(start, end, step, gamma) {
     const _pc = (_hs) => {
@@ -222,4 +244,48 @@ function getDiffColor(start, end, step, gamma) {
         output.push(`#${so.join('')}`);
     }
     return output;
+}
+
+/**
+ * @method rgbToHex reg转16进制
+ * @author ayuanlmo
+ * @param color {string} not null reg颜色
+ * @return {string} 16进制颜色
+ * **/
+function rgbToHex(color = '') {
+    const _ = color;
+    const _r = /^#([\da-fA-f]{3}|[\da-fA-f]{6})$/;
+
+    if (_.indexOf('rgb') === -1)
+        return _;
+    if (/^(rgb|RGB)/.test(_)) {
+        const _color = _.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
+
+        let _hex = "#";
+
+        for (let i = 0; i < _color.length; i += 1) {
+            let _h = Number(_color[i]).toString(16);
+
+            if (_h.length < 2)
+                _h = '0' + _h;
+            _hex += _h;
+        }
+        if (_hex.length !== 7)
+            _hex = _;
+        return _hex;
+    } else if (_r.test(_)) {
+        const _n = _.replace(/#/, "").split("");
+
+        if (_n.length === 6)
+            return _;
+        else if (_n.length === 3) {
+            let _nHex = "#";
+
+            for (let i = 0; i < _n.length; i += 1) {
+                _nHex += _n[i] + _n[i];
+            }
+            return _nHex;
+        }
+    }
+    return _;
 }
