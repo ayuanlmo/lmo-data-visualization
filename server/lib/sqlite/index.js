@@ -6,6 +6,7 @@
 
 const _SQLITE = require('sqlite3');
 const _Fs = require("fs-extra");
+const da = require("element-ui/src/locale/lang/da");
 const _Ti = global.dbConf.index;
 
 class T_DB {
@@ -73,10 +74,23 @@ class T_DB {
         });
     }
 
-    _GET_INSERT_TEMPLATE_TABLE_SQL(DATA = null) {
-        if (DATA === null) return '';
+    _GET_INSERT_RESOURCE_SQL(_ = {}) {
+        return `INSERT INTO Resource (T_Nane, T_Path, T_Create_At, T_Status) 
+                VALUES ('${_['name']}', '${_['path']}', '${new Date().getTime()}', ${_['status']});`;
+    }
+
+    _UPDATE_RESOURCE_STATUS(_ = {}) {
+        return `UPDATE Resource SET T_Status = ${_['status']} WHERE T_Name = '${_['name']}'`;
+    }
+
+    _GET_INSERT_LOG_SQL(_ = {}) {
+        return `INSERT INTO Log(T_Resource_ID, T_Log_File_Path, T_Log_Temp_File_Path) 
+                VALUES ('${_['id']}', '${_['log_file_path']}', '${_['temp_file_path']}');`;
+    }
+
+    _GET_INSERT_TEMPLATE_TABLE_SQL(_ = {}) {
         return `INSERT INTO "Template" ( T_Name, T_Id, T_Title, T_Description, T_Path, T_Type ) 
-                VALUES('${DATA.T_Name}','${DATA.T_Id}','${DATA.T_Title}','${DATA.T_Description}','${DATA.T_Path}','${DATA.T_Type}');`;
+                VALUES('${_['T_Name']}','${_['T_Id']}','${_['T_Title']}','${_['T_Description']}','${_['T_Path']}','${_['T_Type']}');`;
     }
 }
 
