@@ -3,47 +3,47 @@
  Source Server Type    : SQLite
  Source Server Version : 3021000
  Source Schema         : main
-
  Target Server Type    : SQLite
  Target Server Version : 3021000
  File Encoding         : 65001
 
- Date: 13/06/2022 21:21:50
+ This script was created using JetBrains 'DataGrip' by ayuanlmo in 2022
+
 */
 
-PRAGMA foreign_keys = false;
+-- ----------------------------
+-- 日志表
+-- ----------------------------
+DROP TABLE IF EXISTS "Log";
+create table Log
+(
+    T_Resource_ID        text(128) not null, --资源ID
+    T_Log_File_Path      text(256), --日志文件路径
+    T_Log_Temp_File_Path text(256)  --日志临时文件路径
+);
 
 -- ----------------------------
--- Table structure for Resource
+-- 资源表
 -- ----------------------------
 DROP TABLE IF EXISTS "Resource";
-CREATE TABLE "Resource" (
-  "T_Nane" TEXT(128) NOT NULL,
-  "T_Path" TEXT(128) NOT NULL,
-  "T_Create_Time" text(128) NOT NULL,
-  "T_Conf" TEXT(256) NOT NULL
+create table Resource
+(
+    T_Nane      TEXT(128) not null, --名称
+    T_Path      TEXT(128) not null, --路径
+    T_Create_At text(128) not null, --创建时间
+    T_Status    int(2)  --状态
 );
 
 -- ----------------------------
--- Table structure for Template
+-- 模板表
 -- ----------------------------
 DROP TABLE IF EXISTS "Template";
-CREATE TABLE "Template" (
-  "T_Name" text(128) NOT NULL,
-  "T_Id" text(128) NOT NULL,
-  "T_Title" TEXT(128) NOT NULL,
-  "T_Description" TEXT(255) NOT NULL,
-  "T_Path" TEXT(255) NOT NULL,
-  "T_Type" TEXT(12) NOT NULL
+create table Template
+(
+    T_Name        text(128) not null,   --名称
+    T_Id          text(128) not null,   --模板ID
+    T_Title       text(128) not null,   --模板标题
+    T_Description text(255) not null,   --模板介绍
+    T_Path        text(255) not null,   --模板路径
+    T_Type        text(12)  not null    --模板类型
 );
-
--- ----------------------------
--- Table structure for sqlite_sequence
--- ----------------------------
-DROP TABLE IF EXISTS "sqlite_sequence";
-CREATE TABLE "sqlite_sequence" (
-  "name",
-  "seq"
-);
-
-PRAGMA foreign_keys = true;
