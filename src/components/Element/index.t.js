@@ -12,7 +12,7 @@ import InputNumber from "./components/InputNumber.t.jsx";
 import Slider from "./components/Slider.t.jsx";
 import Progress from "./components/Progress.t.jsx";
 import Alert from "./components/Alert.t.jsx";
-import Extend from "./components/Extend.t.jsx";
+import Extend from "./components/Extend.t.js";
 import ColorPicker from "@components/Element/components/ColorPicker";
 
 Vue.component(Button.name, Button);

@@ -4,8 +4,16 @@ import mutations from './mutations.t';
 import state from './state.t';
 
 export default {
-    actions: {...actions},
-    getters: {...getters},
-    mutations: {...mutations},
-    state: {...state}
+    actions: {
+        ...actions
+    },
+    getters: {
+        ...getters
+    },
+    mutations: {
+        ...mutations
+    },
+    state: {
+        ...state
+    }
 };

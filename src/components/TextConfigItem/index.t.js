@@ -66,8 +66,10 @@ export default {
             const _Component = this.configText[i].type;
 
             if (!TextConfigComponent.includes(_Component)) {
-                this.$message.warning(`[${_Component}不是一个受支援的组件]`);
-                return h('span');
+                this.$message.warning(`[${_Component}是一个不受支援的组件]`);
+                return h('span', {
+                    class: 'lmo_hide'
+                });
             }
             if (_Component === 'lmo-input') {
                 return h(_Component, {

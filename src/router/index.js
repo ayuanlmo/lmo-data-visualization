@@ -15,13 +15,14 @@ const RouterCore = new VueRouter({
     }
 });
 
-RouterCore.beforeEach(async (to, from, next) => {
-    Nprogress.start();
-    await next();
-});
-
-RouterCore.afterEach(async () => {
-    await Nprogress.done();
-});
+void (() => {
+    RouterCore.beforeEach(async (to, from, next) => {
+        Nprogress.start();
+        await next();
+    });
+    RouterCore.afterEach(async () => {
+        await Nprogress.done();
+    });
+})();
 
 export default RouterCore;

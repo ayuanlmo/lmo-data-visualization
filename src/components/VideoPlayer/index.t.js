@@ -6,11 +6,11 @@ export default {
                 this.visible = false;
             }} width={'34vw'} style={'margin-top: 15vh;z-index: 10;background-color:#ffffff00;'}
                        title={'lmo VideoPlayer'} visible={this.visible}>
-                <video muted ref={'video'} onCanplay={() => {
+                <video muted ref={'video'} onCanPlay={() => {
                     if (this.visible)
                         this.$refs.video['play']();
                     this.videoConf.duration = parseInt(this.$refs.video['duration']);
-                }} onTimeupdate={() => {
+                }} onTimeUpdate={() => {
                     this.videoConf.currentTime = this.$refs.video['currentTime'];
                     this.videoConf.percent = parseInt((this.videoConf.currentTime / this.videoConf.duration * 100).toFixed(2)) + 1;
                     this.sliderValue = this.videoConf.percent;
