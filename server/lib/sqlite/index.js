@@ -6,7 +6,6 @@
 
 const _SQLITE = require('sqlite3');
 const _Fs = require("fs-extra");
-const da = require("element-ui/src/locale/lang/da");
 const _Ti = global.dbConf.index;
 
 class T_DB {
