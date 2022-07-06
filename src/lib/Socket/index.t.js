@@ -53,11 +53,10 @@ export default class Socket {
     }
 
     onMessage(msg) {
-        Notification.close();
         if (msg.data !== 'pong') {
-            this.callback(JSON.parse(msg.data));
-            const _msg = JSON.parse(msg.data);
+            const _msg = JSON.parse(require('@/utils/index').binaryToString(msg.data));
 
+            this.callback(_msg);
             if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing')
                 return Notification({
                     title: '系统消息',

@@ -29,7 +29,7 @@
         _['on']('message', __ => {
             if (__ === _Conf['__SOCKET_PONG_KEY'])
                 return _['send'](_Conf['__SOCKET_PONG_MESSAGE']);
-            const _m = JSON['parse'](__);
+            const _m = JSON.parse(require('./utils/index').binaryToString(__));
 
             if (_m['cmd'] === _Cmd['__SYNTHESIS'])
                 new (require('./timecut/index')).TC(_Pool, _m['data']);

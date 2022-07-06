@@ -88,7 +88,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.ws.send(JSON.stringify({
+                this.ws.send(require('@/utils/index').stringToBinary(JSON.stringify({
                     cmd: 'synthesis',
                     data: {
                         templateConfig: {
@@ -103,7 +103,7 @@ export default {
                         },
                         template: this.currentTemplate.template
                     }
-                }));
+                })));
             }).catch(() => {
             });
         }

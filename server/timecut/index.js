@@ -1,7 +1,8 @@
 const _TimeCut = require('timecut');
 const _Fs = require('fs-extra');
 const _Path = require('path');
-const ffmpeg = require('fluent-ffmpeg');
+const _Ffmpeg = require('fluent-ffmpeg');
+const _Tool = require('../utils/index');
 
 class TC {
     constructor(ws = null, data) {
@@ -34,9 +35,7 @@ class TC {
                         ...this['data']['config']['video']
                     }
                 })};`, e => {
-                    if (e)
-                        console.log('模板配置文件替换失败');
-                    else
+                    if (!e)
                         this['_Synthesis']();
                 });
             }, 1000);
@@ -76,23 +75,25 @@ class TC {
             const buffer = Buffer['from'](_['audio']['src']['replace']('data:audio/x-m4a;base64,', ''), 'base64');
 
             _Fs['writeFile'](`../server/static/temp/${this['taskName']}.m4a`, buffer, (e) => {
-                if (e)
-                    console.log('音频保存失败');
-                else
+                if (!e)
                     audioPath = `../server/static/temp/${this['taskName']}.m4a`;
             });
         }
 
         _TimeCut(_conf).then(() => {
-            this['_SendMessage']('task_end', 'task_processing', {
-                state: 'success',
-                taskName: this['taskName'],
-                path: `/static/output/'${this['taskName']}.mp4`
-            });
-            this['_ProcessAudio'](_['audio']['src'] !== '' ? `static/output/${this['taskName']}.mp4` : '', audioPath).then(() => {
-                this['_SendMessage']('task_pro', 'task_pro_success', {
-                    taskName: this['taskName']
-                });
+            this['_ProcessAudio'](_['audio']['src'] !== '' ? `static/output/${this['taskName']}.mp4` : '', audioPath).then((_r) => {
+                if (_r === 1) {
+                    setTimeout(() => {
+                        this['_SendMessage']('task_end', 'task_processing', {
+                            state: 'success',
+                            taskName: this['taskName'],
+                            path: `/static/output/'${this['taskName']}.mp4`
+                        });
+                    }, 2000);
+                } else
+                    this['_SendMessage']('task_pro', 'task_pro_success', {
+                        taskName: this['taskName']
+                    });
                 this['_DelTempFile'](`${_Path['resolve'](`../server/static/temp/${this['taskName']}`)}`);
             });
         });
@@ -104,10 +105,10 @@ class TC {
                 taskName: this['taskName']
             });
             if (src === '')
-                return resolve();
-            const _ = ffmpeg(src);
+                return resolve(1);
+            const _ = _Ffmpeg(src);
 
-            _['videoCodec']('libx264');//兼容Chrome的H.264视频编码
+            _['videoCodec']('libx264');
             _['input'](audio);
             _['audioFilters'](`volume=${this['data']['config']['audio']['volume']}`);
             _['audioBitrate']('128k');
@@ -136,7 +137,7 @@ class TC {
 
     _SendMessage(type, cmd, data = {}) {
         this['ws']['clients']['forEach'](i => {
-            i['send'](require('../funcs')['_Stringify'](
+            i['send'](_Tool.stringToBinary(require('../funcs')['_Stringify'](
                 {
                     type: type,
                     data: {
@@ -144,7 +145,7 @@ class TC {
                         ...data
                     }
                 }
-            ));
+            )));
         });
     }
 
