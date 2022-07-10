@@ -66,39 +66,39 @@ export default {
     },
     render(h) {
         return (
-            h('el-input', {
-                props: {
-                    type: this.type,
-                    value: this.value,
-                    disabled: this.disabled,
-                    maxlength: this.maxLength,
-                    minlength: this.minLength,
-                    clearable: this.clearable,
-                    prefixIcon: this.prefixIcon,
-                    suffixIcon: this.suffixIcon,
-                    rows: this.rows,
-                    readonly: this.readonly,
-                    size: this.size
-                },
-                attrs: {
-                    placeholder: this.i18n ? this['$t'](this.placeholder) : this.placeholder
-                },
-                on: {
-                    input: e => {
-                        this.$emit('change', e);
+                h('el-input', {
+                    props: {
+                        type: this.type,
+                        value: this.value,
+                        disabled: this.disabled,
+                        maxlength: this.maxLength,
+                        minlength: this.minLength,
+                        clearable: this.clearable,
+                        prefixIcon: this.prefixIcon,
+                        suffixIcon: this.suffixIcon,
+                        rows: this.rows,
+                        readonly: this.readonly,
+                        size: this.size
                     },
-                    change: e => {
-                        this.$emit('change', e);
+                    attrs: {
+                        placeholder: this.i18n ? this['$t'](this.placeholder) : this.placeholder
                     },
-                    blur: e => {
-                        this.$emit('blur', e);
+                    on: {
+                        input: e => {
+                            this.$emit('change', e);
+                        },
+                        change: e => {
+                            this.$emit('change', e);
+                        },
+                        blur: e => {
+                            this.$emit('blur', e);
+                        },
+                        focus: e => {
+                            this.$emit('focus', e);
+                        }
                     },
-                    focus: e => {
-                        this.$emit('focus', e);
-                    }
-                },
-                ref: 'input'
-            })
+                    ref: 'input'
+                })
         );
     },
     methods: {

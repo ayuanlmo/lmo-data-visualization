@@ -49,11 +49,20 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <link href="<%= BASE_URL %>favicon.ico" rel="icon">
     <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
+<style>
+    #lmo-app {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #162431;
+    }
+</style>
 <body>
 <noscript>
     <strong>
@@ -80,7 +89,7 @@
             console.log('Hi, there👋，欢迎使用 <%= htmlWebpackPlugin.options.title %>');
             console.log('\n' + ' %c GitHub:' + ' %c https://github.com/ayuanlmo/lmo-data-visualization' + '\n', 'color: #fff; background: purple;font-size:14px;border-radius:4px;', 'color:#fff;');
             console.log('\n' + ' %c Gitee:' + ' %c https://gitee.com/ayuanlmo/lmo-data-visualization' + '\n', 'color: #fff; background: red;font-size:14px;border-radius:4px;', 'color:#fff;');
-        }
-    }()
+        };
+    }();
 </script>
 </html>

@@ -35,10 +35,7 @@ export default {
                             }, [
                                 h('div', {
                                     class: 'lmo-template_item_title'
-                                }, [this.data.title]),
-                                h('div', {
-                                    class: 'lmo-template_item_dis'
-                                }, [this.data.description])
+                                }, [this.data.title])
                             ])
                         ])
                     ])

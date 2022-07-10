@@ -2,6 +2,17 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background: #f7f7f7;
+  background: #162431;
   overflow: hidden;
+
+  .lmo-data_visualization_footer {
+    width: 100%;
+    height: 1rem;
+    z-index: 9;
+    position: absolute;
+    bottom: 1rem;
+    text-align: center;
+    font-size: .8rem;
+    color: #FBFBFD;
+  }
 }

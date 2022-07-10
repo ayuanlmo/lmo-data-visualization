@@ -21,12 +21,13 @@
 
       .lmo-audio_box_label {
         min-width: 5rem;
+        color: #FBFBFD;
       }
 
       .lmo-audio_content {
         width: 15vw;
         height: 6vh;
-        background-color: #F5F5F5;
+        background-color: #162431;
         margin-left: 1rem;
         border-radius: 8px;
         padding: .5rem;
@@ -64,6 +65,7 @@
 
       .lmo-video_box_label {
         min-width: 5vw;
+        color: #FBFBFD;
 
         i {
           color: #E6A23C;

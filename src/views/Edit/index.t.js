@@ -24,7 +24,7 @@ export default {
                                 cancelButtonText: '取消',
                                 type: 'warning'
                             }).then(() => {
-                                require('@/utils').routerPush(this.$router,'/','replace');
+                                require('@/utils').routerPush(this.$router, '/', 'replace');
                             }).catch(() => {
                             });
                         }
@@ -34,7 +34,7 @@ export default {
                     class: 'lmo-data_visualization_edit_content'
                 }, [
                     h('div', {
-                        class: 'lmo-data_visualization_edit_preview lmo_color_white_background lmo_flex_box lmo_position_relative'
+                        class: 'lmo-data_visualization_edit_preview lmo_flex_box lmo_position_relative'
                     }, [
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_player lmo_position_relative'
@@ -84,7 +84,7 @@ export default {
                         ])
                     ]),
                     h('div', {
-                        class: 'lmo-data_visualization_edit_configure lmo_color_white_background'
+                        class: 'lmo-data_visualization_edit_configure'
                     }, [
                         h(EditConfig)
                     ])
