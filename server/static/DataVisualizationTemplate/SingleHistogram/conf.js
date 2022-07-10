@@ -45,26 +45,26 @@ window.chartConfig = {
                     label: '慢入'
                 }
             ]
-        },
+        }
     },
     color: {
         mainTitle: {
-            value: '#000',
+            value: '#FBFBFD',
             label: '主标题颜色',
             type: 'lmo-color-picker'
         },
         subTitle: {
-            value: '#000',
+            value: '#FBFBFD',
             label: '副标题颜色',
             type: 'lmo-color-picker'
         },
         dataSource: {
-            value: '#000',
+            value: '#FBFBFD',
             label: '数据来源颜色',
             type: 'lmo-color-picker'
         },
         valueColor: {
-            value: '#000',
+            value: '#FBFBFD',
             label: '值颜色',
             type: 'lmo-color-picker'
         },
@@ -153,7 +153,7 @@ window.chartConfig = {
     ],
     themeColorKey: 0,
     background: {
-        color: '#fff',
+        color: '#0C2856',
         image: '',
         arrange: '0% 0% / 100% 100%'
     },

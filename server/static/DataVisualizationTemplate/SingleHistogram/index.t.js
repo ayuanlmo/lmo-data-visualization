@@ -44,6 +44,7 @@ void function () {
             .attr("y", function () {
                 return yScale(yScale.domain()[0]);
             })
+            .attr("rx", '24')
             .attr("height", function () {
                 return 0;
             })
@@ -100,8 +101,8 @@ void function () {
             });
 
         //X轴
-        SVG.append('g').attr("class", "x-axis").attr("transform", "translate(" + padding.left + "," + (height - padding.bottom) + ")").call(xAxis);
+        // SVG.append('g').attr("class", "x-axis").attr("transform", "translate(" + padding.left + "," + (height - padding.bottom) + ")").attr('fill', '"#ff000000"').call(xAxis);
         //Y轴
-        SVG.append("g").attr("class", "t-axis").attr("transform", "translate(" + padding.left + "," + padding.top + ")").call(yAxis);
+        // SVG.append("g").attr("class", "t-axis").attr("transform", "translate(" + padding.left + "," + padding.top + ")").attr('fill', '"#ff000000"').call(yAxis);
     }
 }();
