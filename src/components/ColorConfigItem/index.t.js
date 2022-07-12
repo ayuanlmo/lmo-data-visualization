@@ -3,7 +3,7 @@ require('./style.t.scss');
 import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {ColorConfigComponent, ColorOption, renderColorOptionExcludeKey, UploadImageTypes} from "@/const/Default.t";
-import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from '@/const/MessageType.t';
+import {UPDATE_BACKGROUND_IMAGE} from '@/const/MessageType.t';
 import AnimateView from '@/components/AnimateView/index.t';
 import ColorMode from '@/components/ColorMode/index.t';
 
@@ -15,7 +15,6 @@ export default {
                 class: 'lmo-color_config_item'
             }, [
                 this.configColorTemplate,
-                this.configThemeColorTemplate,
                 h('div', {
                     class: 'lmo-color_box'
                 }, [
@@ -27,7 +26,7 @@ export default {
                             style: {
                                 width: '100px'
                             }
-                        }, ['背景图片:']),
+                        }, ['背景图片']),
                         h('div', {
                             class: 'lmo-color_box_option',
                             style: {
@@ -91,7 +90,7 @@ export default {
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label'
-                        }, ['背景颜色：']),
+                        }, ['背景颜色']),
                         h('div', {
                             class: 'lmo-color_box_option'
                         }, [
@@ -116,7 +115,7 @@ export default {
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label'
-                        }, ['标题动画：']),
+                        }, ['标题动画']),
                         h('div', {
                             class: 'lmo-color_box_option'
                         }, [
@@ -149,8 +148,7 @@ export default {
                 }
             },
             templateBackgroundType: '拉伸',
-            configThemeColorTemplate: null,
-            themeColorIndex: '0'
+            configThemeColorTemplate: null
         };
     },
     methods: {
@@ -174,7 +172,7 @@ export default {
                             }, [
                                 h('div', {
                                     class: 'lmo-color_box_label'
-                                }, [`${this.configColor[i].label}:`]),
+                                }, [`${this.configColor[i].label}`]),
                                 h('div', {
                                     class: 'lmo-color_box_option'
                                 }, [
@@ -206,67 +204,6 @@ export default {
                         }
                     }
                 });
-        },
-        initConfigThemeColorTemplate(h = this.$createElement) {
-            this.configThemeColorTemplate = h('div', {
-                class: 'lmo-color_box'
-            }, [
-                h('div', {
-                    class: 'lmo-color_box_content lmo_flex_box'
-                }, [
-                    h('div', {
-                        class: 'lmo-color_box_label',
-                        style: {
-                            width: '100px'
-                        }
-                    }, ['主题颜色:']),
-                    h('div', {
-                        class: 'lmo-color_box_option'
-                    }, [
-                        this.currentConfigThemeColor.map((i) => {
-                            return (
-                                h('div', {
-                                    class: 'lmo-theme_item_content lmo_cursor_pointer',
-                                    on: {
-                                        click: () => {
-                                            if (this.themeColorIndex !== i.value) {
-                                                this.themeColorIndex = i.value;
-                                                this.$store.commit('SET_CURRENT_THEME_COLORS', i.colors);
-                                                PostMessage({
-                                                    type: UPDATE_THEME_COLOR,
-                                                    data: {
-                                                        index: this.themeColorIndex,
-                                                        colors: i.colors
-                                                    }
-                                                });
-                                                this.initConfigThemeColorTemplate();
-                                            }
-                                        }
-                                    }
-                                }, [
-                                    h('div', {
-                                        class: [
-                                            'lmo-theme_item_box lmo_flex_box',
-                                            this.themeColorIndex === i.value ? 'lmo-theme_item_box_activation_border' : 'lmo-theme_item_box_default_border'
-                                        ]
-                                    }, [
-                                        i.colors.map((j) => {
-                                            return (
-                                                h('div', {
-                                                    style: {
-                                                        background: j
-                                                    }
-                                                })
-                                            );
-                                        })
-                                    ])
-                                ])
-                            );
-                        })
-                    ])
-                ]),
-                this.renderMoreColorOption()
-            ]);
         },
         renderMoreColorOption(h = this.$createElement) {
             if ('more' in this.currentConfigColor)
@@ -340,7 +277,7 @@ export default {
     },
     mounted() {
         this.initConfigColor();
-        this.initConfigThemeColorTemplate();
+        // this.initConfigThemeColorTemplate();
     },
     watch: {
         currentConfigColor: {
@@ -352,7 +289,7 @@ export default {
         currentConfigThemeColor: {
             deep: true,
             handler() {
-                this.initConfigThemeColorTemplate();
+                // this.initConfigThemeColorTemplate();
             }
         },
         configTemplateBackground: {
@@ -366,8 +303,7 @@ export default {
     },
     computed: {
         ...mapState({
-            currentConfigColor: state => state.appStore.currentConfig.color,
-            currentConfigThemeColor: state => state.appStore.currentConfig.themeColors
+            currentConfigColor: state => state.appStore.currentConfig.color ?? []
         })
     }
 };

@@ -10612,8 +10612,7 @@
 }
 
 .el-collapse {
-  border-top: 1px solid #EBEEF5;
-  border-bottom: 1px solid #EBEEF5
+  padding: .5rem 0;
 }
 
 .el-collapse-item.is-disabled .el-collapse-item__header {
@@ -10622,23 +10621,20 @@
 }
 
 .el-collapse-item__header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   height: 48px;
   line-height: 48px;
-  background-color: #FFF;
-  color: #303133;
+  background-color: #293943;
+  color: #fbfbfd;
   cursor: pointer;
-  border-bottom: 1px solid #EBEEF5;
   font-size: 13px;
   font-weight: 500;
-  -webkit-transition: border-bottom-color .3s;
-  transition: border-bottom-color .3s;
-  outline: 0
+  transition: border-bottom-color 0.3s;
+  outline: 0;
+  border-radius: 1.33rem;
+  padding: 0 .5rem;
+  margin-bottom: .5rem;
 }
 
 .el-collapse-item__header.focusing:focus:not(:hover), .el-tag {
@@ -10665,11 +10661,12 @@
 
 .el-collapse-item__wrap {
   will-change: height;
-  background-color: #FFF;
+  background-color: #293943;
   overflow: hidden;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  border-bottom: 1px solid #EBEEF5
+  margin-bottom: .5rem;
+  border-radius: 1.33rem;
+  padding: .5rem;
 }
 
 .el-cascader__search-input, .el-cascader__tags, .el-tag {
@@ -11727,12 +11724,10 @@
 .el-color-picker__panel {
   position: absolute;
   z-index: 10;
-  padding: 6px;
-  -webkit-box-sizing: content-box;
+  padding: 1rem;
   box-sizing: content-box;
-  background-color: #FFF;
-  border: 1px solid #EBEEF5;
-  border-radius: 4px;
+  background-color: #1A3245;
+  border-radius: 16px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1)
 }
 

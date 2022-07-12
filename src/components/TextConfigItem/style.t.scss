@@ -1,7 +1,22 @@
 .lmo-data_visualization_config_item {
+  height: 100%;
+  background: #162431;
+  border-radius: 16px;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .data_visualization_config_item_card_title {
+    margin-bottom: 1rem;
+    color: #FBFBFD;
+  }
+
   .lmo-data_visualization_config_item_card {
-    width: 48vw;
-    height: 25vh;
+    width: 94%;
+    border-radius: 16px;
+    background-color: #1A3245;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
 
     &:nth-child(1) {
       margin-right: 2.5rem;
@@ -11,7 +26,8 @@
   .text {
     .lmo-text_box {
       display: inline-block;
-      margin-right: 1rem;
+      width: 33.3%;
+      margin-bottom: 1.2rem;
 
       .lmo-text_content {
         margin-bottom: 1rem;
@@ -20,6 +36,7 @@
         .lmo-text_box_label {
           width: 7vw;
           color: #fbfbfd;
+          margin-bottom: .5rem;
         }
 
         .lmo-text_box_option_lmo-component {
@@ -27,7 +44,7 @@
         }
 
         .lmo-text_box_option {
-          margin-left: 6px;
+          margin-left: 0;
         }
       }
     }
