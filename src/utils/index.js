@@ -95,13 +95,15 @@ function toBase64(file) {
     });
 }
 
-function selectFile() {
+function selectFile(multiple = false) {
     return new Promise((resolve, reject) => {
         const i = document.createElement('input');
 
+        if (multiple)
+            i.multiple = true;
         i.type = 'file';
         i.addEventListener('change', () => {
-            resolve(i.files[0]);
+            resolve(multiple ? i.files : i.files[0]);
         });
         i.click();
     });

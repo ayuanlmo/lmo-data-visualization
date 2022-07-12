@@ -36,7 +36,18 @@ export default {
                             h('div', {
                                 class: 'lmo-color_box_option',
                                 on: {
-                                    click: this.selectFile
+                                    click: () => {
+                                        require('@/utils/index').selectFile().then(_ => {
+                                            if (UploadImageTypes.includes(_.type)) {
+                                                if (_.size > 1024 * 1024 * 5)
+                                                    return this.$message.warning(`[${_.name}] 文件过大，请不要超过5M。`);
+                                                require('@utils/index').toBase64(_).then(r => {
+                                                    this.configTemplateBackground.image = r;
+                                                });
+                                            } else
+                                                this.$message.warning(`[${_.name}] 是一个不受支援的文件。`);
+                                        });
+                                    }
                                 }
                             }, [
                                 h('div', {
@@ -260,18 +271,6 @@ export default {
             PostMessage({
                 type: UPDATE_BACKGROUND_IMAGE,
                 data: this.configTemplateBackground
-            });
-        },
-        selectFile() {
-            require('@/utils/index').selectFile().then(file => {
-                if (UploadImageTypes.indexOf(file.type) !== -1) {
-                    if (file.size > 1024 * 1024 * 5)
-                        return this.$message.warning(`${file.name}文件过大，请不要超过5M。`);
-                    require('@utils/index').toBase64(file).then(res => {
-                        this.configTemplateBackground.image = res;
-                    });
-                } else
-                    this.$message.warning(`${file.name}是一个不受支援的文件。`);
             });
         }
     },
