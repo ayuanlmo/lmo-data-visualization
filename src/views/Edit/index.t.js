@@ -1,9 +1,10 @@
 require('./style.t.scss');
 
-import HotTable from '@/components/HotTable/index.t';
 import Player from '@/components/Player/index.t';
-import EditConfig from '@/components/EditConfig/index.t';
 import EditHeader from '@/components/EditHeader/index.t';
+import HotTable from '@/components/HotTable/index.t';
+import TextConfigItem from '@/components/TextConfigItem/index.t';
+import AudioConfig from '@/components/AudioConfig/index.t';
 import {mapState} from "vuex";
 
 export default {
@@ -77,20 +78,61 @@ export default {
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_content'
                             }, [
-                                h(HotTable, {
-                                    ref: 'ht'
-                                })
+                                h('el-tabs', {
+                                    props: {
+                                        value: this.tabsActiveName,
+                                        'tab-position': 'left'
+                                    },
+                                    on: {
+                                        'tab-click': (t) => {
+                                            this.tabsActiveName = t.name;
+                                        }
+                                    }
+                                }, [
+                                    this.tabs.map(i => {
+                                        return (
+                                            h('el-tab-pane', {
+                                                props: {
+                                                    ...i.data
+                                                }
+                                            }, [h(i.template)])
+                                        );
+                                    })
+                                ])
                             ])
                         ])
-                    ]),
-                    h('div', {
-                        class: 'lmo-data_visualization_edit_configure'
-                    }, [
-                        h(EditConfig)
                     ])
                 ])
             ])
         );
+    },
+    data() {
+        return {
+            tabsActiveName: 'text_and_theme',
+            tabs: [
+                {
+                    data: {
+                        name: 'data',
+                        label: '数据'
+                    },
+                    template: HotTable
+                },
+                {
+                    data: {
+                        name: 'text_and_theme',
+                        label: '文字 / 颜色'
+                    },
+                    template: TextConfigItem
+                },
+                {
+                    data: {
+                        name: 'synthesis',
+                        label: '合成'
+                    },
+                    template: AudioConfig
+                }
+            ]
+        };
     },
     methods: {
         downloadDefaultCSV() {

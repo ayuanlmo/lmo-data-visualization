@@ -88,6 +88,20 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                console.log({
+                        templateConfig: {
+                            isCustom: 0,
+                            ...this.currentConfig
+                        },
+                        config: {
+                            ...this.currentTemplateVideoConfig,
+                            audio: {
+                                ...this.templateCurrentAudioConfig
+                            }
+                        },
+                        template: this.currentTemplate.template
+                    }
+                );
                 this.ws.send(require('@/utils/index').stringToBinary(JSON.stringify({
                     cmd: 'synthesis',
                     data: {

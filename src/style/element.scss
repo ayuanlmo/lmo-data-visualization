@@ -4988,8 +4988,13 @@
   list-style: none;
   font-size: 14px;
   font-weight: 500;
-  color: #303133;
+  color: #FBFBFD;
   position: relative
+}
+
+.el-tab-pane {
+  position: relative;
+  height: 84vh;
 }
 
 .el-tabs__item:focus, .el-tabs__item:focus:active {
@@ -5686,7 +5691,7 @@
 }
 
 .el-alert, .el-notification, .el-slider__button, .el-slider__stop {
-  background-color: #FFF
+  background-color: #22506D;
 }
 
 .el-alert {
@@ -5836,7 +5841,6 @@
   border-radius: 8px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  border: 1px solid #EBEEF5;
   position: fixed;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
   -webkit-transition: opacity .3s, left .3s, right .3s, top .4s, bottom .3s, -webkit-transform .3s;
@@ -5862,7 +5866,7 @@
 .el-notification__title {
   font-weight: 700;
   font-size: 16px;
-  color: #303133;
+  color: #fbfbfd;
   margin: 0
 }
 
@@ -5870,7 +5874,7 @@
   font-size: 14px;
   line-height: 21px;
   margin: 6px 0 0;
-  color: #606266;
+  color: #fbfbfd;
   text-align: justify
 }
 
@@ -13059,7 +13063,6 @@
 
 .el-button--primary {
   color: #FFF;
-  background-color: #229EED;
 }
 
 .el-button--primary:focus, .el-button--primary:hover {

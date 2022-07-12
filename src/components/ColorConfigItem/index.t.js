@@ -2,9 +2,8 @@ require('./style.t.scss');
 
 import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {UploadImageTypes} from "@/const/Default.t";
+import {ColorConfigComponent, ColorOption, renderColorOptionExcludeKey, UploadImageTypes} from "@/const/Default.t";
 import {UPDATE_BACKGROUND_IMAGE, UPDATE_THEME_COLOR} from '@/const/MessageType.t';
-import {ColorConfigComponent, ColorOption, renderColorOptionExcludeKey} from "@/const/Default.t";
 import AnimateView from '@/components/AnimateView/index.t';
 import ColorMode from '@/components/ColorMode/index.t';
 
@@ -360,6 +359,7 @@ export default {
             deep: true,
             handler() {
                 this.$refs.BackgroundOption.className = this.configTemplateBackground.image === '' ? 'lmo_hide' : '';
+                this.$store.commit('SET_TEMPLATE_CURRENT_BACKGROUND_CONF', this.configTemplateBackground);
                 this.setTemplateBackground();
             }
         }

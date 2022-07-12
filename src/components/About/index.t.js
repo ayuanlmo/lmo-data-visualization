@@ -16,7 +16,8 @@ export default {
                         visible: this.visible,
                         beforeClose: () => {
                             this.visible = false;
-                        }
+                        },
+                        top: '10vh'
                     }
                 }, [
                     h('img', {
@@ -30,7 +31,9 @@ export default {
                     }, [
                         h('div', [require('@config/AppConfig').appName])
                     ]),
-                    h('span', [
+                    h('span', {
+                        style: 'color:#FBFBFD;'
+                    }, [
                         'By ',
                         h('span', [
                             h('a', {
@@ -46,7 +49,9 @@ export default {
                         class: 'lmo_line'
                     }),
                     h('span', [
-                        h('span', [
+                        h('span', {
+                            style: 'color:#FBFBFD;'
+                        }, [
                             '特别感谢：',
                             AppConfig.specialThanks.map((i, index) => {
                                 return (
@@ -96,7 +101,9 @@ export default {
                         h('div', {
                             class: 'lmo_line'
                         }),
-                        h('span', ['Apache-2.0'])
+                        h('p', [
+                            `Powered by Node.js`
+                        ])
                     ])
                 ])
             ])

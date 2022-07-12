@@ -30,6 +30,7 @@ export default {
                     h(ViewResource, {ref: 'ViewResource'}),
                     h('lmo-button', {
                         props: {
+                            plain: true,
                             text: h('i', {
                                 class: 'el-icon-film'
                             }, [' 资源库'])

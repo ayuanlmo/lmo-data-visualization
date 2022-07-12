@@ -63,11 +63,11 @@ window.chartConfig = {
             label: '数据来源颜色',
             type: 'lmo-color-picker'
         },
-        valueColor: {
-            value: '#FBFBFD',
-            label: '值颜色',
-            type: 'lmo-color-picker'
-        },
+        // valueColor: {
+        //     value: '#FBFBFD',
+        //     label: '值颜色',
+        //     type: 'lmo-color-picker'
+        // },
         more: {
             type: 'Theme',
             config: {}

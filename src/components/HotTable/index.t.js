@@ -12,16 +12,27 @@ export default {
     name: 'lmo-hot-table',
     render(h) {
         return (
-            h(HotTable, {
-                ref: 'HotTable',
-                props: {
-                    settings: {
-                        ...HotTableConfig.settings,
-                        afterChange: this.hotTableAfterChange
-                    },
-                    licenseKey: HotTableConfig.licenseKey
-                }
-            })
+            h('div', {
+                class: 'lmo-edit_hot_table'
+            }, [
+                h('div', {
+                    class: 'lmo-edit_hot_table_title'
+                }, '编辑数据'),
+                h('div', {
+                    class: 'lmo-edit_hot_table_content'
+                }, [
+                    h(HotTable, {
+                        ref: 'HotTable',
+                        props: {
+                            settings: {
+                                ...HotTableConfig.settings,
+                                afterChange: this.hotTableAfterChange
+                            },
+                            licenseKey: HotTableConfig.licenseKey
+                        }
+                    })
+                ])
+            ])
         );
     },
     methods: {
@@ -57,6 +68,7 @@ export default {
                     hotTableData.push(i.split(','));
                 });
                 this.$refs.HotTable['hotInstance'].loadData(hotTableData);
+                console.log(this.$refs.HotTable['hotInstance'].loadData);
             }
         }
     },

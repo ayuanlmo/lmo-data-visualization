@@ -13,7 +13,7 @@ export default {
     render(h) {
         return (
             <el-dialog style={{
-                'background-color': '#f5f5f5'
+                'background-color': '#293943'
             }} title={'预览'} visible={this.visible} width={'1000px'}
                        fullscreen={false} top={'5vh'} before-close={() => {
                 this.visible = false;

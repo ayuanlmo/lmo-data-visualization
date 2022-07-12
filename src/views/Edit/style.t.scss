@@ -2,7 +2,7 @@
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background: #162431;
+  background: #293943;
   overflow: hidden;
 
   .lmo-data_visualization_edit_content {
@@ -17,15 +17,14 @@
       border-radius: .5vw;
 
       .lmo-data_visualization_edit_preview_player {
-        width: 48vw;
-        height: 27vw;
-        background: #f7f7f7;
+        width: 61vw;
+        height: 34.5vw;
         top: 2vh;
         left: 1vw;
       }
 
       .lmo-data_visualization_edit_preview_table {
-        width: 50vw;
+        width: 35vw;
         height: 27vw;
         top: 2vh;
         left: 1.5vw;
@@ -40,16 +39,10 @@
 
         .lmo-data_visualization_edit_preview_table_content {
           width: auto;
-          height: 50vh;
+          height: 84vh;
           overflow-x: hidden;
         }
       }
-    }
-
-    .lmo-data_visualization_edit_configure {
-      height: 32vh;
-      margin-top: 1vh;
-      border-radius: .5vw;
     }
   }
 }
