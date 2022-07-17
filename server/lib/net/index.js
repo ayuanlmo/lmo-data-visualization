@@ -8,10 +8,8 @@ const _Net = require('net');
 const _Clc = require("cli-color");
 
 let _Port = require('../../conf/ServerConfig')['__SERVER_PORT'] - 1;
-
 const _ = {
     __START_SERVER: (__) => {
-
         _Port += 1;
         const _test_server = _Net['createServer']()['listen'](_Port);
 
@@ -48,14 +46,19 @@ const _ = {
         return _na;
     },
     __PRINT_NETWORK_INTO: () => {
-        console.log('\n\n=========================================');
+        console.log('\n\n=========================================\n\n');
+        console.log('        _                 _ _          _   _             ');
+        console.log('       (_)               | (_)        | | (_)            ');
+        console.log(' __   ___ ___ _   _  __ _| |_ ______ _| |_ _  ___  _ __  ');
+        console.log(' \\ \\ / / / __| | | |/ _` | | |_  / _` | __| |/ _ \\| \'_ \\ ');
+        console.log('  \\ V /| \\__ \\ |_| | (_| | | |/ / (_| | |_| | (_) | | | |');
+        console.log('   \\_/ |_|___/\\__,_|\\__,_|_|_/___\\__,_|\\__|_|\\___/|_| |_|\n\n');
         console.log(_Clc['red']('\n Server running at:\n'));
-        console.log(`   -Local: ${_Clc['blue'](`  http://localhost:${_Port}`)}`);
+        console.log(`   -Local: ${_Clc['blue'](`  //localhost:${_Port}/`)}`);
         _['__LOCAL_NETWORK_INTERFACES']()['map'](i => {
-            console.log(`   -NetWork: ${_Clc['blue'](`http://${i}:${_Port}`)}`);
+            console.log(`   -NetWork: ${_Clc['blue'](`//${i}:${_Port}/`)}`);
         });
-        console.log('\n=========================================');
-        console.log(_Clc['bgGreen'](' SERVER START '));
+        console.log('\n\n=========================================');
     }
 };
 

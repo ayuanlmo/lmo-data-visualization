@@ -65,5 +65,17 @@ module.exports = {
     },
     _Stringify(data = {}) {
         return JSON['stringify'](data);
+    },
+    _Get_UUID() {
+        const _ = [];
+        const __ = "ting0123456789QWERYUOPASDFHJKLZXCVBNM";
+
+        for (let i = 0; i < 36; i += 1) {
+            _[i] = __.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+        _[14] = "4";
+        _[19] = __.substr(_[19] & 0x3 | 0x8, 1);
+        _[8] = _[13] = _[18] = _[23] = "-";
+        return _.join("");
     }
 };
