@@ -4,6 +4,7 @@ import {mapState} from 'vuex';
 import {TextConfigComponent} from "@const/Default.t";
 import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 import ThemeConfig from '@/components/ThemeConfig/index.t';
+import BackgroundConfig from '@/components/BackgroundConfig/index.t';
 
 export default {
     name: 'lmo-config_item',
@@ -67,7 +68,13 @@ export default {
                 }, ['主题配置']),
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card theme'
-                }, [h(ThemeConfig)])
+                }, [h(ThemeConfig)]),
+                h('div', {
+                    class: 'data_visualization_config_item_card_title'
+                }, ['背景配置']),
+                h('div', {
+                    class: 'lmo-data_visualization_config_item_card theme'
+                }, [h(BackgroundConfig)])
             ]);
         },
         initConfigText() {

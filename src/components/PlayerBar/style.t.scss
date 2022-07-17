@@ -1,0 +1,36 @@
+.lmo-player_bar {
+  background: #162431;
+  border-radius: 1.33rem;
+  height: 3.2rem;
+  padding: 0 1rem;
+  justify-content: space-between;
+
+  .lmo-player_bar_controller_box {
+    color: #FBFBFD;
+    position: relative;
+    top: .8rem;
+    height: 2rem;
+    line-height: 1.5rem;
+
+    .lmo-player_bar_controller_time {
+      margin-left: .6rem;
+    }
+  }
+
+  .lmo-player_bar_progress_bar {
+    background-color: #FBFBFD;
+    width: 80%;
+    height: 1rem;
+    border-radius: 8px;
+  }
+
+  .background {
+    position: relative;
+    top: 1.1rem;
+    background-color: #1A3245;
+  }
+
+  .lmo-player_bar_progress_bar {
+
+  }
+}

@@ -5,6 +5,7 @@ import EditHeader from '@/components/EditHeader/index.t';
 import HotTable from '@/components/HotTable/index.t';
 import TextConfigItem from '@/components/TextConfigItem/index.t';
 import AudioConfig from '@/components/AudioConfig/index.t';
+import PlayerBar from '@/components/PlayerBar/index.t';
 import {mapState} from "vuex";
 
 export default {
@@ -44,7 +45,8 @@ export default {
                                 props: {
                                     url: this.currentTemplate.url
                                 }
-                            })
+                            }),
+                            h(PlayerBar)
                         ]),
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_table lmo_position_relative'
