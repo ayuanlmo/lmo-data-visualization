@@ -28,7 +28,7 @@
         width: 15vw;
         height: 6vh;
         background-color: #162431;
-        margin-left: 1rem;
+        margin-top: 1rem;
         border-radius: 8px;
         padding: .5rem;
         justify-content: space-between;
@@ -59,13 +59,10 @@
     .lmo_video_config_right_item {
       margin-bottom: 1rem;
 
-      .el-radio-group {
-        margin-left: 1rem;
-      }
-
       .lmo-video_box_label {
         min-width: 5vw;
         color: #FBFBFD;
+        margin-bottom: 1rem;
 
         i {
           color: #E6A23C;

@@ -15,7 +15,10 @@ export default {
                     class: 'lmo-color-box'
                 }, [
                     h('div', {
-                        class: 'lmo-color_box_content lmo_flex_box'
+                        class: 'lmo-color_box_content lmo_flex_box',
+                        style: {
+                            color: '#FBFBFD'
+                        }
                     }, [
                         h('div', {
                             class: 'lmo-color_box_label',

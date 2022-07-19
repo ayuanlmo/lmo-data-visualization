@@ -1,3 +1,13 @@
+/**
+ *   _________  _
+ * |  _   _  |(_)
+ * |_/ | | \_|__   _ .--.   .--./)
+ *     | |   [  | [ `.-. | / /'`\;
+ *    _| |_   | |  | | | | \ \._//
+ *   |_____| [___][___||__].',__`
+ *                        ( ( __))
+ **/
+
 require('./style/lmo-style.t.scss');
 require('./style/lmo-animation.t.scss');
 require('./style/lmo-default.t.scss');

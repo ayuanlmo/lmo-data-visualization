@@ -1,3 +1,10 @@
+/**
+ *   _    __  __  ___
+ *  | |  |  \/  |/ _ \
+ *  | |__| |\/| | (_) |
+ *  |____|_|  |_|\___/
+ * **/
+
 import Vue from 'vue';
 import Root from './Root.t';
 import router from './router';
