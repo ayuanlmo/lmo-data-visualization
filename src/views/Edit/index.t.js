@@ -7,6 +7,7 @@ import TextConfigItem from '@/components/TextConfigItem/index.t';
 import AudioConfig from '@/components/AudioConfig/index.t';
 import PlayerBar from '@/components/PlayerBar/index.t';
 import {mapState} from "vuex";
+import {PostMessage} from "@lib/PostMessage/index.t";
 
 export default {
     name: 'lmo-edit',
@@ -46,7 +47,19 @@ export default {
                                     url: this.currentTemplate.url
                                 }
                             }),
-                            h(PlayerBar)
+                            h(PlayerBar, {
+                                props: {
+                                    duration: this.currentConfig.duration
+                                },
+                                on: {
+                                    play: () => {
+                                        PostMessage({
+                                            type: 'Play',
+                                            data: {}
+                                        });
+                                    }
+                                }
+                            })
                         ]),
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_table lmo_position_relative'
@@ -109,6 +122,7 @@ export default {
         );
     },
     data() {
+        // console.log('store',);
         return {
             tabsActiveName: 'text_and_theme',
             tabs: [
@@ -163,7 +177,8 @@ export default {
     },
     computed: {
         ...mapState({
-            currentTemplate: state => state.appStore.currentTemplate
+            currentTemplate: state => state.appStore.currentTemplate,
+            currentConfig: state => state.appStore.currentConfig
         })
     }
 };

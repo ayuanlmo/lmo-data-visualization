@@ -18,10 +18,18 @@
   }
 
   .lmo-player_bar_progress_bar {
-    background-color: #FBFBFD;
     width: 80%;
+    background-color: #FBFBFD;
     height: 1rem;
-    border-radius: 8px;
+    border-radius: .6rem;
+    position: relative;
+
+    .lmo-player_bar_progress {
+      position: absolute;
+      height: 100%;
+      border-radius: .6rem;
+      background-color: #FBFBFD;
+    }
   }
 
   .background {
