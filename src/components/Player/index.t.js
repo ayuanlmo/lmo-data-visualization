@@ -36,7 +36,9 @@ export default {
         };
     },
     methods: {
-        initPlayerView(e = this.$refs.playerIframeBox ?? document.getElementById('lmo-player_iframe_box')) {
+        initPlayerView() {
+            const e = this.$refs.playerIframeBox ?? document.getElementById('lmo-player_iframe_box');
+            
             if (!e) return;
             const _domHeight = e.offsetHeight;
             const _domWidth = e.offsetWidth;
