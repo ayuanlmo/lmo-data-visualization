@@ -6033,7 +6033,7 @@
 }
 
 .el-input-number--mini {
-  width: 130px;
+  width: 100%;
   line-height: 26px
 }
 
@@ -6261,13 +6261,13 @@
 
 .el-slider__runway {
   width: 100%;
-  height: 6px;
+  height: 1rem;
   margin: 16px 0;
   background-color: #162431;
-  border-radius: 3px;
   position: relative;
   cursor: pointer;
-  vertical-align: middle
+  vertical-align: middle;
+  border-radius: 1rem;
 }
 
 .el-slider__runway.show-input {
@@ -6316,16 +6316,15 @@
 }
 
 .el-slider__bar {
-  height: 6px;
+  height: 1rem;
   background-color: #162431;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-radius: 1rem;
   position: absolute
 }
 
 .el-slider__button-wrapper {
-  height: 36px;
-  width: 36px;
+  height: 2.8rem;
+  width: 1rem;
   position: absolute;
   z-index: 1001;
   top: -15px;
@@ -6360,14 +6359,15 @@
 }
 
 .el-slider__button {
-  width: 16px;
-  height: 16px;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
   -webkit-transition: .2s;
   transition: .2s;
   background: #22506D;
   -webkit-user-select: none;
-  user-select: none
+  user-select: none;
+  margin-top: .6rem;
 }
 
 .el-slider__button.dragging, .el-slider__button.hover, .el-slider__button:hover {
