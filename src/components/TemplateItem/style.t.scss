@@ -14,6 +14,28 @@
       width: 100%;
       height: 100%;
 
+      .lmo-template_item_content_description {
+        background-color: rgba(24, 42, 56, 0.8);
+        z-index: 5 !important;
+
+        .lmo-template_description_title {
+          font-size: 1.4rem;
+          top: 30%;
+        }
+
+        .lmo-template_description_content {
+          font-size: 1rem;
+          top: 50%;
+        }
+
+        span {
+          position: absolute;
+          text-align: center;
+          width: 100%;
+          color: #FBFBFD;
+        }
+      }
+
       .lmo-template_item_content_img {
         width: 100%;
         height: 100%;
@@ -27,10 +49,6 @@
           height: 100%;
           border-radius: 4px;
           transition: all .2s;
-
-          &:hover {
-            transform: scale(1.5);
-          }
         }
       }
 

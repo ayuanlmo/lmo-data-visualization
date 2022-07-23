@@ -40,7 +40,7 @@ export default {
                         class: 'lmo-data_visualization_edit_preview lmo_flex_box lmo_position_relative'
                     }, [
                         h('div', {
-                            class: 'lmo-data_visualization_edit_preview_player lmo_position_relative'
+                            class: 'lmo-data_visualization_edit_preview_player lmo_position_relative animated fadeInUp'
                         }, [
                             h(Player, {
                                 props: {

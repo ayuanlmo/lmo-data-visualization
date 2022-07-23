@@ -11,7 +11,7 @@ export default {
                 class: 'lmo-data_visualization_template_view'
             }, [
                 h('div', {
-                    class: 'lmo-visualization_template'
+                    class: 'lmo-visualization_template animated fadeInUp'
                 }, [
                     this.TemplateData.length === 0 ? <el-empty description="这里暂时啥也没有"></el-empty> :
                         this.TemplateData.map((i) => {
@@ -26,7 +26,7 @@ export default {
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
                                             this.$store.commit('RESET_TEMPLATE_CURRENT_AUDIO_CONFIG');
                                             await set('current_template', JSON.stringify(i));
-                                            await require('@/utils').routerPush(this.$router,'/edit','push');
+                                            await require('@/utils').routerPush(this.$router, '/edit', 'push');
                                         }
                                     }
                                 })

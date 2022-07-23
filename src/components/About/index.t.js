@@ -18,16 +18,17 @@ export default {
                             this.visible = false;
                         },
                         top: '10vh'
-                    }
+                    },
+                    class: 'lmo_none_user_select'
                 }, [
                     h('img', {
-                        class: 'none_user_select cursor_pointer lmo_about_logo',
+                        class: 'none_user_select cursor_pointer lmo_about_logo animated flipInX',
                         attrs: {
                             src: require('@static/svg/lmo-logo.svg')
                         }
                     }),
                     h('div', {
-                        class: 'lmo_about_box_title lmo_theme_color'
+                        class: 'lmo_about_box_title lmo_theme_color animated flipInX'
                     }, [
                         h('div', [require('@config/AppConfig').appName])
                     ]),
@@ -48,7 +49,9 @@ export default {
                     h('div', {
                         class: 'lmo_line'
                     }),
-                    h('span', [
+                    h('div', {
+                        class: 'animated fadeInDown'
+                    }, [
                         h('span', {
                             style: 'color:#FBFBFD;'
                         }, [
