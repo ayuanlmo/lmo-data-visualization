@@ -36,11 +36,12 @@ export default {
                                 class: this.previewType === 'JSON' ? '' : 'lmo_hide',
                                 props: {
                                     data: this.currentConfig,
-                                    deep: 3
+                                    deep: 2
                                 }
                             }),
-                            <el-input rows={50} class={this['previewType'] === 'text' ? '' : 'lmo_hide'} type={'textarea'}
-                                      value={JSON.stringify(this.currentConfig)}/>
+                            <el-input rows={42} class={this['previewType'] === 'text' ? 'lmo-show_text' : 'lmo_hide'}
+                                      type={'textarea'}
+                                      value={require('@/utils/index').stringify(this.currentConfig)}/>
                         ])
                     ])
                 ])
