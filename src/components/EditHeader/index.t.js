@@ -39,7 +39,7 @@ export default {
                 ]),
                 h('div', {}, [
                     h('div', [
-                        this.devMode ? h('lmo-button', {
+                        require('@/config/AppConfig').dev ? h('lmo-button', {
                             props: {
                                 text: '😊 查看模板配置文件'
                             },
@@ -69,9 +69,9 @@ export default {
                         })
                     ])
                 ]),
-                this.devMode ? h(PreviewTemplateConf, {
+                h(PreviewTemplateConf, {
                     ref: 'PreviewTemplateConf'
-                }) : h('')
+                })
             ])
         );
     },
@@ -124,7 +124,6 @@ export default {
     },
     computed: {
         ...mapState({
-            devMode: state => state.appStore.devMode,
             currentConfig: state => state.appStore.currentConfig,
             currentTemplateVideoConfig: state => state.appStore.currentTemplateVideoConfig,
             currentTemplate: state => state.appStore.currentTemplate,
