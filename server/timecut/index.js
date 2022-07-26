@@ -1,6 +1,7 @@
 const _TimeCut = require('timecut');
 const _Fs = require('fs-extra');
 const _Path = require('path');
+const _OS = require('os');
 const _Ffmpeg = require('fluent-ffmpeg');
 const _Tool = require('../utils/index');
 
@@ -8,15 +9,30 @@ class TC {
     constructor(ws = null, data) {
         this['ws'] = ws;
         this['data'] = data;
+        this['logs'] = [];
         this['taskName'] = `lmo_${new Date()['getTime']()}`;
         this['_SendMessage']('task_pending', 'task_pending', {
             taskName: this['taskName']
         });
+        this['schedule'] = 0;
         this['_Init']();
     }
 
     _Init() {
         this['_CopyTemplate']();
+    }
+
+    _OutputLogFile() {
+        const _logPath = '../server/static/log/';
+        const s = '===== BEGIN LMO-DATA-VISUALIZATION TASK LOG =====\n';
+        const e = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
+
+        if (!_Fs['existsSync'](_logPath))
+            _Fs['mkdir'](_logPath);
+        _Fs['writeFile'](`${_logPath}${this['taskName']}.t.log`, `${s}${this['logs'].join('\n')}${e}`, e => {
+            if (!e)
+                this['logs'] = [];
+        });
     }
 
     _CopyTemplate() {
@@ -49,24 +65,33 @@ class TC {
     }
 
     _Synthesis() {
+        this['logs'].push(`\nCREATE AT: ${new Date().getTime()}`);
+        this['logs'].push(`SOURCE TEMPLATE: ${this['data']['template']}`);
+        this['logs'].push(`PLATFORM: ${_OS.type()} / ${_OS.platform()} / ${_OS.arch()} / ${_OS.release()}`);
+        this['logs'].push(`NODE VERSION: ${process.version}`);
+        this['logs'].push(`CURRENT: /static/temp/${this['taskName']}/index.html\n`);
+        this['logs'].push(`CONFIG ${require('../funcs')._Stringify(this['data'])}\n\n`);
         let audioPath = '';
         const _ = this['data']['config'];
         const _conf = {
             url: `http://localhost:${global['__SERVER_PORT']}/static/temp/${this['taskName']}/index.html`,
-            viewport: {
-                ...this['_GetVideoClarity'](_['video']['clarity'])
-            },
             selector: '#app',
             left: 0,
             top: 0,
             right: 0,
             bottom: 0,
+            pipeMode: require('os').freemem() / 1024 / 1024 > 2048,
             fps: parseInt(_['video']['fps']),
             duration: _['video']['duration'],
             output: `static/output/${this['taskName']}.mp4`,
-            preparePageForScreenshot: async () => {
+            viewport: {
+                ...this['_GetVideoClarity'](_['video']['clarity'])
+            },
+            preparePageForScreenshot: async (page, currentFrame, totalFrames) => {
+                this['schedule'] = parseInt(currentFrame / totalFrames * 100);
                 this['_SendMessage']('task_processing', 'task_processing', {
-                    state: this['taskName']
+                    taskName: this['taskName'],
+                    schedule: this.schedule
                 });
             }
         };
@@ -82,6 +107,7 @@ class TC {
 
         _TimeCut(_conf).then(() => {
             this['_ProcessAudio'](_['audio']['src'] !== '' ? `static/output/${this['taskName']}.mp4` : '', audioPath).then((_r) => {
+                this['_OutputLogFile']();
                 if (_r === 1) {
                     setTimeout(() => {
                         this['_SendMessage']('task_end', 'task_processing', {
@@ -95,6 +121,10 @@ class TC {
                         taskName: this['taskName']
                     });
                 this['_DelTempFile'](`${_Path['resolve'](`../server/static/temp/${this['taskName']}`)}`);
+            });
+        }).catch(() => {
+            this['_SendMessage']('task_end', 'error', {
+                taskName: this['taskName']
             });
         });
     }
@@ -136,6 +166,8 @@ class TC {
     }
 
     _SendMessage(type, cmd, data = {}) {
+        if (type !== 'task_pending' && cmd !== 'task_pending')
+            this['logs'].push(`[${new Date().getTime()}]${type} ${cmd} > ${require('../funcs')['_Stringify'](data)}`);
         this['ws']['clients']['forEach'](i => {
             i['send'](_Tool.stringToBinary(require('../funcs')['_Stringify'](
                 {
