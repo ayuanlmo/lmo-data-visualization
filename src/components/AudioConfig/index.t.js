@@ -25,68 +25,80 @@ export default {
                             h('div', {
                                 class: 'lmo-audio_box_label'
                             }, ['背景音乐']),
-                            h('div', {
-                                class: 'lmo_flex_box'
-                            }, [
-                                h('div', {
-                                    class: 'lmo-audio_content lmo_cursor_pointer lmo_flex_box',
-                                    on: {
-                                        click: this.selectAudio,
-                                        mouseover: this.play,
-                                        mouseout: this.pause
-                                    }
-                                }, [
-                                    h('div', {
-                                        class: this.audioName === '' ? 'lmo-audio_content_label lmo-audio_content_label_no_audio' : 'lmo-audio_content_label lmo_theme_color'
+                            h('div', [
+                                h('el-row', [
+                                    h('el-col', {
+                                        props: {
+                                            span: 12
+                                        }
                                     }, [
-                                        this.audioName === '' ? '暂无音频' : this.audioName
-                                    ]),
-                                    h('div', {
-                                        class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon'
-                                    }, [
-                                        h('img', {
-                                            attrs: {
-                                                src: require('@/assets/svg/audio.svg')
-                                            }
-                                        }),
-                                        h('audio', {ref: 'audio'})
-                                    ])
-                                ]),
-                                h('div', {
-                                    class: 'lmo_flex_box',
-                                    style: 'line-height: 6.5rem;margin-left: 1rem;'
-                                }, [
-                                    h('div', {
-                                        class: 'lmo-audio_box_label'
-                                    }, [
-                                        h('el-tooltip', {
-                                            props: {
-                                                content: '开启后视频时长 = 音频时长(动画持续时间不受该选项控制)'
+                                        h('div', {
+                                            class: 'lmo-audio_content lmo_cursor_pointer lmo_flex_box',
+                                            on: {
+                                                click: this.selectAudio,
+                                                mouseover: this.play,
+                                                mouseout: this.pause
                                             }
                                         }, [
-                                            h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
-                                        ]),
-                                        '完整的音频'
+                                            h('div', {
+                                                class: this.audioName === '' ? 'lmo-audio_content_label lmo-audio_content_label_no_audio' : 'lmo-audio_content_label lmo_theme_color'
+                                            }, [
+                                                this.audioName === '' ? '暂无音频' : this.audioName
+                                            ]),
+                                            h('div', {
+                                                class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon'
+                                            }, [
+                                                h('img', {
+                                                    attrs: {
+                                                        src: require('@/assets/svg/audio.svg')
+                                                    }
+                                                }),
+                                                h('audio', {ref: 'audio'})
+                                            ])
+                                        ])
                                     ]),
-                                    h('div', {
-                                        class: 'lmo-audio_controller_slider'
+                                    h('el-col', {
+                                        props: {
+                                            span: 12
+                                        }
                                     }, [
-                                        h('lmo-switch', {
-                                            props: {
-                                                value: false
-                                            },
-                                            on: {
-                                                change: (e) => {
-                                                    this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE', e);
-                                                }
-                                            }
-                                        })
+                                        h('div', {
+                                            class: 'lmo_flex_box',
+                                            style: 'line-height: 6.5rem;margin-left: 1rem;width:40%;margin-left:1.5rem;'
+                                        }, [
+                                            h('div', {
+                                                class: 'lmo-audio_box_label'
+                                            }, [
+                                                h('el-tooltip', {
+                                                    props: {
+                                                        content: '开启后视频时长 = 音频时长(动画持续时间不受该选项控制)'
+                                                    }
+                                                }, [
+                                                    h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
+                                                ]),
+                                                '完整的音频'
+                                            ]),
+                                            h('div', {
+                                                class: ''
+                                            }, [
+                                                h('lmo-switch', {
+                                                    props: {
+                                                        value: false
+                                                    },
+                                                    on: {
+                                                        change: (e) => {
+                                                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE', e);
+                                                        }
+                                                    }
+                                                })
+                                            ])
+                                        ])
                                     ])
                                 ])
                             ])
                         ]),
                         h('div', {
-                            class: 'lmo-audio_config_left_audio_controller lmo_flex_box'
+                            class: 'lmo-audio_config_left_audio_controller'
                         }, [
                             h('div', {
                                 class: 'lmo-audio_box_label'

@@ -34,7 +34,6 @@ export default {
                                                             colors: i.colors
                                                         }
                                                     });
-                                                    //this.initConfigThemeColorTemplate();
                                                 }
                                             }
                                         }
