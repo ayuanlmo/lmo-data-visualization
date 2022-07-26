@@ -34,13 +34,13 @@ export default {
                     }
                 }),
                 h('div', {
-                    class: 'lmo-data_visualization_edit_content'
+                    class: `${this.animationClass} lmo-data_visualization_edit_content`
                 }, [
                     h('div', {
                         class: 'lmo-data_visualization_edit_preview lmo_flex_box lmo_position_relative'
                     }, [
                         h('div', {
-                            class: 'lmo-data_visualization_edit_preview_player lmo_position_relative animated fadeInUp'
+                            class: 'lmo-data_visualization_edit_preview_player lmo_position_relative'
                         }, [
                             h(Player, {
                                 props: {
@@ -125,6 +125,7 @@ export default {
         // console.log('store',);
         return {
             tabsActiveName: 'text_and_theme',
+            animationClass: ' animated zoomIn',
             tabs: [
                 {
                     data: {
@@ -174,6 +175,13 @@ export default {
                 };
             });
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.animationClass = '';
+            }, 2000);
+        });
     },
     computed: {
         ...mapState({
