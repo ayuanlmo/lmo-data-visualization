@@ -14,7 +14,9 @@ class TempLate {
         this.conf = conf;
         this.csvData = null;
         this.chart = null;
+        this.timer = 0;
         this.chartType = type;
+        this.isCustom = this.conf.isCustom === 0;
         this.d3 = window['d3'] ?? window.d3;
         this.echarts = window['echarts'] ?? window.echarts;
         this.renderDom = document.getElementById('canvas');
@@ -22,10 +24,11 @@ class TempLate {
         this.setChart();
         this.init();
         addEventListener('load', () => {
-            parent.postMessage({
-                type: 'FullConfig',
-                data: this.conf
-            }, location.origin);
+            if (!this.isCustom)
+                parent.postMessage({
+                    type: 'FullConfig',
+                    data: this.conf
+                }, location.origin);
         });
     }
 
@@ -37,6 +40,17 @@ class TempLate {
     tryRender(d, t) {
         try {
             this.render(d, t);
+            parent.postMessage({
+                type: 'TemplateRender',
+                data: {}
+            }, location.origin);
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => {
+                parent.postMessage({
+                    type: 'TemplateRenderFinish',
+                    data: {}
+                }, location.origin);
+            }, this.conf.duration);
         } catch (e) {
             parent.postMessage({
                 type: 'RenderError',
@@ -70,9 +84,11 @@ class TempLate {
             this.appDom.style.width = '1920px';
             this.appDom.style.height = '1080px';
         }
-        if (this.conf['isCustom'] === 0)
-            this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
-        else {
+        if (this.isCustom) {
+            this.csvData = this.conf.data.split('\r\n');
+            this.initThemeColor();
+            this.tryRender(this.csvData, true);
+        } else {
             addEventListener('message', (e) => {
                 this.onMessage(e);
             });
