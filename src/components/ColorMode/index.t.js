@@ -38,7 +38,7 @@ export default {
                         }
                     }),
                     h('i', {
-                        class: 'el-icon-arrow-right',
+                        class: 'el-icon-arrow-right lmo_color_white',
                         style: {
                             padding: '0 1rem'
                         }
