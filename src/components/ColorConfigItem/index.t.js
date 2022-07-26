@@ -2,10 +2,9 @@ require('./style.t.scss');
 
 import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {ColorConfigComponent, ColorOption, renderColorOptionExcludeKey} from "@/const/Default.t";
+import {ColorConfigComponent, renderColorOptionExcludeKey} from "@/const/Default.t";
 import {UPDATE_BACKGROUND_IMAGE} from '@/const/MessageType.t';
 import AnimateView from '@/components/AnimateView/index.t';
-import ColorMode from '@/components/ColorMode/index.t';
 
 export default {
     name: 'lmo-color_config_item',
@@ -138,7 +137,6 @@ export default {
         configTemplateBackground: {
             deep: true,
             handler() {
-                this.$refs.BackgroundOption.className = this.configTemplateBackground.image === '' ? 'lmo_hide' : '';
                 this.$store.commit('SET_TEMPLATE_CURRENT_BACKGROUND_CONF', this.configTemplateBackground);
                 this.setTemplateBackground();
             }
