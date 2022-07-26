@@ -124,7 +124,7 @@ export default {
     data() {
         // console.log('store',);
         return {
-            tabsActiveName: 'text_and_theme',
+            tabsActiveName: 'data',
             animationClass: ' animated zoomIn',
             tabs: [
                 {
