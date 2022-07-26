@@ -98,7 +98,7 @@ export default {
     data() {
         return {
             configTemplateBackground: {
-                color: '#fff',
+                color: '#0C2856',
                 image: '',
                 arrange: '0% 0% / 100% 100%'
             },
