@@ -1,1 +1,1 @@
-npm install
+yarn install

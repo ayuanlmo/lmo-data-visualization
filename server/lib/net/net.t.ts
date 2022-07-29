@@ -1,37 +1,39 @@
 /**
- * net/index.js
+ * /lib/net/net.ts
  * @author ayuanlmo
- * 该模块用于检查端口是否被占用 和 启动服务
+ * Net module
  * **/
 
-const _Net = require('net');
-const _Clc = require("cli-color");
+const _Net: any = require('net');
+const _Clc: any = require('cli-color');
+const _global: any = global;
 
-let _Port = require('../../conf/ServerConfig')['__SERVER_PORT'] - 1;
-const _ = {
-    __START_SERVER: (__) => {
+let _Port: number = require('../../conf/conf.t').__SERVER_PORT - 1;
+
+const _: any = {
+    __START_SERVER: (__: any): void => {
         _Port += 1;
-        const _test_server = _Net['createServer']()['listen'](_Port);
+        const _test_server: any = _Net.createServer().listen(_Port);
 
-        _test_server['on']('listening', () => {
-            _test_server['close']();
+        _test_server.on('listening', () => {
+            _test_server.close();
             setTimeout(async () => {
-                __['listen'](_Port, () => {
-                    global['__SERVER_PORT'] = _Port;
-                    _['__PRINT_NETWORK_INTO']();
+                __.listen(_Port, () => {
+                    _global.__SERVER_PORT = _Port;
+                    _.__PRINT_NETWORK_INTO();
                 });
             });
         });
-        _test_server['on']('error', (_e) => {
-            if (_e['code'] === 'EADDRINUSE') {
-                console.log(`${_Port}端口被占用,正在尝试启动新的端口`);
-                _['__START_SERVER'](__);
+        _test_server.on('error', (_e: any): void => {
+            if (_e.code === 'EADDRINUSE') {
+                console.log(`${_Port}端口被占用,正在尝试在新的端口启动`);
+                _.__START_SERVER(__);
             }
         });
     },
-    __LOCAL_NETWORK_INTERFACES() {
-        const _NF = require('os')['networkInterfaces']();
-        const _na = [];
+    __LOCAL_NETWORK_INTERFACES(): Array<string> {
+        const _NF: any = require('os')['networkInterfaces']();
+        const _na: Array<string> = [];
 
         // eslint-disable-next-line guard-for-in
         for (const i in _NF) {
@@ -45,7 +47,7 @@ const _ = {
         }
         return _na;
     },
-    __PRINT_NETWORK_INTO: () => {
+    __PRINT_NETWORK_INTO: (): void => {
         console.log('\n\n=========================================\n\n');
         console.log('        _                 _ _          _   _             ');
         console.log('       (_)               | (_)        | | (_)            ');
@@ -55,8 +57,8 @@ const _ = {
         console.log('   \\_/ |_|___/\\__,_|\\__,_|_|_/___\\__,_|\\__|_|\\___/|_| |_|\n\n');
         console.log(_Clc['red']('\n Server running at:\n'));
         console.log(`   -Local: ${_Clc['blue'](`  //localhost:${_Port}/`)}`);
-        _['__LOCAL_NETWORK_INTERFACES']()['map'](i => {
-            console.log(`   -NetWork: ${_Clc['blue'](`//${i}:${_Port}/`)}`);
+        _['__LOCAL_NETWORK_INTERFACES']().map((i: string) => {
+            console.log(`   -NetWork: ${_Clc.blue(`//${i}:${_Port}/`)}`);
         });
         console.log('\n\n=========================================');
     }
