@@ -57,6 +57,12 @@ export default class Socket {
             const _msg = JSON.parse(require('@/utils/index').binaryToString(msg.data));
 
             this.callback(_msg);
+            if (_msg.type === 'showMessage')
+                return Notification({
+                    title: '系统消息',
+                    message: `${_msg.data.message}`,
+                    type: 'warning'
+                });
             if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing')
                 return Notification({
                     title: '系统消息',
