@@ -1,10 +1,11 @@
 .lmo-data_visualization_header {
   padding: 0 1rem;
   height: 6vh;
-  background-color: #fff;
-  border-bottom-right-radius: .5vw;
-  border-bottom-left-radius: .5vw;
+  width: 96%;
+  margin: 1rem auto auto;
+  border-radius: 1.33rem;
   justify-content: space-between;
+  background: #fbfbfd14;
 
   h3 {
     font-size: 1.2vw;

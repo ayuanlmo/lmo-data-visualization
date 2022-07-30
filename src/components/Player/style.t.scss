@@ -1,10 +1,9 @@
 .lmo-data_visualization_edit_preview_player_iframe_box {
   width: 100%;
   height: 100%;
-  background-color: #EEEEEE;
-  box-shadow: 0 0 4px 0 #d8d8d8;
   overflow: hidden;
-  border-radius: .5vw;
+  border-radius: 1.33vw;
+  background: #0C2856;
 
   iframe {
     width: 1920px;
@@ -19,9 +18,4 @@
     z-index: 5;
   }
 
-  .data_visualization_edit_preview_play_button {
-    left: 1rem;
-    bottom: 1rem;
-    z-index: 9;
-  }
 }

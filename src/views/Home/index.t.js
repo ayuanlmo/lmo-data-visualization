@@ -11,7 +11,10 @@ export default {
                 class: 'lmo-data_visualization'
             }, [
                 h(Header),
-                h(TemplateView)
+                h(TemplateView),
+                h('div', {
+                    class: 'lmo-data_visualization_footer'
+                }, 'Design by @阿柒')
             ])
         );
     }

@@ -6,6 +6,8 @@ ffmpeg.exe
 /temp
 /output*
 *.mp4*
+*.log*
+*.t.log*
 
 # local env files
 .env.local

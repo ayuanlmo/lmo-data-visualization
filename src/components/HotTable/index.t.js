@@ -12,16 +12,23 @@ export default {
     name: 'lmo-hot-table',
     render(h) {
         return (
-            h(HotTable, {
-                ref: 'HotTable',
-                props: {
-                    settings: {
-                        ...HotTableConfig.settings,
-                        afterChange: this.hotTableAfterChange
-                    },
-                    licenseKey: HotTableConfig.licenseKey
-                }
-            })
+            h('div', {
+                class: 'lmo-data_visualization_config_item'
+            }, [
+                h('div', {
+                    class: 'data_visualization_config_item_card_title'
+                }, ['编辑数据']),
+                h(HotTable, {
+                    ref: 'HotTable',
+                    props: {
+                        settings: {
+                            ...HotTableConfig.settings,
+                            afterChange: this.hotTableAfterChange
+                        },
+                        licenseKey: HotTableConfig.licenseKey
+                    }
+                })
+            ])
         );
     },
     methods: {
@@ -62,6 +69,12 @@ export default {
     },
     mounted() {
         this.initHotTableData();
+        this.$nextTick(() => {
+            const el = document.getElementsByClassName('ht_clone_bottom handsontable');
+
+            if (el.length !== 0)
+                el[0].remove();
+        });
     },
     watch: {
         csvData() {

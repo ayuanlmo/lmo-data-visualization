@@ -16,21 +16,25 @@ export default {
                         visible: this.visible,
                         beforeClose: () => {
                             this.visible = false;
-                        }
-                    }
+                        },
+                        top: '10vh'
+                    },
+                    class: 'lmo_none_user_select'
                 }, [
                     h('img', {
-                        class: 'none_user_select cursor_pointer lmo_about_logo',
+                        class: 'none_user_select cursor_pointer lmo_about_logo animated flipInX',
                         attrs: {
                             src: require('@static/svg/lmo-logo.svg')
                         }
                     }),
                     h('div', {
-                        class: 'lmo_about_box_title lmo_theme_color'
+                        class: 'lmo_about_box_title lmo_theme_color animated flipInX'
                     }, [
                         h('div', [require('@config/AppConfig').appName])
                     ]),
-                    h('span', [
+                    h('span', {
+                        style: 'color:#FBFBFD;'
+                    }, [
                         'By ',
                         h('span', [
                             h('a', {
@@ -45,8 +49,12 @@ export default {
                     h('div', {
                         class: 'lmo_line'
                     }),
-                    h('span', [
-                        h('span', [
+                    h('div', {
+                        class: 'animated fadeInDown'
+                    }, [
+                        h('span', {
+                            style: 'color:#FBFBFD;'
+                        }, [
                             '特别感谢：',
                             AppConfig.specialThanks.map((i, index) => {
                                 return (
@@ -96,7 +104,9 @@ export default {
                         h('div', {
                             class: 'lmo_line'
                         }),
-                        h('span', ['Apache-2.0'])
+                        h('p', [
+                            `Powered by Node.js`
+                        ])
                     ])
                 ])
             ])

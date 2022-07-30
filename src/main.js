@@ -1,3 +1,10 @@
+/**
+ *   _    __  __  ___
+ *  | |  |  \/  |/ _ \
+ *  | |__| |\/| | (_) |
+ *  |____|_|  |_|\___/
+ * **/
+
 import Vue from 'vue';
 import Root from './Root.t';
 import router from './router';
@@ -5,6 +12,7 @@ import store from '@/store';
 import Socket from "@lib/Socket/index.t";
 import './lib/Element/index.t';
 import '@/components/Element/index.t';
+import '@/lib/Global/index.t';
 
 void ((_) => {
     Vue.config.productionTip = false;

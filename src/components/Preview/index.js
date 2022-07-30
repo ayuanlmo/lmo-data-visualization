@@ -1,19 +1,16 @@
 require('./style.t.scss');
 
+import PlayerBar from '@/components/PlayerBar/index.t';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
 import {PREVIEW} from '@/const/MessageType.t';
-
-let timer = 0;
-
-let cont = 0;
 
 export default {
     name: 'lmo-preview',
     render(h) {
         return (
             <el-dialog style={{
-                'background-color': '#f5f5f5'
+                'background-color': '#293943'
             }} title={'预览'} visible={this.visible} width={'1000px'}
                        fullscreen={false} top={'5vh'} before-close={() => {
                 this.visible = false;
@@ -50,16 +47,29 @@ export default {
                             ])
                         ]),
                         h('div', {
-                            class: 'lmo-preview_iframe_box'
+                            style: {
+                                width: '960px',
+                                height: '580px'
+                            }
                         }, [
-                            this.visible ? <iframe onLoad={this.play} src={this.url + '?type=preview'}
-                                                   frameBorder="0"/> : '',
                             h('div', {
-                                class: 'lmo-preview_progress_box'
+                                class: 'lmo-preview_iframe_box'
                             }, [
-                                <el-progress show-text={false} text-inside={true}
-                                             percentage={this.percentage}/>
+                                this.visible ? <iframe onLoad={this.play} src={this.url + '?type=preview'}
+                                                       frameBorder="0"/> : ''
                             ])
+                        ]),
+                        h('div', [
+                            h(PlayerBar, {
+                                ref: 'PlayerBar',
+                                style: {
+                                    background: '#293943'
+                                },
+                                props: {
+                                    duration: this.currentConfig.duration,
+                                    controllerButton: false
+                                }
+                            })
                         ])
                     ])
                 }
@@ -69,32 +79,18 @@ export default {
     data() {
         return {
             visible: false,
-            percentage: 0,
             playState: false
         };
     },
     methods: {
         play() {
             this.playState = true;
+            this.$refs['PlayerBar'].reset();
             PostMessage({
                     type: PREVIEW,
                     data: this.currentConfig
                 }
             );
-            clearInterval(timer);
-            const duration = this.currentConfig.duration;
-
-            this.percentage = 0;
-            cont = 0;
-            timer = setInterval(() => {
-                if (cont === duration / 1000) {
-                    this.playState = false;
-                    clearInterval(timer);
-                } else {
-                    cont += 1;
-                    this.percentage += 100 / duration * 1000;
-                }
-            }, 1000);
         },
         show() {
             this.visible = !this.visible;
@@ -102,16 +98,15 @@ export default {
     },
     watch: {
         visible() {
-            if (!this.visible) {
+            if (!this.visible)
                 this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', false);
-                clearInterval(timer);
-            }
         }
     },
     computed: {
         ...mapState({
             url: state => `/server${state.appStore.currentTemplate.url}`,
-            currentConfig: state => state.appStore.currentConfig
+            currentConfig: state => state.appStore.currentConfig,
+            currentTemplate: state => state.appStore.currentTemplate
         })
     }
 };

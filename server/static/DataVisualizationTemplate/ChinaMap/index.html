@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>中国地图</title>
-    <link rel="stylesheet" href="../../style/animate.min.css">
-    <link rel="stylesheet" href="../../style/default.css">
+    <link href="../../style/animate.min.css" rel="stylesheet">
+    <link href="../../style/default.css" rel="stylesheet">
+    <style>
+        .t_value {
+            position: absolute;
+            left: 8%;
+        }
+    </style>
 </head>
 <script src="../../script/echarts.min.js"></script>
 <script src="./china.js"></script>
@@ -16,7 +22,7 @@
 <div id="app">
     <div id="text">
         <div class="title">
-            <div class="title_main animated rubberBand" id="title_main"></div>
+            <div id="title_main" class="title_main animated rubberBand"></div>
             <div class="title_sub"></div>
         </div>
         <div class="from">
@@ -24,7 +30,7 @@
             <div class="data_source"></div>
         </div>
     </div>
-    <div>
+    <div class="t_value">
         <h1 class="value"></h1>
     </div>
     <div id="canvas"></div>

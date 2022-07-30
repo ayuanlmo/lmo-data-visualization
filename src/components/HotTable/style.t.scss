@@ -1,5 +1,29 @@
-.handsontable {
-  th {
-    background-color: #409fee29 !important;
+.lmo-edit_hot_table {
+  width: 100%;
+  position: relative;
+  height: 100vh;
+  background-color: #162431;
+  border-radius: 1.33rem;
+  padding: 1rem;
+
+  .lmo-edit_hot_table_title {
+    color: #FBFBFD;
+    margin-bottom: 1rem;
   }
+
+  .lmo-edit_hot_table_content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.handsontable {
+  width: 1000px;
+  height: 1000px;
+  position: absolute;
+}
+
+.wtHolder {
+  overflow: initial !important;
 }

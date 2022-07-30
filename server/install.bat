@@ -9,7 +9,7 @@
 ::	=========================================
 
 @echo OFF
-title lmo-pm2-management Install packages
+title lmo-Data-Visualization Install packages
 cls
 echo.
 echo ________________________________________________

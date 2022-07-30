@@ -39,7 +39,7 @@ export default {
                 ]),
                 h('div', {}, [
                     h('div', [
-                        this.devMode ? h('lmo-button', {
+                        require('@/config/AppConfig').dev ? h('lmo-button', {
                             props: {
                                 text: '😊 查看模板配置文件'
                             },
@@ -69,9 +69,9 @@ export default {
                         })
                     ])
                 ]),
-                this.devMode ? h(PreviewTemplateConf, {
+                h(PreviewTemplateConf, {
                     ref: 'PreviewTemplateConf'
-                }) : h('')
+                })
             ])
         );
     },
@@ -88,6 +88,20 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
+                console.log({
+                        templateConfig: {
+                            isCustom: 0,
+                            ...this.currentConfig
+                        },
+                        config: {
+                            ...this.currentTemplateVideoConfig,
+                            audio: {
+                                ...this.templateCurrentAudioConfig
+                            }
+                        },
+                        template: this.currentTemplate.template
+                    }
+                );
                 this.ws.send(require('@/utils/index').stringToBinary(JSON.stringify({
                     cmd: 'synthesis',
                     data: {
@@ -110,7 +124,6 @@ export default {
     },
     computed: {
         ...mapState({
-            devMode: state => state.appStore.devMode,
             currentConfig: state => state.appStore.currentConfig,
             currentTemplateVideoConfig: state => state.appStore.currentTemplateVideoConfig,
             currentTemplate: state => state.appStore.currentTemplate,

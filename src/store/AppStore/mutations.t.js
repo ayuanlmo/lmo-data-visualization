@@ -1,11 +1,6 @@
 import * as TYPE from '@/const/MutationTypes.t';
 import {PostMessage} from '@/lib/PostMessage/index.t';
-import {
-    UPDATE_COLOR,
-    UPDATE_DURATION,
-    UPDATE_TEXT,
-    UPDATE_COLOR_MODE
-} from '@/const/MessageType.t';
+import {UPDATE_COLOR, UPDATE_COLOR_MODE, UPDATE_DURATION, UPDATE_TEXT} from '@/const/MessageType.t';
 
 export default {
     [TYPE.SET_CURRENT_TEMPLATE_DEFAULT_DATA](state, data) {
@@ -13,6 +8,9 @@ export default {
     },
     [TYPE.SET_CURRENT_TEMPLATE](state, data) {
         state.currentTemplate = data;
+    },
+    [TYPE.SET_TEMPLATE_CURRENT_BACKGROUND](state, data) {
+        state.currentConfig['background'] = data;
     },
     [TYPE.SET_CURRENT_CSV_DATA](state, data) {
         state.currentConfig['csvData'] = data;

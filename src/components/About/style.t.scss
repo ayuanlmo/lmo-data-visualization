@@ -1,6 +1,10 @@
 .lmo_about_box {
   text-align: center;
 
+  .animated {
+    animation-duration: 1s;
+  }
+
   .lmo_about_box_title {
     font-size: 26px;
     font-weight: bold;
@@ -15,13 +19,17 @@
 
   .lmo_icon {
     img {
-      width: 28px;
+      width: 38px;
       padding-right: 12px;
+      position: relative;
+      top: 1rem;
     }
   }
 
   .lmo_about_logo {
     width: 26%;
+    background: #FBFBFD;
+    border-radius: 50%;
   }
 
   span {
@@ -30,5 +38,9 @@
     a {
       color: #000;
     }
+  }
+
+  p {
+    line-height: 3rem;
   }
 }

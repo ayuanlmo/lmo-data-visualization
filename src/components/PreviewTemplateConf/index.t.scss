@@ -4,8 +4,35 @@
   .lmo-preview_template_conf_title {
     text-align: center;
     font-size: 1vw;
+    color: #FBFBFD;
   }
-  .lmo-preview_template_conf_preview_type_box{
 
+  .lmo-preview_template_conf_preview_type_box {
+    span {
+      color: #FBFBFD;
+    }
   }
+}
+
+.lmo-show_text {
+  textarea {
+    color: #57b73b;
+    background-color: #293943 !important;
+    border-color: rgba(255, 255, 255, 0);
+
+    &:focus {
+      border-color: rgba(255, 255, 255, 0);
+    }
+
+    &:hover {
+      border-color: rgba(255, 255, 255, 0);
+    }
+  }
+}
+
+.json-view-container {
+  background-color: #293943 !important;
+  border-radius: 1.33rem;
+  padding: .5rem;
+  margin-bottom: 1rem;
 }

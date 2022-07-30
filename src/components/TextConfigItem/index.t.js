@@ -3,10 +3,12 @@ require('./style.t.scss');
 import {mapState} from 'vuex';
 import {TextConfigComponent} from "@const/Default.t";
 import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
+import ThemeConfig from '@/components/ThemeConfig/index.t';
+import BackgroundConfig from '@/components/BackgroundConfig/index.t';
 
 export default {
     name: 'lmo-config_item',
-    render() {
+    render(h) {
         return (
             this.renderTemplate
         );
@@ -20,40 +22,59 @@ export default {
     methods: {
         initRender(h = this.$createElement) {
             this.renderTemplate = h('div', {
-                class: 'lmo-data_visualization_config_item lmo_flex_box'
-            }, [h('div', {
-                class: 'lmo-data_visualization_config_item_card text'
+                class: 'lmo-data_visualization_config_item'
             }, [
-                Object.keys(this.configText).map(i => {
-                    return (
-                        h('div', {
-                            class: 'lmo-text_box'
-                        }, [
+                h('div', {
+                    class: 'data_visualization_config_item_card_title'
+                }, ['文字配置']),
+                h('div', {
+                    class: 'lmo-data_visualization_config_item_card text'
+                }, [
+                    Object.keys(this.configText).map(i => {
+                        return (
                             h('div', {
-                                class: 'lmo-text_content lmo_flex_box'
+                                class: 'lmo-text_box'
                             }, [
                                 h('div', {
-                                    class: 'lmo-text_box_label'
-                                }, [
-                                    h('span', [`${this.configText[i].label}:`])
-                                ]),
-                                h('div', {
-                                    class: 'lmo-text_box_option'
+                                    class: 'lmo-text_content'
                                 }, [
                                     h('div', {
-                                        class: 'lmo-text_box_option_lmo-component'
+                                        class: 'lmo-text_box_label'
                                     }, [
-                                        this.renderComponent(i, h)
+                                        h('span', [`${this.configText[i].label}`])
+                                    ]),
+                                    h('div', {
+                                        class: 'lmo-text_box_option'
+                                    }, [
+                                        h('div', {
+                                            class: 'lmo-text_box_option_lmo-component'
+                                        }, [
+                                            this.renderComponent(i, h)
+                                        ])
                                     ])
                                 ])
                             ])
-
-                        ])
-                    );
-                })
-            ]), h('div', {
-                class: 'lmo-data_visualization_config_item_card theme'
-            }, [h(ThemeConfigItem)])
+                        );
+                    })
+                ]),
+                h('div', {
+                    class: 'data_visualization_config_item_card_title'
+                }, ['颜色配置']),
+                h('div', {
+                    class: 'lmo-data_visualization_config_item_card theme'
+                }, [h(ThemeConfigItem)]),
+                h('div', {
+                    class: 'data_visualization_config_item_card_title'
+                }, ['主题配置']),
+                h('div', {
+                    class: 'lmo-data_visualization_config_item_card theme'
+                }, [h(ThemeConfig)]),
+                h('div', {
+                    class: 'data_visualization_config_item_card_title'
+                }, ['背景配置']),
+                h('div', {
+                    class: 'lmo-data_visualization_config_item_card theme'
+                }, [h(BackgroundConfig)])
             ]);
         },
         initConfigText() {

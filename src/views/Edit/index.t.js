@@ -1,10 +1,13 @@
 require('./style.t.scss');
 
-import HotTable from '@/components/HotTable/index.t';
 import Player from '@/components/Player/index.t';
-import EditConfig from '@/components/EditConfig/index.t';
 import EditHeader from '@/components/EditHeader/index.t';
+import HotTable from '@/components/HotTable/index.t';
+import TextConfigItem from '@/components/TextConfigItem/index.t';
+import AudioConfig from '@/components/AudioConfig/index.t';
+import PlayerBar from '@/components/PlayerBar/index.t';
 import {mapState} from "vuex";
+import {PostMessage} from "@lib/PostMessage/index.t";
 
 export default {
     name: 'lmo-edit',
@@ -24,17 +27,17 @@ export default {
                                 cancelButtonText: '取消',
                                 type: 'warning'
                             }).then(() => {
-                                require('@/utils').routerPush(this.$router,'/','replace');
+                                require('@/utils').routerPush(this.$router, '/', 'replace');
                             }).catch(() => {
                             });
                         }
                     }
                 }),
                 h('div', {
-                    class: 'lmo-data_visualization_edit_content'
+                    class: `${this.animationClass} lmo-data_visualization_edit_content`
                 }, [
                     h('div', {
-                        class: 'lmo-data_visualization_edit_preview lmo_color_white_background lmo_flex_box lmo_position_relative'
+                        class: 'lmo-data_visualization_edit_preview lmo_flex_box lmo_position_relative'
                     }, [
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_player lmo_position_relative'
@@ -42,6 +45,19 @@ export default {
                             h(Player, {
                                 props: {
                                     url: this.currentTemplate.url
+                                }
+                            }),
+                            h(PlayerBar, {
+                                props: {
+                                    duration: this.currentConfig.duration
+                                },
+                                on: {
+                                    play: () => {
+                                        PostMessage({
+                                            type: 'Play',
+                                            data: {}
+                                        });
+                                    }
                                 }
                             })
                         ]),
@@ -77,20 +93,63 @@ export default {
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_content'
                             }, [
-                                h(HotTable, {
-                                    ref: 'ht'
-                                })
+                                h('el-tabs', {
+                                    props: {
+                                        value: this.tabsActiveName,
+                                        'tab-position': 'left'
+                                    },
+                                    on: {
+                                        'tab-click': (t) => {
+                                            this.tabsActiveName = t.name;
+                                        }
+                                    }
+                                }, [
+                                    this.tabs.map(i => {
+                                        return (
+                                            h('el-tab-pane', {
+                                                props: {
+                                                    ...i.data
+                                                }
+                                            }, [h(i.template)])
+                                        );
+                                    })
+                                ])
                             ])
                         ])
-                    ]),
-                    h('div', {
-                        class: 'lmo-data_visualization_edit_configure lmo_color_white_background'
-                    }, [
-                        h(EditConfig)
                     ])
                 ])
             ])
         );
+    },
+    data() {
+        // console.log('store',);
+        return {
+            tabsActiveName: 'data',
+            animationClass: ' animated zoomIn',
+            tabs: [
+                {
+                    data: {
+                        name: 'data',
+                        label: '数据'
+                    },
+                    template: HotTable
+                },
+                {
+                    data: {
+                        name: 'text_and_theme',
+                        label: '文字 / 颜色'
+                    },
+                    template: TextConfigItem
+                },
+                {
+                    data: {
+                        name: 'synthesis',
+                        label: '合成'
+                    },
+                    template: AudioConfig
+                }
+            ]
+        };
     },
     methods: {
         downloadDefaultCSV() {
@@ -117,9 +176,17 @@ export default {
             });
         }
     },
+    mounted() {
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.animationClass = '';
+            }, 2000);
+        });
+    },
     computed: {
         ...mapState({
-            currentTemplate: state => state.appStore.currentTemplate
+            currentTemplate: state => state.appStore.currentTemplate,
+            currentConfig: state => state.appStore.currentConfig
         })
     }
 };

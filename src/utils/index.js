@@ -14,6 +14,7 @@ module.exports.routerPush = routerPush;
 module.exports.downloadFile = downloadFile;
 module.exports.stringToBinary = stringToBinary;
 module.exports.binaryToString = binaryToString;
+module.exports.formatSec = formatSec;
 
 function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -95,13 +96,15 @@ function toBase64(file) {
     });
 }
 
-function selectFile() {
+function selectFile(multiple = false) {
     return new Promise((resolve, reject) => {
         const i = document.createElement('input');
 
+        if (multiple)
+            i.multiple = true;
         i.type = 'file';
         i.addEventListener('change', () => {
-            resolve(i.files[0]);
+            resolve(multiple ? i.files : i.files[0]);
         });
         i.click();
     });
@@ -168,4 +171,21 @@ function binaryToString(str = '') {
         _.push(String.fromCharCode(parseInt(list[i], 2)));
     }
     return _.join("");
+}
+
+function formatSec(sec, isMs) {
+    if (isMs)
+        sec /= 1000;
+
+    let _ = String(parseInt(sec / 60));
+
+    let __ = String(parseInt(sec % 60));
+
+    if (_.length === 1) {
+        _ = `0${_}`;
+    }
+    if (__.length === 1) {
+        __ = `0${__}`;
+    }
+    return `${_}:${__}`;
 }

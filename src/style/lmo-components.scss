@@ -1,0 +1,13 @@
+.lmo-button {
+  border: 0;
+  padding: .5rem;
+  min-width: 5rem;
+  color: #FBFBFD;
+  font-size: .8rem;
+  border-radius: .8rem;
+  background-color: #22506D;
+
+  &:hover {
+    background-color: #18618f;
+  }
+}

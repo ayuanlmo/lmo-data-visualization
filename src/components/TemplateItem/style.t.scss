@@ -1,22 +1,40 @@
 .lmo-template_item_content {
-  padding: 1.2vh;
   display: inline-block;
   vertical-align: top;
   font-size: 12px;
-  width: 22%;
+  width: 18%;
   margin-left: 1.5vw;
   margin-top: 1vw;
-  background: #ffffff;
   box-shadow: 1px 2px 12px 0 rgb(0 0 0 / 10%);
-  border-radius: 4px;
 
   .lmo-template_item_content_card {
     padding-bottom: 56.25%;
-    background: #f5f5f5;
 
     .lmo-template_item_content_img_box {
       width: 100%;
       height: 100%;
+
+      .lmo-template_item_content_description {
+        background-color: rgba(24, 42, 56, 0.8);
+        z-index: 5 !important;
+
+        .lmo-template_description_title {
+          font-size: 1.4rem;
+          top: 30%;
+        }
+
+        .lmo-template_description_content {
+          font-size: 1rem;
+          top: 50%;
+        }
+
+        span {
+          position: absolute;
+          text-align: center;
+          width: 100%;
+          color: #FBFBFD;
+        }
+      }
 
       .lmo-template_item_content_img {
         width: 100%;
@@ -25,33 +43,31 @@
         top: 0;
         z-index: 0;
         overflow: hidden;
+        border-radius: .8rem;
 
         img {
           height: 100%;
           border-radius: 4px;
           transition: all .2s;
-
-          &:hover {
-            transform: scale(1.5);
-          }
         }
       }
 
       .lmo-template_item_content_title {
         width: 100%;
         height: 6vh;
-        background: #00000054;
         bottom: 0;
-        color: #fff;
+        color: #FBFBFD;
 
         .lmo-template_item_content_title_box {
           padding-left: 1vw;
           margin-top: .5vw;
 
           .lmo-template_item_title {
-            font-size: 1vw;
+            font-size: 1rem;
+            line-height: 4vh
           }
-          .lmo-template_item_dis{
+
+          .lmo-template_item_dis {
             font-size: 1.5vh
           }
         }
