@@ -5,17 +5,9 @@
 
     .lmo-audio_config_left_audio_box {
 
-      .lmo-audio_config_left_audio_bg_box {
-
-      }
-
       .lmo-audio_controller_slider {
         width: 15.5vw;
         margin-left: .8rem;
-      }
-
-      .lmo-audio_config_left_audio_controller {
-
       }
 
       .lmo-audio_box_label {
@@ -75,4 +67,14 @@
     color: #E6A23C;
   }
 
+  .lmo-customize_option {
+    width: 10rem;
+
+    span {
+      width: 6rem;
+    }
+
+    left: 1rem;
+    line-height: 1.66rem;
+  }
 }

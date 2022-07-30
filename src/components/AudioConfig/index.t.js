@@ -135,13 +135,49 @@ export default {
                             '合成帧率'
                         ]),
                         h('div', {
-                            class: 'lmo-audio_controller_slide'
+                            class: 'lmo-audio_controller_slider'
                         }, [
-                            <el-radio-group v-model={this.videoConf.video.fps}>
-                                <el-radio-button label="30"></el-radio-button>
-                                <el-radio-button label="60"></el-radio-button>
-                                <el-radio-button label="90"></el-radio-button>
-                            </el-radio-group>
+                            h('div', {
+                                class: 'lmo_flex_box'
+                            }, [
+                                h('div', [
+                                    <el-radio-group v-model={this.videoConf.video.fps}>
+                                        <el-radio-button label="30"></el-radio-button>
+                                        <el-radio-button label="60"></el-radio-button>
+                                        <el-radio-button label="90"></el-radio-button>
+                                    </el-radio-group>
+                                ]),
+                                h('el-tooltip', {
+                                    props: {
+                                        effect: 'dark',
+                                        content: '最小支持30帧, 最大支持90帧',
+                                        placement: 'top'
+                                    }
+                                }, [
+                                    h('div', {
+                                        class: 'lmo_flex_box lmo-customize_option lmo_position_relative'
+                                    }, [
+                                        h('span', {
+                                            class: 'lmo_color_white'
+                                        }, ['自定义']),
+                                        h('lmo-input', {
+                                            props: {
+                                                type: 'number',
+                                                clearable: false,
+                                                value: `${this.videoConf.video.fps}`
+                                            },
+                                            on: {
+                                                change: (e) => {
+                                                    if (this.changeInput('30>90', e))
+                                                        this.videoConf.video.fps = `${e}`;
+                                                    else
+                                                        return this.$message.warning('帧率最低支持30帧,最高支持90帧');
+                                                }
+                                            }
+                                        })
+                                    ])
+                                ])
+                            ])
                         ])
                     ]),
                     h('div', {
@@ -162,15 +198,43 @@ export default {
                         h('div', {
                             class: 'lmo-audio_controller_slide'
                         }, [
-                            <el-radio-group onChange={(e) => {
-                                this.$store.commit('SET_TEMPLATE_CURRENT_DURATION', e);
-                            }} v-model={this.videoConf.video.duration}>
-                                <el-radio-button label="5"/>
-                                <el-radio-button label="10"/>
-                                <el-radio-button label="20"/>
-                                <el-radio-button label="30"/>
-                                <el-radio-button label="60"/>
-                            </el-radio-group>
+                            h('div', {
+                                class: 'lmo_flex_box'
+                            }, [
+                                h('div', [
+                                    <el-radio-group onChange={(e) => {
+                                        this.$store.commit('SET_TEMPLATE_CURRENT_DURATION', e);
+                                    }} v-model={this.videoConf.video.duration}>
+                                        <el-radio-button label="5"/>
+                                        <el-radio-button label="10"/>
+                                        <el-radio-button label="20"/>
+                                        <el-radio-button label="30"/>
+                                        <el-radio-button label="60"/>
+                                    </el-radio-group>
+                                ]),
+                                h('div', {
+                                    class: 'lmo_flex_box lmo-customize_option lmo_position_relative'
+                                }, [
+                                    h('span', {
+                                        class: 'lmo_color_white'
+                                    }, ['自定义']),
+                                    h('lmo-input', {
+                                        props: {
+                                            type: 'number',
+                                            clearable: false,
+                                            value: `${this.videoConf.video.duration}`
+                                        },
+                                        on: {
+                                            change: (e) => {
+                                                if (this.changeInput('5>600', e))
+                                                    this.videoConf.video.duration = `${e}`;
+                                                else
+                                                    return this.$message.warning('持续时间最高支持600秒(10分钟),最低支持5秒');
+                                            }
+                                        }
+                                    })
+                                ])
+                            ])
                         ])
                     ]),
                     h('div', {
@@ -214,13 +278,18 @@ export default {
                 },
                 video: {
                     fps: '30',
-                    duration: 5,
+                    duration: '5',
                     clarity: '1080P'
                 }
             }
         };
     },
     methods: {
+        changeInput(test = '30>90', num = 0) {
+            const _ = test.split('>');
+
+            return num >= parseInt(_[0]) && num <= parseInt(_[1]);
+        },
         selectAudio() {
             require('@/utils/index').selectFile().then(file => {
                 const fr = new FileReader();
