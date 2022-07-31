@@ -4,6 +4,8 @@
  * @class TC
  * @constructor
  * **/
+import * as path from "path";
+
 const _TimeCut = require('timecut');
 const _Ffmpeg = require('fluent-ffmpeg');
 const _Tool = require('../utils/utils.t');
@@ -38,7 +40,7 @@ class TC {
     }
 
     _OutputLogFile(): void {
-        const _logPath: string = '../build/static/log/';
+        const _logPath: string = '../server/static/log/';
         const s: string = '===== BEGIN LMO-DATA-VISUALIZATION TASK LOG =====\n';
         const e: string = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
 
@@ -51,14 +53,14 @@ class TC {
     }
 
     _CopyTemplate(): void {
-        const _temp: string = '../build/static/temp/';
-        const _: string = `../build/static/temp/${this.taskName}`;
+        const _temp: string = '../server/static/temp/';
+        const _: string = `../server/static/temp/${this.taskName}`;
 
         if (!this._Fs.existsSync(_temp))
             this._Fs.mkdir(_temp);
         if (!this._Fs.existsSync(_)) {
             this._Fs.mkdir(_);
-            this._CopyFile(`../build/static/DataVisualizationTemplate/${this.data.template}`, _);
+            this._CopyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, _);
             setTimeout(() => {
                 this._Fs.writeFile(`${_}/conf.js`, `window.chartConfig = ${JSON.stringify({
                     ...this.data.templateConfig,
@@ -74,7 +76,7 @@ class TC {
     }
 
     _CopyFile(dir: string, to: string): void {
-        this._Fs.readdirSync(dir, {withFileTypes: true}).forEach((i: any) => {
+        this._Fs.readdirSync(path.resolve(dir), {withFileTypes: true}).forEach((i: any) => {
             this._Fs.copyFileSync(this._Path.resolve(dir, i.name), this._Path.resolve(to, i.name));
         });
     }
@@ -114,9 +116,9 @@ class TC {
         if (_.audio.src !== '') {
             const buffer: any = Buffer.from(_.audio.src.replace('data:audio/x-m4a;base64,', ''), 'base64');
 
-            this._Fs['writeFile'](`../build/static/temp/${this.taskName}.m4a`, buffer, (e: any) => {
+            this._Fs['writeFile'](`../server/static/temp/${this.taskName}.m4a`, buffer, (e: any) => {
                 if (!e)
-                    audioPath = `../build/static/temp/${this.taskName}.m4a`;
+                    audioPath = `../server/static/temp/${this.taskName}.m4a`;
             });
         }
 
@@ -135,7 +137,7 @@ class TC {
                     this._SendMessage('task_pro', 'task_pro_success', {
                         taskName: this.taskName
                     });
-                this._DelTempFile(`${this._Path.resolve(`../build/static/temp/${this.taskName}`)}`);
+                this._DelTempFile(`${this._Path.resolve(`../server/static/temp/${this.taskName}`)}`);
             });
         }).catch(() => {
             this._SendMessage('task_end', 'error', {
