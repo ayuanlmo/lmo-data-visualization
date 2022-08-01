@@ -3,7 +3,11 @@ const _ = window ?? globalThis;
 const appConfig = require('@/config/AppConfig');
 
 void ((_, __FACTORY) => {
-    _['__LMO'] = __FACTORY();
+    try {
+        _['__LMO'] = __FACTORY();
+    } catch (e) {
+        return {};
+    }
     console.log('  _______                       _______                ');
     console.log(' \'   /    ` , __     ___.      \'   /    ` , __     ___.');
     console.log('     |    | |\'  `. .\'   `          |    | |\'  `. .\'   `');
