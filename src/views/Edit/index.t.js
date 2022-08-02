@@ -67,28 +67,7 @@ export default {
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_header'
                             }, [
-                                h('div', {
-                                    class: 'lmo-data_visualization_edit_preview_table_header_content'
-                                }, [
-                                    h('lmo-button', {
-                                        props: {
-                                            text: '上传本地数据',
-                                            plain: true
-                                        },
-                                        on: {
-                                            click: this.importLocalData
-                                        }
-                                    }),
-                                    h('lmo-button', {
-                                        props: {
-                                            text: '导出示例数据',
-                                            plain: true
-                                        },
-                                        on: {
-                                            click: this.downloadDefaultCSV
-                                        }
-                                    })
-                                ])
+
                             ]),
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_content'
@@ -122,7 +101,6 @@ export default {
         );
     },
     data() {
-        // console.log('store',);
         return {
             tabsActiveName: 'data',
             animationClass: ' animated zoomIn',
@@ -150,31 +128,6 @@ export default {
                 }
             ]
         };
-    },
-    methods: {
-        downloadDefaultCSV() {
-            require('@/utils').downloadFile({
-                download: this.currentTemplate.title,
-                href: this.currentTemplate.url.split('index.html')[0] + 'data.csv'
-            }).then(a => {
-                a.click();
-            });
-        },
-        importLocalData() {
-            require('@/utils/index').selectFile().then(file => {
-                if (file.type !== 'text/csv')
-                    return this.$message.warning(`[${file.name}]是一个不受支持的文件`);
-                const fr = new FileReader();
-
-                fr.readAsText(file);
-                fr.onload = (res) => {
-                    this.$store.commit('SET_CURRENT_CSV_DATA', res.srcElement.result ?? res.target.result);
-                    setTimeout(() => {
-                        this.$refs.ht.updateData();
-                    }, 500);
-                };
-            });
-        }
     },
     mounted() {
         this.$nextTick(() => {

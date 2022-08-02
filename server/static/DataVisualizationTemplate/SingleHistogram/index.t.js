@@ -11,11 +11,9 @@ void function () {
 
         text.map((i, index) => {
             if (index !== 0) {
-                const _ = i.split(',');
-
-                data.text.push(_[0]);
-                data.value.push(_[1]);
-                data.all.push(_);
+                data.text.push(i[0]);
+                data.value.push(i[1]);
+                data.all.push(i.join(','));
             }
         });
         for (let i = 0; i < canvas.children.length; i += 1) {

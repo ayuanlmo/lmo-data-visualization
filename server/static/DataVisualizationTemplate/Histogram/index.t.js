@@ -18,7 +18,7 @@ void function (doc, global, echarts, d3) {
         if (update)
             this.chart && this.chart.clear();
         text.forEach(i => {
-            const t = i.split(',');
+            const t = i;
 
             xAxisData.push(t[0]);
             seriesData.push({
