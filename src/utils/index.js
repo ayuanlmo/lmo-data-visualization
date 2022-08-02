@@ -15,6 +15,7 @@ module.exports.downloadFile = downloadFile;
 module.exports.stringToBinary = stringToBinary;
 module.exports.binaryToString = binaryToString;
 module.exports.formatSec = formatSec;
+module.exports.toCSV = toCSV;
 
 function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -145,7 +146,7 @@ function downloadFile(conf) {
 
     return new Promise((resolve, reject) => {
         a.download = `${conf.download}${new Date().getTime()}`;
-        a.href = require('@/config/AppConfig').devProxy.http + conf.href;
+        a.href = conf.href;
         resolve(a);
     });
 }
@@ -188,4 +189,13 @@ function formatSec(sec, isMs) {
         __ = `0${__}`;
     }
     return `${_}:${__}`;
+}
+
+function toCSV(arr = []) {
+    let _ = 'data:text/csv;charset=utf-8,\ufeff';
+
+    arr.forEach(i => {
+        _ += i.join(',') + '\r\n';
+    });
+    return encodeURI(_);
 }
