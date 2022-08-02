@@ -85,7 +85,7 @@ class TempLate {
             this.appDom.style.height = '1080px';
         }
         if (this.isCustom) {
-            this.csvData = this.conf.data.split('\r\n');
+            this.csvData = this.conf.data;
             this.initThemeColor();
             this.tryRender(this.csvData, true);
         } else {
@@ -148,13 +148,7 @@ class TempLate {
         if (msg.origin === location.origin) {
             if (m.type === 'UpdateData') {
                 this.conf.data = m.data;
-                const data = [];
-
-                this.conf.data.split('\r\n').map(i => {
-                    if (i !== '')
-                        data.push(i);
-                });
-                this.csvData = data;
+                this.csvData = m.data;
                 this.tryRender(this.csvData, true);
             }
             if (m.type === 'UpdateText') {
@@ -203,11 +197,11 @@ class TempLate {
     }
 
     fetchCSV() {
-        fetch('data.csv').then(res => {
-            return res.text();
-        }).then(text => {
-            this.conf.data = text;
-            this.csvData = this.conf.data.split('\r\n');
+        fetch('data.json').then(res => {
+            return res.json();
+        }).then(json => {
+            this.conf.data = json;
+            this.csvData = json;
             parent.postMessage({
                 type: 'first',
                 data: this.conf

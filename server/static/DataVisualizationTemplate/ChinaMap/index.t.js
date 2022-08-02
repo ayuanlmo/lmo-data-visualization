@@ -81,7 +81,7 @@ void function (echarts, d3) {
                 dynamicTags.style('display', 'none');
                 return clearInterval(timer);
             }
-            const _tempData = textData[i].split(',');
+            const _tempData = textData[i];
 
             dynamicTags.transition().tween('text', () => {
                 return function (t) {
