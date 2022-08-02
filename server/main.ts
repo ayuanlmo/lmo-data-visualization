@@ -53,7 +53,7 @@
             const _m: any = JSON.parse(require('./utils/utils.t').binaryToString(__));
 
             if (_m.cmd === _Cmd['__SYNTHESIS'])
-                new (require('./timecut/timecut.t')).TC(_Pool, _m['data']);
+                new (require('./bin/timecut.t')).TC(_Pool, _m['data']);
         });
         _.on('close', () => {
             onlineUsers -= 1;
