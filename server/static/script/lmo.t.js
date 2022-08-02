@@ -202,6 +202,7 @@ class TempLate {
         }).then(json => {
             this.conf.data = json;
             this.csvData = json;
+            this.conf.defaultData =JSON.parse(JSON.stringify(json));
             parent.postMessage({
                 type: 'first',
                 data: this.conf
