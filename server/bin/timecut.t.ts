@@ -4,11 +4,10 @@
  * @class TC
  * @constructor
  * **/
-import * as path from "path";
-
 const _TimeCut = require('timecut');
 const _Ffmpeg = require('fluent-ffmpeg');
 const _Tool = require('../utils/utils.t');
+const _ResolvePath = require('path').resolve;
 
 class TC {
     private readonly ws: any;
@@ -17,16 +16,14 @@ class TC {
     private schedule: number;
     private readonly taskName: string;
     private readonly _Fs: any;
-    private readonly _Path: any;
     private readonly _OS: any;
 
-    constructor(ws: object, data: any) {
+    constructor(ws: any, data: any) {
         this.ws = ws;
         this.data = data;
         this.logs = [];
         this.taskName = `lmo_${new Date().getTime()}`;
         this._Fs = require('fs-extra');
-        this._Path = require('path');
         this._OS = require('os');
         this._SendMessage('task_pending', 'task_pending', {
             taskName: this.taskName
@@ -40,27 +37,26 @@ class TC {
     }
 
     _OutputLogFile(): void {
-        const _logPath: string = '../server/static/log/';
+        const _logPath: string = _ResolvePath('./static/log/');
         const s: string = '===== BEGIN LMO-DATA-VISUALIZATION TASK LOG =====\n';
         const e: string = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
-
         if (!this._Fs.existsSync(_logPath))
             this._Fs.mkdir(_logPath);
-        this._Fs.writeFile(`${_logPath}${this.taskName}.t.log`, `${s}${this.logs.join('\n')}${e}`, (e: any) => {
+        this._Fs.writeFile(_ResolvePath(`${_logPath}/${this.taskName}.t.log`), `${s}${this.logs.join('\n')}${e}`, (e: any) => {
             if (!e)
                 this.logs = [];
         });
     }
 
     _CopyTemplate(): void {
-        const _temp: string = '../server/static/temp/';
-        const _: string = `../server/static/temp/${this.taskName}`;
+        const _temp: string = _ResolvePath('./static/temp/');
+        const _: string = _ResolvePath(`./static/temp/${this.taskName}`);
 
         if (!this._Fs.existsSync(_temp))
             this._Fs.mkdir(_temp);
         if (!this._Fs.existsSync(_)) {
             this._Fs.mkdir(_);
-            this._CopyFile(`../server/static/DataVisualizationTemplate/${this.data.template}`, _);
+            this._CopyFile(`${_ResolvePath('./static/DataVisualizationTemplate')}/${this.data.template}`, _);
             setTimeout(() => {
                 this._Fs.writeFile(`${_}/conf.js`, `window.chartConfig = ${JSON.stringify({
                     ...this.data.templateConfig,
@@ -76,8 +72,8 @@ class TC {
     }
 
     _CopyFile(dir: string, to: string): void {
-        this._Fs.readdirSync(path.resolve(dir), {withFileTypes: true}).forEach((i: any) => {
-            this._Fs.copyFileSync(this._Path.resolve(dir, i.name), this._Path.resolve(to, i.name));
+        this._Fs.readdirSync(dir, {withFileTypes: true}).forEach((i: any) => {
+            this._Fs.copyFileSync(_ResolvePath(dir, i.name), _ResolvePath(to, i.name));
         });
     }
 
@@ -116,9 +112,9 @@ class TC {
         if (_.audio.src !== '') {
             const buffer: any = Buffer.from(_.audio.src.replace('data:audio/x-m4a;base64,', ''), 'base64');
 
-            this._Fs['writeFile'](`../server/static/temp/${this.taskName}.m4a`, buffer, (e: any) => {
+            this._Fs['writeFile'](_ResolvePath(`./static/temp/${this.taskName}.m4a`), buffer, (e: any) => {
                 if (!e)
-                    audioPath = `../server/static/temp/${this.taskName}.m4a`;
+                    audioPath = _ResolvePath(`./static/temp/${this.taskName}.m4a`);
             });
         }
 
@@ -137,7 +133,7 @@ class TC {
                     this._SendMessage('task_pro', 'task_pro_success', {
                         taskName: this.taskName
                     });
-                this._DelTempFile(`${this._Path.resolve(`../server/static/temp/${this.taskName}`)}`);
+                this._DelTempFile(`${_ResolvePath(`./static/temp/${this.taskName}`)}`);
             });
         }).catch(() => {
             this._SendMessage('task_end', 'error', {
@@ -186,7 +182,7 @@ class TC {
         if (type !== 'task_pending' && cmd !== 'task_pending')
             this.logs.push(`[${new Date().getTime()}]${type} ${cmd} > ${require('../funcs.t')._Stringify(data)}`);
         this.ws.clients.forEach((i: any) => {
-            i['send'](_Tool.stringToBinary(require('../funcs.t')['_Stringify'](
+            i['send'](_Tool.stringToBinary(require('../funcs.t')._Stringify(
                 {
                     type: type,
                     data: {
