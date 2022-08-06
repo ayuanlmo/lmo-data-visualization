@@ -5977,14 +5977,14 @@
 
 .el-input-number__increase {
   right: 1px;
-  border-top-right-radius: .8rem;
-  border-bottom-right-radius: .8rem;
+  border-top-right-radius: .2rem;
+  border-bottom-right-radius: .2px;
 }
 
 .el-input-number__decrease {
   left: 1px;
-  border-top-left-radius: .8rem;
-  border-bottom-left-radius: .8rem;
+  border-top-left-radius: .2rem;
+  border-bottom-left-radius: .2rem;
 }
 
 .el-input-number.is-disabled .el-input-number__decrease, .el-input-number.is-disabled .el-input-number__increase {
@@ -11819,7 +11819,7 @@
 
 .el-input {
   input {
-    border-radius: .8rem;
+    border-radius: .2rem;
     color: #fbfbfd;
     border: 0 !important;
     background-color: #22506D;

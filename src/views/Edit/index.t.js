@@ -66,9 +66,7 @@ export default {
                         }, [
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_header'
-                            }, [
-
-                            ]),
+                            }, []),
                             h('div', {
                                 class: 'lmo-data_visualization_edit_preview_table_content'
                             }, [
@@ -114,8 +112,8 @@ export default {
                 },
                 {
                     data: {
-                        name: 'text_and_theme',
-                        label: '文字 / 颜色'
+                        name: 'style',
+                        label: '样式'
                     },
                     template: TextConfigItem
                 },

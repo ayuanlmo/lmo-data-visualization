@@ -16,30 +16,35 @@ export default {
                 class: 'lmo-data_visualization_config_item'
             }, [
                 h('div', {
-                    class: 'data_visualization_config_item_card_title',
-                    style: 'margin-bottom:0;'
-                }, ['编辑数据']),
-                h('div', {
-                    class: 'data_visualization_config_item_card_title lmo-button_group lmo_position_relative lmo_flex_box'
+                    class: 'lmo_flex_box',
+                    style: 'justify-content: space-between;margin-bottom: 1rem;'
                 }, [
-                    h('lmo-button', {
-                        props: {
-                            text: '上传本地数据',
-                            plain: true
-                        },
-                        on: {
-                            click: this.importLocalData
-                        }
-                    }),
-                    h('lmo-button', {
-                        props: {
-                            text: '导出示例数据',
-                            plain: true
-                        },
-                        on: {
-                            click: this.downloadDefaultCSV
-                        }
-                    })
+                    h('div', {
+                        class: 'lmo-data_visualization_config_item_card_title',
+                        style: 'margin-bottom:0;'
+                    }, ['编辑数据']),
+                    h('div', {
+                        class: 'lmo-button_group lmo_position_relative lmo_flex_box'
+                    }, [
+                        h('lmo-button', {
+                            props: {
+                                text: '上传本地数据',
+                                plain: true
+                            },
+                            on: {
+                                click: this.importLocalData
+                            }
+                        }),
+                        h('lmo-button', {
+                            props: {
+                                text: '导出示例数据',
+                                plain: true
+                            },
+                            on: {
+                                click: this.downloadDefaultCSV
+                            }
+                        })
+                    ])
                 ]),
                 h(HotTable, {
                     ref: 'HotTable',

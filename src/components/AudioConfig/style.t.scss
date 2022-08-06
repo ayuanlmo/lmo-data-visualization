@@ -13,6 +13,11 @@
       .lmo-audio_box_label {
         min-width: 6rem;
         color: #FBFBFD;
+        margin-right: .5rem;
+
+        i {
+          margin-right: .5rem;
+        }
       }
 
       .lmo-audio_content {
@@ -53,13 +58,12 @@
         min-width: 5vw;
         color: #FBFBFD;
         margin-bottom: 1rem;
+
+        i {
+          margin-left: .5rem;
+        }
       }
     }
-  }
-
-  .lmo-data_visualization_config_item_card_title {
-    margin-bottom: 1rem;
-    color: #FBFBFD;
   }
 
   i {

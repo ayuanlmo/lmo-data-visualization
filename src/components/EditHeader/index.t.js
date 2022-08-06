@@ -41,7 +41,7 @@ export default {
                     h('div', [
                         require('@/config/AppConfig').dev ? h('lmo-button', {
                             props: {
-                                text: '😊 查看模板配置文件'
+                                text: '查看模板配置文件'
                             },
                             on: {
                                 click: () => {
@@ -51,7 +51,7 @@ export default {
                         }) : h(''),
                         h('lmo-button', {
                             props: {
-                                text: '😝 预览'
+                                text: '预览'
                             },
                             on: {
                                 click: () => {
@@ -61,7 +61,7 @@ export default {
                         }),
                         h('lmo-button', {
                             props: {
-                                text: '🤞合成'
+                                text: '合成'
                             },
                             on: {
                                 click: this.startSynthesis
