@@ -25,7 +25,7 @@ export default {
                 class: 'lmo-data_visualization_config_item'
             }, [
                 h('div', {
-                    class: 'data_visualization_config_item_card_title'
+                    class: 'lmo-data_visualization_config_item_card_title'
                 }, ['文字配置']),
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card text'
@@ -58,19 +58,19 @@ export default {
                     })
                 ]),
                 h('div', {
-                    class: 'data_visualization_config_item_card_title'
+                    class: 'lmo-data_visualization_config_item_card_title'
                 }, ['颜色配置']),
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card theme'
                 }, [h(ThemeConfigItem)]),
                 h('div', {
-                    class: 'data_visualization_config_item_card_title'
+                    class: 'lmo-data_visualization_config_item_card_title'
                 }, ['主题配置']),
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card theme'
                 }, [h(ThemeConfig)]),
                 h('div', {
-                    class: 'data_visualization_config_item_card_title'
+                    class: 'lmo-data_visualization_config_item_card_title'
                 }, ['背景配置']),
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card theme'

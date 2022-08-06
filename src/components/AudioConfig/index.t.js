@@ -64,7 +64,7 @@ export default {
                                     }, [
                                         h('div', {
                                             class: 'lmo_flex_box',
-                                            style: 'line-height: 6.5rem;margin-left: 1rem;width:40%;margin-left:1.5rem;'
+                                            style: 'line-height: 6.5rem;margin-left: 1rem;margin-left:1.5rem;'
                                         }, [
                                             h('div', {
                                                 class: 'lmo-audio_box_label'
@@ -125,14 +125,14 @@ export default {
                         h('div', {
                             class: 'lmo-video_box_label'
                         }, [
+                            '合成帧率',
                             h('el-tooltip', {
                                 props: {
                                     content: '帧率越高，合成时间越久。'
                                 }
                             }, [
                                 h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
-                            ]),
-                            '合成帧率'
+                            ])
                         ]),
                         h('div', {
                             class: 'lmo-audio_controller_slider'
@@ -186,14 +186,14 @@ export default {
                         h('div', {
                             class: 'lmo-video_box_label'
                         }, [
+                            '持续时间',
                             h('el-tooltip', {
                                 props: {
                                     content: '单位：(秒)'
                                 }
                             }, [
                                 h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
-                            ]),
-                            '持续时间'
+                            ])
                         ]),
                         h('div', {
                             class: 'lmo-audio_controller_slide'
@@ -243,14 +243,14 @@ export default {
                         h('div', {
                             class: 'lmo-video_box_label'
                         }, [
+                            '清晰度',
                             h('el-tooltip', {
                                 props: {
                                     content: '清晰度越高，效果越好'
                                 }
                             }, [
                                 h('i', {class: 'lmo_cursor_pointer el-icon-warning'})
-                            ]),
-                            '清晰度'
+                            ])
                         ]),
                         h('div', {
                             class: 'lmo-audio_controller_slide'

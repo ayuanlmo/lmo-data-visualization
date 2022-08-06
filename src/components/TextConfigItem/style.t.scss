@@ -6,9 +6,22 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  .data_visualization_config_item_card_title {
+  .lmo-data_visualization_config_item_card_title {
     margin-bottom: 1rem;
     color: #FBFBFD;
+    display: flex;
+
+    &:before {
+      content: "";
+      width: .4rem;
+      background-color: #229eed;
+      margin-right: 0.6rem;
+      border-radius: 6px;
+      display: block;
+      height: 1rem;
+      position: relative;
+      top: .2rem;
+    }
   }
 
   .lmo-data_visualization_config_item_card {

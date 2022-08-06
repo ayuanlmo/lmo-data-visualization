@@ -29,6 +29,13 @@ class TC {
             taskName: this.taskName
         });
         this.schedule = 0;
+        if (!require('../conf/conf.t').__FFMPEG) {
+            this._SendMessage('showMessage', 'showMessage', {
+                message: require('../conf/message.t').__NO_FFMPEG,
+                timestamp: new Date().getTime()
+            });
+            return;
+        }
         this._Init();
     }
 
