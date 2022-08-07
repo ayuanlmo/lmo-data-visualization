@@ -1,5 +1,9 @@
 require('./style.t.scss');
 
+let durationTimer = 0;
+
+let timeTimer = 0;
+
 export default {
     name: 'lmo-player_bar',
     props: {
@@ -58,6 +62,7 @@ export default {
     },
     methods: {
         init() {
+            clearTimeout(durationTimer);
             this.timerDuration = this.duration / 100;
             this.currentProgress += this.timerDuration;
             this.progressWidth += 1;
@@ -65,13 +70,15 @@ export default {
                 return this.progressWidth = 100;
             if (this.currentProgress === this.duration)
                 return;
-            setTimeout(this.init, this.timerDuration);
+            durationTimer = setTimeout(this.init, this.timerDuration);
         },
         initTime() {
+            clearTimeout(timeTimer);
             this.currentTime += 1;
             if (this.duration / 1000 !== this.currentTime && this.currentTime > this.duration / 1000)
                 return this.currentTime = this.duration / 1000;
-            setTimeout(this.initTime, 1000);
+            
+            timeTimer = setTimeout(this.initTime, 1000);
         },
         reset() {
             this.timerDuration = 0;
@@ -80,11 +87,18 @@ export default {
             this.currentTime = 0;
             this.init();
             this.initTime();
+        },
+        onmessage(e) {
+            if (e.data.type === 'TemplateRender')
+                this.reset();
         }
+
     },
     mounted() {
-        this.init();
-        this.initTime();
+        addEventListener('message', this.onmessage);
+    },
+    destroyed() {
+        removeEventListener('message', this.onmessage);
     },
     data() {
         return {
