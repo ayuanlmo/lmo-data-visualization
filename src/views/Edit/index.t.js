@@ -87,7 +87,13 @@ export default {
                                                 props: {
                                                     ...i.data
                                                 }
-                                            }, [h(i.template)])
+                                            }, [
+                                                h('div', {
+                                                    class: 'lmo-data_visualization_config_item'
+                                                }, [
+                                                    h(i.template)
+                                                ])
+                                            ])
                                         );
                                     })
                                 ])

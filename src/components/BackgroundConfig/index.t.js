@@ -23,7 +23,8 @@ export default {
                         h('div', {
                             class: 'lmo-color_box_label',
                             style: {
-                                width: '100px'
+                                width: '100px',
+                                fontStyle: '.8rem'
                             }
                         }, ['背景图片']),
                         h('div', {

@@ -30,6 +30,20 @@
   position: absolute;
 }
 
+.htCore {
+  td {
+    color: #FBFBFD;
+  }
+}
+
+.handsontable th {
+  background-color: #1A5981 !important;
+}
+
+.handsontable td {
+  background-color: #72A9CB !important;
+}
+
 .wtHolder {
   overflow: initial !important;
 }

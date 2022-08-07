@@ -82,7 +82,7 @@ export default {
             }
         };
     },
-    methods:{
+    methods: {
         renderMoreColorOption(h = this.$createElement) {
             if ('more' in this.currentConfigColor)
                 if ('type' in this.currentConfigColor['more'])
@@ -93,7 +93,9 @@ export default {
                             h('div', {
                                 class: 'lmo-color_box_label',
                                 style: {
-                                    width: '100px'
+                                    width: '4.5rem',
+                                    height: '1.5rem',
+                                    lineHeight: '1.5rem'
                                 }
                             }, ['颜色模式:']),
                             h('div', {

@@ -16,6 +16,7 @@
 
       .lmo-color_box_label {
         color: #fbfbfd;
+        font-size: .8rem;
       }
 
       .lmo-color_box_option {
@@ -23,6 +24,10 @@
 
         .lmo-color_box_option_mode {
           display: flex;
+
+          .el-select {
+            width: 8rem;
+          }
 
           .lmo-color_box_option_mode_picker {
             margin-left: 1rem;
