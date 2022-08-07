@@ -6,6 +6,7 @@
 </p>
 <h1 align="center" style="margin: 30px 0 30px; font-weight: bold;color:#409fee;">lmo-DataVisualization</h1>
 <p align="center">
+    <img src="https://img.shields.io/badge/TypeScript-4.7.4 -blue.svg" alt="TypeScript">
     <img src="https://img.shields.io/badge/ApacheEcharts-5.0 -blue.svg" alt="ApacheEcharts">
     <img src="https://img.shields.io/badge/timecut-0.3.3 -blue.svg" alt="timecut">
     <img src="https://img.shields.io/badge/fluent_ffmpeg-2.1.2 -blue.svg" alt="fluent-ffmpeg">
@@ -72,8 +73,6 @@ PS：不同的模板配置项可能有些差别，这是根据模板内部提供
 本项目服务端文件在/server目录下。 合成需要ffmpeg支持，[点击这里下载](https://ffmpeg.org/download.html)</a>
 (为保证合成的视频能兼容H.264编码,建议使用GPL协议编译的ffmpeg)
 
-Github、Gitee同步更新，如果您无法从和GitHub获取代码，请尝试从Gitee。
-
 ```bash
 #clone
 git clone https://github.com/ayuanlmo/lmo-data-visualization
@@ -98,7 +97,25 @@ yarn build
 #WebSocket默认为：/connectSocket
 #API接口默认为：/server
 #如果你需要修改以上配置 请到/config/DevProxy.js修改配置
-#服务端可直接cp代码 然后通过脚本运行
+```
+
+## nginx配置參考
+
+```text
+location /server/{
+    proxy_pass http://127.0.0.1:3000/;
+}
+
+location /connectSocket{
+    proxy_pass http://127.0.0.1:3000/ws/connect/;
+    proxy_read_timeout 300s;
+    proxy_send_timeout 300s;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+}
 ```
 
 ## 其他
@@ -118,26 +135,11 @@ yarn build
 ![Github Star](https://img.shields.io/github/stars/ayuanlmo/lmo-data-visualization?logo=github)
 ![Github Star](https://img.shields.io/github/forks/ayuanlmo/lmo-data-visualization?logo=github)
 
-[Gitee](https://gitee.com/ayuanlmo/lmo-data-visualization)
-
-[![Gitee Star](https://gitee.com/ayuanlmo/lmo-data-visualization/badge/star.svg?theme=dark)](https://gitee.com/ayuanlmo/lmo-data-visualization/stargazers)
-[![Gitee Fork](https://gitee.com/ayuanlmo/lmo-data-visualization/badge/fork.svg?theme=dark)](https://gitee.com/ayuanlmo/lmo-data-visualization/members)
-
----
-
-## 特别感谢
-
-感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了免费的开源[许可证](https://www.jetbrains.com/community/opensource/)
-
-![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
-
 ---
 
 ## 有问题吗？
 
 可通过[YouTrack](https://ayuanlmo.youtrack.cloud/)向我们提问，或者您可以发送issues
-
-![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
 
 ## 感谢贡献
 
@@ -147,4 +149,15 @@ yarn build
 - Yc Core
 
 ---
+
+## 特别感谢
+
+感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了免费的 [开发许可证](https://www.jetbrains.com/community/opensource/)
+
+![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
+![DataGrip logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/DataGrip_icon.svg)
+![WebStorm logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/WebStorm_icon.svg)
+![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
+---
+
 本文档遵循[知识共享许可协议CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)。
