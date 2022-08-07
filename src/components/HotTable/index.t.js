@@ -35,15 +35,40 @@ export default {
                                 click: this.importLocalData
                             }
                         }),
-                        h('lmo-button', {
+                        h('el-dropdown', {
                             props: {
-                                text: '导出示例数据',
-                                plain: true
+                                trigger: 'click'
+                            },
+                            style: {
+                                marginLeft: '1rem'
                             },
                             on: {
-                                click: this.downloadDefaultCSV
+                                command: (e) => {
+                                    this.downloadDefaultData(e);
+                                }
                             }
-                        })
+                        }, [
+                            h('lmo-button', {
+                                props: {
+                                    text: '导出示例数据',
+                                    plain: true
+                                }
+                            }),
+                            h('el-dropdown-menu', {
+                                slot: 'dropdown'
+                            }, [
+                                h('el-dropdown-item', {
+                                    props: {
+                                        command: 'CSV'
+                                    }
+                                }, ['CSV']),
+                                h('el-dropdown-item', {
+                                    props: {
+                                        command: 'JSON'
+                                    }
+                                }, ['JSON'])
+                            ])
+                        ])
                     ])
                 ]),
                 h(HotTable, {
@@ -60,10 +85,10 @@ export default {
         );
     },
     methods: {
-        downloadDefaultCSV() {
+        downloadDefaultData(type = 'CSV') {
             require('@/utils').downloadFile({
                 download: this.currentTemplate.title,
-                href: require('@/utils').toCSV(this.currentConfig.defaultData)
+                href: type === 'CSV' ? require('@/utils').toCSV(this.currentConfig.defaultData) : require('@/config/AppConfig').devProxy.http + this.currentTemplate.url.replace('index.html', '') + 'data.json'
             }).then(a => {
                 a.click();
             });
