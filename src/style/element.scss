@@ -1752,8 +1752,7 @@
   z-index: 10;
   padding: 10px 0;
   margin: 5px 0;
-  background-color: #FFF;
-  border: 1px solid #EBEEF5;
+  background-color: #22506D;
   border-radius: 4px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1)
 }
@@ -1764,13 +1763,12 @@
   padding: 0 20px;
   margin: 0;
   font-size: 14px;
-  color: #606266;
+  color: #9E9E9E;
   cursor: pointer;
   outline: 0
 }
 
 .el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
-  background-color: #ecf5ff;
   color: #66b1ff
 }
 
