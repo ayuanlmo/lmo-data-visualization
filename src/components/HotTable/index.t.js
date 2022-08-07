@@ -13,7 +13,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-data_visualization_config_item'
+                class: 'lmo-data_visualization_config_item_content'
             }, [
                 h('div', {
                     class: 'lmo_flex_box',

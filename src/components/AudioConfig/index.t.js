@@ -8,7 +8,7 @@ export default {
     render(h) {
         return (
             h('div', {
-                class: 'lmo-audio_config lmo_position_relative lmo-data_visualization_config_item'
+                class: 'lmo-audio_config lmo_position_relative lmo-data_visualization_config_item_content'
             }, [
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card_title'

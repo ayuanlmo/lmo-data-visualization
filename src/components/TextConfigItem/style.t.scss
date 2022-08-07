@@ -2,7 +2,7 @@
   height: 100%;
   background: #162431;
   border-radius: 16px;
-  padding: 1rem;
+  //padding: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -49,6 +49,7 @@
         .lmo-text_box_label {
           width: 7vw;
           color: #fbfbfd;
+          font-size: .8rem;
           margin-bottom: .5rem;
         }
 
