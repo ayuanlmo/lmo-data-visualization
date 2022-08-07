@@ -309,6 +309,7 @@ export default {
         },
         play() {
             if (this.audioName !== '') {
+                this.$refs.audio.currentTime = 0;
                 this.audioPlay = true;
                 this.$refs.audio['play']();
             }
@@ -322,10 +323,25 @@ export default {
 
             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME', volume);
             this.$refs.audio.volume = volume;
+        },
+        onmessage(e) {
+            if (e.data.type === 'TemplateRender') {
+                setTimeout(() => {
+                    this.play();
+                });
+            } else if (e.data.type === 'TemplateRenderFinish') {
+                this.pause();
+            }
+            //
+            console.log(e.data.type);
         }
     },
     mounted() {
         this.$store.commit('SET_CURRENT_TEMPLATE_VIDEO_CONFIG', this.videoConf);
+        addEventListener('message', this.onmessage);
+    },
+    destroyed() {
+        removeEventListener('message', this.onmessage);
     },
     watch: {
         playState(n) {
