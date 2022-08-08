@@ -47,7 +47,6 @@ export default {
                     }
                 }, [
                     this.template.map(i => {
-                        console.log('this.showTab', this.showTab === i.name);
                         if (this.showTab === i.name || this.showTab === '') {
                             return (
                                 h('el-tab-pane', {
