@@ -16,6 +16,7 @@ module.exports.stringToBinary = stringToBinary;
 module.exports.binaryToString = binaryToString;
 module.exports.formatSec = formatSec;
 module.exports.toCSV = toCSV;
+module.exports.getFormData = getFormData;
 
 function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -198,4 +199,13 @@ function toCSV(arr = []) {
         _ += i.join(',') + '\r\n';
     });
     return encodeURI(_);
+}
+
+function getFormData(data = {}) {
+    const fd = new FormData();
+
+    Object.keys(data).map(i => {
+        fd.append(i, data[i]);
+    });
+    return fd;
 }
