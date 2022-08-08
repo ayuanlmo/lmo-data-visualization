@@ -12,6 +12,7 @@
     const _N = require('./lib/net/net.t');
     const _Path = require('path');
     const _App = _Express();
+    const _Multer: any = require('multer')({dest: './static/uploads'});
     const _WsApp: any = require('express-ws')(_App);
     const _Pool: any = _WsApp['getWss'](_Router.__SOCKET_CONNECT);
 
@@ -25,6 +26,7 @@
     };
     new (require('./lib/sqlite/sqlite.t').T_DB);
     _App.use(_Express.urlencoded({extended: false}));
+    _App.use(_Multer.single('media'));
     _App.use(_Conf.__STATIC_PATH, _Express.static(`${__dirname}${_Conf.__STATIC_PATH}`));
     _App.use(_Conf.__STATIC_PATH, _Express.static(`../dist`));
     _App.ws(_Router.__SOCKET_CONNECT, async (_: any) => {
@@ -71,6 +73,9 @@
     });
     _App.post(_Router.__GET_TEMPLATE, (_: any, __: any) => {
         return _Func._GetTemplateList(__);
+    });
+    _App.post(_Router.__UPLOAD_MEDIA, (_: any, __: any): void => {
+        return _Func._UpLoadFile(_, __);
     });
     _App.post(_Router.__GET_MEDIA, (_: any, __: any): void => {
         return _Func._GetMedia(__);
