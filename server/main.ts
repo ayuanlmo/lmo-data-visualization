@@ -77,6 +77,9 @@
     _App.post(_Router.__UPLOAD_MEDIA, (_: any, __: any): void => {
         return _Func._UpLoadFile(_, __);
     });
+    _App.post(_Router.__GET_UPLOAD_MEDIA, (_: any, __: any): void => {
+        return _Func._GetUpLoadMedia(__);
+    });
     _App.post(_Router.__GET_MEDIA, (_: any, __: any): void => {
         return _Func._GetMedia(__);
     });

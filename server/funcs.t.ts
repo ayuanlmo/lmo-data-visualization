@@ -47,6 +47,30 @@ const _F = {
                 });
             });
         },
+        _GetUpLoadMedia: (__: any) => {
+            _Fs.readdir('./static/uploads', (_e: never, _d: Array<any>) => {
+                __.json(
+                    _F._GetSuccessMessage({
+                        audioMedia: _F._FilterMedia(_d, 'audio'),
+                        videoMedia: _F._FilterMedia(_d, 'video'),
+                        imageMedia: _F._FilterMedia(_d, 'image')
+                    })
+                );
+            });
+        },
+        _FilterMedia: (_: Array<string>, type: string = 'audio') => {
+            const Arr: Array<object> = [];
+
+            _.filter((i: string) => {
+                return require('./const/mediaTypes')[type].includes(i.split('.')[1])
+            }).map((i: string) => {
+                Arr.push({
+                    name: i,
+                    path: `/static/output/${i}`
+                })
+            });
+            return Arr;
+        },
         _UpLoadFile: async (_: any, __: any): Promise<any> => {
             const File: any = _.file;
             if (!File) {
@@ -59,7 +83,7 @@ const _F = {
                 return __.send(_F._GetErrorMessage({}, require('./conf/message.t').__FILE_NS.replace('$t', `${File.originalname}`)))
             }
             const Extname: Array<string> = File.originalname.split('.');
-            Extname[1].replace(' ', '');
+            Extname[1].split(' ').join('');
             const FR: any = _Fs.createReadStream(File.path);
             const FN: string = `${Extname[0]}${new Date().getTime()}.${Extname[1]}`;
             const FW = await _Fs.createWriteStream(`${FD}/${FN}`);
