@@ -66,7 +66,7 @@ const _F = {
             }).map((i: string) => {
                 Arr.push({
                     name: i,
-                    path: `/static/output/${i}`
+                    path: `/static/uploads/${i}`
                 })
             });
             return Arr;
