@@ -8,10 +8,10 @@ const _Net: any = require('net');
 const _Clc: any = require('cli-color');
 const _global: any = global;
 
-let _Port: number = require('../../conf/conf.t').__SERVER_PORT - 1;
+let _Port: number = require('../../conf/Conf.t').__SERVER_PORT - 1;
 
 const _: any = {
-    __START_SERVER: (__: any): void => {
+    START_SERVER: (__: any): void => {
         _Port += 1;
         const _test_server: any = _Net.createServer().listen(_Port);
 
@@ -20,7 +20,7 @@ const _: any = {
             setTimeout(async () => {
                 __.listen(_Port, () => {
                     _global.__SERVER_PORT = _Port;
-                    _.__PRINT_NETWORK_INTO();
+                    _.PRINT_NETWORK_INTO();
                 });
             });
         });
@@ -31,13 +31,11 @@ const _: any = {
             }
         });
     },
-    __LOCAL_NETWORK_INTERFACES(): Array<string> {
+    LOCAL_NETWORK_INTERFACES(): Array<string> {
         const _NF: any = require('os')['networkInterfaces']();
         const _na: Array<string> = [];
 
-        // eslint-disable-next-line guard-for-in
         for (const i in _NF) {
-            // eslint-disable-next-line guard-for-in
             for (const j in _NF[i]) {
                 const _t = _NF[i][j];
 
@@ -47,7 +45,7 @@ const _: any = {
         }
         return _na;
     },
-    __PRINT_NETWORK_INTO: (): void => {
+    PRINT_NETWORK_INTO: (): void => {
         console.log('\n\n=========================================\n\n');
         console.log('        _                 _ _          _   _             ');
         console.log('       (_)               | (_)        | | (_)            ');
@@ -57,7 +55,7 @@ const _: any = {
         console.log('   \\_/ |_|___/\\__,_|\\__,_|_|_/___\\__,_|\\__|_|\\___/|_| |_|\n\n');
         console.log(_Clc['red']('\n Server running at:\n'));
         console.log(`   -Local: ${_Clc['blue'](`  //localhost:${_Port}/`)}`);
-        _['__LOCAL_NETWORK_INTERFACES']().map((i: string) => {
+        _.LOCAL_NETWORK_INTERFACES().map((i: string) => {
             console.log(`   -NetWork: ${_Clc.blue(`//${i}:${_Port}/`)}`);
         });
         console.log('\n\n=========================================');
