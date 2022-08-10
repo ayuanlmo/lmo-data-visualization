@@ -90,7 +90,6 @@ export default {
         },
         onmessage(e) {
             if (e.data.type === 'TemplateRender') {
-                console.log('开始');
                 this.reset();
             }
         },

@@ -17,6 +17,7 @@ module.exports.binaryToString = binaryToString;
 module.exports.formatSec = formatSec;
 module.exports.toCSV = toCSV;
 module.exports.getFormData = getFormData;
+module.exports.getMediaType = getMediaType;
 
 function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -208,4 +209,10 @@ function getFormData(data = {}) {
         fd.append(i, data[i]);
     });
     return fd;
+}
+
+function getMediaType(mediaName = '') {
+    if (mediaName === '')
+        return '';
+    return mediaName.split('.')[1];
 }

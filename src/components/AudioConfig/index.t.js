@@ -18,10 +18,8 @@ export default {
                     on: {
                         select: (e) => {
                             this.audioName = e.name;
-
-                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', e.src);
+                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', e.path);
                             this.$refs.audio.src = `${require('@/config/AppConfig').devProxy.http}${e.path}`;
-                            console.log('eeee', e);
                         }
                     }
                 }),

@@ -29,9 +29,14 @@ export default {
                                         }
                                     }, [
                                         h('div', {
-                                            class: 'lmo_audio-list-item-content lmo_cursor_pointer'
+                                            class: 'lmo_position_relative lmo_hover_theme_color lmo_audio-list-item-content lmo_cursor_pointer'
                                         }, [
-                                            i.name
+                                            i.name,
+                                            h('div', {
+                                                class: 'lmo_select-media-type'
+                                            }, [
+                                                `${require('@/utils/index').getMediaType(i.name)}`
+                                            ])
                                         ])
                                     ])
                                 ])

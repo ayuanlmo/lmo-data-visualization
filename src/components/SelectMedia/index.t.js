@@ -1,6 +1,7 @@
 require('./TempLate/style.t.scss');
 
 import AudioListT from "@components/SelectMedia/TempLate/AudioList.t";
+import NoData from '@/components/NoData/index.t';
 
 export default {
     name: 'lmo-select-media',
@@ -55,7 +56,9 @@ export default {
                                         name: i.name
                                     }
                                 }, [
-                                    this.media[i.dataIndex].length === 0 ? h('div', ['Null']) : h(i.template, {
+                                    this.media[i.dataIndex].length === 0 ? h('div', [
+                                        h(NoData)
+                                    ]) : h(i.template, {
                                         props: {
                                             data: this.media[i.dataIndex]
                                         },
