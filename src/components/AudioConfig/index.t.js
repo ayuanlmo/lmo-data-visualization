@@ -1,7 +1,7 @@
 require('./style.t.scss');
 
+import SelectMedia from '@/components/SelectMedia/index.t';
 import {mapState} from "vuex";
-import {UploadAudioTypes} from '@/const/Default.t';
 
 export default {
     name: 'lmo-audio_config',
@@ -10,6 +10,19 @@ export default {
             h('div', {
                 class: 'lmo-audio_config lmo_position_relative lmo-data_visualization_config_item_content'
             }, [
+                h(SelectMedia, {
+                    ref: 'SelectMedia',
+                    props: {
+                        showTab: 'audio'
+                    },
+                    on: {
+                        select: (e) => {
+                            this.audioName = e.name;
+                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', e.path);
+                            this.$refs.audio.src = `${require('@/config/AppConfig').devProxy.http}${e.path}`;
+                        }
+                    }
+                }),
                 h('div', {
                     class: 'lmo-data_visualization_config_item_card_title'
                 }, ['音频配置']),
@@ -35,7 +48,10 @@ export default {
                                         h('div', {
                                             class: 'lmo-audio_content lmo_cursor_pointer lmo_flex_box',
                                             on: {
-                                                click: this.selectAudio,
+                                                click: () => {
+                                                    this.$refs.SelectMedia.show();
+                                                },
+                                                // click: this.selectAudio,
                                                 mouseover: this.play,
                                                 mouseout: this.pause
                                             }
@@ -290,23 +306,6 @@ export default {
 
             return num >= parseInt(_[0]) && num <= parseInt(_[1]);
         },
-        selectAudio() {
-            require('@/utils/index').selectFile().then(file => {
-                const fr = new FileReader();
-
-                if (!UploadAudioTypes.includes(file.type))
-                    return this.$message.warning(`${file.name}是一个不受支持的音频文件`);
-                this.audioName = file.name;
-                this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_NAME', this.audioName);
-                fr.readAsDataURL(file);
-                fr.onload = (r) => {
-                    const result = r.currentTarget.result;
-
-                    this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', result);
-                    this.$refs.audio.src = result;
-                };
-            });
-        },
         play() {
             if (this.audioName !== '') {
                 this.$refs.audio.currentTime = 0;
@@ -325,15 +324,12 @@ export default {
             this.$refs.audio.volume = volume;
         },
         onmessage(e) {
-            if (e.data.type === 'TemplateRender') {
+            if (e.data.type === 'TemplateRender')
                 setTimeout(() => {
                     this.play();
                 });
-            } else if (e.data.type === 'TemplateRenderFinish') {
+            else if (e.data.type === 'TemplateRenderFinish')
                 this.pause();
-            }
-            //
-            console.log(e.data.type);
         }
     },
     mounted() {

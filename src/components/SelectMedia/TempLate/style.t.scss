@@ -1,0 +1,30 @@
+.lmo_audio-list {
+  .lmo_audio-list-item {
+    width: 100%;
+    height: 3rem;
+
+    .lmo_audio-list-item-content {
+      border: 1px solid #FBFBFD;
+      border-radius: 6px;
+      padding: 0.2rem;
+      margin: 0.2rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      height: 3rem;
+      line-height: 3rem;
+    }
+  }
+}
+
+.lmo_select-media-type {
+  position: absolute;
+  top: .2rem;
+  right: .2rem;
+  background: green;
+  color: #FBFBFD;
+  height: 1rem;
+  line-height: 1rem;
+  border-radius: 4px;
+  padding: 0 .2rem;
+}

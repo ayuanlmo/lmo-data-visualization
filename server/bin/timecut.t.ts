@@ -8,93 +8,95 @@ const _TimeCut = require('timecut');
 const _Ffmpeg = require('fluent-ffmpeg');
 const _Tool = require('../utils/utils.t');
 const _ResolvePath = require('path').resolve;
+const _PATH: any = require('../const/Path');
 
 class TC {
-    private readonly ws: any;
-    private readonly data: any;
-    private logs: Array<string>;
-    private schedule: number;
-    private readonly taskName: string;
+    private readonly _Ws: any;
+    private readonly _Data: any;
+    private _Logs: Array<string>;
+    private _Schedule: number;
+    private readonly _Task_Name: string;
     private readonly _Fs: any;
     private readonly _OS: any;
 
     constructor(ws: any, data: any) {
-        this.ws = ws;
-        this.data = data;
-        this.logs = [];
-        this.taskName = `lmo_${new Date().getTime()}`;
+        this._Ws = ws;
+        this._Data = data;
+        this._Logs = [];
+        this._Task_Name = `lmo_${new Date().getTime()}`;
         this._Fs = require('fs-extra');
         this._OS = require('os');
-        this._SendMessage('task_pending', 'task_pending', {
-            taskName: this.taskName
+        this.SEND_MESSAGE('task_pending', 'task_pending', {
+            taskName: this._Task_Name
         });
-        this.schedule = 0;
-        if (!require('../conf/conf.t').__FFMPEG) {
-            this._SendMessage('showMessage', 'showMessage', {
-                message: require('../conf/message.t').__NO_FFMPEG,
+        this._Schedule = 0;
+        if (!require('../conf/Conf.t').__FFMPEG) {
+            this.SEND_MESSAGE('showMessage', 'showMessage', {
+                message: require('../conf/Message.t').__NO_FFMPEG,
                 timestamp: new Date().getTime()
             });
             return;
         }
-        this._Init();
+        this.INIT();
     }
 
-    _Init(): void {
-        this._CopyTemplate();
+    INIT(): void {
+        this.COPY_TEMPLATE();
     }
 
-    _OutputLogFile(): void {
-        const _logPath: string = _ResolvePath('./static/log/');
+    OUTPUT_LOG_FILE(): void {
+        const _logPath: string = _ResolvePath(_PATH.LOG.PATH);
         const s: string = '===== BEGIN LMO-DATA-VISUALIZATION TASK LOG =====\n';
         const e: string = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
         if (!this._Fs.existsSync(_logPath))
             this._Fs.mkdir(_logPath);
-        this._Fs.writeFile(_ResolvePath(`${_logPath}/${this.taskName}.t.log`), `${s}${this.logs.join('\n')}${e}`, (e: any) => {
+        this._Fs.writeFile(_ResolvePath(`${_logPath}/${this._Task_Name}.t.log`), `${s}${this._Logs.join('\n')}${e}`, (e: any) => {
             if (!e)
-                this.logs = [];
+                this._Logs = [];
         });
     }
 
-    _CopyTemplate(): void {
-        const _temp: string = _ResolvePath('./static/temp/');
-        const _: string = _ResolvePath(`./static/temp/${this.taskName}`);
+    COPY_TEMPLATE(): void {
+
+        const _temp: string = _ResolvePath(_PATH.COPY_TEMPLATE.TEMP);
+        const _: string = _ResolvePath(`${_PATH.COPY_TEMPLATE.THIS}${this._Task_Name}`);
 
         if (!this._Fs.existsSync(_temp))
             this._Fs.mkdir(_temp);
         if (!this._Fs.existsSync(_)) {
             this._Fs.mkdir(_);
-            this._CopyFile(`${_ResolvePath('./static/DataVisualizationTemplate')}/${this.data.template}`, _);
+            this.COPY_FILE(`${_ResolvePath(`${_PATH.COPY_TEMPLATE.ORIGIN}`)}/${this._Data.template}`, _);
             setTimeout(() => {
                 this._Fs.writeFile(`${_}/conf.js`, `window.chartConfig = ${JSON.stringify({
-                    ...this.data.templateConfig,
+                    ...this._Data.templateConfig,
                     _video: {
-                        ...this.data.config.video
+                        ...this._Data.config.video
                     }
                 })};`, (e: any) => {
                     if (!e)
-                        this._Synthesis();
+                        this.SYNTHESIS();
                 });
             }, 1000);
         }
     }
 
-    _CopyFile(dir: string, to: string): void {
+    COPY_FILE(dir: string, to: string): void {
         this._Fs.readdirSync(dir, {withFileTypes: true}).forEach((i: any) => {
             this._Fs.copyFileSync(_ResolvePath(dir, i.name), _ResolvePath(to, i.name));
         });
     }
 
-    _Synthesis(): void {
-        this.logs.push(`\nCREATE AT: ${new Date().getTime()}`);
-        this.logs.push(`SOURCE TEMPLATE: ${this.data.template}`);
-        this.logs.push(`PLATFORM: ${this._OS.type()} / ${this._OS.platform()} / ${this._OS.arch()} / ${this._OS.release()}`);
-        this.logs.push(`NODE VERSION: ${process.version}`);
-        this.logs.push(`CURRENT: /static/temp/${this.taskName}/index.html\n`);
-        this.logs.push(`CONFIG ${require('../funcs.t')._Stringify(this.data)}\n\n`);
+    SYNTHESIS(): void {
+        this._Logs.push(`\nCREATE AT: ${new Date().getTime()}`);
+        this._Logs.push(`SOURCE TEMPLATE: ${this._Data.template}`);
+        this._Logs.push(`PLATFORM: ${this._OS.type()} / ${this._OS.platform()} / ${this._OS.arch()} / ${this._OS.release()}`);
+        this._Logs.push(`NODE VERSION: ${process.version}`);
+        this._Logs.push(`CURRENT: ${_PATH.SYNTHESIS.CURRENT_TEMPLATE.replace('$t', this._Task_Name)}`);
+        this._Logs.push(`CONFIG ${require('../funcs.t').STRINGIFY(this._Data)}\n\n`);
         let audioPath = '';
-        const _ = this.data.config;
+        const _ = this._Data.config;
         const _conf: object = {
-            url: `http://localhost:${require('../conf/conf.t').__SERVER_PORT}/static/temp/${this.taskName}/index.html`,
+            url: `http://localhost:${require('../conf/Conf.t').__SERVER_PORT}${_PATH.SYNTHESIS.SERVER.replace('$t', this._Task_Name)}`,
             selector: '#app',
             left: 0,
             top: 0,
@@ -103,56 +105,55 @@ class TC {
             pipeMode: require('os').freemem() / 1024 / 1024 > 2048,
             fps: parseInt(_.video.fps),
             duration: _.video.duration,
-            output: `static/output/${this.taskName}.mp4`,
+            output: _PATH.SYNTHESIS.OUTPUT.replace('$t', this._Task_Name),
             viewport: {
-                ...this._GetVideoClarity(_.video.clarity)
+                ...this.GET_VIDEO_CLARITY(_.video.clarity)
             },
             preparePageForScreenshot: async (page: any, currentFrame: number, totalFrames: number) => {
-                this.schedule = parseInt(String(currentFrame / totalFrames * 100));
-                await this._SendMessage('task_processing', 'task_processing', {
-                    taskName: this.taskName,
-                    schedule: this.schedule
+                this._Schedule = parseInt(String(currentFrame / totalFrames * 100));
+                await this.SEND_MESSAGE('task_processing', 'task_processing', {
+                    taskName: this._Task_Name,
+                    schedule: this._Schedule
                 });
             }
         };
 
         if (_.audio.src !== '') {
-            const buffer: any = Buffer.from(_.audio.src.replace('data:audio/x-m4a;base64,', ''), 'base64');
-
-            this._Fs['writeFile'](_ResolvePath(`./static/temp/${this.taskName}.m4a`), buffer, (e: any) => {
-                if (!e)
-                    audioPath = _ResolvePath(`./static/temp/${this.taskName}.m4a`);
-            });
+            audioPath = _ResolvePath(`.${_.audio.src}`);
+            if (this._Fs.existsSync(audioPath))
+                this._Data.config.audio.src = audioPath;
+            else
+                this._Data.config.audio.src = ''
         }
 
         _TimeCut(_conf).then(() => {
-            this._ProcessAudio(_.audio.src !== '' ? `static/output/${this.taskName}.mp4` : '', audioPath).then((_r) => {
-                this._OutputLogFile();
+            this.PROCESS_AUDIO(_.audio.src !== '' ? `${_PATH.PROCESS_AUDIO.PATH.replace('$t', this._Task_Name)}` : '', audioPath).then((_r) => {
+                this.OUTPUT_LOG_FILE();
                 if (_r === 1) {
                     setTimeout(() => {
-                        this._SendMessage('task_end', 'task_processing', {
+                        this.SEND_MESSAGE('task_end', 'task_processing', {
                             state: 'success',
-                            taskName: this.taskName,
-                            path: `/static/output/'${this.taskName}.mp4`
+                            taskName: this._Task_Name,
+                            path: _PATH.SYNTHESIS.OUTPUT.replace('$t', this._Task_Name)
                         });
                     }, 2000);
                 } else
-                    this._SendMessage('task_pro', 'task_pro_success', {
-                        taskName: this.taskName
+                    this.SEND_MESSAGE('task_pro', 'task_pro_success', {
+                        taskName: this._Task_Name
                     });
-                this._DelTempFile(`${_ResolvePath(`./static/temp/${this.taskName}`)}`);
+                this.DEL_TEMP_FILE(`${_ResolvePath(`./static/temp/${this._Task_Name}`)}`);
             });
         }).catch(() => {
-            this._SendMessage('task_end', 'error', {
-                taskName: this.taskName
+            this.SEND_MESSAGE('task_end', 'error', {
+                taskName: this._Task_Name
             });
         });
     }
 
-    _ProcessAudio(src: string, audio: string) {
+    PROCESS_AUDIO(src: string, audio: string) {
         return new Promise((resolve: any) => {
-            this._SendMessage('task_pro', 'task_pro_ready', {
-                taskName: this.taskName
+            this.SEND_MESSAGE('task_pro', 'task_pro_ready', {
+                taskName: this._Task_Name
             });
             if (src === '')
                 return resolve(1);
@@ -160,24 +161,23 @@ class TC {
 
             _.videoCodec('libx264');
             _.input(audio);
-            _.audioFilters(`volume=${this.data.config.audio.volume}`);
+            _.audioFilters(`volume=${this._Data.config.audio.volume}`);
             _.audioBitrate('128k');
-            if (!this.data.config.audio.complete)
-                _.duration(this.data.config.video.duration);
-            _.output(`static/output/${this.taskName}264.mp4`);
+            if (!this._Data.config.audio.complete)
+                _.duration(this._Data.config.video.duration);
+            _.output(`${_PATH.PROCESS_AUDIO.OUTPUT.replace('$t', this._Task_Name)}`);
             _.on('end', () => {
                 this._Fs.unlinkSync(src);
-                this._Fs.unlinkSync(audio);
                 resolve();
             });
             _.on('error', (_e: any) => {
-                this._SendMessage('task_pro', 'task_pro_error', {
+                this.SEND_MESSAGE('task_pro', 'task_pro_error', {
                     message: _e.message
                 });
             });
             _.on('stderr', (msg: string) => {
-                this._SendMessage('task_processing', 'task_processing', {
-                    taskName: this.taskName,
+                this.SEND_MESSAGE('task_processing', 'task_processing', {
+                    taskName: this._Task_Name,
                     message: msg
                 });
             });
@@ -185,11 +185,11 @@ class TC {
         });
     }
 
-    _SendMessage(type: string, cmd: string, data: object = {}): void {
+    SEND_MESSAGE(type: string, cmd: string, data: object = {}): void {
         if (type !== 'task_pending' && cmd !== 'task_pending')
-            this.logs.push(`[${new Date().getTime()}]${type} ${cmd} > ${require('../funcs.t')._Stringify(data)}`);
-        this.ws.clients.forEach((i: any) => {
-            i['send'](_Tool.stringToBinary(require('../funcs.t')._Stringify(
+            this._Logs.push(`[${new Date().getTime()}]${type} ${cmd} > ${require('../funcs.t').STRINGIFY(data)}`);
+        this._Ws.clients.forEach((i: any) => {
+            i.send(_Tool.STRING_TO_BINARY(require('../funcs.t').STRINGIFY(
                 {
                     type: type,
                     data: {
@@ -201,7 +201,7 @@ class TC {
         });
     }
 
-    _DelTempFile(_path: string): void {
+    DEL_TEMP_FILE(_path: string): void {
         let _: Array<any> = [];
 
         if (this._Fs.existsSync(_path)) {
@@ -210,7 +210,7 @@ class TC {
                 const __ = _path + "/" + _f;
 
                 if (this._Fs.statSync(__).isDirectory())
-                    this._DelTempFile(__);
+                    this.DEL_TEMP_FILE(__);
                 else
                     this._Fs.unlinkSync(__);
             });
@@ -218,7 +218,7 @@ class TC {
         }
     }
 
-    _GetVideoClarity(k: string) {
+    GET_VIDEO_CLARITY(k: string) {
         if (k === '1080P')
             return {
                 width: 1920,

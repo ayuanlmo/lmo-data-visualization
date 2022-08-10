@@ -60,16 +60,17 @@ export default {
                             ])
                         ]),
                         h('div', [
-                            h(PlayerBar, {
-                                ref: 'PlayerBar',
-                                style: {
-                                    background: '#293943'
-                                },
-                                props: {
-                                    duration: this.currentConfig.duration,
-                                    controllerButton: false
-                                }
-                            })
+                            this.visible ?
+                                h(PlayerBar, {
+                                    ref: 'PlayerBar',
+                                    style: {
+                                        background: '#293943'
+                                    },
+                                    props: {
+                                        duration: this.currentConfig.duration,
+                                        controllerButton: false
+                                    }
+                                }) : h('')
                         ])
                     ])
                 }

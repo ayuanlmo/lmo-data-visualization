@@ -28,7 +28,7 @@ export default {
                         on: {
                             click: () => {
                                 this.reset();
-                                this.$emit('play');
+                                this.play();
                             }
                         },
                         class: {
@@ -44,7 +44,7 @@ export default {
                     h('div', {
                         class: 'lmo-player_bar_controller_time'
                     }, [
-                        `${require('@/utils/index').formatSec(this.duration / 1000)} / ${require('@/utils/index').formatSec(this.currentTime)}`
+                        `${require('@/utils/index').formatSec(this.currentTime)} / ${require('@/utils/index').formatSec(this.duration / 1000)}`
                     ])
                 ]),
                 h('div', {
@@ -77,7 +77,7 @@ export default {
             this.currentTime += 1;
             if (this.duration / 1000 !== this.currentTime && this.currentTime > this.duration / 1000)
                 return this.currentTime = this.duration / 1000;
-            
+
             timeTimer = setTimeout(this.initTime, 1000);
         },
         reset() {
@@ -89,16 +89,27 @@ export default {
             this.initTime();
         },
         onmessage(e) {
-            if (e.data.type === 'TemplateRender')
+            if (e.data.type === 'TemplateRender') {
                 this.reset();
+            }
+        },
+        play() {
+            this.$emit('play');
+        },
+        onkeydown(e) {
+            if (e.code === 'Space') {
+                this.reset();
+                this.play();
+            }
         }
-
     },
     mounted() {
         addEventListener('message', this.onmessage);
+        addEventListener('keydown', this.onkeydown);
     },
     destroyed() {
         removeEventListener('message', this.onmessage);
+        removeEventListener('keydown', this.onkeydown);
     },
     data() {
         return {

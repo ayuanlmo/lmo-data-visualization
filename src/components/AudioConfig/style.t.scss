@@ -1,4 +1,7 @@
 .lmo-audio_config {
+  .el-tabs__content {
+    height: 40vh;
+  }
 
   .lmo-audio_config_left {
     margin-right: 2.5rem;
@@ -32,6 +35,10 @@
 
         .lmo-audio_content_label {
           line-height: 6vh;
+          width: 80%;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
 
         .lmo-audio_content_label_no_audio {

@@ -4,7 +4,13 @@
  * 一些工具函数
  * **/
 
-module.exports.stringToBinary = (str: string): string => {
+/**
+ * @method STRING_TO_BINARY
+ * @description 字符串转二进制
+ * @param str {string}
+ * @return string
+ * **/
+module.exports.STRING_TO_BINARY = (str: string): string => {
     const _: string[] = [];
     const __: string[] = str.split("");
 
@@ -17,7 +23,13 @@ module.exports.stringToBinary = (str: string): string => {
     return _.join("");
 };
 
-module.exports.binaryToString = (str: string): string => {
+/**
+ * @method BINARY_TO_STRING
+ * @description 二进制转字符串
+ * @param str {string}
+ * @return string
+ * **/
+module.exports.BINARY_TO_STRING = (str: string): string => {
     const _: string[] = [];
     const list: string[] = str.split(" ");
 
@@ -27,7 +39,13 @@ module.exports.binaryToString = (str: string): string => {
     return _.join("");
 };
 
-module.exports.cmdExists = (cmd: string): boolean => {
+/**
+ * @method CMD_EXISTS
+ * @description 判定某条命令是否存在于系统
+ * @param cmd {string}
+ * @return boolean
+ * **/
+module.exports.CMD_EXISTS = (cmd: string): boolean => {
     try {
         require('child_process').execSync(
             require('os').platform() === 'win32'
@@ -40,7 +58,12 @@ module.exports.cmdExists = (cmd: string): boolean => {
     }
 };
 
-module.exports.check264Lib = (): Promise<boolean> => {
+/**
+ * @method CHECK_264_LIB
+ * @description 检查ffmpeg是否支持 H.264库
+ * @return Promise<boolean>
+ * **/
+module.exports.CHECK_264_LIB = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
         try {
             require('child_process').exec('ffmpeg -codecs', (e: any, stdout: string) => {
@@ -52,7 +75,14 @@ module.exports.check264Lib = (): Promise<boolean> => {
     });
 };
 
-module.exports.execCmd = (cmd: string, opt: any): Promise<any> => {
+/**
+ * @method EXEC_CMD
+ * @description 执行命令
+ * @param cmd {string}
+ * @param opt {any}
+ * @return Promise<any>
+ * **/
+module.exports.EXEC_CMD = (cmd: string, opt: any): Promise<any> => {
     return new Promise((resolve, reject) => {
         try {
             require('child_process').exec(cmd, opt, (e: any, stdout: string) => {
@@ -62,4 +92,14 @@ module.exports.execCmd = (cmd: string, opt: any): Promise<any> => {
             reject(e);
         }
     });
+};
+
+/**
+ * @method TO_UTF8
+ * @description 转UTF8字符串
+ * @param str {String}
+ * @return String
+ * **/
+module.exports.TO_UTF8 = (str: string): string => {
+    return require('iconv-lite').decode(str, 'utf8');
 };

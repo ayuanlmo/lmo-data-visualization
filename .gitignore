@@ -3,8 +3,9 @@ node_modules
 /dist
 
 ffmpeg.exe
-/temp
-/output*
+\temp
+\output*
+\uploads*
 *.mp4*
 *.log*
 *.t.log*
