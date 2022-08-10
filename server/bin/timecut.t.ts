@@ -119,12 +119,11 @@ class TC {
         };
 
         if (_.audio.src !== '') {
-            const buffer: any = Buffer.from(_.audio.src.replace('data:audio/x-m4a;base64,', ''), 'base64');
-
-            this._Fs['writeFile'](_ResolvePath(`./static/temp/${this._Task_Name}.m4a`), buffer, (e: any) => {
-                if (!e)
-                    audioPath = _ResolvePath(`./static/temp/${this._Task_Name}.m4a`);
-            });
+            audioPath = _ResolvePath(`.${_.audio.src}`);
+            if (this._Fs.existsSync(audioPath))
+                this._Data.config.audio.src = audioPath;
+            else
+                this._Data.config.audio.src = ''
         }
 
         _TimeCut(_conf).then(() => {
@@ -156,6 +155,7 @@ class TC {
             this.SEND_MESSAGE('task_pro', 'task_pro_ready', {
                 taskName: this._Task_Name
             });
+            debugger
             if (src === '')
                 return resolve(1);
             const _ = _Ffmpeg(src);
@@ -169,7 +169,6 @@ class TC {
             _.output(`${_PATH.PROCESS_AUDIO.OUTPUT.replace('$t', this._Task_Name)}`);
             _.on('end', () => {
                 this._Fs.unlinkSync(src);
-                this._Fs.unlinkSync(audio);
                 resolve();
             });
             _.on('error', (_e: any) => {
