@@ -82,6 +82,7 @@ export default {
     computed: {
         ...mapState({
             mode: state => state.appStore.currentConfig.color['more']['type'],
+            modeConfig: state => state.appStore.currentConfig.color['more'].config,
             themeColor: state => state.appStore.currentConfig.themeColor
         })
     },
@@ -89,12 +90,16 @@ export default {
         'themeColor': {
             deep: true,
             handler() {
-                this.config.Gradient.color[0] = this.themeColor[0];
-                this.config.Gradient.color[1] = this.themeColor[this.themeColor.length - 1];
-                this.Gradient.color1 = this.config.Gradient.color[0];
-                this.Gradient.color2 = this.config.Gradient.color[1];
-                this.config.Monotone.color = this.themeColor[0];
-                this.$emit('change', this.config);
+                try {
+                    this.config.Gradient.color[0] = this.modeConfig.Gradient.color[0];
+                    this.config.Gradient.color[1] = this.modeConfig.Gradient.color[1];
+                    this.Gradient.color1 = this.config.Gradient.color[0];
+                    this.Gradient.color2 = this.config.Gradient.color[1];
+                    this.config.Monotone.color = this.themeColor[0];
+                    this.$emit('change', this.config);
+                } catch (e) {
+                    e;
+                }
             }
         }
     }
