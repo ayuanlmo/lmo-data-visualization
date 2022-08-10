@@ -30,6 +30,21 @@ export default {
                                                 if (this.themeColorIndex !== i.value) {
                                                     this.themeColorIndex = i.value;
                                                     this.$store.commit('SET_CURRENT_THEME_COLORS', i.colors);
+                                                    if ('more' in this.currentConfigColor) {
+                                                        this.$store.commit('SET_CURRENT_TEMPLATE_COLOR_MODE', {
+                                                            config: {
+                                                                Gradient: {
+                                                                    color: [
+                                                                        `${i.colors[0]}`, `${i.colors[i.colors.length - 1]}`
+                                                                    ]
+                                                                },
+                                                                Monotone: {
+                                                                    color: i.colors[0]
+                                                                }
+                                                            },
+                                                            type: 'Theme'
+                                                        });
+                                                    }
                                                     PostMessage({
                                                         type: UPDATE_THEME_COLOR,
                                                         data: {
