@@ -155,7 +155,6 @@ class TC {
             this.SEND_MESSAGE('task_pro', 'task_pro_ready', {
                 taskName: this._Task_Name
             });
-            debugger
             if (src === '')
                 return resolve(1);
             const _ = _Ffmpeg(src);

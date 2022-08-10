@@ -111,6 +111,9 @@ const _F = {
      * **/
     UPLOAD_FILE: async (_: any, __: any): Promise<any> => {
         const File: any = _.file;
+
+        File.originalname = require('./utils/utils.t').TO_UTF8(File.originalname);
+
         if (!File) {
             return __.send(_F.GET_ERROR_MESSAGE({}, require('./conf/Message.t').__NO_FILE));
         }

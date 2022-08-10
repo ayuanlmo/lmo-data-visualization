@@ -93,3 +93,13 @@ module.exports.EXEC_CMD = (cmd: string, opt: any): Promise<any> => {
         }
     });
 };
+
+/**
+ * @method TO_UTF8
+ * @description 转UTF8字符串
+ * @param str {String}
+ * @return String
+ * **/
+module.exports.TO_UTF8 = (str: string): string => {
+    return require('iconv-lite').decode(str, 'utf8');
+};
