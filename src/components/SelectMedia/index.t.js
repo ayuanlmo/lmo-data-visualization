@@ -1,7 +1,10 @@
 require('./TempLate/style.t.scss');
 
-import AudioListT from "@components/SelectMedia/TempLate/AudioList.t";
+import AudioList from "@components/SelectMedia/TempLate/AudioList.t";
+import ImageList from "@components/SelectMedia/TempLate/ImageList";
 import NoData from '@/components/NoData/index.t';
+import {FILE_MAX_LENGTH} from "@/const/Const.t";
+import {UPLOAD_SUCCESS, FILE_SIZE} from '@/const/Message';
 
 export default {
     name: 'lmo-select-media',
@@ -24,11 +27,13 @@ export default {
                         on: {
                             click: () => {
                                 require('@/utils/index').selectFile(false).then(file => {
+                                    if (file.size > FILE_MAX_LENGTH)
+                                        return this.$message.warning(FILE_SIZE.replace('$t', file.name));
                                     this.$store.dispatch('UPLOAD_MEDIA', {
                                         media: file
                                     }).then(res => {
                                         if (res.code === 200) {
-                                            this.$message.success('上传成功');
+                                            this.$message.success(UPLOAD_SUCCESS);
                                             this.getMedia();
                                         }
                                     });
@@ -113,7 +118,7 @@ export default {
                     label: '音频',
                     name: 'audio',
                     dataIndex: 'audioMedia',
-                    template: AudioListT
+                    template: AudioList
                 },
                 {
                     label: '视频',
@@ -123,7 +128,8 @@ export default {
                 {
                     label: '图片',
                     name: 'image',
-                    dataIndex: 'imageMedia'
+                    dataIndex: 'imageMedia',
+                    template: ImageList
                 }
             ]
         };
