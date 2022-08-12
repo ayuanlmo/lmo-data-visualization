@@ -3,6 +3,7 @@ require('./style.scss');
 import {UploadImageTypes} from "@const/Default.t";
 import {PostMessage} from "@lib/PostMessage/index.t";
 import {UPDATE_BACKGROUND_IMAGE} from "@const/MessageType.t";
+import SelectMedia from '@/components/SelectMedia/index.t';
 
 export default {
     name: 'lmo-background_config',
@@ -11,6 +12,17 @@ export default {
             h('div', {
                 class: 'lmo-color_config_item'
             }, [
+                h(SelectMedia, {
+                    ref: 'SelectMedia',
+                    props: {
+                        showTab: 'image'
+                    },
+                    on: {
+                        select: (e) => {
+                            this.configTemplateBackground.image = `${require('@/config/AppConfig').devProxy.http}${e.path}`;
+                        }
+                    }
+                }),
                 h('div', {
                     class: 'lmo-color-box'
                 }, [
@@ -37,16 +49,17 @@ export default {
                                 class: 'lmo-color_box_option',
                                 on: {
                                     click: () => {
-                                        require('@/utils/index').selectFile().then(_ => {
-                                            if (UploadImageTypes.includes(_.type)) {
-                                                if (_.size > 1024 * 1024 * 5)
-                                                    return this.$message.warning(`[${_.name}] 文件过大，请不要超过5M。`);
-                                                require('@utils/index').toBase64(_).then(r => {
-                                                    this.configTemplateBackground.image = r;
-                                                });
-                                            } else
-                                                this.$message.warning(`[${_.name}] 是一个不受支援的文件。`);
-                                        });
+                                        this.$refs.SelectMedia.show();
+                                        // require('@/utils/index').selectFile().then(_ => {
+                                        //     if (UploadImageTypes.includes(_.type)) {
+                                        //         if (_.size > 1024 * 1024 * 5)
+                                        //             return this.$message.warning(`[${_.name}] 文件过大，请不要超过5M。`);
+                                        //         require('@utils/index').toBase64(_).then(r => {
+                                        //             this.configTemplateBackground.image = r;
+                                        //         });
+                                        //     } else
+                                        //         this.$message.warning(`[${_.name}] 是一个不受支援的文件。`);
+                                        // });
                                     }
                                 }
                             }, [
