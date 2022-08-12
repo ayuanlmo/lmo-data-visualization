@@ -103,3 +103,42 @@ module.exports.EXEC_CMD = (cmd: string, opt: any): Promise<any> => {
 module.exports.TO_UTF8 = (str: string): string => {
     return require('iconv-lite').decode(str, 'utf8');
 };
+
+/**
+ * @method FILE_TO_BASE64
+ * @description 文件转base64
+ * @param path {String} File path
+ * @return Promise<string>
+ * **/
+module.exports.FILE_TO_BASE64 = (path: string): Promise<string> => {
+    return new Promise((resolve: any, reject: any): any => {
+        try {
+            const binary = require('fs').readFileSync(path);
+
+            resolve(Buffer.from(binary, 'binary').toString('base64'));
+        } catch (e) {
+            reject(e ?? '');
+        }
+    });
+};
+
+/**
+ * @method RESOLVE_STATIC_FILE_PATH
+ * @description 静态文件路径转换
+ * @param path {String}
+ * @return String
+ * **/
+module.exports.RESOLVE_STATIC_FILE_PATH = (path = ''): string => {
+    if (path === '') return '/';
+    return `/static${path.split('/static')[1]}`;
+}
+
+/**
+ * @method GET_FILE_TYPE
+ * @description 获取文件类型
+ * @param name {String}
+ * @return String
+ * **/
+module.exports.GET_FILE_TYPE = (name: string) => {
+    return name.split('.')[1];
+}

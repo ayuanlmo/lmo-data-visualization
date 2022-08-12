@@ -57,7 +57,6 @@ class TC {
     }
 
     COPY_TEMPLATE(): void {
-
         const _temp: string = _ResolvePath(_PATH.COPY_TEMPLATE.TEMP);
         const _: string = _ResolvePath(`${_PATH.COPY_TEMPLATE.THIS}${this._Task_Name}`);
 
@@ -66,6 +65,18 @@ class TC {
         if (!this._Fs.existsSync(_)) {
             this._Fs.mkdir(_);
             this.COPY_FILE(`${_ResolvePath(`${_PATH.COPY_TEMPLATE.ORIGIN}`)}/${this._Data.template}`, _);
+            const Origin = this._Data.templateConfig.background.image;
+
+            if (Origin !== '') {
+                const BaseHead = require('../const/ImageBase64Type').GET_IMAGE_BASE64_TYPE(require('../utils/utils.t').GET_FILE_TYPE(Origin));
+                const Path = _ResolvePath(`./${require('../utils/utils.t').RESOLVE_STATIC_FILE_PATH(this._Data.templateConfig.background.image)}`);
+
+                require('../utils/utils.t').FILE_TO_BASE64(Path).then((r: string) => {
+                    this._Data.templateConfig.background.image = `${BaseHead}${r}`;
+                }).catch((e: any) => {
+                    console.log('错误', e);
+                })
+            }
             setTimeout(() => {
                 this._Fs.writeFile(`${_}/conf.js`, `window.chartConfig = ${JSON.stringify({
                     ...this._Data.templateConfig,
