@@ -31,56 +31,56 @@
 
 ---
 
-[简体中文](./README.md) | [繁體中文](./README-ZH_TW.md)
+[簡體中文](./README.md) | [繁體中文](./README-ZH_TW.md)
 
 ## 介绍
 
-lmo-DataVisualization，一款开源可视化数据制作工具。 根据提供的模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
+lmo-DataVisualization，一款開源可視化數據製作工具。根據提供的範本，將各種業務數據轉換為視頻動畫，使數據更加形象、生動。
 
 ## 内置功能
 
-1. 数据相关
-    - 支持手动编辑数据
-    - 上传本地数据
-    - 可导出模板示例数据
-2. 文字 / 主题相关
-    - 支持配置标题信息、颜色
-    - 配置图表主题颜色
-    - 背景颜色
-    - 标题动画
-    - 背景图片
-3. 音频 / 时间相关
-    - 背景音乐
-    - 设置音量大小
-4. 合成相关
-    - 合成帧率设置
-    - 视频清晰度配置(最高支持4K)
-    - 动画时间配置
+1. 數據相關
+    - 支援手動編輯數據
+    - 支援上傳本地檔
+    - 支援可匯出範本示例檔
+2. 文字 / 主題相關
+    - 支援配置標題訊息、顏色
+    - 支援圖表主題顏色
+    - 背景顏色
+    - 標題動畫
+    - 背景圖片
+3. 音訊 / 時間相關
+    - 背景音樂
+    - 設定音量大小
+4. 合成相關
+    - 視訊帧率設定
+    - 視訊清晰度設定(最高支援4K)
+    - 視訊時間配置
 
-PS：不同的模板配置项可能有些差别，这是根据模板内部提供给编辑器的选项进行的。
+PS：不同的範本配置項可能有些差別，這是根據範本內部提供給編輯器的選項進行的。
 
-*注 ： 由于合成服务无法模拟Animate.css提供的动画，后续将会采用纯JavaScript进行对Animate.css动画的模拟。
+*注 ：由於合成服務無法類比Animate.css提供的動畫，後續將會採用純JavaScript進行對Animate.css動畫的類比。
 
-## 模板制作
+## 範本製作
 
-我们为开发者提供了一些API，以简单、快速开发出适用的模板。请参阅 [开发模板.md](./doc/开发模板.md)
+我們為開發者提供了一些API，以簡單、快速開發出適用的範本。 請參閱 [开发模板.md](./doc/开发模板.md)
 
 ## 在线体验
 
-- 演示服务器关闭了合成服务、文件上传服务
+- 演示伺服器關閉了合成、檔上傳
 
-[演示地址](https://dv.ayuanlmo.cn)
+[演示位址](https://dv.ayuanlmo.cn)
 
-## 演示图
+## 演示圖
 
 <table>
     <tr>
-        <td>模板页</td>
+        <td>範本页</td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo4.png"/></td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo7.png"/></td>
     </tr>
     <tr>
-        <td>设计器</td>
+        <td>設計器</td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo3.png"/></td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo8.png"/></td>
     </tr>
@@ -90,46 +90,40 @@ PS：不同的模板配置项可能有些差别，这是根据模板内部提供
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo2.png"/></td>
     </tr>
 	<tr>
-        <td>资源库 / 日志</td>
+        <td>檔案庫 / 日誌</td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo10.png"/></td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo5.png"/></td>
     </tr>	 
     <tr>
-        <td>预览 / 媒体文件选择</td>
+        <td>預覽 / 媒體檔案選擇</td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo9.png"/></td>
         <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo11.png"/></td>
     </tr>
 </table>
 
-## 开发
+## 開發
 
-项目服务端文件在/server目录下。 合成需要ffmpeg支持，[点击这里下载](https://ffmpeg.org/download.html)</a>
-(请确保 ffmpeg 支持H.264视频压缩标准)
+專案伺服器檔在/server下。 合成需要ffmpeg支援，[點擊這裡下載](https://ffmpeg.org/download.html)</a>
+（請確保 ffmpeg 支援H.264視訊壓縮標準）
 
 ```bash
-#clone
 git clone https://github.com/ayuanlmo/lmo-data-visualization
-#安装模块
+
 yarn
-#启动项目
+
 yarn serve
-#进入服务端目录
-cd server/
-#安装服务端模块
+
+cd serve/
+
 yarn
-#运行服务端
+
 yarn start-server
 ```
 
-## 发布
+## 發佈
 
 ```bash
-#打包前端
 yarn build
-#注意部署后 请配置前端的WebSocket 和 API接口的反向代理
-#WebSocket默认为：/connectSocket
-#API接口默认为：/server
-#如果你需要修改以上配置 请到/config/DevProxy.js修改配置
 ```
 
 ## nginx配置參考
@@ -157,11 +151,11 @@ location /connectSocket{
   yarn lint
 ```
 
-## 开源相关
+## 開源相關
 
-本项目所有源代码基于 [Apache-2.0](https://gitee.com/ayuanlmo/lmo-data-visualization/blob/master/LICENSE)协议开源。
+本專案所有原始程式碼基於 [Apache-2.0](https://gitee.com/ayuanlmo/lmo-data-visualization/blob/master/LICENSE)協定開源。
 
-本项目所使用的第三方库，请遵循该库的开源协议标准。
+本專案所使用的第三方庫，請遵循該庫的開源協定。
 
 [GitHub](https://github.com/ayuanlmo/lmo-data-visualization)
 
@@ -170,11 +164,11 @@ location /connectSocket{
 
 ---
 
-## 有问题吗？
+## 有問題嗎？
 
-可通过[YouTrack](https://ayuanlmo.youtrack.cloud/)向我们提问，或者您可以发送issues
+可透過[YouTrack](https://ayuanlmo.youtrack.cloud/)向我們提出問題，或者發送issues
 
-## 感谢贡献
+## 感谢為此專案貢獻
 
 - 糖兮兮
 - 游游
@@ -185,7 +179,7 @@ location /connectSocket{
 
 ## 特别感谢
 
-感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了免费的 [开发许可证](https://www.jetbrains.com/community/opensource/)
+感谢 [JetBrains](https://www.jetbrains.com/) 為此專案提供了免費的 [開發許可證](https://www.jetbrains.com/community/opensource/)
 
 ![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
 ![DataGrip logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/DataGrip_icon.svg)
@@ -193,4 +187,4 @@ location /connectSocket{
 ![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
 ---
 
-本文档遵循[知识共享许可协议CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)。
+本文檔遵循[知識共用許可協定CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)。
