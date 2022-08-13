@@ -9,6 +9,7 @@ export default {
                 on: {
                     click: () => {
                         this.$emit('click', this.data);
+                        this.showDescription = false;
                     }
                 }
             }, [

@@ -32,7 +32,13 @@ export default {
                         name: 'lmo_t'
                     }
                 }, [
-                    h('router-view')
+                    h('keep-alive', {
+                        props: {
+                            include: 'lmo-home'
+                        }
+                    }, [
+                        h('router-view')
+                    ])
                 ])
             ])
         );
