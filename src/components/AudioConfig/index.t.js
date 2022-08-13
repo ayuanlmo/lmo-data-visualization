@@ -242,9 +242,10 @@ export default {
                                         },
                                         on: {
                                             change: (e) => {
-                                                if (this.changeInput('5>600', e))
+                                                if (this.changeInput('5>600', e)) {
                                                     this.videoConf.video.duration = `${e}`;
-                                                else
+                                                    this.$store.commit('SET_TEMPLATE_CURRENT_DURATION', e);
+                                                } else
                                                     return this.$message.warning('持续时间最高支持600秒(10分钟),最低支持5秒');
                                             }
                                         }
