@@ -66,7 +66,8 @@
                 data: {
                     onlineUsers: _OnlineUsers,
                     tenantID: `ting-${_Func.GET_UUID()}`,
-                    timestamp: new Date().getTime()
+                    timestamp: new Date().getTime(),
+                    serverInfo: require('./bin/serverInf')
                 }
             }))
         );
