@@ -110,13 +110,16 @@ const _F = {
      * @return Promise<any>
      * **/
     UPLOAD_FILE: async (_: any, __: any): Promise<any> => {
+        if (!require('./conf/default.t').__UPLOAD)
+            return __.send(_F.GET_ERROR_MESSAGE({}, require('./conf/Message.t').__UPLOAD_CLOSE));
+
         const File: any = _.file;
 
         File.originalname = require('./utils/utils.t').TO_UTF8(File.originalname);
 
-        if (!File) {
+        if (!File)
             return __.send(_F.GET_ERROR_MESSAGE({}, require('./conf/Message.t').__NO_FILE));
-        }
+
         const FD: string = require('path').resolve('./static/uploads');
         const OriginName: string = `${FD}/${File.filename}`;
         if (!require('./const/FileTypes.t').includes(File.mimetype)) {
