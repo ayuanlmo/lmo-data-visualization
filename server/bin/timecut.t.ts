@@ -26,10 +26,17 @@ class TC {
         this._Task_Name = `lmo_${new Date().getTime()}`;
         this._Fs = require('fs-extra');
         this._OS = require('os');
+        this._Schedule = 0;
         this.SEND_MESSAGE('task_pending', 'task_pending', {
             taskName: this._Task_Name
         });
-        this._Schedule = 0;
+        if(!require('../conf/default.t').__SYNTHESIS){
+            this.SEND_MESSAGE('showMessage','showMessage',{
+                message: require('../conf/Message.t').__SYNTHESIS_CLOSE,
+                timestamp: new Date().getTime()
+            });
+            return;
+        }
         if (!require('../conf/Conf.t').__FFMPEG) {
             this.SEND_MESSAGE('showMessage', 'showMessage', {
                 message: require('../conf/Message.t').__NO_FFMPEG,

@@ -9,6 +9,7 @@ export default {
                     },
                     on: {
                         'active-change': (e) => {
+                            this.value = e;
                             this.$emit('change', e);
                         }
                     }
