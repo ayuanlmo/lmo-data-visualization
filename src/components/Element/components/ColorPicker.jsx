@@ -4,17 +4,25 @@ export default {
         return (
                 h('el-color-picker', {
                     props: {
-                        value: this.value,
+                        value: this.tVal,
                         'color-format': 'hex'
                     },
                     on: {
                         'active-change': (e) => {
-                            this.value = e;
+                            this.tVal = e;
                             this.$emit('change', e);
                         }
                     }
                 })
         );
+    },
+    data() {
+        return {
+            tVal: ''
+        };
+    },
+    mounted() {
+        this.tVal = this.value;
     },
     props: {
         value: {
