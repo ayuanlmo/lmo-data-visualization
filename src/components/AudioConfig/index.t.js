@@ -51,7 +51,6 @@ export default {
                                                 click: () => {
                                                     this.$refs.SelectMedia.show();
                                                 },
-                                                // click: this.selectAudio,
                                                 mouseover: this.play,
                                                 mouseout: this.pause
                                             }
@@ -69,7 +68,12 @@ export default {
                                                         src: require('@/assets/svg/audio.svg')
                                                     }
                                                 }),
-                                                h('audio', {ref: 'audio'})
+                                                h('audio', {
+                                                    ref: 'audio',
+                                                    on: {
+                                                        ended: this.pause
+                                                    }
+                                                })
                                             ])
                                         ])
                                     ]),
@@ -103,6 +107,7 @@ export default {
                                                     },
                                                     on: {
                                                         change: (e) => {
+                                                            this.complete = e;
                                                             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_COMPLETE', e);
                                                         }
                                                     }
@@ -288,6 +293,7 @@ export default {
             audioName: '',
             audioVolume: 100,
             audioPlay: false,
+            complete: false,
             videoConf: {
                 audio: {
                     name: '',
@@ -330,7 +336,8 @@ export default {
                     this.play();
                 });
             else if (e.data.type === 'TemplateRenderFinish')
-                this.pause();
+                if (!this.complete)
+                    this.pause();
         }
     },
     mounted() {
