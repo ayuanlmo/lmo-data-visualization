@@ -8,7 +8,7 @@ export default {
                         'color-format': 'hex'
                     },
                     on: {
-                        'active-change': (e) => {
+                        'change': (e) => {
                             this.tVal = e;
                             this.$emit('change', e);
                         }
@@ -23,6 +23,9 @@ export default {
     },
     mounted() {
         this.tVal = this.value;
+    },
+    watch: {
+        value: (n) => this.tVal = n
     },
     props: {
         value: {
