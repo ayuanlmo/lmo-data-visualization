@@ -38,11 +38,11 @@ void function (doc, global, echarts, d3) {
                 type: 'line',
                 data: data[i],
                 stack: 'Total',
-                smooth: ChartConfig.text.smoothCurve.value,
+                smooth: this.conf.text.smoothCurve.value,
                 itemStyle: {
                     normal: {
                         lineStyle: {
-                            width: ChartConfig.text.lineSize.value
+                            width: this.conf.text.lineSize.value
                         }
                     }
                 }
@@ -53,11 +53,11 @@ void function (doc, global, echarts, d3) {
         });
         this.chart.setOption({
             animation: true,
-            animationDuration: ChartConfig.duration,
-            color: ChartConfig.themeColor,
+            animationDuration: this.conf.duration,
+            color: this.conf.themeColor,
             legend: {
                 data: legendData,
-                itemHeight: ChartConfig.text.legendItemHeight.value,
+                itemHeight: this.conf.text.legendItemHeight.value,
                 textStyle: {
                     fontSize: this.conf.text.legendFontSize.value,
                     color: this.conf.color.legendFontColor.value
@@ -74,25 +74,24 @@ void function (doc, global, echarts, d3) {
                 boundaryGap: false,
                 data: xAxisData,
                 axisLabel: {
-                    show: ChartConfig.text.xAxisLabel.value,
-                    color: ChartConfig.color.xAxisLabelColor.value,
+                    show: this.conf.text.xAxisLabel.value,
+                    color: this.conf.color.xAxisLabelColor.value,
                     textStyle: {
-                        fontSize: ChartConfig.text.xAxisFontSize.value
+                        fontSize: this.conf.text.xAxisFontSize.value
                     }
                 }
             },
             yAxis: {
                 type: 'value',
                 axisLabel: {
-                    show: ChartConfig.text.yAxisLabel.value,
-                    color: ChartConfig.color.yAxisLabelColor.value,
+                    show: this.conf.text.yAxisLabel.value,
+                    color: this.conf.color.yAxisLabelColor.value,
                     textStyle: {
-                        fontSize: ChartConfig.text.yAxisFontSize.value
+                        fontSize: this.conf.text.yAxisFontSize.value
                     }
                 }
             },
             series: [].concat(seriesData)
         });
     }
-
 }(document, window ?? global, window['echarts'] ?? window.echarts, window['d3'] ?? window.d3);
