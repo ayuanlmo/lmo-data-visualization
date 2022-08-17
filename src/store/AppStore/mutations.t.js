@@ -28,7 +28,10 @@ export default {
             type: UPDATE_COLOR,
             data: data
         });
-        state.currentConfig['color'] = data;
+        state.currentConfig['color'] = {
+            ...state.currentConfig['color'],
+            ...data
+        };
     },
     [TYPE.SET_CURRENT_TEMPLATE_COLOR_MODE](state, data) {
         state.currentConfig['color']['more'] = data;
