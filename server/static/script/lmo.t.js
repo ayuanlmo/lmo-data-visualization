@@ -11,6 +11,7 @@ class TempLate {
     constructor(conf = {}, renderFunc = () => {
     }, type = 'echarts') {
         this.render = renderFunc;
+        this.isPreview = location.href.indexOf('type=preview') !== -1;
         this.conf = conf;
         this.csvData = null;
         this.chart = null;
@@ -24,11 +25,14 @@ class TempLate {
         this.setChart();
         this.init();
         addEventListener('load', () => {
-            if (!this.isCustom)
+            if (!this.isCustom && !this.isPreview)
                 parent.postMessage({
                     type: 'FullConfig',
                     data: this.conf
                 }, location.origin);
+            parent.postMessage({
+                type: 'TemplateLoad'
+            });
         });
     }
 
@@ -37,30 +41,31 @@ class TempLate {
             this.chart = this.echarts.init(this.getRenderDom(), null, {renderer: 'svg'});
     }
 
-    tryRender(d, t) {
+    postMessage(type = '', message = {}) {
+        parent.postMessage({
+            type: type,
+            data: message
+        }, location.origin);
+    }
+
+    tryRender(t) {
         try {
-            this.render(d, t);
-            parent.postMessage({
-                type: 'TemplateRender',
-                data: {}
-            }, location.origin);
+            this.render(this.csvData ?? this.conf.data, t);
+            this.postMessage('TemplateRender');
             clearTimeout(this.timer);
             this.timer = setTimeout(() => {
-                parent.postMessage({
-                    type: 'TemplateRenderFinish',
-                    data: {}
-                }, location.origin);
+                this.postMessage('TemplateRenderFinish');
             }, this.conf.duration);
         } catch (e) {
             parent.postMessage({
                 type: 'RenderError',
                 data: e
             }, location.origin);
+            console.error('[Lmo warn]: Template render error\n\n', Error(e));
         }
     }
 
     init() {
-        //设置分辨率 ('_video')对象需要在合成时才会存在
         if ('_video' in this.conf) {
             const clarity = this.conf['_video']['clarity'];
 
@@ -87,12 +92,13 @@ class TempLate {
         if (this.isCustom) {
             this.csvData = this.conf.data;
             this.initThemeColor();
-            this.tryRender(this.csvData, true);
+            this.tryRender(true);
         } else {
             addEventListener('message', (e) => {
                 this.onMessage(e);
             });
-            this.fetchCSV();
+            if (!this.isPreview)
+                this.fetchCSV();
         }
         this.initTitle();
         this.initBackground();
@@ -125,10 +131,10 @@ class TempLate {
             this.appDom.style.background = this.conf.background.color;
     }
 
-    initThemeColor(__ = []) {
+    initThemeColor(colors = []) {
         const _ = this.conf.color.more;
 
-        if (_ !== undefined)
+        if (_ !== undefined) {
             if ('type' in _) {
                 if (_.type === 'Theme')
                     this.conf.themeColor = this.conf.themeColors[this.conf.themeColorKey].colors;
@@ -137,9 +143,11 @@ class TempLate {
                 if (_.type === 'Gradient')
                     this.conf.themeColor = getDiffColor(rgbToHex(_.config.Gradient.color[0]), rgbToHex(_.config.Gradient.color[1]), this.csvData.length, 1);
             }
-        if (__.length !== 0)
-            this.conf.themeColor = __;
-        this.tryRender(this.csvData, true);
+        } else {
+            if (colors.length !== 0)
+                this.conf.themeColor = colors;
+        }
+        this.tryRender(true);
     }
 
     onMessage(msg) {
@@ -149,12 +157,12 @@ class TempLate {
             if (m.type === 'UpdateData') {
                 this.conf.data = m.data;
                 this.csvData = m.data;
-                this.tryRender(this.csvData, true);
+                this.tryRender(true);
             }
             if (m.type === 'UpdateText') {
                 this.conf.text = m.data;
                 this.initTitle();
-                this.tryRender(this.csvData, false);
+                this.tryRender(false);
             }
             if (m.type === 'UpdateColorMode') {
                 this.conf.color.more = m.data;
@@ -163,12 +171,12 @@ class TempLate {
             if (m.type === 'UpdateColor') {
                 this.conf.color = m.data;
                 this.initTitle();
-                this.tryRender(this.csvData, false);
+                this.tryRender(false);
             }
             if (m.type === 'UpdateThemeColor') {
                 this.conf.themeColorKey = m.data.index;
                 this.initThemeColor(m.data.colors);
-                this.tryRender(this.csvData, false);
+                this.tryRender(false);
             }
             if (m.type === 'UpdateBackground_image') {
                 this.conf.background = m.data;
@@ -177,21 +185,25 @@ class TempLate {
             if (m.type === 'UpdateAnimateName') {
                 this.conf.titleAnimateName = m.data;
                 this.setTitleAnimate();
-                this.tryRender(this.csvData, true);
+                this.tryRender(true);
             }
             if (m.type === 'Preview') {
                 this.conf = m.data;
+                this.csvData = this.conf.data;
+                this.setTitleAnimate();
                 this.initBackground();
-                this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
+                this.initTitle();
+                this.initThemeColor();
+                this.tryRender(true);
             }
             if (m.type === 'Play') {
-                this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
+                this.tryRender(true);
                 this.initBackground();
             }
             if (m.type === 'UpdateDuration') {
                 this.conf.duration = m.data;
                 this.initBackground();
-                this.tryRender(this.csvData ?? this.conf.data.split('\r\n'), true);
+                this.tryRender(true);
             }
         }
     }
@@ -202,15 +214,9 @@ class TempLate {
         }).then(json => {
             this.conf.data = json;
             this.csvData = json;
-            this.conf.defaultData =JSON.parse(JSON.stringify(json));
-            parent.postMessage({
-                type: 'first',
-                data: this.conf
-            }, location.origin);
-            parent.postMessage({
-                type: 'FullConfig',
-                data: this.conf
-            }, location.origin);
+            this.conf.defaultData = JSON.parse(JSON.stringify(json));
+            this.postMessage('first', this.conf);
+            this.postMessage('FullConfig', this.conf);
         });
     }
 }
