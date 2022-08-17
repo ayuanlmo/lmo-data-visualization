@@ -103,8 +103,6 @@ export default {
                 fr.onload = (res) => {
                     const _ = res.srcElement.result.split('\r\n') ?? res.target.result.split('\r\n');
 
-                    console.log(_);
-
                     this.$store.commit('SET_CURRENT_CSV_DATA', _);
                     setTimeout(() => {
                         this.$refs.ht.updateData();
@@ -126,6 +124,7 @@ export default {
                             return _ !== null;
                         }));
             });
+            this.$store.commit('SET_CURRENT_CSV_DATA', csvData);
             PostMessage({
                 type: UPDATE_DATA,
                 data: csvData
