@@ -1,3 +1,7 @@
+/**
+ * @author You-YH
+ * @description 多柱状图模板
+ */
 void function (doc, global, echarts, d3) {
     const ChartConfig = window['chartConfig'] || window.chartConfig;
 
@@ -7,10 +11,6 @@ void function (doc, global, echarts, d3) {
     new TempLate(ChartConfig, render);
 
     function render(text, update = false) {
-        parent.postMessage({
-            type: 'Play',
-            data: 0
-        }, location.origin);
         const xAxisData = [];
         const seriesData = [];
 
@@ -42,43 +42,36 @@ void function (doc, global, echarts, d3) {
                 type: 'category',
                 data: xAxisData,
                 axisLabel: {
-                    show: ChartConfig.text.xAxisLabel.value,
+                    show: this.conf.text.xAxisLabel.value,
                     textStyle: {
-                        fontSize: ChartConfig.text.xAxisFontSize.value
+                        fontSize: this.conf.text.xAxisFontSize.value
                     }
                 }
             },
             yAxis: {
                 type: 'value',
                 axisLabel: {
-                    show: ChartConfig.text.yAxisLabel.value,
+                    show: this.conf.text.yAxisLabel.value,
                     textStyle: {
-                        fontSize: ChartConfig.text.yAxisFontSize.value
+                        fontSize: this.conf.text.yAxisFontSize.value
                     }
                 }
             },
-            color: ChartConfig.themeColor,
+            color: this.conf.themeColor,
             animationDuration: 500,
             series: []
         };
 
         this.chart.setOption(option);
         let i = -1;
-        const timerDuration = this.conf.duration / seriesData.length;
 
         timer = setInterval(() => {
             if (i !== seriesData.length - 1) {
                 i += 1;
                 option.series.push(seriesData[i]);
                 this.chart.setOption(option);
-            } else {
-                console.log('PlayEnd');
-                parent.postMessage({
-                    type: 'PlayEnd',
-                    data: 0
-                }, location.origin);
+            } else
                 clearInterval(timer);
-            }
-        }, timerDuration);
+        }, this.conf.duration / seriesData.length);
     }
 }(document, window ?? global, window['echarts'] ?? window.echarts, window['d3'] ?? window.d3);
