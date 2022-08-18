@@ -22,13 +22,13 @@ export default {
                     class: 'lmo_none_user_select'
                 }, [
                     h('img', {
-                        class: 'none_user_select cursor_pointer lmo_about_logo animated flipInX',
+                        class: 'none_user_select cursor_pointer lmo_about_logo animated bounce',
                         attrs: {
                             src: require('@static/svg/lmo-logo.svg')
                         }
                     }),
                     h('div', {
-                        class: 'lmo_about_box_title lmo_theme_color animated flipInX'
+                        class: 'lmo_about_box_title lmo_theme_color animated slideInDown'
                     }, [
                         h('div', [require('@config/AppConfig').appName])
                     ]),
@@ -86,26 +86,23 @@ export default {
                                         src: require('@static/svg/github.svg')
                                     }
                                 })
-                            ]),
-                            h('a', {
-                                attrs: {
-                                    title: 'Gitee',
-                                    href: AppConfig.openSource.gitee,
-                                    target: '_blank'
-                                }
-                            }, [
-                                h('img', {
-                                    attrs: {
-                                        src: require('@static/svg/gitee.svg')
-                                    }
-                                })
                             ])
                         ]),
                         h('div', {
                             class: 'lmo_line'
                         }),
                         h('p', [
-                            `Powered by Node.js`
+                            'Powered by ',
+                            h('a', {
+                                class: 'lmo_theme_color',
+                                attrs: {
+                                    title: 'nodejs.org',
+                                    target: '_blank',
+                                    href: 'https://nodejs.org/'
+                                }
+                            }, [
+                                `Node.js`
+                            ])
                         ])
                     ])
                 ])

@@ -9,6 +9,7 @@ ffmpeg.exe
 *.mp4*
 *.log*
 *.t.log*
+*.ting.db*
 
 # local env files
 .env.local
@@ -28,3 +29,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+*ting.db
