@@ -67,7 +67,7 @@ class T_DB {
                             resolve(e);
                         else {
                             console.warn(`CREATE_TABLE ${name} :`, e);
-                            reject(e)
+                            reject(e);
                         }
                     });
             });
@@ -77,7 +77,7 @@ class T_DB {
     OPEN(): void {
         this._ = new _SQLITE.Database(_Global.dbConf._path, (_e: any) => {
             if (_e)
-                console.warn('[Warn]:Database open failed...')
+                console.warn('[Warn]:Database open failed...');
         });
     }
 
@@ -87,29 +87,26 @@ class T_DB {
     }
 
     INIT_TEMPLATE(): void {
-        this['_']['all']('SELECT * FROM Template', (_e: any) => {
+        this._.all('SELECT * FROM Template', (_e: any) => {
             if (_e)
                 console.warn(['[Warn]:Failed to init template...'], _e);
             else {
-                this._FS.readdir(_Global.dbConf._template, (e: any, data: Array<any>) => {
-                    if (!e) {
-                        data.map(i => {
-                            const _SQL = this.GET_INSERT_TEMPLATE_TABLE_SQL({
-                                T_Name: i,
-                                T_Id: `lmo_data_visualization_template_${i}`,
-                                T_Title: _Ti[i]['title'],
-                                T_Description: _Ti[i]['description'],
-                                T_Path: `/static/DataVisualizationTemplate/${i}/index.html`,
-                                T_Type: '0'
-                            });
+                const path = '/static/DataVisualizationTemplate/$t/index.html';
 
-                            if (_SQL !== '')
-                                this._.run(_SQL, (e: any) => {
-                                    if (e)
-                                        console.warn('[Warn]:Template write failed...', e);
-                                });
+                _Ti.map((i: any) => {
+                    const _SQL = this.GET_INSERT_TEMPLATE_TABLE_SQL({
+                        T_Name: i.name,
+                        T_Id: `lmo_data_visualization_template_${i.name}`,
+                        T_Title: i.title,
+                        T_Description: i.description,
+                        T_Path: path.replace('$t', i.name),
+                        T_Type: '0'
+                    });
+                    if (_SQL !== '')
+                        this._.run(_SQL, (e: any) => {
+                            if (e)
+                                console.warn('[Warn]:Template write failed...', e);
                         });
-                    }
                 });
             }
         });
