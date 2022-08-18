@@ -1,7 +1,8 @@
-require('./style.t.scss');
-
 import SelectMedia from '@/components/SelectMedia/index.t';
 import {mapState} from "vuex";
+import LmoAudioPlayer from "@components/AudioPlayer/index.t";
+
+require('./style.t.scss');
 
 export default {
     name: 'lmo-audio_config',
@@ -19,7 +20,9 @@ export default {
                         select: (e) => {
                             this.audioName = e.name;
                             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', e.path);
-                            this.$refs.audio.src = `${require('@/config/AppConfig').devProxy.http}${e.path}`;
+                            const src = `${require('@/config/AppConfig').devProxy.http}${e.path}`;
+
+                            this.lap.setSrc(src);
                         }
                     }
                 }),
@@ -66,12 +69,6 @@ export default {
                                                 h('img', {
                                                     attrs: {
                                                         src: require('@/assets/svg/audio.svg')
-                                                    }
-                                                }),
-                                                h('audio', {
-                                                    ref: 'audio',
-                                                    on: {
-                                                        ended: this.pause
                                                     }
                                                 })
                                             ])
@@ -294,6 +291,7 @@ export default {
             audioVolume: 100,
             audioPlay: false,
             complete: false,
+            lap: new LmoAudioPlayer(),
             videoConf: {
                 audio: {
                     name: '',
@@ -315,20 +313,22 @@ export default {
         },
         play() {
             if (this.audioName !== '') {
-                this.$refs.audio.currentTime = 0;
+                this.lap.play(true);
                 this.audioPlay = true;
-                this.$refs.audio['play']();
+                this.lap.Audio.addEventListener('ended', () => {
+                    this.pause();
+                });
             }
         },
         pause() {
             this.audioPlay = false;
-            this.$refs.audio['pause']();
+            this.lap.pause();
         },
         sliderChange(e) {
             const volume = (e / 100).toFixed(1);
 
             this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_VOLUME', volume);
-            this.$refs.audio.volume = volume;
+            this.lap.setVolume(volume);
         },
         onmessage(e) {
             if (e.data.type === 'TemplateRender')
