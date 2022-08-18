@@ -44,7 +44,8 @@ class T_DB {
                     await this.INIT_TABLE();
                 }, 2000);
             }
-        }
+        } else
+            this.OPEN();
     }
 
     INIT_TABLE(): void {
@@ -134,14 +135,18 @@ class T_DB {
     }
 
     QUERY_TEMPLATE_LIST(): any {
-        console.log(this);
-        return new Promise((_resolve) => {
-            this._.all('SELECT * FROM Template', (_e: any, _d: any) => {
-                if (!_e)
-                    _resolve(_d ?? []);
-                else
-                    console.log(_e);
-            });
+        return new Promise((resolve, reject) => {
+            try {
+                this._.all('SELECT * FROM Template', (_e: any, _d: any) => {
+                    if (!_e)
+                        resolve(_d ?? []);
+                    else
+                        console.log(_e);
+                });
+            } catch (e) {
+                reject(e);
+            }
+
         });
     }
 
