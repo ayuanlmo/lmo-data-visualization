@@ -24,28 +24,60 @@ interface INSERT_RESOURCE_SQL {
 }
 
 const _SQLITE: any = require('sqlite3');
-const _FS: any = require("fs-extra");
 const _Global: any = global;
 const _Ti: any = _Global.dbConf.index;
 
 class T_DB {
     private _: any;
+    private readonly _FS: any;
+    private readonly _RESOLVE_PATH: any;
 
     constructor() {
+        this._FS = require("fs-extra");
         this._ = null;
-        this.OPEN();
+        this._RESOLVE_PATH = require('path').resolve;
+        if (!this._FS.existsSync(this._RESOLVE_PATH(__dirname + '/db'))) {
+            this._FS.mkdir(this._RESOLVE_PATH(__dirname + '/db'));
+            if (!this._FS.existsSync(this._RESOLVE_PATH(__dirname + '/db/db.ting.db'))) {
+                this.OPEN();
+                setTimeout(async () => {
+                    await this.INIT_TABLE();
+                }, 2000);
+            }
+        }
+    }
+
+    INIT_TABLE(): void {
+        Promise.all([
+            this.CREATE_TABLE('Template', 'create table Template(T_Name text(128) not null,T_Id text(128) not null,T_Title text(128) not null,T_Description text(255) not null,T_Path text(255) not null,T_Type text(12)  not null);'),
+            this.CREATE_TABLE('Resource', 'create table Resource(T_Nane TEXT(128) not null,T_Path TEXT(128) not null,T_Create_At text(128) not null,T_Status int(2));'),
+            this.CREATE_TABLE('Log', 'create table Log(T_Resource_ID text(128) not null,T_Log_File_Path text(256),T_Log_Temp_File_Path text(256));')
+        ]).then(() => {
+            this.INIT_TEMPLATE();
+        });
+    }
+
+    CREATE_TABLE(name: string, sql: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this._.run(`DROP TABLE IF EXISTS ${name};`, (e: any) => {
+                if (!e)
+                    this._.run(sql, (e: any) => {
+                        if (!e)
+                            resolve(e);
+                        else {
+                            console.warn(`CREATE_TABLE ${name} :`, e);
+                            reject(e)
+                        }
+                    });
+            });
+        });
     }
 
     OPEN(): void {
         this._ = new _SQLITE.Database(_Global.dbConf._path, (_e: any) => {
             if (_e)
                 console.warn('[Warn]:Database open failed...')
-            else
-                this.QUERY_TEMPLATE_LIST().then((R: any) => {
-                    if (R.length === 0)
-                        this.INIT_TEMPLATE();
-                })
-        })
+        });
     }
 
     CLOSE(): void {
@@ -58,7 +90,7 @@ class T_DB {
             if (_e)
                 console.warn(['[Warn]:Failed to init template...'], _e);
             else {
-                _Fs.readdir(_Global.dbConf._template, (e: any, data: Array<any>) => {
+                this._FS.readdir(_Global.dbConf._template, (e: any, data: Array<any>) => {
                     if (!e) {
                         data.map(i => {
                             const _SQL = this.GET_INSERT_TEMPLATE_TABLE_SQL({
@@ -71,7 +103,7 @@ class T_DB {
                             });
 
                             if (_SQL !== '')
-                                this._.eun(_SQL, (e: any) => {
+                                this._.run(_SQL, (e: any) => {
                                     if (e)
                                         console.warn('[Warn]:Template write failed...', e);
                                 });
@@ -102,6 +134,7 @@ class T_DB {
     }
 
     QUERY_TEMPLATE_LIST(): any {
+        console.log(this);
         return new Promise((_resolve) => {
             this._.all('SELECT * FROM Template', (_e: any, _d: any) => {
                 if (!_e)
