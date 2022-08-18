@@ -9,10 +9,8 @@
  **/
 
 require('./style/lmo-style.t.scss');
-require('./style/lmo-animation.t.scss');
-require('./style/lmo-default.t.scss');
+require('@style/lmo-default.t.css');
 require('../public/style/animate.min.css');
-require('./style/lmo-components.scss');
 
 import '@/lib/PostMessage/index.t';
 import {get} from '@/lib/Storage';
