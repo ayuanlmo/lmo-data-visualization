@@ -25,7 +25,9 @@ export default {
         this.tVal = this.value;
     },
     watch: {
-        value: (n) => this.tVal = n
+        value: function (n) {
+            this.tVal = n;
+        }
     },
     props: {
         value: {
