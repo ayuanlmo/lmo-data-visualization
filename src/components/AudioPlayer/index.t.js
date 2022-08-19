@@ -51,6 +51,12 @@ export default class LmoAudioPlayer {
         return this.Audio;
     }
 
+    destroy() {
+        if (!this.Audio.paused)
+            this.Audio.pause();
+        this.Audio = null;
+    }
+
     continue() {
         this.play(false);
     }
