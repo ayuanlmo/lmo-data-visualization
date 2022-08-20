@@ -18,6 +18,7 @@ class TC {
     private readonly _Task_Name: string;
     private readonly _Fs: any;
     private readonly _OS: any;
+    private readonly _DB: any;
 
     constructor(ws: any, data: any) {
         this._Ws = ws;
@@ -26,12 +27,13 @@ class TC {
         this._Task_Name = `lmo_${new Date().getTime()}`;
         this._Fs = require('fs-extra');
         this._OS = require('os');
+        this._DB = new (require('../lib/sqlite/sqlite.t').T_DB);
         this._Schedule = 0;
         this.SEND_MESSAGE('task_pending', 'task_pending', {
             taskName: this._Task_Name
         });
-        if(!require('../conf/default.t').__SYNTHESIS){
-            this.SEND_MESSAGE('showMessage','showMessage',{
+        if (!require('../conf/default.t').__SYNTHESIS) {
+            this.SEND_MESSAGE('showMessage', 'showMessage', {
                 message: require('../conf/Message.t').__SYNTHESIS_CLOSE,
                 timestamp: new Date().getTime()
             });
@@ -57,9 +59,18 @@ class TC {
         const e: string = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
         if (!this._Fs.existsSync(_logPath))
             this._Fs.mkdir(_logPath);
-        this._Fs.writeFile(_ResolvePath(`${_logPath}/${this._Task_Name}.t.log`), `${s}${this._Logs.join('\n')}${e}`, (e: any) => {
-            if (!e)
+        const P = _ResolvePath(`${_logPath}/${this._Task_Name}.t.log`);
+
+        this._Fs.writeFile(P, `${s}${this._Logs.join('\n')}${e}`, (e: any) => {
+            if (!e) {
                 this._Logs = [];
+                this._DB.INSERT_LOG({
+                    id: this._Task_Name,
+                    log_file_path: P,
+                    temp_file_path: '/'
+                });
+            }
+
         });
     }
 
@@ -112,6 +123,12 @@ class TC {
         this._Logs.push(`CURRENT: ${_PATH.SYNTHESIS.CURRENT_TEMPLATE.replace('$t', this._Task_Name)}`);
         this._Logs.push(`CONFIG ${require('../funcs.t').STRINGIFY(this._Data)}\n\n`);
         let audioPath = '';
+        this._DB.SET_RESOURCE({
+            name: this._Task_Name,
+            path: '/',
+            status: 'Processing',
+            id: this._Task_Name
+        });
         const _ = this._Data.config;
         const _conf: object = {
             url: `http://localhost:${require('../conf/Conf.t').__SERVER_PORT}${_PATH.SYNTHESIS.SERVER.replace('$t', this._Task_Name)}`,
@@ -148,11 +165,19 @@ class TC {
             this.PROCESS_AUDIO(_.audio.src !== '' ? `${_PATH.PROCESS_AUDIO.PATH.replace('$t', this._Task_Name)}` : '', audioPath).then((_r) => {
                 this.OUTPUT_LOG_FILE();
                 if (_r === 1) {
+                    const P = _PATH.SYNTHESIS.OUTPUT.replace('$t', this._Task_Name);
+
+                    this._DB.UPDATE_RESOURCE_STATUS({
+                        status: 'Finish',
+                        name: this._Task_Name,
+                        path: P
+                    });
                     setTimeout(() => {
+                        this._DB.CLOSE();
                         this.SEND_MESSAGE('task_end', 'task_processing', {
                             state: 'success',
                             taskName: this._Task_Name,
-                            path: _PATH.SYNTHESIS.OUTPUT.replace('$t', this._Task_Name)
+                            path: P
                         });
                     }, 2000);
                 } else
