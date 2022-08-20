@@ -95,8 +95,11 @@ const _F = {
         _.filter((i: string) => {
             return require('./const/MediaTypes.t')[type].includes(i.split('.')[1])
         }).map((i: string) => {
+            const media = i.split('.');
+            
             Arr.push({
-                name: i,
+                name: media[0],
+                type: media[1],
                 path: `/static/uploads/${i}`
             })
         });

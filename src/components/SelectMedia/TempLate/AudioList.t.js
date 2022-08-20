@@ -35,7 +35,7 @@ export default {
                                             h('div', {
                                                 class: 'lmo_select-media-type'
                                             }, [
-                                                `${require('@/utils/index').getMediaType(i.name)}`
+                                                `${i.type}`
                                             ])
                                         ])
                                     ])

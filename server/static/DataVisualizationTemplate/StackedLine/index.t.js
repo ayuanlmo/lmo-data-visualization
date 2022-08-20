@@ -13,7 +13,8 @@ void function (doc, global, echarts, d3) {
         const data = {};
         const legendData = [];
         const seriesData = [];
-        const xAxisData = [];
+
+        let xAxisData = [];
 
         //拆分数据
         text.map(async (i, index) => {
@@ -48,8 +49,10 @@ void function (doc, global, echarts, d3) {
                 }
             });
         });
+        xAxisData = [];
         seriesData[0].data.map((i, index) => {
-            xAxisData.push(`${index += 1}`);
+            if(i !== null)
+                xAxisData.push(`${index += 1}`);
         });
         this.chart.setOption({
             animation: true,

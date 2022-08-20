@@ -345,6 +345,8 @@ export default {
         addEventListener('message', this.onmessage);
     },
     destroyed() {
+        this.lap.destroy();
+        this.lap = null;
         removeEventListener('message', this.onmessage);
     },
     watch: {

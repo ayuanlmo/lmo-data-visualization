@@ -6,6 +6,7 @@ import HotTable from '@/components/HotTable/index.t';
 import TextConfigItem from '@/components/TextConfigItem/index.t';
 import AudioConfig from '@/components/AudioConfig/index.t';
 import PlayerBar from '@/components/PlayerBar/index.t';
+import VideoInfo from '@/components/VideoInfo/index.t';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
 
@@ -59,7 +60,8 @@ export default {
                                         });
                                     }
                                 }
-                            })
+                            }),
+                            h(VideoInfo)
                         ]),
                         h('div', {
                             class: 'lmo-data_visualization_edit_preview_table lmo_position_relative'
