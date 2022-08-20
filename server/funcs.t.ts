@@ -5,6 +5,8 @@
  * */
 
 const _Fs: any = require('fs-extra');
+const _Message = require('./conf/Message.t');
+const _Path = require('path');
 const _F = {
     /**
      * @method GET_SUCCESS_MESSAGE
@@ -96,7 +98,7 @@ const _F = {
             return require('./const/MediaTypes.t')[type].includes(i.split('.')[1])
         }).map((i: string) => {
             const media = i.split('.');
-            
+
             Arr.push({
                 name: media[0],
                 type: media[1],
@@ -114,7 +116,7 @@ const _F = {
      * **/
     UPLOAD_FILE: async (_: any, __: any): Promise<any> => {
         if (!require('./conf/default.t').__UPLOAD)
-            return __.send(_F.GET_ERROR_MESSAGE({}, require('./conf/Message.t').__UPLOAD_CLOSE));
+            return __.send(_F.GET_ERROR_MESSAGE({}, _Message.__UPLOAD_CLOSE));
 
         const File: any = _.file;
 
@@ -154,30 +156,59 @@ const _F = {
      * @method GET_MEDIA
      * @description 获取合成媒体
      * @param _ {any} 响应对象
+     * @param req {any} 请求对象
      * **/
-    GET_MEDIA: (_: any): void => {
-        const _outputDir = './static/output';
+    GET_MEDIA: (_: any, req: any): void => {
+        const _T_DB = new (require('./lib/sqlite/sqlite.t').T_DB);
 
-        if (!_Fs.existsSync(_outputDir))
-            _Fs.mkdir(_outputDir);
-        _Fs.readdir('./static/output', (_e: never, _d: Array<any>) => {
+        _T_DB.GET_MEDIA_LIST(req.query.type ?? '').then(((r: any) => {
             const __: Array<object> = [];
 
-            _d.forEach((i: string) => {
-                if (i.split('.')[1] === 'mp4') {
-                    __.push({
-                        name: i,
-                        path: `/static/output/${i}`
-                    });
-                }
-            });
-            _.json(
-                _F.GET_SUCCESS_MESSAGE({
-                    list: __
+            r.map((i: any) => {
+                __.push({
+                    name: i.T_Name,
+                    path: i.T_Path,
+                    create_at: i.T_Create_At,
+                    status: i._Status,
+                    id: i.T_ID
                 })
-            );
-        });
+            });
+            _.json(_F.GET_SUCCESS_MESSAGE({
+                list: __
+            }));
+            _T_DB.CLOSE();
+        }))
     },
+
+    /**
+     * @method DEL_MEDIA
+     * @description 删除某个媒体文件
+     * @param _ {any} 响应对象
+     * @param req {any} 请求对象
+     * **/
+    DEL_MEDIA(_: any, req: any) {
+        const MediaId = req.query.id ?? '';
+
+        if (MediaId === '') {
+            _.json(_F.GET_ERROR_MESSAGE({}, _Message.__NO_MEDIA_ID));
+        } else {
+            const _T_DB = new (require('./lib/sqlite/sqlite.t').T_DB);
+
+            _T_DB.DEL_MEDIA_ITEM(MediaId).then(() => {
+                _.json(_F.GET_SUCCESS_MESSAGE());
+                const MediaPath: string = _Path.resolve(`./${req.query.path}`);
+                const LogPath: string = _Path.resolve(`./static/log/lmo_${MediaId}.t.log`);
+
+                _Fs.unlinkSync(MediaPath);
+                _Fs.unlinkSync(LogPath);
+                _T_DB.DEL_LOG(MediaId);
+                _T_DB.CLOSE();
+            }).catch(() => {
+                _.json(_F.GET_ERROR_MESSAGE({}, _Message.__DEL_MEDIA_ERROR));
+            });
+        }
+    },
+
     /**
      * @method STRINGIFY
      * @description Object转String

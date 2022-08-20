@@ -4,5 +4,7 @@ module.exports = {
     __FILE_NS: '文件$t非受支持的媒体文件，请重新上传',
     __NO_FILE: '请选择一个文件',
     __SYNTHESIS_CLOSE: '当前服务器未开启合成服务',
-    __UPLOAD_CLOSE: '当前服务器未开启文件上传'
+    __UPLOAD_CLOSE: '当前服务器未开启文件上传',
+    __NO_MEDIA_ID: '请传入Media ID',
+    __DEL_MEDIA_ERROR: '删除媒体文件失败：[数据库错误]'
 };

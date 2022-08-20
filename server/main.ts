@@ -82,7 +82,10 @@
         return _Func.GET_UPLOAD_MEDIA(__);
     });
     _App.post(_Router.__GET_MEDIA, (_: any, __: any): void => {
-        return _Func.GET_MEDIA(__);
+        return _Func.GET_MEDIA(__, _);
+    });
+    _App.post(_Router.__DEL_MEDIA, (_: any, __: any) => {
+        return _Func.DEL_MEDIA(__, _);
     });
     _App.get('*', (_: any, __: any): void => {
         __.json({data: {}, code: 404, message: 'No Found'});
