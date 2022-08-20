@@ -147,7 +147,7 @@ function downloadFile(conf) {
     const a = document.createElement('a');
 
     return new Promise((resolve, reject) => {
-        a.download = `${conf.download}${new Date().getTime()}`;
+        a.download = `${conf.download}}`;
         a.href = conf.href;
         resolve(a);
     });
