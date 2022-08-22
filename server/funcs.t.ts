@@ -204,6 +204,8 @@ const _F = {
                 _T_DB.DEL_LOG(MediaId);
                 _T_DB.CLOSE();
             }).catch(() => {
+                console.log(_)
+                debugger;
                 _.json(_F.GET_ERROR_MESSAGE({}, _Message.__DEL_MEDIA_ERROR));
             });
         }

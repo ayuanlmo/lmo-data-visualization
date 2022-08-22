@@ -96,6 +96,11 @@ export default {
                                                                     h('img', {
                                                                         attrs: {
                                                                             src: require('@/assets/svg/del.svg')
+                                                                        },
+                                                                        on: {
+                                                                            click: () => {
+                                                                                this.clickEvent(i, 'del');
+                                                                            }
                                                                         }
                                                                     })
                                                                 ])
@@ -140,6 +145,20 @@ export default {
                     href: `${require('@/config/AppConfig').devProxy.http}/${i.path}`
                 }).then(a => {
                     a.click();
+                });
+            }
+            if (type === 'del') {
+                this.$confirm('将永久删除该文件以及日志，确定吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$store.dispatch('DEL_MEDIA_ITEM', {
+                        id: i.id
+                    }).then(r => {
+                        console.log(r);
+                    });
+                }).catch(() => {
                 });
             }
         }
