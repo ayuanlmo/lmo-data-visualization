@@ -66,7 +66,7 @@ class TC {
                 this._Logs = [];
                 this._DB.INSERT_LOG({
                     id: this._Task_Name,
-                    log_file_path: P,
+                    log_file_path: `${_PATH.LOG.PATH.replace('.','')}${this._Task_Name}.t.log`,
                     temp_file_path: '/'
                 });
             }
