@@ -14,5 +14,8 @@ export default {
     },
     [TYPE.GET_UPLOAD_MEDIA]({commit}) {
         return _POST(URL.GET_UPLOAD_MEDIA);
+    },
+    [TYPE.DEL_MEDIA_ITEM]({commit}, data) {
+        return _POST(`${URL.DEL_MEDIA}${require('@/utils/index').createQueryParams(data)}`);
     }
 };

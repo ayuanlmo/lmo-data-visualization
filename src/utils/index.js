@@ -18,6 +18,7 @@ module.exports.formatSec = formatSec;
 module.exports.toCSV = toCSV;
 module.exports.getFormData = getFormData;
 module.exports.getMediaType = getMediaType;
+module.exports.createQueryParams = createQueryParams;
 
 function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
@@ -147,7 +148,7 @@ function downloadFile(conf) {
     const a = document.createElement('a');
 
     return new Promise((resolve, reject) => {
-        a.download = `${conf.download}${new Date().getTime()}`;
+        a.download = `${conf.download}}`;
         a.href = conf.href;
         resolve(a);
     });
@@ -215,4 +216,14 @@ function getMediaType(mediaName = '') {
     if (mediaName === '')
         return '';
     return mediaName.split('.')[1];
+}
+
+function createQueryParams(data = {}) {
+    let str = '?';
+
+    Object.keys(data).map(i => {
+        str += `${i}=${data[i]}&`;
+    });
+
+    return str.substring(0, str.length - 1);
 }

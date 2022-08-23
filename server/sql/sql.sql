@@ -17,9 +17,9 @@
 DROP TABLE IF EXISTS "Log";
 create table Log
 (
-    T_Resource_ID        text(128) not null, --资源ID
-    T_Log_File_Path      text(256), --日志文件路径
-    T_Log_Temp_File_Path text(256)  --日志临时文件路径
+    T_Resource_ID        TEXT(128) NOT NULL, --资源ID
+    T_Log_File_Path      TEXT(256), --日志文件路径
+    T_Log_Temp_File_Path TEXT(256)  --日志临时文件路径
 );
 
 -- ----------------------------
@@ -28,10 +28,11 @@ create table Log
 DROP TABLE IF EXISTS "Resource";
 create table Resource
 (
-    T_Nane      TEXT(128) not null, --名称
-    T_Path      TEXT(128) not null, --路径
-    T_Create_At text(128) not null, --创建时间
-    T_Status    int(2)  --状态
+    T_Name      TEXT(128) NOT NULL, --名称
+    T_Path      TEXT(128) NOT NULL, --路径
+    T_Create_At TEXT(128) NOT NULL, --创建时间
+    T_Status    TEXT(30),  --状态
+    T_ID TEXT(128) NOT NULL
 );
 
 -- ----------------------------
@@ -40,10 +41,10 @@ create table Resource
 DROP TABLE IF EXISTS "Template";
 create table Template
 (
-    T_Name        text(128) not null,   --名称
-    T_Id          text(128) not null,   --模板ID
-    T_Title       text(128) not null,   --模板标题
-    T_Description text(255) not null,   --模板介绍
-    T_Path        text(255) not null,   --模板路径
-    T_Type        text(12)  not null    --模板类型
+    T_Name        TEXT(128) NOT NULL,   --名称
+    T_Id          TEXT(128) NOT NULL,   --模板ID
+    T_Title       TEXT(128) NOT NULL,   --模板标题
+    T_Description TEXT(255) NOT NULL,   --模板介绍
+    T_Path        TEXT(255) NOT NULL,   --模板路径
+    T_Type        TEXT(12)  NOT NULL    --模板类型
 );
