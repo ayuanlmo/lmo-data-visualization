@@ -195,17 +195,15 @@ const _F = {
             const _T_DB = new (require('./lib/sqlite/sqlite.t').T_DB);
 
             _T_DB.DEL_MEDIA_ITEM(MediaId).then(() => {
-                _.json(_F.GET_SUCCESS_MESSAGE());
                 const MediaPath: string = _Path.resolve(`./${req.query.path}`);
-                const LogPath: string = _Path.resolve(`./static/log/lmo_${MediaId}.t.log`);
+                const LogPath: string = _Path.resolve(`./static/log/${MediaId}.t.log`);
 
                 _Fs.unlinkSync(MediaPath);
                 _Fs.unlinkSync(LogPath);
                 _T_DB.DEL_LOG(MediaId);
                 _T_DB.CLOSE();
+                _.json(_F.GET_SUCCESS_MESSAGE());
             }).catch(() => {
-                console.log(_)
-                debugger;
                 _.json(_F.GET_ERROR_MESSAGE({}, _Message.__DEL_MEDIA_ERROR));
             });
         }

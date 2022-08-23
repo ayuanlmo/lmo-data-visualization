@@ -127,10 +127,11 @@ class T_DB {
     DEL_MEDIA_ITEM(id: string): Promise<number> {
         return new Promise((resolve, reject) => {
             this._.run(`DELETE FROM Resource WHERE T_ID = '${id}'`, (e: any) => {
-                if (!e) {
+                if (e === null) {
                     resolve(1);
-                } else
+                } else {
                     reject(0);
+                }
             });
         });
     }
