@@ -154,9 +154,13 @@ export default {
                     type: 'warning'
                 }).then(() => {
                     this.$store.dispatch('DEL_MEDIA_ITEM', {
-                        id: i.id
+                        id: i.id,
+                        path: i.path
                     }).then(r => {
-                        console.log(r);
+                        if (r.code === 200) {
+                            this.$message.success('删除成功');
+                            this.getList();
+                        }
                     });
                 }).catch(() => {
                 });
