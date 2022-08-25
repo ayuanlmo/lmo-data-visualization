@@ -26,7 +26,8 @@ void function (doc, global, echarts, d3) {
                 if (Array.isArray(i)) {
                     i.map((j, k) => {
                         if (k !== 0 && k !== 1) {
-                            xAxisData.push(j);
+                            if (j !== null)
+                                xAxisData.push(j);
                         }
                     });
                 }
