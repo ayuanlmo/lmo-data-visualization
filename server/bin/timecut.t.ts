@@ -16,6 +16,7 @@ class TC {
     private _Logs: Array<string>;
     private _Schedule: number;
     private readonly _Task_Name: string;
+    private _Name: string;
     private readonly _Fs: any;
     private readonly _OS: any;
     private readonly _DB: any;
@@ -29,8 +30,9 @@ class TC {
         this._OS = require('os');
         this._DB = new (require('../lib/sqlite/sqlite.t').T_DB);
         this._Schedule = 0;
+        this._Name = this._Data.name === '' ? this._Task_Name : this._Data.name;
         this.SEND_MESSAGE('task_pending', 'task_pending', {
-            taskName: this._Task_Name
+            taskName: this._Name
         });
         if (!require('../conf/default.t').__SYNTHESIS) {
             this.SEND_MESSAGE('showMessage', 'showMessage', {
@@ -129,7 +131,7 @@ class TC {
         this._Logs.push(`CONFIG ${require('../funcs.t').STRINGIFY(this._Data)}\n\n`);
         let audioPath = '';
         this._DB.SET_RESOURCE({
-            name: this._Task_Name,
+            name: this._Name,
             path: '/',
             status: 'Processing',
             id: this._Task_Name
@@ -152,7 +154,7 @@ class TC {
             preparePageForScreenshot: async (page: any, currentFrame: number, totalFrames: number) => {
                 this._Schedule = parseInt(String(currentFrame / totalFrames * 100));
                 await this.SEND_MESSAGE('task_processing', 'task_processing', {
-                    taskName: this._Task_Name,
+                    taskName: this._Name,
                     schedule: this._Schedule
                 });
             }
@@ -167,41 +169,44 @@ class TC {
         }
 
         _TimeCut(_conf).then(() => {
-            this.PROCESS_AUDIO(_.audio.src !== '' ? `${_PATH.PROCESS_AUDIO.PATH.replace('$t', this._Task_Name)}` : '', audioPath).then((_r) => {
+            this.PROCESS_AUDIO(_.audio.src !== '' ? `${_PATH.PROCESS_AUDIO.PATH.replace('$t', this._Task_Name)}` : '', audioPath).then((_r: number) => {
                 this.OUTPUT_LOG_FILE();
-                if (_r === 1) {
-                    const P = _PATH.SYNTHESIS.OUTPUT.replace('$t', this._Task_Name);
+                const P = _PATH.SYNTHESIS.OUTPUT.replace('$t', `${this._Task_Name}${_r === 1 ? '' : '264'}`);
 
-                    this._DB.UPDATE_RESOURCE_STATUS({
-                        status: 'Finish',
-                        name: this._Task_Name,
-                        path: P
-                    });
+                this._DB.UPDATE_RESOURCE_STATUS({
+                    status: 'Finish',
+                    name: this._Task_Name,
+                    path: P
+                });
+
+                if (_r === 1) {
                     setTimeout(() => {
                         this._DB.CLOSE();
                         this.SEND_MESSAGE('task_end', 'task_processing', {
                             state: 'success',
-                            taskName: this._Task_Name,
+                            taskName: this._Name,
                             path: P
                         });
                     }, 2000);
-                } else
+                } else {
                     this.SEND_MESSAGE('task_pro', 'task_pro_success', {
-                        taskName: this._Task_Name
+                        taskName: this._Name,
+                        path: P
                     });
+                }
                 this.DEL_TEMP_FILE(`${_ResolvePath(`./static/temp/${this._Task_Name}`)}`);
             });
         }).catch(() => {
             this.SEND_MESSAGE('task_end', 'error', {
-                taskName: this._Task_Name
+                taskName: this._Name
             });
         });
     }
 
-    PROCESS_AUDIO(src: string, audio: string) {
+    PROCESS_AUDIO(src: string, audio: string): Promise<number> {
         return new Promise((resolve: any) => {
             this.SEND_MESSAGE('task_pro', 'task_pro_ready', {
-                taskName: this._Task_Name
+                taskName: this._Name
             });
             if (src === '')
                 return resolve(1);
@@ -225,7 +230,7 @@ class TC {
             });
             _.on('stderr', (msg: string) => {
                 this.SEND_MESSAGE('task_processing', 'task_processing', {
-                    taskName: this._Task_Name,
+                    taskName: this._Name,
                     message: msg
                 });
             });
