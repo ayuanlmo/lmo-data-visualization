@@ -83,14 +83,14 @@ export default {
     },
     methods: {
         startSynthesis() {
-            this.$confirm('您确定要开始合成吗?', '提示', {
+            this.$prompt('请输入项目名称(可空)', '发起合成', {
                 confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
+                cancelButtonText: '取消'
+            }).then(({value}) => {
                 this.ws.send(require('@/utils/index').stringToBinary(JSON.stringify({
                     cmd: 'synthesis',
                     data: {
+                        name: value ?? '',
                         templateConfig: {
                             isCustom: 0,
                             ...this.currentConfig

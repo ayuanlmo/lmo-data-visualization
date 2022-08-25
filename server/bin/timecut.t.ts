@@ -16,6 +16,7 @@ class TC {
     private _Logs: Array<string>;
     private _Schedule: number;
     private readonly _Task_Name: string;
+    private _Name: string;
     private readonly _Fs: any;
     private readonly _OS: any;
     private readonly _DB: any;
@@ -29,8 +30,9 @@ class TC {
         this._OS = require('os');
         this._DB = new (require('../lib/sqlite/sqlite.t').T_DB);
         this._Schedule = 0;
+        this._Name = this._Data.name === '' ? this._Task_Name : this._Data.name;
         this.SEND_MESSAGE('task_pending', 'task_pending', {
-            taskName: this._Task_Name
+            taskName: this._Name
         });
         if (!require('../conf/default.t').__SYNTHESIS) {
             this.SEND_MESSAGE('showMessage', 'showMessage', {
@@ -74,39 +76,44 @@ class TC {
         });
     }
 
-    COPY_TEMPLATE(): void {
+    async COPY_TEMPLATE() {
         const _temp: string = _ResolvePath(_PATH.COPY_TEMPLATE.TEMP);
         const _: string = _ResolvePath(`${_PATH.COPY_TEMPLATE.THIS}${this._Task_Name}`);
 
         if (!this._Fs.existsSync(_temp))
             this._Fs.mkdir(_temp);
         if (!this._Fs.existsSync(_)) {
-            this._Fs.mkdir(_);
-            setTimeout(() => {
-                this.COPY_FILE(`${_ResolvePath(`${_PATH.COPY_TEMPLATE.ORIGIN}`)}/${this._Data.template}`, _);
-                const Origin = this._Data.templateConfig.background.image;
+            this._Fs.mkdirSync(_);
+            await this.COPY_FILE(`${_ResolvePath(`${_PATH.COPY_TEMPLATE.ORIGIN}`)}/${this._Data.template}`, _);
+            const Origin = this._Data.templateConfig.background.image;
 
-                if (Origin !== '') {
-                    const BaseHead = require('../const/ImageBase64Type').GET_IMAGE_BASE64_TYPE(require('../utils/utils.t').GET_FILE_TYPE(Origin));
-                    const Path = _ResolvePath(`./${require('../utils/utils.t').RESOLVE_STATIC_FILE_PATH(this._Data.templateConfig.background.image)}`);
+            if (Origin !== '') {
+                const BaseHead = require('../const/ImageBase64Type').GET_IMAGE_BASE64_TYPE(require('../utils/utils.t').GET_FILE_TYPE(Origin));
+                const Path = _ResolvePath(`./${require('../utils/utils.t').RESOLVE_STATIC_FILE_PATH(this._Data.templateConfig.background.image)}`);
 
-                    require('../utils/utils.t').FILE_TO_BASE64(Path).then((r: string) => {
-                        this._Data.templateConfig.background.image = `${BaseHead}${r}`;
-                    }).catch((e: any) => {
-                        console.log('错误', e);
-                    })
-                }
-                this._Fs.writeFile(`${_}/conf.js`, `window.chartConfig = ${JSON.stringify({
-                    ...this._Data.templateConfig,
-                    _video: {
-                        ...this._Data.config.video
-                    }
-                })};`, (e: any) => {
-                    if (!e)
-                        this.SYNTHESIS();
-                });
-            }, 1000);
+                require('../utils/utils.t').FILE_TO_BASE64(Path).then(async (r: string) => {
+                    this._Data.templateConfig.background.image = `${BaseHead}${r}`;
+                    await this.WRITE_CONF_JS(this._Data.templateConfig, _);
+                }).catch((e: any) => {
+                    console.log('错误', e);
+                })
+            } else {
+                await this.WRITE_CONF_JS(this._Data.templateConfig, _);
+            }
         }
+        return Promise.resolve(0);
+    }
+
+    WRITE_CONF_JS(conf: object, path: string) {
+        this._Fs.writeFile(`${path}/conf.js`, `window.chartConfig = ${JSON.stringify({
+            ...conf,
+            _video: {
+                ...this._Data.config.video
+            }
+        })};`, (e: any) => {
+            if (!e)
+                this.SYNTHESIS();
+        });
     }
 
     COPY_FILE(dir: string, to: string): void {
@@ -124,7 +131,7 @@ class TC {
         this._Logs.push(`CONFIG ${require('../funcs.t').STRINGIFY(this._Data)}\n\n`);
         let audioPath = '';
         this._DB.SET_RESOURCE({
-            name: this._Task_Name,
+            name: this._Name,
             path: '/',
             status: 'Processing',
             id: this._Task_Name
@@ -147,7 +154,7 @@ class TC {
             preparePageForScreenshot: async (page: any, currentFrame: number, totalFrames: number) => {
                 this._Schedule = parseInt(String(currentFrame / totalFrames * 100));
                 await this.SEND_MESSAGE('task_processing', 'task_processing', {
-                    taskName: this._Task_Name,
+                    taskName: this._Name,
                     schedule: this._Schedule
                 });
             }
@@ -162,41 +169,44 @@ class TC {
         }
 
         _TimeCut(_conf).then(() => {
-            this.PROCESS_AUDIO(_.audio.src !== '' ? `${_PATH.PROCESS_AUDIO.PATH.replace('$t', this._Task_Name)}` : '', audioPath).then((_r) => {
+            this.PROCESS_AUDIO(_.audio.src !== '' ? `${_PATH.PROCESS_AUDIO.PATH.replace('$t', this._Task_Name)}` : '', audioPath).then((_r: number) => {
                 this.OUTPUT_LOG_FILE();
-                if (_r === 1) {
-                    const P = _PATH.SYNTHESIS.OUTPUT.replace('$t', this._Task_Name);
+                const P = _PATH.SYNTHESIS.OUTPUT.replace('$t', `${this._Task_Name}${_r === 1 ? '' : '264'}`);
 
-                    this._DB.UPDATE_RESOURCE_STATUS({
-                        status: 'Finish',
-                        name: this._Task_Name,
-                        path: P
-                    });
+                this._DB.UPDATE_RESOURCE_STATUS({
+                    status: 'Finish',
+                    name: this._Task_Name,
+                    path: P
+                });
+
+                if (_r === 1) {
                     setTimeout(() => {
                         this._DB.CLOSE();
                         this.SEND_MESSAGE('task_end', 'task_processing', {
                             state: 'success',
-                            taskName: this._Task_Name,
+                            taskName: this._Name,
                             path: P
                         });
                     }, 2000);
-                } else
+                } else {
                     this.SEND_MESSAGE('task_pro', 'task_pro_success', {
-                        taskName: this._Task_Name
+                        taskName: this._Name,
+                        path: P
                     });
+                }
                 this.DEL_TEMP_FILE(`${_ResolvePath(`./static/temp/${this._Task_Name}`)}`);
             });
         }).catch(() => {
             this.SEND_MESSAGE('task_end', 'error', {
-                taskName: this._Task_Name
+                taskName: this._Name
             });
         });
     }
 
-    PROCESS_AUDIO(src: string, audio: string) {
+    PROCESS_AUDIO(src: string, audio: string): Promise<number> {
         return new Promise((resolve: any) => {
             this.SEND_MESSAGE('task_pro', 'task_pro_ready', {
-                taskName: this._Task_Name
+                taskName: this._Name
             });
             if (src === '')
                 return resolve(1);
@@ -220,7 +230,7 @@ class TC {
             });
             _.on('stderr', (msg: string) => {
                 this.SEND_MESSAGE('task_processing', 'task_processing', {
-                    taskName: this._Task_Name,
+                    taskName: this._Name,
                     message: msg
                 });
             });

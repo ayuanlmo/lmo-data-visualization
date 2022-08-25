@@ -1,10 +1,9 @@
 require('./TempLate/style.t.scss');
 
-import AudioList from "@components/SelectMedia/TempLate/AudioList.t";
-import ImageList from "@components/SelectMedia/TempLate/ImageList";
+import MediaList from "@components/SelectMedia/TempLate/MediaList";
 import NoData from '@/components/NoData/index.t';
 import {FILE_MAX_LENGTH} from "@/const/Const.t";
-import {UPLOAD_SUCCESS, FILE_SIZE} from '@/const/Message';
+import {FILE_SIZE, UPLOAD_SUCCESS} from '@/const/Message';
 
 export default {
     name: 'lmo-select-media',
@@ -118,18 +117,19 @@ export default {
                     label: '音频',
                     name: 'audio',
                     dataIndex: 'audioMedia',
-                    template: AudioList
+                    template: MediaList
                 },
                 {
                     label: '视频',
                     name: 'video',
-                    dataIndex: 'videoMedia'
+                    dataIndex: 'videoMedia',
+                    template: MediaList
                 },
                 {
                     label: '图片',
                     name: 'image',
                     dataIndex: 'imageMedia',
-                    template: ImageList
+                    template: MediaList
                 }
             ]
         };

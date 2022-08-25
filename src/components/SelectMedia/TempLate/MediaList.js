@@ -1,9 +1,9 @@
 export default {
-    name: 'lmo-audio-list',
+    name: 'lmo-media-list',
     render(h) {
         return (
             h('div', {
-                class: 'lmo_audio-list'
+                class: 'lmo_media-list'
             }, [
                 h('el-row', [
                     this.data.map(i => {
@@ -14,7 +14,7 @@ export default {
                                 }
                             }, [
                                 h('div', {
-                                    class: 'lmo_audio-list-item',
+                                    class: 'lmo_media-list-item',
                                     on: {
                                         click: () => {
                                             this.$emit('click', i);
@@ -29,7 +29,7 @@ export default {
                                         }
                                     }, [
                                         h('div', {
-                                            class: 'lmo_position_relative lmo_hover_theme_color lmo_audio-list-item-content lmo_cursor_pointer'
+                                            class: 'lmo_position_relative lmo_hover_theme_color lmo_media-list-item-content lmo_cursor_pointer'
                                         }, [
                                             i.name,
                                             h('div', {
