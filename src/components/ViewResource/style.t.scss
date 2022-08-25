@@ -1,11 +1,20 @@
 .lmo-view_resource {
   width: 37.8vw;
-  height: 30vh;
+  height: 40vh;
 
-  .lmo-view_resource_item {
-    overflow: hidden;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
+  .lmo-view_resource_list {
+    overflow-y: auto;
+    height: 100%;
+    justify-content: space-between;
+
+    .lmo-resource_item {
+      padding: .5rem;
+      background-color: #293943;
+      margin-bottom: .5rem;
+      border-radius: .5rem;
+      justify-content: space-between;
+      line-height: 2.5rem;
+    }
   }
 
   .lmo-view_resource_media_item_status {
@@ -20,13 +29,13 @@
 
   .lmo-view_resource_media_item_option {
     justify-content: space-around;
-    line-height: 4rem;
+    width: 12rem;
 
     .lmo-view_resource_media_item_option_item {
       width: 1.5rem;
       height: 1.5rem;
       position: relative;
-      top: 30%;
+      top: .5rem;
 
       img {
         width: 100%;

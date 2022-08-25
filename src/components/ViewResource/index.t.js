@@ -25,16 +25,16 @@ export default {
                                             props: {
                                                 description: '这里啥也没有'
                                             }
-                                        }) : h('el-collapse', {
-                                            props: {
-                                                accordion: true
-                                            }
+                                        }) : h('div', {
+                                            class: 'lmo-view_resource_list'
                                         }, [
                                             this.list.map(i => {
                                                 return (
-                                                    h('el-collapse-item', [
+                                                    h('div', {
+                                                        class: 'lmo-resource_item lmo_flex_box lmo_cursor_pointer'
+                                                    }, [
                                                         h('div', {
-                                                            slot: 'title'
+                                                            class: 'lmo-resource_item_title lmo_color_white'
                                                         }, [
                                                             h('span', {
                                                                 class: 'lmo-view_resource_media_item_status'
@@ -47,63 +47,60 @@ export default {
                                                             class: 'lmo-view_resource_media_item_option lmo_flex_box'
                                                         }, [
                                                             h('div', {
-                                                                class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
+                                                                class: 'lmo-view_resource_media_item_option_item'
                                                             }, [
-                                                                h('span', [
-                                                                    h('img', {
-                                                                        attrs: {
-                                                                            src: require('@/assets/svg/view.svg')
-                                                                        },
-                                                                        on: {
-                                                                            click: () => {
-                                                                                this.clickEvent(i, 'view');
-                                                                            }
+                                                                h('img', {
+                                                                    attrs: {
+                                                                        src: require('@/assets/svg/view.svg')
+                                                                    },
+                                                                    on: {
+                                                                        click: () => {
+                                                                            this.clickEvent(i, 'view');
                                                                         }
-                                                                    })
-                                                                ])
+                                                                    }
+                                                                })
                                                             ]),
                                                             h('div', {
-                                                                class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
+                                                                class: 'lmo-view_resource_media_item_option_item'
                                                             }, [
-                                                                h('span', [
-                                                                    h('img', {
-                                                                        attrs: {
-                                                                            src: require('@/assets/svg/download.svg')
-                                                                        },
-                                                                        on: {
-                                                                            click: () => {
-                                                                                this.clickEvent(i, 'download');
-                                                                            }
+                                                                h('img', {
+                                                                    attrs: {
+                                                                        src: require('@/assets/svg/download.svg')
+                                                                    },
+                                                                    on: {
+                                                                        click: () => {
+                                                                            this.clickEvent(i, 'download');
                                                                         }
-                                                                    })
-                                                                ])
+                                                                    }
+                                                                })
                                                             ]),
                                                             h('div', {
-                                                                class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
+                                                                class: 'lmo-view_resource_media_item_option_item lmo_hide'
                                                             }, [
-                                                                h('span', [
-                                                                    h('img', {
-                                                                        attrs: {
-                                                                            src: require('@/assets/svg/log.svg')
+                                                                h('img', {
+                                                                    attrs: {
+                                                                        src: require('@/assets/svg/log.svg')
+                                                                    },
+                                                                    on: {
+                                                                        click: () => {
+                                                                            this.clickEvent(i, 'log');
                                                                         }
-                                                                    })
-                                                                ])
+                                                                    }
+                                                                })
                                                             ]),
                                                             h('div', {
-                                                                class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
+                                                                class: 'lmo-view_resource_media_item_option_item'
                                                             }, [
-                                                                h('span', [
-                                                                    h('img', {
-                                                                        attrs: {
-                                                                            src: require('@/assets/svg/del.svg')
-                                                                        },
-                                                                        on: {
-                                                                            click: () => {
-                                                                                this.clickEvent(i, 'del');
-                                                                            }
+                                                                h('img', {
+                                                                    attrs: {
+                                                                        src: require('@/assets/svg/del.svg')
+                                                                    },
+                                                                    on: {
+                                                                        click: () => {
+                                                                            this.clickEvent(i, 'del');
                                                                         }
-                                                                    })
-                                                                ])
+                                                                    }
+                                                                })
                                                             ])
                                                         ])
                                                     ])
@@ -176,79 +173,3 @@ export default {
         }
     }
 };
-
-//         return (
-//             h('el-col', {
-//                 props: {
-//                     span: 6
-//                 },
-//                 class: 'lmo-view_resource_item lmo_position_relative'
-//             }, [
-//                 h('div', {
-//                     class: 'lmo-view_resource_media_item_status'
-//                 }, [
-//                     `${i.status === 'Processing' ? '合成中' : '完成'}`
-//                 ]),
-//                 h('div', {
-//                     class: this.getOptionClass
-//                 }, [
-//                     h('div', {
-//                         class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
-//                     }, [
-//                         h('img', {
-//                             attrs: {
-//                                 src: require('@/assets/svg/view.svg')
-//                             }
-//                         })
-//                     ]),
-//                     h('div', {
-//                         class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
-//                     }, [
-//                         h('img', {
-//                             attrs: {
-//                                 src: require('@/assets/svg/download.svg')
-//                             }
-//                         })
-//                     ]),
-//                     h('div', {
-//                         class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
-//                     }, [
-//                         h('img', {
-//                             attrs: {
-//                                 src: require('@/assets/svg/log.svg')
-//                             }
-//                         })
-//                     ]),
-//                     h('div', {
-//                         class: 'lmo-view_resource_media_item_option_item lmo_cursor_pointer'
-//                     }, [
-//                         h('img', {
-//                             attrs: {
-//                                 src: require('@/assets/svg/del.svg')
-//                             }
-//                         })
-//                     ])
-//                 ]),
-//                 h('div', {
-//                     class: 'lmo-view_resource_media_item lmo_cursor_pointer',
-//                     on: {
-//                         click: () => {
-//                             if (i.status === 'Processing')
-//                                 return this.$message.warning('当前任务正在进行中,请稍后查看');
-//                             this.playerUrl = i.path;
-//                             this.$refs.VideoPlayer.show();
-//                         },
-//                         on: {
-//                             mouseover: () => {
-//                                 this.showOption = true;
-//                             },
-//                             mouseout: () => {
-//                                 this.showOption = false;
-//                             }
-//                         }
-//                     }
-//                 }, [i.name])
-//             ])
-//         );
-//     })
-// ])
