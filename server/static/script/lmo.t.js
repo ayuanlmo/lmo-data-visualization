@@ -98,7 +98,7 @@ class TempLate {
                 this.onMessage(e);
             });
             if (!this.isPreview)
-                this.fetchCSV();
+                this.fetchJSON();
         }
         this.initTitle();
         this.initBackground();
@@ -208,7 +208,7 @@ class TempLate {
         }
     }
 
-    fetchCSV() {
+    fetchJSON() {
         fetch('data.json').then(res => {
             return res.json();
         }).then(json => {
