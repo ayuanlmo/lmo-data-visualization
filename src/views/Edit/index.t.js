@@ -9,6 +9,7 @@ import PlayerBar from '@/components/PlayerBar/index.t';
 import VideoInfo from '@/components/VideoInfo/index.t';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
+import {createLoading} from "@lib/Loading";
 
 export default {
     name: 'lmo-edit',
@@ -136,6 +137,7 @@ export default {
         };
     },
     mounted() {
+        createLoading('模板加载中...');
         this.$nextTick(() => {
             setTimeout(() => {
                 this.animationClass = '';

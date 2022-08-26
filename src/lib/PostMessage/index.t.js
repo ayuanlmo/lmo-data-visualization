@@ -1,5 +1,6 @@
 import Store from "@/store";
 import {Notification} from "element-ui";
+import {closeLoading} from "@lib/Loading";
 
 export const PostMessage = (message = {}) => {
     const _ = document.querySelector('iframe').contentWindow;
@@ -12,6 +13,8 @@ void (() => {
         if (m.origin === location.origin) {
             const msg = m.data;
 
+            if (msg.type === 'TemplateLoad')
+                closeLoading();
             if (msg.type === 'first') {
                 Store.commit('SET_CURRENT_TEMPLATE_TEXT_SETTING', msg.data.text);
                 Store.commit('SET_CURRENT_CSV_DATA', msg.data.defaultData);
