@@ -1142,6 +1142,7 @@
 }
 
 .el-icon-loading {
+  font-size: 1.4rem;
   -webkit-animation: rotating 2s linear infinite;
   animation: rotating 2s linear infinite
 }
@@ -6543,9 +6544,9 @@
 }
 
 .el-loading-spinner .el-loading-text {
-  color: #229EED;
+  color: #FBFBFD;
   margin: 3px 0;
-  font-size: 14px
+  font-size: 1.2rem;
 }
 
 .el-loading-spinner .circular {
@@ -6566,7 +6567,7 @@
 }
 
 .el-loading-spinner i {
-  color: #229EED
+  color: #FBFBFD;
 }
 
 @-webkit-keyframes loading-rotate {
