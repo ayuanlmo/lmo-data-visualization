@@ -36,6 +36,7 @@ export default {
                         }
                     }, [
                         h('img', {
+                            class: 'lmo_cursor_pointer',
                             attrs: {
                                 src: require('@/assets/svg/play-circle.svg')
                             }
