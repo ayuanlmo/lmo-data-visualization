@@ -119,6 +119,15 @@ class T_DB {
         });
     }
 
+    RUN(SQL: string, CALL_BACK: Function): any {
+        return this._.run(SQL, CALL_BACK);
+    }
+
+    ALL(SQL: string, CALL_BACK: Function): any {
+        return this._.all(SQL, CALL_BACK);
+    }
+
+
     //插入一条资源
     SET_RESOURCE(data: any): void {
         this._.run(this.GET_INSERT_RESOURCE_SQL(data));
