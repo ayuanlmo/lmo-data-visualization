@@ -56,7 +56,8 @@ const _F = {
                         cover: `/static/DataVisualizationTemplate/${i.T_Name}/cover.png`,
                         template: i.T_Name,
                         title: i.T_Title,
-                        description: i.T_Description
+                        description: i.T_Description,
+                        type: i.T_Type
                     });
                 });
                 _.json(
