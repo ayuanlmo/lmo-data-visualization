@@ -54,8 +54,10 @@
                 return _.send(_Conf.__SOCKET_PONG_MESSAGE);
             const _m: any = JSON.parse(require('./utils/utils.t').BINARY_TO_STRING(__));
 
-            if (_m.cmd === _Cmd['__SYNTHESIS'])
-                new (require('./bin/timecut.t')).TC(_Pool, _m['data']);
+            if (_m.cmd === _Cmd.__SYNTHESIS)
+                new (require('./bin/timecut.t')).TC(_Pool, _m['data'], 0);
+            if (_m.cmd === _Cmd.__CREATE_TEMPLATE)
+                new (require('./bin/timecut.t')).TC(_Pool, _m['data'], 1);
         });
         _.on('close', () => {
             _OnlineUsers -= 1;
