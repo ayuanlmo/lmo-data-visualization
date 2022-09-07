@@ -9,7 +9,7 @@ import PlayerBar from '@/components/PlayerBar/index.t';
 import VideoInfo from '@/components/VideoInfo/index.t';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
-import {createLoading} from "@lib/Loading";
+import {createLoading} from "@lib/BasicInteraction";
 
 export default {
     name: 'lmo-edit',

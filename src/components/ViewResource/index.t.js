@@ -1,6 +1,7 @@
-require('./style.t.scss');
-
 import VideoPlayer from '@/components/VideoPlayer/index.t';
+import {createMessageBox} from "@lib/BasicInteraction";
+
+require('./style.t.scss');
 
 export default {
     name: 'lmo-view_resource', render(h) {
@@ -155,7 +156,10 @@ export default {
                         path: i.path
                     }).then(r => {
                         if (r.code === 200) {
-                            this.$message.success('删除成功');
+                            createMessageBox({
+                                type: 'success',
+                                message: '删除成功'
+                            });
                             this.getList();
                         }
                     });

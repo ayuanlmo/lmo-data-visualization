@@ -1,6 +1,5 @@
 import Store from "@/store";
-import {Notification} from "element-ui";
-import {closeLoading} from "@lib/Loading";
+import {closeLoading, createNotification} from "@lib/BasicInteraction";
 
 export const PostMessage = (message = {}) => {
     const _ = document.querySelector('iframe').contentWindow;
@@ -27,7 +26,7 @@ void (() => {
             if (msg.type === 'PlayEnd')
                 Store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_PLAY_STATE', false);
             if (msg.type === 'RenderError')
-                return Notification({
+                return createNotification({
                     title: '模板渲染错误',
                     type: 'error',
                     message: msg.data

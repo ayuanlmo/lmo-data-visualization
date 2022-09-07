@@ -9,7 +9,7 @@
  * Created by ayuanlmo on 2022/02
  * **/
 
-import {Notification} from "element-ui";
+import {createMessageBox, createNotification} from "@lib/BasicInteraction";
 
 export default class Socket {
     constructor(url, callback = () => {
@@ -58,37 +58,37 @@ export default class Socket {
 
             this.callback(_msg);
             if (_msg.type === 'showMessage')
-                return Notification({
+                return createNotification({
                     title: '系统消息',
                     message: `${_msg.data.message}`,
                     type: 'warning'
                 });
             if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing')
-                return Notification({
+                return createNotification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 合成完毕`,
                     type: 'success'
                 });
             if (_msg.type === 'task_pending')
-                return Notification({
+                return createNotification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 开始合成`,
                     type: 'success'
                 });
             if (_msg.type === 'task_pro' && _msg.data['cmd'] === 'task_pro_ready')
-                return Notification({
+                return createNotification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 开始转码`,
                     type: 'success'
                 });
             if (_msg.type === 'task_pro' && _msg.data['cmd'] === 'task_pro_error')
-                return Notification({
+                return createNotification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 转码失败`,
                     type: 'error'
                 });
             if (_msg.type === 'task_pro' && _msg.data['cmd'] === 'task_pro_success')
-                return Notification({
+                return createNotification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 转码完成`,
                     type: 'success'
@@ -140,6 +140,10 @@ export default class Socket {
 
     reconnection() {
         this.currentNumberOfReconnects += 1;
-        this.currentNumberOfReconnects !== this.maximumNumberOfReconnects ? this.init() : console.log('错误');
+        this.currentNumberOfReconnects !== this.maximumNumberOfReconnects ? this.init() : createMessageBox({
+            title: '提示',
+            type: 'error',
+            message: '您已与服务器断开连接，请刷新页面后重试'
+        });
     }
 }
