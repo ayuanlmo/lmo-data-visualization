@@ -57,6 +57,13 @@ export default class Socket {
             const _msg = JSON.parse(require('@/utils/index').binaryToString(msg.data));
 
             this.callback(_msg);
+            if (_msg.type === 'create_template' && _msg.data['cmd'] === 'success') {
+                return createNotification({
+                    title: '系统消息',
+                    message: `自定义模板创建成功`,
+                    type: 'success'
+                });
+            }
             if (_msg.type === 'showMessage')
                 return createNotification({
                     title: '系统消息',
