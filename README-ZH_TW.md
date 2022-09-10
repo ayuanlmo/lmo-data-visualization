@@ -56,14 +56,16 @@ lmo-DataVisualization，一款開源可視化數據製作工具。根據提供�
     - 視訊帧率設定
     - 視訊清晰度設定(最高支援4K)
     - 視訊時間配置
+5. 其他
+    - 為模板創建範本
 
 PS：不同的範本配置項可能有些差別，這是根據範本內部提供給編輯器的選項進行的。
 
 *注 ：由於合成服務無法類比Animate.css提供的動畫，後續將會採用純JavaScript進行對Animate.css動畫的類比。
 
-## 範本製作
+## 模板製作
 
-我們為開發者提供了一些API，以簡單、快速開發出適用的範本。 請參閱 [开发模板.md](./doc/开发模板.md)
+我們為開發者提供了一些API，以簡單、快速開發出適用的模板。 請參閱 [开发模板.md](./doc/开发模板.md)
 
 ## 在线体验
 
@@ -179,7 +181,8 @@ location /connectSocket{
 
 ## 特别感谢
 
-感谢 [JetBrains](https://www.jetbrains.com/) 為此專案提供了免費的 [開發許可證](https://www.jetbrains.com/community/opensource/)
+感谢 [JetBrains](https://www.jetbrains.com/)
+為此專案提供了免費的 [開發許可證](https://www.jetbrains.com/community/opensource/)
 
 ![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
 ![DataGrip logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/DataGrip_icon.svg)
@@ -187,4 +190,5 @@ location /connectSocket{
 ![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
 ---
 
-本文檔遵循[知識共用許可協定CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)。
+本文檔遵循[知識共用許可協定CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)
+。

@@ -56,6 +56,8 @@ lmo-DataVisualization，一款开源可视化数据制作工具。 根据提供�
     - 合成帧率设置
     - 视频清晰度配置(最高支持4K)
     - 动画时间配置
+5. 其他
+    - 保存为自定义模板
 
 PS：不同的模板配置项可能有些差别，这是根据模板内部提供给编辑器的选项进行的。
 
@@ -70,36 +72,6 @@ PS：不同的模板配置项可能有些差别，这是根据模板内部提供
 - 演示服务器关闭了合成服务、文件上传服务
 
 [演示地址](https://dv.ayuanlmo.cn)
-
-## 演示图
-
-<table>
-    <tr>
-        <td>模板页</td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo4.png"/></td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo7.png"/></td>
-    </tr>
-    <tr>
-        <td>设计器</td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo3.png"/></td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo8.png"/></td>
-    </tr>
-    <tr>
-        <td>播放器</td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo1.png"/></td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo2.png"/></td>
-    </tr>
-	<tr>
-        <td>资源库 / 日志</td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo10.png"/></td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo5.png"/></td>
-    </tr>	 
-    <tr>
-        <td>预览 / 媒体文件选择</td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo9.png"/></td>
-        <td><img src="https://cdn.ayuanlmo.cn/lmo-public/Visualization/lmo11.png"/></td>
-    </tr>
-</table>
 
 ## 开发
 
@@ -185,7 +157,8 @@ location /connectSocket{
 
 ## 特别感谢
 
-感谢 [JetBrains](https://www.jetbrains.com/) 为此项目提供了免费的 [开发许可证](https://www.jetbrains.com/community/opensource/)
+感谢 [JetBrains](https://www.jetbrains.com/)
+为此项目提供了免费的 [开发许可证](https://www.jetbrains.com/community/opensource/)
 
 ![JetBrainsLogo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
 ![DataGrip logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/DataGrip_icon.svg)
@@ -193,4 +166,5 @@ location /connectSocket{
 ![YouTrack logo](https://resources.jetbrains.com.cn/storage/products/company/brand/logos/YouTrack_icon.svg)
 ---
 
-本文档遵循[知识共享许可协议CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)。
+本文档遵循[知识共享许可协议CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)
+。
