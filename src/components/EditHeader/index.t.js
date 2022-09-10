@@ -69,11 +69,6 @@ export default {
                         }),
                         h('lmo-button', {
                             props: {
-                                text: '保存'
-                            }
-                        }),
-                        h('lmo-button', {
-                            props: {
                                 text: '保存为自定义模板'
                             },
                             on: {
