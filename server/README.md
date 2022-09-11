@@ -40,11 +40,14 @@ yarn start-server
 
 ## API接口文档
 
-| API               |        类型 |   请求方式    |  返回  |     备注      |
-|:------------------|----------:|:---------:|:----:|:-----------:|
-| /api/getMedia/    |       API |   POST    | JSON |   获取合成结果    |
-| /api/getTemplate/ |       API |   POST    | JSON |   获取模板信息    |
-| /ws/connect       | WebSocket | WebSocket |  -   | 创建合成任务、日志推送 |
+| API                 |        类型 |   请求方式    |  返回  |     备注      |
+|:--------------------|----------:|:---------:|:----:|:-----------:|
+| /api/getMedia/      |       API |   POST    | JSON |   获取合成结果    |
+| /api/getTemplate/   |       API |   POST    | JSON |   获取模板信息    |
+| /ws/connect         | WebSocket | WebSocket |  -   | 创建合成任务、日志推送 |
+| /api/uploadMedia    |       API |   POST    | JSON |   上传媒体文件    |
+| /api/getUploadMedia |       API |   POST    | JSON | 获取上传媒体文件列表  |
+| /api/deleteMedia    |       API |   POST    | JSON |   删除某个合成项   |
 
 ## 返回示例
 
@@ -60,7 +63,8 @@ yarn start-server
                 "cover": "模板预览图",
                 "template": "模板路径名称",
                 "title": "模板名称",
-                "description": "模板介绍"
+                "description": "模板介绍",
+                "type": "模板类型"
             }
         ]
     },
@@ -78,13 +82,63 @@ yarn start-server
         "list": [
             {
                 "name": "视频名称.mp4",
-                "path": "视频路径"
+                "path": "视频路径",
+                "type": "媒体文件类型"
             }
         ]
     },
     "message": "success",
     "code": 200,
     "_t": 1653936653266
+}
+```
+
+#### 获取上传的媒体文件
+
+```json
+
+{
+    "data": {
+        "audioMedia": [
+            {
+                "name": "媒体名称",
+                "type": "媒体类型",
+                "path": "路径"
+            }
+        ],
+        "videoMedia": [],
+        "imageMedia": []
+    },
+    "message": "success",
+    "code": 200,
+    "_t": 1662889428238
+}
+```
+
+#### 删除某个合成项
+
+```json
+{
+    "data": {},
+    "message": "success",
+    "code": 200,
+    "_t": 1662889428238
+}
+```
+
+### 上传媒体文件
+
+请求参数
+media:[二进制]
+
+```json
+{
+    "data": {
+        "path": "文件路径"
+    },
+    "message": "success",
+    "code": 200,
+    "_t": 1662889325101
 }
 ```
 
@@ -115,4 +169,5 @@ WebSocket.send(JSON.stringify(data));
 - Yc Core
 
 ---
-本文档遵循[知识共享许可协议CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)。
+本文档遵循[知识共享许可协议CC 4.0](https://creativecommons.org/licenses/by/4.0/) (http://creativecommons.org/Licenses/by/4.0/)
+。
