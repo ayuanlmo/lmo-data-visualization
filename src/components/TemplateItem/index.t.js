@@ -32,7 +32,10 @@ export default {
                         }, [
                             h('span', {
                                 class: 'lmo-template_description_title animated fadeInDown'
-                            }, [this.data.title]),
+                            }, [
+                                this.data.title,
+                                this.getEditTemplate()
+                            ]),
                             h('br'),
                             h('span', {
                                 class: 'lmo-template_description_content animated fadeInDown'
@@ -81,5 +84,21 @@ export default {
             return this.showDescription ? `${_}` : `${_} lmo_hide`;
         }
     },
-    methods: {}
+    methods: {
+        getEditTemplate(h = this.$createElement) {
+            if (this.data.type === 'customize') {
+                return h('i', {
+                    class: 'el-icon-edit-outline lmo_hover_theme_color',
+                    on: {
+                        click: (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }
+                    }
+                });
+            }
+            return '';
+        }
+    }
 };
