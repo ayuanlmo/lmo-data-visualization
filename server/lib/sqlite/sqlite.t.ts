@@ -210,6 +210,32 @@ class T_DB {
         return this.SQL_QUERY('SELECT * FROM Template');
     }
 
+    //通过ID查询模板
+    QUERY_TEMPLATE_BY_ID(id: string): any {
+        return this.SQL_QUERY(`SELECT * FROM Template WHERE T_ID = '${id}'`);
+    }
+
+    //删除模板
+    DEL_TEMPLATE(id: string): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+            this.QUERY_TEMPLATE_BY_ID(id).then((template: Array<object>) => {
+                if (template.length === 0)
+                    reject('no_template');
+                else {
+                    // @ts-ignore
+                    if (template[0].T_Id === id) {
+                        this._.run(`DELETE FROM Template WHERE T_ID = '${id}'`, (e: any) => {
+                            if (!e)
+                                resolve('');
+                            else
+                                reject(`${e}`);
+                        });
+                    }
+                }
+            });
+        });
+    }
+
 }
 
 module.exports.T_DB = T_DB;

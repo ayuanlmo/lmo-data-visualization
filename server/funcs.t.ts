@@ -210,6 +210,16 @@ const _F = {
         }
     },
 
+    DEL_TEMPLATE(_: any, __: any) {
+        const _T_DB = new (require('./lib/sqlite/sqlite.t').T_DB);
+
+        _T_DB.DEL_TEMPLATE(_.query.id ?? '').then(() => {
+            __.json(_F.GET_SUCCESS_MESSAGE())
+        }).catch((e: string) => {
+            __.json(_F.GET_ERROR_MESSAGE({}, e === 'no_template' ? _Message.__DEL_TEMPLATE_ERROR_NT : _Message.__DEL_TEMPLATE_ERROR));
+        });
+    },
+
     /**
      * @method STRINGIFY
      * @description Object转String
