@@ -85,7 +85,10 @@ export default {
                         'before-close': () => this.createTemplateVisible = false
                     }
                 }, [
-                    h('div', [
+                    h('div', {
+                        class: 'lmo_flex_box lmo_create_template'
+                    }, [
+                        h('span', ['标题']),
                         h('lmo-input', {
                             props: {
                                 value: this.customize.title
@@ -95,7 +98,10 @@ export default {
                             }
                         })
                     ]),
-                    h('div', [
+                    h('div', {
+                        class: 'lmo_flex_box lmo_create_template'
+                    }, [
+                        h('span', ['介绍']),
                         h('lmo-input', {
                             props: {
                                 value: this.customize.description
@@ -159,6 +165,9 @@ export default {
                     template: this.currentTemplate.template
                 }
             })));
+            setTimeout(() => {
+                this.createTemplateVisible = false;
+            }, 1000);
         },
         startSynthesis() {
             this.$prompt('请输入项目名称(可空)', '发起合成', {
