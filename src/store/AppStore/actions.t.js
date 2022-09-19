@@ -17,5 +17,8 @@ export default {
     },
     [TYPE.DEL_MEDIA_ITEM]({commit}, data) {
         return _POST(`${URL.DEL_MEDIA}${require('@/utils/index').createQueryParams(data)}`);
+    },
+    [TYPE.DEL_TEMPLATE]({commit}, data) {
+        return _POST(`${URL.DEL_TEMPLATE}${require('@/utils/index').createQueryParams(data)}`);
     }
 };

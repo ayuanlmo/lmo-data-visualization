@@ -18,6 +18,15 @@
         background-color: rgba(24, 42, 56, 0.8);
         z-index: 5 !important;
 
+        .lmo-template_del_icon {
+          position: absolute;
+          font-weight: bold;
+          justify-content: end;
+          width: 95%;
+          top: .8rem;
+          font-size: 1.2rem;
+        }
+
         .lmo-template_description_title {
           font-size: 1.4rem;
           top: 30%;

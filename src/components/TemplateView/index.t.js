@@ -21,6 +21,7 @@ export default {
                                         data: i
                                     },
                                     on: {
+                                        delItem: this.getTemplate,
                                         click: async (i) => {
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
@@ -41,9 +42,14 @@ export default {
             TemplateData: []
         };
     },
+    methods: {
+        getTemplate() {
+            this.$store.dispatch('GET_TEMPLATE_LIST').then(res => {
+                this.TemplateData = res.data.list;
+            });
+        }
+    },
     mounted() {
-        this.$store.dispatch('GET_TEMPLATE_LIST').then(res => {
-            this.TemplateData = res.data.list;
-        });
+        this.getTemplate();
     }
 };
