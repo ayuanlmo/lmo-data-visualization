@@ -49,7 +49,7 @@ export default {
             });
         }
     },
-    mounted() {
-        this.getTemplate();
+    activated() {
+      this.getTemplate();
     }
 };
