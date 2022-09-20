@@ -185,11 +185,16 @@ class TC {
                 ...this.GET_VIDEO_CLARITY(_.video.clarity)
             },
             preparePageForScreenshot: async (page: any, currentFrame: number, totalFrames: number) => {
-                this._Schedule = parseInt(String(currentFrame / totalFrames * 100));
-                await this.SEND_MESSAGE('task_processing', 'task_processing', {
-                    taskName: this._Name,
-                    schedule: this._Schedule
-                });
+                const _NewSchedule: number = parseInt(String(currentFrame / totalFrames * 100));
+
+                if (this._Schedule !== _NewSchedule) {
+                    this._Schedule = _NewSchedule;
+                    await this.SEND_MESSAGE('task_processing', 'task_processing', {
+                        taskName: this._Name,
+                        schedule: this._Schedule,
+                        taskId: this._Task_Name
+                    });
+                }
             }
         };
 
