@@ -80,7 +80,7 @@ class TC {
         });
     }
 
-    async COPY_TEMPLATE() {
+    async COPY_TEMPLATE(): Promise<number> {
         const _temp: string = _ResolvePath(this._Type === 0 ? _PATH.COPY_TEMPLATE.TEMP : _PATH.COPY_TEMPLATE.ORIGIN + '/');
         const _: string = _ResolvePath(`${this._Type === 0 ? _PATH.COPY_TEMPLATE.THIS : _PATH.COPY_TEMPLATE.ORIGIN + '/'}${this._Task_Name}`);
 
