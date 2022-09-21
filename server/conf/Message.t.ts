@@ -8,5 +8,6 @@ module.exports = {
     __NO_MEDIA_ID: '请传入Media ID',
     __DEL_MEDIA_ERROR: '删除媒体文件失败：[数据库错误]',
     __DEL_TEMPLATE_ERROR_NT: '未查询到当前模板，请检查ID是否正确',
-    __DEL_TEMPLATE_ERROR: '模板删除失败：[数据库错误]'
+    __DEL_TEMPLATE_ERROR: '模板删除失败：[数据库错误]',
+    __EDIT_TEMPLATE_ERROR: '编辑删除失败：[数据库错误]'
 };

@@ -25,6 +25,11 @@ interface INSERT_RESOURCE_SQL {
     id: any
 }
 
+interface UPDATE_TEMPLATE_INFO {
+    title: string;
+    description: string;
+}
+
 const _SQLITE: any = require('sqlite3');
 const _Global: any = global;
 const _Ti: any = _Global.dbConf.index;
@@ -236,6 +241,25 @@ class T_DB {
         });
     }
 
+    //编辑模板信息
+    EDIT_TEMPLATE_INFO(id: string, params: UPDATE_TEMPLATE_INFO) {
+        return new Promise<string>((resolve, reject) => {
+            this.QUERY_TEMPLATE_BY_ID(id).then((template: Array<any>) => {
+                if (template.length === 0)
+                    reject('no_template');
+                else {
+                    if (template[0].T_Id === id && template[0].T_Type !== '0') {
+                        this._.run(`UPDATE Template SET T_Description='${params.description ?? template[0].T_Description}',T_Title='${params.title ?? template[0].T_Title}'  WHERE T_ID = '${id}'`, (e: any) => {
+                            if (!e)
+                                resolve('');
+                            else
+                                reject(`${e}`);
+                        });
+                    }
+                }
+            });
+        });
+    }
 }
 
 module.exports.T_DB = T_DB;

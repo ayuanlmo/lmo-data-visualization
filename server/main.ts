@@ -92,6 +92,9 @@
     _App.post(_Router.__DEL_TEMPLATE, (_: any, __: any): void => {
         return _Func.DEL_TEMPLATE(_, __);
     });
+    _App.post(_Router.__EDIT_TEMPLATE_INFO, (_: any, __: any): void => {
+        return _Func.EDIT_TEMPLATE_INFO(_, __);
+    });
     _App.get('*', (_: any, __: any): void => {
         __.json({data: {}, code: 404, message: 'No Found'});
     });
