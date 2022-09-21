@@ -130,7 +130,11 @@ export default {
                         click: (e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            return false;
+                            return this.$emit('edit', {
+                                id: this.data.id,
+                                title: this.data.title,
+                                description: this.data.description
+                            });
                         }
                     }
                 });

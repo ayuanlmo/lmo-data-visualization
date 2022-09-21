@@ -1,3 +1,5 @@
+import {createMessage} from "@lib/BasicInteraction";
+
 require('./style.t.scss');
 
 import TemplateItem from '@/components/TemplateItem/index.t';
@@ -10,6 +12,64 @@ export default {
             h('div', {
                 class: 'lmo-data_visualization_template_view'
             }, [
+                h('el-dialog', {
+                    props: {
+                        title: '编辑模板信息',
+                        visible: this.editTemplateVisible,
+                        width: '20%',
+                        'before-close': () => {
+                            this.editTemplateVisible = false;
+                        }
+                    }
+                }, [
+                    h('div', [
+                        h('span', [
+                            '模板标题',
+                            h('lmo-input', {
+                                props: {
+                                    value: this.templateInfo.title
+                                },
+                                on: {
+                                    change: e => this.templateInfo.title = e
+                                }
+                            })
+                        ])
+                    ]),
+                    h('div', [
+                        h('span', [
+                            '模板介绍',
+                            h('lmo-input', {
+                                props: {
+                                    value: this.templateInfo.description
+                                },
+                                on: {
+                                    change: e => this.templateInfo.description = e
+                                }
+                            })
+                        ])
+                    ]),
+                    h('span', {
+                        slot: 'footer'
+                    }, [
+                        h('lmo-button', {
+                            props: {
+                                text: '确认'
+                            },
+                            on: {
+                                click: () => this.$store.dispatch('EDIT_TEMPLATE', {...this.templateInfo}).then(res => {
+                                    if (res.code === 200) {
+                                        createMessage({
+                                            type: 'success',
+                                            message: '修改成功'
+                                        });
+                                        this.editTemplateVisible = false;
+                                        this.getTemplate();
+                                    }
+                                })
+                            }
+                        })
+                    ])
+                ]),
                 h('div', {
                     class: 'lmo-visualization_template animated fadeInUp'
                 }, [
@@ -22,6 +82,10 @@ export default {
                                     },
                                     on: {
                                         delItem: this.getTemplate,
+                                        edit: (data) => {
+                                            this.templateInfo = data;
+                                            this.editTemplateVisible = true;
+                                        },
                                         click: async (i) => {
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
@@ -39,7 +103,13 @@ export default {
     },
     data() {
         return {
-            TemplateData: []
+            TemplateData: [],
+            editTemplateVisible: false,
+            templateInfo: {
+                id: '',
+                title: '',
+                description: ''
+            }
         };
     },
     methods: {
@@ -50,6 +120,6 @@ export default {
         }
     },
     activated() {
-      this.getTemplate();
+        this.getTemplate();
     }
 };
