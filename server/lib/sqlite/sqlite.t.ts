@@ -223,11 +223,13 @@ class T_DB {
     //删除模板
     DEL_TEMPLATE(id: string): Promise<string> {
         return new Promise<string>((resolve, reject) => {
-            this.QUERY_TEMPLATE_BY_ID(id).then((template: Array<object>) => {
+            this.QUERY_TEMPLATE_BY_ID(id).then((template: Array<any>) => {
                 if (template.length === 0)
                     reject('no_template');
                 else {
-                    // @ts-ignore
+                    if(template[0].T_Type === '0'){
+                        return  reject(`prohibited`);
+                    }
                     if (template[0].T_Id === id) {
                         this._.run(`DELETE FROM Template WHERE T_ID = '${id}'`, (e: any) => {
                             if (!e)
