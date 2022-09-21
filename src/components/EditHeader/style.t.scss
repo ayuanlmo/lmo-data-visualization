@@ -36,4 +36,16 @@
     }
   }
 
+  .lmo_create_template {
+    span {
+      display: inline-block;
+      width: 4rem;
+      color: #fbfbfd;
+
+      &:after {
+        content: '：';
+      }
+    }
+  }
+
 }

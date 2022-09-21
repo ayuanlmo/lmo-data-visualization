@@ -1,6 +1,7 @@
 import {_POST, _POST_Form_Data} from '@/lib/Request/index.t';
 import * as TYPE from '@const/ActionsTypes.t';
 import * as URL from '@const/InterfaceUrls';
+import {EDIT_TEMPLATE} from "@const/ActionsTypes.t";
 
 export default {
     [TYPE.GET_TEMPLATE_LIST]({commit}) {
@@ -17,5 +18,11 @@ export default {
     },
     [TYPE.DEL_MEDIA_ITEM]({commit}, data) {
         return _POST(`${URL.DEL_MEDIA}${require('@/utils/index').createQueryParams(data)}`);
+    },
+    [TYPE.DEL_TEMPLATE]({commit}, data) {
+        return _POST(`${URL.DEL_TEMPLATE}${require('@/utils/index').createQueryParams(data)}`);
+    },
+    [TYPE.EDIT_TEMPLATE]({commit}, data) {
+        return _POST(`${URL.EDIT_TEMPLATE}${require('@/utils/index').createQueryParams(data)}`);
     }
 };

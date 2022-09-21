@@ -1,4 +1,5 @@
 module.exports.formatTime = formatTime;
+module.exports.formatDate = formatDate;
 module.exports.getWsUrl = getWsUrl;
 module.exports.isObject = isObject;
 module.exports.stringify = stringify;
@@ -28,6 +29,16 @@ function formatTime(s) {
 
     s -= 60 * m;
     return h + ':' + m + ':' + `${s >= 10 ? s : '0' + s}`;
+}
+
+function formatDate(time) {
+    const date = new Date(time);
+    const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+    const currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    const hh = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    const mm = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+
+    return date.getFullYear() + "-" + month + "-" + currentDate + " " + hh + ":" + mm;
 }
 
 function getWsUrl(url = location.origin ?? global.location.origin) {

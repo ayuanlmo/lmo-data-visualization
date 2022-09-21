@@ -5,13 +5,13 @@
  * @module @/store
  * Created by ayuanlmo on 2022/02
  * **/
-import {Notification} from "element-ui";
+import {createNotification} from "@lib/BasicInteraction";
 
 const axios = require('axios');
 
 axios.interceptors.response.use(r => {
     if (r.data.code !== 200)
-        Notification({
+        createNotification({
             title: '提示',
             message: `${r.data.message}`,
             type: 'error'

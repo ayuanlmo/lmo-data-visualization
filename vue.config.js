@@ -51,6 +51,8 @@ module.exports = {
                 }));
         conf.plugin('html').tap(apps => {
             apps[0].title = AppConfig.title;
+            apps[0].buildTime = require('./src/utils/index').formatDate(TimeStamp);
+            apps[0].osType = require('os').type();
             return apps;
         });
         conf.resolve.alias.set('@src', resolve('src'));

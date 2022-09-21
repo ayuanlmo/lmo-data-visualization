@@ -66,6 +66,61 @@ export default {
                             on: {
                                 click: this.startSynthesis
                             }
+                        }),
+                        h('lmo-button', {
+                            props: {
+                                text: '保存为自定义模板'
+                            },
+                            on: {
+                                click: () => this.createTemplateVisible = true
+                            }
+                        })
+                    ])
+                ]),
+                h('el-dialog', {
+                    props: {
+                        visible: this.createTemplateVisible,
+                        width: '20%',
+                        title: '自定义模板信息',
+                        'before-close': () => this.createTemplateVisible = false
+                    }
+                }, [
+                    h('div', {
+                        class: 'lmo_flex_box lmo_create_template'
+                    }, [
+                        h('span', ['标题']),
+                        h('lmo-input', {
+                            props: {
+                                value: this.customize.title
+                            },
+                            on: {
+                                change: e => this.customize.title = e
+                            }
+                        })
+                    ]),
+                    h('div', {
+                        class: 'lmo_flex_box lmo_create_template'
+                    }, [
+                        h('span', ['介绍']),
+                        h('lmo-input', {
+                            props: {
+                                value: this.customize.description
+                            },
+                            on: {
+                                change: e => this.customize.description = e
+                            }
+                        })
+                    ]),
+                    h('span', {
+                        slot: 'footer'
+                    }, [
+                        h('lmo-button', {
+                            props: {
+                                text: '立即保存'
+                            },
+                            on: {
+                                click: () => this.createTemplate()
+                            }
                         })
                     ])
                 ]),
@@ -81,7 +136,39 @@ export default {
             default: '编辑模板'
         }
     },
+    data() {
+        return {
+            createTemplateVisible: false,
+            customize: {
+                title: '',
+                description: ''
+            }
+        };
+    },
     methods: {
+        createTemplate() {
+            this.ws.send(require('@/utils/index').stringToBinary(JSON.stringify({
+                cmd: 'createTemplate',
+                data: {
+                    customize: {
+                        ...this.customize
+                    },
+                    templateConfig: {
+                        ...this.currentConfig
+                    },
+                    config: {
+                        ...this.currentTemplateVideoConfig,
+                        audio: {
+                            ...this.templateCurrentAudioConfig
+                        }
+                    },
+                    template: this.currentTemplate.template
+                }
+            })));
+            setTimeout(() => {
+                this.createTemplateVisible = false;
+            }, 1000);
+        },
         startSynthesis() {
             this.$prompt('请输入项目名称(可空)', '发起合成', {
                 confirmButtonText: '确定',

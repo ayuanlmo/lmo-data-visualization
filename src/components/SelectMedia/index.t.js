@@ -4,6 +4,7 @@ import MediaList from "@components/SelectMedia/TempLate/MediaList";
 import NoData from '@/components/NoData/index.t';
 import {FILE_MAX_LENGTH} from "@/const/Const.t";
 import {FILE_SIZE, UPLOAD_SUCCESS} from '@/const/Message';
+import {createMessage} from "@lib/BasicInteraction";
 
 export default {
     name: 'lmo-select-media',
@@ -27,13 +28,19 @@ export default {
                             click: () => {
                                 require('@/utils/index').selectFile(false).then(file => {
                                     if (file.size > FILE_MAX_LENGTH)
-                                        return this.$message.warning(FILE_SIZE.replace('$t', file.name));
+                                        return createMessage({
+                                            type: 'warning',
+                                            message: FILE_SIZE.replace('$t', file.name)
+                                        });
                                     this.$store.dispatch('UPLOAD_MEDIA', {
                                         media: file
                                     }).then(res => {
                                         if (res.code === 200) {
-                                            this.$message.success(UPLOAD_SUCCESS);
                                             this.getMedia();
+                                            return createMessage({
+                                                type: 'success',
+                                                message: UPLOAD_SUCCESS
+                                            });
                                         }
                                     });
                                 });

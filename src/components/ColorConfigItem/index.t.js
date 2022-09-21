@@ -4,6 +4,7 @@ import {mapState} from "vuex";
 import {PostMessage} from '@/lib/PostMessage/index.t';
 import {ColorConfigComponent, renderColorOptionExcludeKey} from "@/const/Default.t";
 import {UPDATE_BACKGROUND_IMAGE} from '@/const/MessageType.t';
+import {createMessage} from "@lib/BasicInteraction";
 import AnimateView from '@/components/AnimateView/index.t';
 
 export default {
@@ -107,7 +108,10 @@ export default {
             const h = this.$createElement;
 
             if (!ColorConfigComponent.includes(_Component)) {
-                this.$message.warning(`[${_Component}不是一个受支援的组件]`);
+                createMessage({
+                    type: 'warning',
+                    message: `[${_Component}不是一个受支援的组件]`
+                });
                 return h('span');
             }
             if (_Component === 'lmo-color-picker')

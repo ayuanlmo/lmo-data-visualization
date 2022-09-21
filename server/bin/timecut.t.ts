@@ -16,14 +16,16 @@ class TC {
     private _Logs: Array<string>;
     private _Schedule: number;
     private readonly _Task_Name: string;
-    private _Name: string;
+    private readonly _Name: string;
     private readonly _Fs: any;
     private readonly _OS: any;
     private readonly _DB: any;
+    private readonly _Type: number;
 
-    constructor(ws: any, data: any) {
+    constructor(ws: any, data: any, type: number) {
         this._Ws = ws;
         this._Data = data;
+        this._Type = type;
         this._Logs = [];
         this._Task_Name = `lmo_${new Date().getTime()}`;
         this._Fs = require('fs-extra');
@@ -31,9 +33,11 @@ class TC {
         this._DB = new (require('../lib/sqlite/sqlite.t').T_DB);
         this._Schedule = 0;
         this._Name = this._Data.name === '' ? this._Task_Name : this._Data.name;
-        this.SEND_MESSAGE('task_pending', 'task_pending', {
-            taskName: this._Name
-        });
+        if (this._Type === 0) {
+            this.SEND_MESSAGE('task_pending', 'task_pending', {
+                taskName: this._Name
+            });
+        }
         if (!require('../conf/default.t').__SYNTHESIS) {
             this.SEND_MESSAGE('showMessage', 'showMessage', {
                 message: require('../conf/Message.t').__SYNTHESIS_CLOSE,
@@ -76,9 +80,9 @@ class TC {
         });
     }
 
-    async COPY_TEMPLATE() {
-        const _temp: string = _ResolvePath(_PATH.COPY_TEMPLATE.TEMP);
-        const _: string = _ResolvePath(`${_PATH.COPY_TEMPLATE.THIS}${this._Task_Name}`);
+    async COPY_TEMPLATE(): Promise<number> {
+        const _temp: string = _ResolvePath(this._Type === 0 ? _PATH.COPY_TEMPLATE.TEMP : _PATH.COPY_TEMPLATE.ORIGIN + '/');
+        const _: string = _ResolvePath(`${this._Type === 0 ? _PATH.COPY_TEMPLATE.THIS : _PATH.COPY_TEMPLATE.ORIGIN + '/'}${this._Task_Name}`);
 
         if (!this._Fs.existsSync(_temp))
             this._Fs.mkdir(_temp);
@@ -104,15 +108,44 @@ class TC {
         return Promise.resolve(0);
     }
 
-    WRITE_CONF_JS(conf: object, path: string) {
-        this._Fs.writeFile(`${path}/conf.js`, `window.chartConfig = ${JSON.stringify({
-            ...conf,
+    WRITE_CONF_JS(conf: object, path: string): void {
+        const Data = this._Type === 1 ? {} : {
             _video: {
                 ...this._Data.config.video
             }
+        };
+
+        this._Fs.writeFile(`${path}/conf.js`, `window.chartConfig = ${JSON.stringify({
+            ...conf,
+            ...Data
         })};`, (e: any) => {
-            if (!e)
-                this.SYNTHESIS();
+            if (!e) {
+                if (this._Type === 0)
+                    this.SYNTHESIS();
+                if (this._Type === 1)
+                    this.CREATE_TEMPLATE();
+            }
+        });
+    }
+
+    CREATE_TEMPLATE(): void {
+        const T_DB = new (require('../lib/sqlite/sqlite.t')['T_DB']);
+        const SQL = T_DB.GET_INSERT_TEMPLATE_TABLE_SQL({
+            T_Name: this._Task_Name,
+            T_Id: `lmo_data_visualization_template_${this._Task_Name}`,
+            T_Title: this._Data.customize.title ?? '自定义模板',
+            T_Description: this._Data.customize.description ?? '这是一个自定义模板',
+            T_Path: '/static/DataVisualizationTemplate/' + this._Task_Name + '/index.html',
+            T_Type: 'customize'
+        })
+
+        T_DB.RUN(SQL, (e: any) => {
+            if (e)
+                console.warn('[Warn]:Template write failed...', e);
+            else {
+                T_DB.CLOSE();
+                this.SEND_MESSAGE('create_template', 'success', {});
+            }
         });
     }
 
@@ -152,11 +185,16 @@ class TC {
                 ...this.GET_VIDEO_CLARITY(_.video.clarity)
             },
             preparePageForScreenshot: async (page: any, currentFrame: number, totalFrames: number) => {
-                this._Schedule = parseInt(String(currentFrame / totalFrames * 100));
-                await this.SEND_MESSAGE('task_processing', 'task_processing', {
-                    taskName: this._Name,
-                    schedule: this._Schedule
-                });
+                const _NewSchedule: number = parseInt(String(currentFrame / totalFrames * 100));
+
+                if (this._Schedule !== _NewSchedule) {
+                    this._Schedule = _NewSchedule;
+                    await this.SEND_MESSAGE('task_processing', 'task_processing', {
+                        taskName: this._Name,
+                        schedule: this._Schedule,
+                        taskId: this._Task_Name
+                    });
+                }
             }
         };
 

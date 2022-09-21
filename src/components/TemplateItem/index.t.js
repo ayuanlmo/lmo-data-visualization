@@ -1,5 +1,7 @@
 require('./style.t.scss');
 
+import {createMessage, createMessageBox} from "@lib/BasicInteraction";
+
 export default {
     name: 'lmo-template_item',
     render(h) {
@@ -30,9 +32,46 @@ export default {
                         h('div', {
                             class: this.getDescriptionClass
                         }, [
+                            this.customizeTemplate ?
+                                h('span', {
+                                    class: 'lmo-template_del_icon lmo_flex_box'
+                                }, [
+                                    h('i', {
+                                        class: 'el-icon-delete lmo_hover_theme_color',
+                                        on: {
+                                            click: (e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                createMessageBox({
+                                                    confirmButtonText: '确定',
+                                                    cancelButtonText: '取消',
+                                                    showCancelButton: true,
+                                                    title: '提示',
+                                                    type: 'warning',
+                                                    message: '您确定要删除该模板吗？(删除后不可恢复)'
+                                                }).then(() => {
+                                                    this.$store.dispatch('DEL_TEMPLATE', {
+                                                        id: this.data.id
+                                                    }).then(res => {
+                                                        if (res.code === 200) {
+                                                            createMessage({
+                                                                type: 'success',
+                                                                message: '删除成功'
+                                                            });
+                                                            this.$emit('delItem');
+                                                        }
+                                                    });
+                                                });
+                                            }
+                                        }
+                                    })
+                                ]) : h(''),
                             h('span', {
                                 class: 'lmo-template_description_title animated fadeInDown'
-                            }, [this.data.title]),
+                            }, [
+                                this.data.title,
+                                this.getEditTemplate()
+                            ]),
                             h('br'),
                             h('span', {
                                 class: 'lmo-template_description_content animated fadeInDown'
@@ -71,7 +110,8 @@ export default {
     },
     data() {
         return {
-            showDescription: false
+            showDescription: false,
+            customizeTemplate: this.data.type === 'customize'
         };
     },
     computed: {
@@ -81,5 +121,25 @@ export default {
             return this.showDescription ? `${_}` : `${_} lmo_hide`;
         }
     },
-    methods: {}
+    methods: {
+        getEditTemplate(h = this.$createElement) {
+            if (this.customizeTemplate) {
+                return h('i', {
+                    class: 'el-icon-edit-outline lmo_hover_theme_color',
+                    on: {
+                        click: (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return this.$emit('edit', {
+                                id: this.data.id,
+                                title: this.data.title,
+                                description: this.data.description
+                            });
+                        }
+                    }
+                });
+            }
+            return '';
+        }
+    }
 };

@@ -4,6 +4,7 @@ import {HotTable} from '@handsontable/vue';
 import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
 import {UPDATE_DATA} from '@/const/MessageType.t';
+import {createMessage} from "@lib/BasicInteraction";
 import 'handsontable/dist/handsontable.full.css';
 
 const HotTableConfig = require('@/config/HotTable');
@@ -96,7 +97,11 @@ export default {
         importLocalData() {
             require('@/utils/index').selectFile().then(file => {
                 if (file.type !== 'text/csv')
-                    return this.$message.warning(`[${file.name}]是一个不受支持的文件`);
+                    return createMessage({
+                        type: 'warning',
+                        message: `[${file.name}]是一个不受支持的文件`
+                    });
+                
                 const fr = new FileReader();
 
                 fr.readAsText(file);

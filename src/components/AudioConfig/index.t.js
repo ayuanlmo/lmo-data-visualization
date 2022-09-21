@@ -1,5 +1,6 @@
 import SelectMedia from '@/components/SelectMedia/index.t';
 import {mapState} from "vuex";
+import {createMessage} from "@lib/BasicInteraction";
 import LmoAudioPlayer from "@components/AudioPlayer/index.t";
 
 require('./style.t.scss');
@@ -189,7 +190,10 @@ export default {
                                                     if (this.changeInput('30>90', e))
                                                         this.videoConf.video.fps = `${e}`;
                                                     else
-                                                        return this.$message.warning('帧率最低支持30帧,最高支持90帧');
+                                                        return createMessage({
+                                                            type: 'warning',
+                                                            message: '帧率最低支持30帧,最高支持90帧'
+                                                        });
                                                 }
                                             }
                                         })
@@ -248,7 +252,10 @@ export default {
                                                     this.videoConf.video.duration = `${e}`;
                                                     this.$store.commit('SET_TEMPLATE_CURRENT_DURATION', e);
                                                 } else
-                                                    return this.$message.warning('持续时间最高支持600秒(10分钟),最低支持5秒');
+                                                    return createMessage({
+                                                        type: 'warning',
+                                                        message: '持续时间最高支持600秒(10分钟),最低支持5秒'
+                                                    });
                                             }
                                         }
                                     })

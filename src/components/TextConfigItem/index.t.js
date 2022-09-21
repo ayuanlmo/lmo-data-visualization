@@ -2,6 +2,7 @@ require('./style.t.scss');
 
 import {mapState} from 'vuex';
 import {TextConfigComponent} from "@const/Default.t";
+import {createMessage} from "@lib/BasicInteraction";
 import ThemeConfigItem from '@/components/ColorConfigItem/index.t';
 import ThemeConfig from '@/components/ThemeConfig/index.t';
 import BackgroundConfig from '@/components/BackgroundConfig/index.t';
@@ -87,7 +88,10 @@ export default {
             const _Component = this.configText[i].type;
 
             if (!TextConfigComponent.includes(_Component)) {
-                this.$message.warning(`[${_Component}是一个不受支援的组件]`);
+                createMessage({
+                    type: 'warning',
+                    message: `[${_Component}是一个不受支援的组件]`
+                });
                 return h('span', {
                     class: 'lmo_hide'
                 });

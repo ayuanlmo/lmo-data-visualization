@@ -54,8 +54,10 @@
                 return _.send(_Conf.__SOCKET_PONG_MESSAGE);
             const _m: any = JSON.parse(require('./utils/utils.t').BINARY_TO_STRING(__));
 
-            if (_m.cmd === _Cmd['__SYNTHESIS'])
-                new (require('./bin/timecut.t')).TC(_Pool, _m['data']);
+            if (_m.cmd === _Cmd.__SYNTHESIS)
+                new (require('./bin/timecut.t')).TC(_Pool, _m['data'], 0);
+            if (_m.cmd === _Cmd.__CREATE_TEMPLATE)
+                new (require('./bin/timecut.t')).TC(_Pool, _m['data'], 1);
         });
         _.on('close', () => {
             _OnlineUsers -= 1;
@@ -86,6 +88,12 @@
     });
     _App.post(_Router.__DEL_MEDIA, (_: any, __: any): void => {
         return _Func.DEL_MEDIA(__, _);
+    });
+    _App.post(_Router.__DEL_TEMPLATE, (_: any, __: any): void => {
+        return _Func.DEL_TEMPLATE(_, __);
+    });
+    _App.post(_Router.__EDIT_TEMPLATE_INFO, (_: any, __: any): void => {
+        return _Func.EDIT_TEMPLATE_INFO(_, __);
     });
     _App.get('*', (_: any, __: any): void => {
         __.json({data: {}, code: 404, message: 'No Found'});
