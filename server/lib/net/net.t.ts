@@ -26,8 +26,8 @@ const _: any = {
         });
         _test_server.on('error', (_e: any): void => {
             if (_e.code === 'EADDRINUSE') {
-                console.log(`${_Port}端口被占用,正在尝试在新的端口启动`);
-                _.__START_SERVER(__);
+                console.warn(`${_Port}端口被占用,正在尝试在新的端口启动`);
+                _.START_SERVER(__);
             }
         });
     },
