@@ -9,7 +9,7 @@ export default {
     name: 'lmo-preview',
     render(h) {
         return (
-            <el-dialog style={{
+            <el-dialog center={true} style={{
                 'background-color': '#293943'
             }} title={'预览'} visible={this.visible} width={'1000px'}
                        fullscreen={false} top={'5vh'} before-close={() => {

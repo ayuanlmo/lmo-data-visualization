@@ -6,7 +6,7 @@ export default {
     name: 'lmo-animate_list',
     render(h) {
         return (
-            <el-dialog beforeClose={() => {
+            <el-dialog center={true} beforeClose={() => {
                 this.show();
             }} visible={this.visible} title={'选择标题动画'} width={'40%'}>
                 {

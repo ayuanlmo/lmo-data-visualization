@@ -82,6 +82,7 @@ export default {
                         visible: this.createTemplateVisible,
                         width: '20%',
                         title: '自定义模板信息',
+                        'center': true,
                         'before-close': () => this.createTemplateVisible = false
                     }
                 }, [

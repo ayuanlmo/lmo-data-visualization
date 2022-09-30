@@ -14,9 +14,7 @@ export default {
                         title: '',
                         width: '40%',
                         visible: this.visible,
-                        beforeClose: () => {
-                            this.visible = false;
-                        },
+                        beforeClose: () => this.visible = false,
                         top: '10vh'
                     },
                     class: 'lmo_none_user_select'

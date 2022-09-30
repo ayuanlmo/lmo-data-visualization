@@ -17,9 +17,8 @@ export default {
                         title: '编辑模板信息',
                         visible: this.editTemplateVisible,
                         width: '20%',
-                        'before-close': () => {
-                            this.editTemplateVisible = false;
-                        }
+                        'center': true,
+                        'before-close': () => this.editTemplateVisible = false
                     }
                 }, [
                     h('div', [

@@ -14,12 +14,12 @@ export default {
                 props: {
                     visible: this.showSelectMedia,
                     title: '选择媒体文件',
-                    'before-close': () => {
-                        this.showSelectMedia = false;
-                    }
+                    'append-to-body	': true,
+                    'before-close': () => this.showSelectMedia = false,
+                    'center': true
                 }
             }, [
-                h('div', {}, [
+                h('div', [
                     h('lmo-button', {
                         props: {
                             text: '上传'
@@ -53,9 +53,7 @@ export default {
                         value: this.tabsActiveName
                     },
                     on: {
-                        'tab-click': (t) => {
-                            this.tabsActiveName = t.name;
-                        }
+                        'tab-click': (t) => this.tabsActiveName = t.name
                     }
                 }, [
                     this.template.map(i => {
@@ -69,7 +67,7 @@ export default {
                                 }, [
                                     this.media[i.dataIndex].length === 0 ? h('div', [
                                         h(NoData)
-                                    ]) : h(i.template, {
+                                    ]) : h(MediaList, {
                                         props: {
                                             data: this.media[i.dataIndex]
                                         },
@@ -123,20 +121,17 @@ export default {
                 {
                     label: '音频',
                     name: 'audio',
-                    dataIndex: 'audioMedia',
-                    template: MediaList
+                    dataIndex: 'audioMedia'
                 },
                 {
                     label: '视频',
                     name: 'video',
-                    dataIndex: 'videoMedia',
-                    template: MediaList
+                    dataIndex: 'videoMedia'
                 },
                 {
                     label: '图片',
                     name: 'image',
-                    dataIndex: 'imageMedia',
-                    template: MediaList
+                    dataIndex: 'imageMedia'
                 }
             ]
         };
