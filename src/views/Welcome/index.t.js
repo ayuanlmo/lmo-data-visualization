@@ -1,5 +1,7 @@
 require('./style.t.scss');
 
+import {set} from "@lib/Storage";
+
 export default {
     name: 'lmo-welcome',
     render(h) {
@@ -33,6 +35,7 @@ export default {
                                 class: 'lmo-welcome_content_app_info_name_button lmo_cursor_pointer_hover lmo_color_white_background',
                                 on: {
                                     click: async () => {
+                                        await set('welcome_state', '1');
                                         await require('@/utils').routerPush(this.$router, '/', 'replace');
                                     }
                                 }
