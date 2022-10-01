@@ -20,15 +20,15 @@ module.exports = {
         sourceMap: AppConfig.build.cssSourceMap,
         extract: {
             filename: `css/lmo-css_[contenthash].t.css`,
-            chunkFilename: `css/lmo-css_[contenthash].t.css`
+            chunkFilename: `css/lmo-css_chunk_[chunkhash].t.css`
         },
         loaderOptions: {}
     },
     configureWebpack: {
         name: AppConfig.appName,
         output: {
-            filename: `js/lmo-js_[contenthash].t.js`,
-            chunkFilename: `js/lmo-js_[contenthash].t.js`
+            filename: `js/lmo-js_[hash].t.js`,
+            chunkFilename: `js/lmo-js_chunk_[contenthash].t.js`
         },
         plugins: [
             // new MiniCssExtractPlugin({
