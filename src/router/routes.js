@@ -8,6 +8,11 @@ const routes = [
         path: '/edit',
         name: 'lmo-edit',
         component: () => import('../views/Edit/index.t')
+    },
+    {
+        path: '/welcome',
+        name: 'lmo-welcome',
+        component: () => import('../views/Welcome/index.t')
     }
 ];
 
