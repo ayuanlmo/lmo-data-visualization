@@ -31,6 +31,12 @@ function formatTime(s) {
     return h + ':' + m + ':' + `${s >= 10 ? s : '0' + s}`;
 }
 
+/**
+ * @method formatDate
+ * @param time {number} UNIX时间戳
+ * @description 将时间戳转为'2022-01-02 12:01:01'格式
+ * @return {string}
+ * **/
 function formatDate(time) {
     const date = new Date(time);
     const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
@@ -41,6 +47,12 @@ function formatDate(time) {
     return date.getFullYear() + "-" + month + "-" + currentDate + " " + hh + ":" + mm;
 }
 
+/**
+ * @method getWsUrl
+ * @param url {string} url
+ * @description 将 http/https 格式url转换为socket专用的 ws/wss 地址
+ * @return {string}
+ * **/
 function getWsUrl(url = location.origin ?? global.location.origin) {
     const urls = location.origin.split(':');
     const origin = location.host;
@@ -49,14 +61,32 @@ function getWsUrl(url = location.origin ?? global.location.origin) {
         return urls[0] === 'https' ? `wss:${origin}${url}` : `ws:${origin}${url}`;
 }
 
+/**
+ * @method isObject
+ * @param data {object}
+ * @description 判断当前数据类型是否为 对象
+ * @return {boolean}
+ * **/
 function isObject(data = {}) {
     return typeof data === 'object' && Object.prototype.toString.call(data).toLowerCase() === '[object object]' && data.length;
 }
 
+/**
+ * @method stringify
+ * @param data {object}
+ * @description 将对象转换为JSON字符串
+ * @return {string}
+ * **/
 function stringify(data = null) {
     return data === null ? 'null' : JSON.stringify(data);
 }
 
+/**
+ * @method toString
+ * @param data {any}
+ * @description 将常见数据类型转换为字符串
+ * @return {string}
+ * **/
 function toString(data) {
     if (typeof data === 'boolean')
         return `${data}`;
@@ -69,14 +99,32 @@ function toString(data) {
     return '';
 }
 
+/**
+ * @method isArray
+ * @param arr{any}
+ * @description 判断数据类型是否为 数组
+ * @return {boolean}
+ * **/
 function isArray(arr = []) {
     return Object.prototype.toString.call(arr) === "[object Array]";
 }
 
+/**
+ * @method isString
+ * @param str{any}
+ * @description 判断数据类型是否为 字符串
+ * @return {boolean}
+ * **/
 function isString(str = '') {
     return typeof str === 'string';
 }
 
+/**
+ * @method encode
+ * @param str {string} 编码字符串
+ * @description 将字符串进行编码（需要使用decode解码）
+ * @return {string}
+ * **/
 function encode(str = '') {
     let code = '_lmo_ting^';
 
@@ -86,6 +134,12 @@ function encode(str = '') {
     return code.slice(0, code.length - 1);
 }
 
+/**
+ * @method decode
+ * @param code {string} 解码字符串
+ * @description 将字符串进行解码（需要使用encode编码）
+ * @return {string}
+ * **/
 function decode(code = '') {
     const codeTemplate = '_lmo_ting^';
 
@@ -97,6 +151,12 @@ function decode(code = '') {
     return str;
 }
 
+/**
+ * @method toBase64
+ * @param file {file}
+ * @description 将二进制文件 转换为base64
+ * @return {Promise}
+ * **/
 function toBase64(file) {
     return new Promise(function (r, e) {
         const fr = new FileReader();
@@ -111,6 +171,12 @@ function toBase64(file) {
     });
 }
 
+/**
+ * @method selectFile
+ * @param multiple {boolean} 多文件
+ * @description 选择文件
+ * @return {Promise}
+ * **/
 function selectFile(multiple = false) {
     return new Promise((resolve, reject) => {
         const i = document.createElement('input');
@@ -125,6 +191,11 @@ function selectFile(multiple = false) {
     });
 }
 
+/**
+ * @method getRouterQuery
+ * @description 将路由查询 按照对象返回
+ * @return {object}
+ * **/
 function getRouterQuery() {
     const _ = [];
     const query = {};
@@ -146,6 +217,13 @@ function getRouterQuery() {
     return query;
 }
 
+/**
+ * @method routerPush
+ * @param t {any} RouterObject
+ * @param to {string} 目标地址
+ * @param t {string} 跳转类型 push&replace 可选
+ * @description 路由跳转
+ * **/
 function routerPush(r, to, t = 'push') {
     t === 'push' ? r['push']({
         path: to,
@@ -155,6 +233,13 @@ function routerPush(r, to, t = 'push') {
     }) : r['replace'](to);
 }
 
+/**
+ * @method downloadFile
+ * @param conf{object}
+ * @description 下载文件
+ * @return {Promise}
+ *
+ * **/
 function downloadFile(conf) {
     const a = document.createElement('a');
 
@@ -165,6 +250,12 @@ function downloadFile(conf) {
     });
 }
 
+/**
+ * @method stringToBinary
+ * @param str {string}
+ * @description 字符串转换为 二进制字符串
+ * @return {string}
+ * **/
 function stringToBinary(str = '') {
     const _ = [];
     const __ = str.split("");
@@ -178,6 +269,12 @@ function stringToBinary(str = '') {
     return _.join("");
 }
 
+/**
+ * @method binaryToString
+ * @param str {string}
+ * @description 二进制字符串转换为 字符串
+ * @return {string}
+ * **/
 function binaryToString(str = '') {
     const _ = [];
     const list = str.split(" ");
@@ -188,6 +285,13 @@ function binaryToString(str = '') {
     return _.join("");
 }
 
+/**
+ * @method formatSec
+ * @param sec {number}
+ * @param isMs {boolean}
+ * @description 将 整秒 转换为 01:22 格式
+ * @return {string}
+ * **/
 function formatSec(sec, isMs) {
     if (isMs)
         sec /= 1000;
@@ -205,6 +309,12 @@ function formatSec(sec, isMs) {
     return `${_}:${__}`;
 }
 
+/**
+ * @method toCSV
+ * @param arr{array}
+ * @description 转换为CSV文件(只返回地址，下载请调用downloadFile函数)
+ * @return {string} 地址
+ * **/
 function toCSV(arr = []) {
     let _ = 'data:text/csv;charset=utf-8,\ufeff';
 
@@ -214,6 +324,12 @@ function toCSV(arr = []) {
     return encodeURI(_);
 }
 
+/**
+ * @method getFormData
+ * @param data{object}
+ * @description 将对象转换为FormData
+ * @return {FormData}
+ * **/
 function getFormData(data = {}) {
     const fd = new FormData();
 
@@ -223,12 +339,24 @@ function getFormData(data = {}) {
     return fd;
 }
 
+/**
+ * @method getMediaType
+ * @param mediaName {string} 'xxx.mp4'
+ * @description 获取媒体文件类型
+ * @return {string} 'mp4'
+ * **/
 function getMediaType(mediaName = '') {
     if (mediaName === '')
         return '';
     return mediaName.split('.')[1];
 }
 
+/**
+ * @method createQueryParams
+ * @param data {string}
+ * @description 创建一个http查询参数
+ * @return {string}  '?id=xx&name=xx'
+ * **/
 function createQueryParams(data = {}) {
     let str = '?';
 

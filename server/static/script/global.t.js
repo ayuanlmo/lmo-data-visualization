@@ -5,6 +5,7 @@
  * @module _ting_ting-com for smp
  * @module _ting_ting-ws for smp
  * 仅适用于YC SMP Runtime
+ * @description 这是一份适用于YC SMP Runtime的驱动文件。如果您的运行环境非YC SMP 可忽略它。它不会影响该应用运行于其他Runtime
  * **/
 
 void function (__GLOBAL, __FACTORY) {
@@ -13,7 +14,7 @@ void function (__GLOBAL, __FACTORY) {
     //__GLOBAL 仅在v1 提供支援
     const __GLOBAL = window['__GLOBAL'] ?? window['__GLOBAL_THIS'];
 
-    if(!__GLOBAL) return;
+    if (!__GLOBAL) return;
     __GLOBAL['__'] = '${{{__GLOBAL}}}##' ?? ['__GLOBAL_LMO__'];
     __GLOBAL['chartConfig'] = '${{{%CONF}}}';
     if (__GLOBAL['YC']) {

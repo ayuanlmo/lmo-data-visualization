@@ -1,3 +1,7 @@
+/**
+ * @description 这是一份适用于 YC smp Runtime 的一套驱动程序
+ * 如果您在其他Runtime运行该程序，可忽略。它不会影响该应用运行于其他Runtime
+ * */
 const globalThis = window ?? globalThis;
 const _ = window ?? globalThis;
 const appConfig = require('@/config/AppConfig');

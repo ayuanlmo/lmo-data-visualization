@@ -131,7 +131,7 @@ module.exports.FILE_TO_BASE64 = (path: string): Promise<string> => {
 module.exports.RESOLVE_STATIC_FILE_PATH = (path = ''): string => {
     if (path === '') return '/';
     return `/static${path.split('/static')[1]}`;
-}
+};
 
 /**
  * @method GET_FILE_TYPE
@@ -141,4 +141,4 @@ module.exports.RESOLVE_STATIC_FILE_PATH = (path = ''): string => {
  * **/
 module.exports.GET_FILE_TYPE = (name: string) => {
     return name.split('.')[1];
-}
+};
