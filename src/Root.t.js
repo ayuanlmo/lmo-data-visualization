@@ -16,6 +16,7 @@ const routerPush = require('@/utils').routerPush;
 
 import '@/lib/PostMessage/index.t';
 import {get} from '@/lib/Storage';
+import {CURRENT_TEMPLATE, WELCOME_STATE} from "@const/StorageKtys.t";
 
 export default {
     name: 'lmo-root',
@@ -44,8 +45,8 @@ export default {
         );
     },
     async created() {
-        const current_template = get('current_template');
-        const welcome_state = get('welcome_state');
+        const current_template = get(CURRENT_TEMPLATE);
+        const welcome_state = get(WELCOME_STATE);
 
         if (require('@/config/AppConfig').pages.welcome)
             if (welcome_state === null || welcome_state === '0')

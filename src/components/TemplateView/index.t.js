@@ -1,9 +1,9 @@
 import {createMessage} from "@lib/BasicInteraction";
-
-require('./style.t.scss');
-
 import TemplateItem from '@/components/TemplateItem/index.t';
 import {set} from '@/lib/Storage';
+import {CURRENT_TEMPLATE} from "@const/StorageKtys.t";
+
+require('./style.t.scss');
 
 export default {
     name: 'lmo-template_view',
@@ -89,7 +89,7 @@ export default {
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
                                             this.$store.commit('RESET_TEMPLATE_CURRENT_AUDIO_CONFIG');
-                                            await set('current_template', JSON.stringify(i));
+                                            await set(CURRENT_TEMPLATE, JSON.stringify(i));
                                             await require('@/utils').routerPush(this.$router, '/edit', 'push');
                                         }
                                     }
