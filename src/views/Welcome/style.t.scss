@@ -7,41 +7,57 @@
   height: 100%;
 
   .lmo-welcome_content {
-    img {
-      width: 210px;
-      border-radius: 24px;
-    }
-
     position: relative;
-    top: 28%;
-    left: 5%;
+    top: 30%;
+    width: 50vw;
+    height: auto;
+    left: 10%;
+
+    img {
+      width: 10vw;
+      border-radius: 50%;
+    }
 
     .lmo-welcome_content_app_info {
       position: relative;
       left: 2rem;
 
       .lmo-welcome_content_app_info_name {
-        font-size: 36px;
-        margin-top: 4rem;
+
+        .lmo-welcome_content_app_info_name_content {
+          font-size: 4vh;
+          font-weight: 600;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-image: linear-gradient(90deg,
+                  rgb(34 158 237),
+                  rgb(229 229 229),
+                  rgb(86, 117, 229),
+                  rgb(239, 122, 200),
+                  rgb(19, 166, 172),
+                  rgb(15, 195, 162));
+          background-size: 200%;
+          animation: streamer 3s linear infinite;
+        }
 
         .lmo-welcome_content_app_info_name_button {
-          width: 10rem;
-          height: 2.8rem;
+          width: 10vw;
+          height: 4vh;
           position: relative;
-          top: .2rem;
-          left: 1rem;
-          border-radius: .6rem;
+          top: 1vh;
+          left: 1vw;
+          border-radius: .5vw;
           overflow: hidden;
 
           .lmo-welcome_content_app_info_name_button_text {
-            font-size: 1.4rem;
+            font-size: 1vw;
             text-align: center;
-            line-height: 2.8rem;
+            line-height: 4vh;
 
             img {
-              width: 1.2rem;
+              width: 1vw;
               position: relative;
-              top: 0.1rem;
+              top: .2vh;
             }
           }
         }
@@ -49,6 +65,7 @@
 
       .lmo_welcome_content_app_info_author {
         color: #E5E5E5;
+        font-size: 1vw;
       }
     }
   }
@@ -59,7 +76,7 @@
     padding: 1rem;
 
     span {
-      font-size: 16px;
+      font-size: .5vw;
 
       &:nth-child(2) {
         margin-left: 2rem;
@@ -67,4 +84,14 @@
     }
   }
 
+}
+
+@keyframes streamer {
+  0% {
+    background-position: 200%;
+  }
+
+  100% {
+    background-position: 0;
+  }
 }

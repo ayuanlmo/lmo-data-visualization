@@ -31,7 +31,11 @@ export default {
                         h('p', {
                             class: 'lmo-welcome_content_app_info_name lmo_color_white lmo_flex_box'
                         }, [
-                            require('@config/AppConfig').appName.replace('l', 'l'.toUpperCase()),
+                            h('div', {
+                                class: 'lmo-welcome_content_app_info_name_content'
+                            }, [
+                                require('@config/AppConfig').appName.replace('l', 'l'.toUpperCase())
+                            ]),
                             h('div', {
                                 class: 'lmo-welcome_content_app_info_name_button lmo_cursor_pointer_hover lmo_color_white_background',
                                 on: {
