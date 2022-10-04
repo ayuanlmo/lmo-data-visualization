@@ -48,16 +48,15 @@ export default {
         const current_template = get(CURRENT_TEMPLATE);
         const welcome_state = get(WELCOME_STATE);
 
-        if (require('@/config/AppConfig').pages.welcome)
+        if (require('@/config/AppConfig').pages.welcome) {
             if (welcome_state === null || welcome_state === '0')
-                await routerPush(this.$router, 'welcome', 'replace');
-            else
-                routerPush(this.$router, '/', 'replace');
-
-        else
-            routerPush(this.$router, '/', 'replace');
+                return routerPush(this.$router, '/welcome', 'replace');
+        } else
+            return routerPush(this.$router, '/', 'replace');
 
         if (current_template !== null)
-            this.$store.commit('SET_CURRENT_TEMPLATE', JSON.parse(current_template));
+            await this.$store.commit('SET_CURRENT_TEMPLATE', JSON.parse(current_template));
+        else
+            return routerPush(this.$router, '/', 'replace');
     }
 };
