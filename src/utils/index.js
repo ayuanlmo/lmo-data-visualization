@@ -366,3 +366,12 @@ function createQueryParams(data = {}) {
 
     return str.substring(0, str.length - 1);
 }
+
+/**
+ * @method isMobileDevice
+ * @description 是否移动设备
+ * @return {boolean}
+ * **/
+function isMobileDevice() {
+    return navigator.userAgent.match(/Mobile/i).length > 0;
+}
