@@ -374,5 +374,9 @@ function createQueryParams(data = {}) {
  * @return {boolean}
  * **/
 function isMobileDevice() {
+    const _ = navigator.userAgent.match(/Mobile/i);
+    
+    if (_ === null)
+        return false;
     return navigator.userAgent.match(/Mobile/i).length > 0;
 }
