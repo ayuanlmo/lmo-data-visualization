@@ -2,6 +2,8 @@ import SelectMedia from '@/components/SelectMedia/index.t';
 import {mapState} from "vuex";
 import {createMessage} from "@lib/BasicInteraction";
 import LmoAudioPlayer from "@components/AudioPlayer/index.t";
+import {get, set} from '@/lib/Storage/index';
+import {MOBILE_AUDIO} from "@const/StorageKtys.t";
 
 require('./style.t.scss');
 
@@ -319,7 +321,17 @@ export default {
             return num >= parseInt(_[0]) && num <= parseInt(_[1]);
         },
         play() {
+
+            console.log();
+            console.log(set);
             if (this.audioName !== '') {
+                if (require('@/utils').isMobileDevice() && get(MOBILE_AUDIO) === null) {
+                    createMessage({
+                        type: 'warning',
+                        message: '当前为移动端设备，设计器可能无法控制设备音量大小。'
+                    });
+                    set(MOBILE_AUDIO, '1');
+                }
                 this.lap.play(true);
                 this.audioPlay = true;
                 this.lap.Audio.addEventListener('ended', () => {
