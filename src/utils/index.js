@@ -20,6 +20,7 @@ module.exports.toCSV = toCSV;
 module.exports.getFormData = getFormData;
 module.exports.getMediaType = getMediaType;
 module.exports.createQueryParams = createQueryParams;
+module.exports.isMobileDevice = isMobileDevice;
 
 function formatTime(s) {
     const h = Math.floor(s / 3600) >= 10 ? Math.floor(s / 3600) : '0' + Math.floor(s / 3600);
