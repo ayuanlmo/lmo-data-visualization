@@ -17,7 +17,9 @@ export default {
                 h('div', {
                     class: 'lmo-welcome_content lmo_flex_box bounceInRight animated'
                 }, [
-                    h('div', [
+                    h('div', {
+                        class: 'lmo-welcome_content_logo_content lmo_position_absolute'
+                    }, [
                         h('img', {
                             attrs: {
                                 alt: 'logo',
@@ -26,7 +28,7 @@ export default {
                         })
                     ]),
                     h('div', {
-                        class: 'lmo-welcome_content_app_info'
+                        class: 'lmo-welcome_content_app_info lmo_position_absolute'
                     }, [
                         h('p', {
                             class: 'lmo-welcome_content_app_info_name lmo_color_white lmo_flex_box'
@@ -35,28 +37,6 @@ export default {
                                 class: 'lmo-welcome_content_app_info_name_content'
                             }, [
                                 require('@config/AppConfig').appName.replace('l', 'l'.toUpperCase())
-                            ]),
-                            h('div', {
-                                class: 'lmo-welcome_content_app_info_name_button lmo_cursor_pointer_hover lmo_color_white_background',
-                                on: {
-                                    click: async () => {
-                                        await set(WELCOME_STATE, '1');
-                                        await require('@/utils').routerPush(this.$router, '/', 'replace');
-                                    }
-                                }
-                            }, [
-                                h('p', {
-                                    class: 'lmo-welcome_content_app_info_name_button_text lmo_theme_color'
-                                }, [
-                                    '立即创作',
-                                    h('img', {
-                                        class: 'bounce animated infinite',
-                                        attrs: {
-                                            alt: 'right-icon',
-                                            src: require('@static/svg/right.svg')
-                                        }
-                                    })
-                                ])
                             ])
                         ]),
                         h('p', [
@@ -65,6 +45,28 @@ export default {
                             }, [
                                 'by ',
                                 require('@config/AppConfig').appAuthor
+                            ])
+                        ]),
+                        h('div', {
+                            class: 'lmo-welcome_content_app_info_name_button lmo_cursor_pointer_hover lmo_color_white_background',
+                            on: {
+                                click: async () => {
+                                    await set(WELCOME_STATE, '1');
+                                    await require('@/utils').routerPush(this.$router, '/', 'replace');
+                                }
+                            }
+                        }, [
+                            h('p', {
+                                class: 'lmo-welcome_content_app_info_name_button_text lmo_theme_color'
+                            }, [
+                                '立即创作',
+                                h('img', {
+                                    class: 'bounce animated infinite',
+                                    attrs: {
+                                        alt: 'right-icon',
+                                        src: require('@static/svg/right.svg')
+                                    }
+                                })
                             ])
                         ])
                     ])

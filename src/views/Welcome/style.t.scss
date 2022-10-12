@@ -13,14 +13,17 @@
     height: auto;
     left: 10%;
 
-    img {
-      width: 10vw;
-      border-radius: 50%;
+    .lmo-welcome_content_logo_content {
+      width: 30%;
+
+      img {
+        width: 100%;
+        border-radius: 50%;
+      }
     }
 
     .lmo-welcome_content_app_info {
-      position: relative;
-      left: 2rem;
+      left: 35%;
 
       .lmo-welcome_content_app_info_name {
 
@@ -39,33 +42,32 @@
           background-size: 200%;
           animation: streamer 3s linear infinite;
         }
-
-        .lmo-welcome_content_app_info_name_button {
-          width: 10vw;
-          height: 4vh;
-          position: relative;
-          top: 1vh;
-          left: 1vw;
-          border-radius: .5vw;
-          overflow: hidden;
-
-          .lmo-welcome_content_app_info_name_button_text {
-            font-size: 1vw;
-            text-align: center;
-            line-height: 4vh;
-
-            img {
-              width: 1vw;
-              position: relative;
-              top: .2vh;
-            }
-          }
-        }
       }
 
       .lmo_welcome_content_app_info_author {
         color: #E5E5E5;
         font-size: 1vw;
+      }
+    }
+  }
+
+  .lmo-welcome_content_app_info_name_button {
+    width: 10rem;
+    height: 2.5rem;
+    position: relative;
+    top: 2rem;
+    border-radius: .5rem;
+    overflow: hidden;
+
+    .lmo-welcome_content_app_info_name_button_text {
+      font-size: 1rem;
+      text-align: center;
+      line-height: 2.5rem;
+
+      img {
+        width: 1rem;
+        position: relative;
+        top: .2rem;
       }
     }
   }
@@ -76,7 +78,7 @@
     padding: 1rem;
 
     span {
-      font-size: .5vw;
+      font-size: .5rem;
 
       &:nth-child(2) {
         margin-left: 2rem;
