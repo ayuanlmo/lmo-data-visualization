@@ -32,8 +32,8 @@ window.chartConfig = {
             label: 'Y轴字体大小',
             value: '24'
         },
-        lineSize:{
-            type:'lmo-input-number',
+        lineSize: {
+            type: 'lmo-input-number',
             label: '线条大小',
             value: '10'
         },
@@ -56,6 +56,11 @@ window.chartConfig = {
             type: 'lmo-switch',
             label: 'Y轴标签',
             value: true
+        },
+        showLegend: {
+            type: 'lmo-switch',
+            label: '图例',
+            value: false
         }
     },
     color: {
