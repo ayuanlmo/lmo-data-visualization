@@ -62,12 +62,28 @@ export default {
                                             }
                                         }, [
                                             h('div', {
-                                                class: this.audioName === '' ? 'lmo-audio_content_label lmo-audio_content_label_no_audio' : 'lmo-audio_content_label lmo_theme_color'
+                                                class: this.audioName === '' ? ' lmo-audio_content_label_no_audio' : 'lmo-audio_content_label lmo_theme_color lmo_flex_box'
                                             }, [
-                                                this.audioName === '' ? '暂无音频' : this.audioName
+                                                h('p', {
+                                                    class: 'lmo-audio_content_label'
+                                                }, [
+                                                    this.audioName === '' ? '暂无音频' : this.audioName
+                                                ]),
+                                                h('span', {
+                                                    class: this.audioName === '' ? 'lmo_hide' : 'el-icon-delete',
+                                                    on: {
+                                                        click: (e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            this.audioName = '';
+                                                            this.lap.pause();
+                                                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', '');
+                                                        }
+                                                    }
+                                                })
                                             ]),
                                             h('div', {
-                                                class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon'
+                                                class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon lmo_hide'
                                             }, [
                                                 h('img', {
                                                     attrs: {
