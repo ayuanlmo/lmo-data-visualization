@@ -39,10 +39,16 @@
           text-overflow: ellipsis;
           white-space: nowrap;
           overflow: hidden;
+
+          span {
+            margin-left: 1rem;
+            line-height: 6vh;
+          }
         }
 
         .lmo-audio_content_label_no_audio {
           color: #d7d7d7;
+          width: 90%;
         }
 
         .lmo-audio_content_icon {
@@ -83,6 +89,7 @@
     width: 10rem;
 
     span {
+      font-size: 0.8rem;
       width: 6rem;
     }
 

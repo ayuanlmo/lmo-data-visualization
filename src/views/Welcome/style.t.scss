@@ -1,0 +1,99 @@
+.lmo-data_visualization_welcome {
+  font-family: 'JetBrains Mono';
+  font-weight: bold;
+  position: absolute;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+
+  .lmo-welcome_content {
+    position: relative;
+    top: 30%;
+    width: 50vw;
+    height: auto;
+    left: 10%;
+
+    .lmo-welcome_content_logo_content {
+      width: 30%;
+
+      img {
+        width: 100%;
+        border-radius: 50%;
+      }
+    }
+
+    .lmo-welcome_content_app_info {
+      left: 35%;
+
+      .lmo-welcome_content_app_info_name {
+
+        .lmo-welcome_content_app_info_name_content {
+          font-size: 4vh;
+          font-weight: 600;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-image: linear-gradient(90deg,
+                  rgb(34 158 237),
+                  rgb(229 229 229),
+                  rgb(86, 117, 229),
+                  rgb(239, 122, 200),
+                  rgb(19, 166, 172),
+                  rgb(15, 195, 162));
+          background-size: 200%;
+          animation: streamer 3s linear infinite;
+        }
+      }
+
+      .lmo_welcome_content_app_info_author {
+        color: #E5E5E5;
+        font-size: 1vw;
+      }
+    }
+  }
+
+  .lmo-welcome_content_app_info_name_button {
+    width: 10rem;
+    height: 2.5rem;
+    position: relative;
+    top: 2rem;
+    border-radius: .5rem;
+    overflow: hidden;
+
+    .lmo-welcome_content_app_info_name_button_text {
+      font-size: 1rem;
+      text-align: center;
+      line-height: 2.5rem;
+
+      img {
+        width: 1rem;
+        position: relative;
+        top: .2rem;
+      }
+    }
+  }
+
+  .lmo_welcome_footer {
+    position: absolute;
+    bottom: 0;
+    padding: 1rem;
+
+    span {
+      font-size: .5rem;
+
+      &:nth-child(2) {
+        margin-left: 2rem;
+      }
+    }
+  }
+
+}
+
+@keyframes streamer {
+  0% {
+    background-position: 200%;
+  }
+
+  100% {
+    background-position: 0;
+  }
+}

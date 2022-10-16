@@ -1,7 +1,7 @@
 export default {
     name: 'lmo-video_player',
     render(h) {
-        return <el-dialog before-close={() => {
+        return <el-dialog center={true} before-close={() => {
             this.visible = false;
         }} width={'50vw'} style={'z-index: 10;background-color:#ffffff00;'}
                           title={'lmo VideoPlayer'} visible={this.visible}>

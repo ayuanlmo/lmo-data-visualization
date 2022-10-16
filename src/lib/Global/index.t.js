@@ -1,35 +1,38 @@
-const globalThis = window ?? globalThis;
+/**
+ * @description 这是一份适用于 YC smp Runtime 的一套驱动程序
+ * 如果您在其他Runtime运行该程序，可忽略。它不会影响该应用运行于其他Runtime
+ * */
+const globalThis = window ?? globalThis ?? global;
 const _ = window ?? globalThis;
 const appConfig = require('@/config/AppConfig');
 
-void ((_, __FACTORY) => {
+void (async (_, __FACTORY) => {
     try {
         _['__LMO'] = __FACTORY();
     } catch (e) {
         return {};
     }
-    console.log('  _______                       _______                ');
-    console.log(' \'   /    ` , __     ___.      \'   /    ` , __     ___.');
-    console.log('     |    | |\'  `. .\'   `          |    | |\'  `. .\'   `');
-    console.log('     |    | |    | |    |          |    | |    | |    |');
-    console.log('     /    / /    |  `---|          /    / /    |  `---|');
-    console.log('                    \\___/                         \\___/');
-    console.log(`%c [婷婷C++]  %c ${_['__LMO']._PM['_TING_TING_C++']}`, 'color:pink;background:#030307;padding:4px 0;', 'background:#EE6666;padding:4px 0;');
+    console.log('\n' +
+        '.   ,                    .        \n' +
+        ' \\./ *._  _      ___     |._ _  _ \n' +
+        '  |  |[ )(_]             |[ | )(_)\n' +
+        '         ._|                      \n');
+    console.log(`%c [Ying C++]  %c ${_['__LMO']._PM['_YING_C++']}`, 'color:pink;background:#030307;padding:4px 0;', 'background:#EE6666;padding:4px 0;');
 })(globalThis ?? global, () => {
     return {
         _PM: {
-            '_TING_TING_C++': _['V'] ? _['V']['T_CPP']['__'] : false,
-            '_TING_TING_BUFFER': _['V'] ? _['V']['T_Buffer']['__'] : false,
+            '_YING_C++': _['V'] ? _['V']['T_CPP']['__'] : false,
+            '_YING_BUFFER': _['V'] ? _['V']['T_Buffer']['__'] : false,
             _CREATE_CPP_MEMORY: _['M'] ? _['M']['CPP_MEMORY']['__CREATE'] : () => {
                 return false;
             }
         },
         _PF: {
-            _TING_TING: _['V'] ? _['V']['includes']('ting-ting') : false,
+            _YING: _['V'] ? _['V']['includes']('YING-YING') : false,
             _NETWORK: {
                 _SOCKET: {
                     _WEBSOCKET: 'WebSocket' in _,
-                    _TING_TING_WS: '__CreateWebSocket' in _,
+                    _YING_WS: '__CreateWebSocket' in _,
                     _YC_WS: '__ConnectSocket' in _
                 }
             },

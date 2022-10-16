@@ -64,6 +64,7 @@ void function (doc, global, echarts, d3) {
             color: this.conf.themeColor,
             legend: {
                 data: legendData,
+                show: this.conf.text.showLegend.value,
                 itemHeight: this.conf.text.legendItemHeight.value,
                 textStyle: {
                     fontSize: this.conf.text.legendFontSize.value,

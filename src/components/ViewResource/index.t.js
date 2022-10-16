@@ -13,7 +13,7 @@ export default {
                             path: this.playerUrl
                         }
                     }),
-                    <el-dialog before-close={() => {
+                    <el-dialog center={true} before-close={() => {
                         this.visible = false;
                     }} width={'40vw'} title={'资源库'} visible={this['visible']}>
                         {

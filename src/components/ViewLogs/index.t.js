@@ -8,7 +8,7 @@ export default {
         return (
             <el-dialog before-close={() => {
                 this.visible = false;
-            }} title={'消息日志'} visible={this.visible}>
+            }} center={true} title={'消息日志'} visible={this.visible}>
                 {
                     h('div', {
                         class: 'lmo-view_logs'

@@ -5,9 +5,13 @@
 }
 
 .lmo_media-list {
+  height: 40vh;
+  overflow-x: auto;
+
   .lmo_media-list-item {
     width: 100%;
     height: 3rem;
+    margin-bottom: .8rem;
 
     .lmo_media-list-item-content {
       text-align: center;

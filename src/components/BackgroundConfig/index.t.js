@@ -48,19 +48,7 @@ export default {
                             h('div', {
                                 class: 'lmo-color_box_option',
                                 on: {
-                                    click: () => {
-                                        this.$refs.SelectMedia.show();
-                                        // require('@/utils/index').selectFile().then(_ => {
-                                        //     if (UploadImageTypes.includes(_.type)) {
-                                        //         if (_.size > 1024 * 1024 * 5)
-                                        //             return this.$message.warning(`[${_.name}] 文件过大，请不要超过5M。`);
-                                        //         require('@utils/index').toBase64(_).then(r => {
-                                        //             this.configTemplateBackground.image = r;
-                                        //         });
-                                        //     } else
-                                        //         this.$message.warning(`[${_.name}] 是一个不受支援的文件。`);
-                                        // });
-                                    }
+                                    click: () => this.$refs.SelectMedia.show()
                                 }
                             }, [
                                 h('div', {
@@ -86,7 +74,7 @@ export default {
                                     if (n === '纵铺')
                                         this.configTemplateBackground.arrange = '0% 0% / auto 100%';
 
-                                }} size={'mini'}>
+                                }}>
                                     <el-radio-button label="拉伸"/>
                                     <el-radio-button label="横铺"/>
                                     <el-radio-button label="纵铺"/>

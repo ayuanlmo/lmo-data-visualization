@@ -2,6 +2,8 @@ import SelectMedia from '@/components/SelectMedia/index.t';
 import {mapState} from "vuex";
 import {createMessage} from "@lib/BasicInteraction";
 import LmoAudioPlayer from "@components/AudioPlayer/index.t";
+import {get, set} from '@/lib/Storage/index';
+import {MOBILE_AUDIO} from "@const/StorageKtys.t";
 
 require('./style.t.scss');
 
@@ -60,12 +62,28 @@ export default {
                                             }
                                         }, [
                                             h('div', {
-                                                class: this.audioName === '' ? 'lmo-audio_content_label lmo-audio_content_label_no_audio' : 'lmo-audio_content_label lmo_theme_color'
+                                                class: this.audioName === '' ? ' lmo-audio_content_label_no_audio' : 'lmo-audio_content_label lmo_theme_color lmo_flex_box'
                                             }, [
-                                                this.audioName === '' ? '暂无音频' : this.audioName
+                                                h('p', {
+                                                    class: 'lmo-audio_content_label'
+                                                }, [
+                                                    this.audioName === '' ? '暂无音频' : this.audioName
+                                                ]),
+                                                h('span', {
+                                                    class: this.audioName === '' ? 'lmo_hide' : 'el-icon-delete',
+                                                    on: {
+                                                        click: (e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            this.audioName = '';
+                                                            this.lap.pause();
+                                                            this.$store.commit('SET_TEMPLATE_CURRENT_AUDIO_CONFIG_SRC', '');
+                                                        }
+                                                    }
+                                                })
                                             ]),
                                             h('div', {
-                                                class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon'
+                                                class: this.audioPlay ? 'lmo-audio_content_icon animated flash infinite' : 'lmo-audio_content_icon lmo_hide'
                                             }, [
                                                 h('img', {
                                                     attrs: {
@@ -319,7 +337,17 @@ export default {
             return num >= parseInt(_[0]) && num <= parseInt(_[1]);
         },
         play() {
+
+            console.log();
+            console.log(set);
             if (this.audioName !== '') {
+                if (require('@/utils').isMobileDevice() && get(MOBILE_AUDIO) === null) {
+                    createMessage({
+                        type: 'warning',
+                        message: '当前为移动端设备，设计器可能无法控制设备音量大小。'
+                    });
+                    set(MOBILE_AUDIO, '1');
+                }
                 this.lap.play(true);
                 this.audioPlay = true;
                 this.lap.Audio.addEventListener('ended', () => {
