@@ -1,11 +1,27 @@
 {
-  "compilerOptions": {
-    "outDir": "./build",
-    "target": "es2016",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true
+  "compilerOptions" : {
+    "incremental" : true,
+    "tsBuildInfoFile" : "./dist/lmo",
+    "declaration" : true,
+    "module" : "commonjs",
+    "target" : "es6",
+    "moduleResolution" : "node",
+    "sourceMap" : true,
+    "inlineSourceMap" : true,
+    "declarationMap" : true,
+    "outDir" : "dist",
+    "removeComments" : true,
+    "baseUrl" : ".",
+    "listFiles" : true,
+    "noUnusedLocals" : true,
+    "diagnostics" : true,
+    "listEmittedFiles" : true,
+    "noUnusedParameters" : true,
+    "noFallthroughCasesInSwitch" : true,
+    "paths" : {
+      "*" : [
+        "node_modules/*"
+      ]
+    }
   }
 }
