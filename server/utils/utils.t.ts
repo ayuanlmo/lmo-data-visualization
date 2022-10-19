@@ -67,7 +67,8 @@ module.exports.CHECK_264_LIB = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
         try {
             require('child_process').exec('ffmpeg -codecs', (e: any, stdout: string) => {
-                resolve(stdout.indexOf('h264') !== -1 && stdout.indexOf('H.264') !== -1 && stdout.indexOf('libx264') !== -1);
+                if (!e)
+                    resolve(stdout.indexOf('h264') !== -1 && stdout.indexOf('H.264') !== -1 && stdout.indexOf('libx264') !== -1);
             });
         } catch (e) {
             reject(false);
@@ -86,7 +87,8 @@ module.exports.EXEC_CMD = (cmd: string, opt: any): Promise<any> => {
     return new Promise((resolve, reject) => {
         try {
             require('child_process').exec(cmd, opt, (e: any, stdout: string) => {
-                resolve(stdout);
+                if (!e)
+                    resolve(stdout);
             });
         } catch (e) {
             reject(e);
