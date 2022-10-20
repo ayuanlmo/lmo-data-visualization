@@ -1,4 +1,4 @@
-module.exports = [
+export default [
     {
         name: 'StackedLine',
         title: '多折线图',

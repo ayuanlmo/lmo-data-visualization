@@ -129,7 +129,7 @@ const _F = {
 
         const FD: string = require('path').resolve('./static/uploads');
         const OriginName: string = `${FD}/${File.filename}`;
-        if (!require('./const/FileTypes.t').includes(File.mimetype)) {
+        if (!require('./const/FileTypes.y').includes(File.mimetype)) {
             await _F.DEL_TEMP_FILE(OriginName);
             return __.send(_F.GET_ERROR_MESSAGE({}, require('./conf/Message.t').__FILE_NS.replace('$t', `${File.originalname}`)))
         }

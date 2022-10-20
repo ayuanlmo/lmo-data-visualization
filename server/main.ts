@@ -8,7 +8,7 @@
     const _Router = require('./const/Routers.t');
     const _Func = require('./funcs.t');
     const _Conf: any = require('./conf/Conf.t');
-    const _Cmd = require('./const/CMD.t');
+    const _Cmd = require('./const/CMD.y');
     const _N = require('./lib/net/net.t');
     const _Path = require('path');
     const _App = _Express();

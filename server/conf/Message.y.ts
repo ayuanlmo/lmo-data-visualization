@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     __NO_FFMPEG: '当前服务器缺少必要组件，合成服务将无法正常工作。',
     __NO_264LIB: '当前服务器缺少[H.264]组件，合成服务可能无法正常工作。',
     __FILE_NS: '文件$t非受支持的媒体文件，请重新上传',
@@ -12,4 +12,4 @@ module.exports = {
     __DEL_TEMPLATE_ERROR: '模板删除失败：[数据库错误]',
     __EDIT_TEMPLATE_ERROR: '编辑删除失败：[数据库错误]',
     __LIVE_SERVER: '演示服务器不允许进行该操作'
-};
+}

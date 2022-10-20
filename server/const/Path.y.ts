@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     COPY_TEMPLATE: {
         TEMP: './static/temp/',
         THIS: './static/temp/',
