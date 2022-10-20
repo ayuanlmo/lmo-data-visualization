@@ -40,15 +40,19 @@ class TC {
         }
         if (!require('../conf/default.t').__SYNTHESIS) {
             this.SEND_MESSAGE('showMessage', 'showMessage', {
-                message: require('../conf/Message.t').__SYNTHESIS_CLOSE,
-                timestamp: new Date().getTime()
+                message: require('../conf/Message.t').__SYNTHESIS_CLOSE
             });
             return;
         }
         if (!require('../conf/Conf.t').__FFMPEG) {
             this.SEND_MESSAGE('showMessage', 'showMessage', {
-                message: require('../conf/Message.t').__NO_FFMPEG,
-                timestamp: new Date().getTime()
+                message: require('../conf/Message.t').__NO_FFMPEG
+            });
+            return;
+        }
+        if (require('../conf/Conf.t').__LIVE_SERVER) {
+            this.SEND_MESSAGE('showMessage', 'showMessage', {
+                message: require('../conf/Message.t').__LIVE_SERVER
             });
             return;
         }
@@ -287,6 +291,7 @@ class TC {
                     type: type,
                     data: {
                         cmd: cmd,
+                        timestamp: new Date().getTime(),
                         ...data
                     }
                 }

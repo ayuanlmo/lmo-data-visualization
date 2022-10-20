@@ -7,8 +7,9 @@ module.exports = {
     __UPLOAD_CLOSE: '当前服务器未开启文件上传',
     __NO_MEDIA_ID: '请传入Media ID',
     __DEL_MEDIA_ERROR: '删除媒体文件失败：[数据库错误]',
-    __DEL_PROHIBITED:'当前模板禁止删除',
+    __DEL_PROHIBITED: '当前模板禁止删除',
     __DEL_TEMPLATE_ERROR_NT: '未查询到当前模板，请检查ID是否正确',
     __DEL_TEMPLATE_ERROR: '模板删除失败：[数据库错误]',
-    __EDIT_TEMPLATE_ERROR: '编辑删除失败：[数据库错误]'
+    __EDIT_TEMPLATE_ERROR: '编辑删除失败：[数据库错误]',
+    __LIVE_SERVER: '演示服务器不允许进行该操作'
 };

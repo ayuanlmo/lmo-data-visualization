@@ -7,6 +7,7 @@
 const _Fs: any = require('fs-extra');
 const _Message = require('./conf/Message.t');
 const _Path = require('path');
+const _Live_Server: boolean = require('./conf/Conf.t').__LIVE_SERVER;
 const _F = {
     /**
      * @method GET_SUCCESS_MESSAGE
@@ -188,6 +189,8 @@ const _F = {
      * @param req {any} 请求对象
      * **/
     DEL_MEDIA(_: any, req: any) {
+        if (_Live_Server)
+            return _.json(_F.GET_ERROR_MESSAGE({}, _Message.__LIVE_SERVER));
         const MediaId = req.query.id ?? '';
 
         if (MediaId === '') {
@@ -211,6 +214,8 @@ const _F = {
     },
 
     DEL_TEMPLATE(_: any, __: any) {
+        if (_Live_Server)
+            return __.json(_F.GET_ERROR_MESSAGE({}, _Message.__LIVE_SERVER));
         const _T_DB = new (require('./lib/sqlite/sqlite.t').T_DB);
 
         _T_DB.DEL_TEMPLATE(_.query.id ?? '').then(() => {
@@ -221,6 +226,8 @@ const _F = {
     },
 
     EDIT_TEMPLATE_INFO(_: any, __: any) {
+        if (_Live_Server)
+            return __.json(_F.GET_ERROR_MESSAGE({}, _Message.__LIVE_SERVER));
         const _T_DB = new (require('./lib/sqlite/sqlite.t').T_DB);
 
         _T_DB.EDIT_TEMPLATE_INFO(_.query.id ?? '', _.query).then(() => {
