@@ -1,20 +1,19 @@
-class ServerInfY {
-    private os: any;
+const Os = require('os');
 
+class ServerInf {
     constructor() {
-        this.os = require('os');
         this.init();
     }
 
     public init(): object {
         return {
-            system: this.os.release(),
-            systemArch: this.os.arch(),
-            systemPlatform: this.os.platform(),
-            systemType: this.os.type(),
-            systemRunTime: (this.os.uptime() / 60 / 60 / 24).toFixed(2)
+            system: Os.release(),
+            systemArch: Os.arch(),
+            systemPlatform: Os.platform(),
+            systemType: Os.type(),
+            systemRunTime: (Os.uptime() / 60 / 60 / 24).toFixed(2)
         }
     }
 }
 
-export default new ServerInfY().init();
+export default new ServerInf().init();
