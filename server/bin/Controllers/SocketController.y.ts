@@ -5,9 +5,10 @@
  * **/
 
 import Conf from "../../conf/Conf.y";
-import {STRING_TO_BINARY, STRINGIFY, CHECK_264_LIB, BINARY_TO_STRING} from "../../utils/Utils.y";
 import Message from "../../conf/Message.y";
 import CMD from "../../const/CMD.y";
+import ServerInf from "../ServerInf.y";
+import {STRING_TO_BINARY, STRINGIFY, CHECK_264_LIB, BINARY_TO_STRING, CREATE_UUID} from "../../utils/Utils.y";
 
 // Socket消息类型
 interface MessageType {
@@ -22,16 +23,18 @@ interface WsType {
 }
 
 class SocketController {
-    private Ws: WsType;
+    private readonly Ws: WsType;
+    private readonly OnLineUsers: number;
 
-    constructor(Ws: WsType) {
+    constructor(Ws: WsType, OnLineUsers: number) {
         this.Ws = Ws;
+        this.OnLineUsers = OnLineUsers;
         this.Connect();
     }
 
-    //Socket连接
+    // Socket连接
     private async Connect(): Promise<void> {
-        //不存在ffmpeg
+        // 不存在ffmpeg
         if (Conf.__FFMPEG)
             await this.Ws.send(STRING_TO_BINARY(STRINGIFY({
                 type: 'showMessage',
@@ -40,7 +43,7 @@ class SocketController {
                     timestamp: new Date().getTime()
                 }
             })));
-        //检查ffmpeg是否支持 h.264lib
+        // 检查ffmpeg是否支持 h.264lib
         await CHECK_264_LIB().then((r: boolean) => {
             if (!r)
                 this.Ws.send(STRING_TO_BINARY(STRINGIFY({
@@ -51,6 +54,16 @@ class SocketController {
                     }
                 })));
         });
+        // 发送基本信息
+        await this.Ws.send(STRING_TO_BINARY(STRINGIFY({
+            type: 'connect',
+            data: {
+                onlineUsers: this.OnLineUsers,
+                tenantID: `ying-${CREATE_UUID()}`,
+                timestamp: new Date().getTime(),
+                serverInfo: ServerInf
+            }
+        })));
         await this.Ws.on('message', (msg: string) => {
             // 心跳消息
             if (msg === Conf.__SOCKET_PONG_KEY)
