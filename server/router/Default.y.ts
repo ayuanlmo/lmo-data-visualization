@@ -1,7 +1,3 @@
-/**
- *
- * **/
-
 import {Router, Request, Response} from "express";
 
 const _Router = Router();
