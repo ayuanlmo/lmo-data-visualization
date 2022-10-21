@@ -185,3 +185,22 @@ export const CREATE_ERROR_MESSAGE = (DATA: object, MSG: String = ''): object => 
 export const STRINGIFY = (DATA: object): string => {
     return JSON.stringify(DATA);
 }
+
+/**
+ * @method CREATE_UUID
+ * @description 生成一个UUID
+ * @return String
+ * **/
+export const CREATE_UUID = (): string => {
+    const ids: Array<string> = [];
+    const str = 'ying0123456789QWERYUOPASDFHJKLZXCVBNM';
+
+    for (let i = 0; i < 36; i++) {
+        ids[i] = str.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    ids[14] = '4';
+    // @ts-ignore
+    ids[19] = str.substr(ids[19] & 0x3 | 0x8, 1);
+    ids[8] = ids[13] = ids[19] = ids[23] = '-';
+    return ids.join('');
+};
