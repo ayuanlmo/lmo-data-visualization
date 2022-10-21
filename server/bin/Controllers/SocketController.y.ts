@@ -8,27 +8,19 @@ import Conf from "../../conf/Conf.y";
 import Message from "../../conf/Message.y";
 import CMD from "../../const/CMD.y";
 import ServerInf from "../ServerInf.y";
+import YingCore from "../Core.y";
+import {MessageType, WsType} from "../../interface/SocketController.y";
 import {STRING_TO_BINARY, STRINGIFY, CHECK_264_LIB, BINARY_TO_STRING, CREATE_UUID} from "../../utils/Utils.y";
-
-// Socket消息类型
-interface MessageType {
-    cmd: string;
-    data: object;
-}
-
-// WS对象(基础类型)
-interface WsType {
-    send: any;
-    on: any;
-}
 
 class SocketController {
     private readonly Ws: WsType;
     private readonly OnLineUsers: number;
+    private readonly Pool: any;
 
-    constructor(Ws: WsType, OnLineUsers: number) {
+    constructor(Ws: WsType, OnLineUsers: number, Pool: any) {
         this.Ws = Ws;
         this.OnLineUsers = OnLineUsers;
+        this.Pool = Pool;
         this.Connect();
     }
 
@@ -71,12 +63,10 @@ class SocketController {
             try {
                 const data: MessageType = JSON.parse(BINARY_TO_STRING(msg));
 
-                if (data.cmd === CMD.__SYNTHESIS) {
-                    //TODO 合成
-                }
-                if (data.cmd === CMD.__CREATE_TEMPLATE) {
-                    //TODO 创建模板
-                }
+                if (data.cmd === CMD.__SYNTHESIS)
+                    new YingCore(this.Pool, data.data, 0);
+                if (data.cmd === CMD.__CREATE_TEMPLATE)
+                    new YingCore(this.Pool, data.data, 1);
             } catch (e) {
                 // 未知消息
                 this.Ws.send(msg);

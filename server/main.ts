@@ -1,110 +1,41 @@
-/**
- * Core
- * @author ayuanlmo
- * **/
+import Router from "./router/index.y";
+import Conf from "./conf/Conf.y";
+import SocketController from "./bin/Controllers/SocketController.y";
+import TemplateIndex from "./const/TemplateIndex.y";
+import {Net} from "./lib/net/Net.y";
+import {CONNECT} from "./router/Socket.y";
+import {WsObj} from "./interface/Main.y";
 
-(() => {
-    const _Express = require('express');
-    const _Router = require('./const/Routers.t');
-    const _Func = require('./funcs.t');
-    const _Conf: any = require('./conf/Conf.t');
-    const _Cmd = require('./const/CMD.y');
-    const _N = require('./lib/net/net.t');
-    const _Path = require('path');
-    const _App = _Express();
-    const _Multer: any = require('multer')({dest: './static/uploads'});
-    const _WsApp: any = require('express-ws')(_App);
-    const _Pool: any = _WsApp['getWss'](_Router.__SOCKET_CONNECT);
-
-    let _OnlineUsers: number = 0;
+((): void => {
+    const Express = require('express');
+    const App = Express();
+    const WsApp = require('express-ws')(App);
+    const Pool = WsApp.getWss(CONNECT);
+    const Path = require('path');
+    const Multer = require('multer')({
+        dest: './static/uploads'
+    });
+    let OnLineUsers: number = 0;
 
     // @ts-ignore
     global['dbConf'] = {
-        _path: _Path['resolve'](__dirname + '/lib/sqlite/db/db.ting.db'),
-        _template: _Path['resolve'](__dirname + '/static/DataVisualizationTemplate'),
-        index: require('./const/TemplateIndex.t')
+        _path: Path.resolve(__dirname + '/lib/sqlite/db/db.ting.db'),
+        _template: Path.resolve(__dirname + '/static/DataVisualizationTemplate'),
+        index: TemplateIndex
     };
-    new (require('./lib/sqlite/sqlite.t').T_DB);
-    _App.use(_Express.urlencoded({extended: false}));
-    _App.use(_Multer.single('media'));
-    _App.use(_Conf.__STATIC_PATH, _Express.static(`${__dirname}${_Conf.__STATIC_PATH}`));
-    _App.use(_Conf.__STATIC_PATH, _Express.static(`../dist`));
-    _App.ws(_Router.__SOCKET_CONNECT, async (_: any) => {
-        _OnlineUsers += 1;
-        if (!_Conf.__FFMPEG)
-            await _.send(require('./utils/utils.t').STRING_TO_BINARY(_Func.STRINGIFY({
-                type: 'showMessage',
-                data: {
-                    message: require('./conf/Message.t').__NO_FFMPEG,
-                    timestamp: new Date().getTime()
-                }
-            })));
-        await require('./utils/utils.t').CHECK_264_LIB().then((r: boolean) => {
-            if (!r)
-                _.send(require('./utils/utils.t').STRING_TO_BINARY(_Func.STRINGIFY({
-                    type: 'showMessage',
-                    data: {
-                        message: require('./conf/Message.t').__NO_264LIB,
-                        timestamp: new Date().getTime()
-                    }
-                })));
+    App.use(Express.urlencoded({
+        extended: false
+    }));
+    App.use(Multer.single('media'));
+    App.use(Conf.__STATIC_PATH, Express.static(`${__dirname}${Conf.__STATIC_PATH}`))
+    App.ws(CONNECT, async (ws: WsObj) => {
+        OnLineUsers++;
+        new SocketController(ws, OnLineUsers, Pool);
+        ws.on('close', () => {
+            OnLineUsers--;
         });
-        _.on('message', (__: string) => {
-            if (__ === _Conf.__SOCKET_PONG_KEY)
-                return _.send(_Conf.__SOCKET_PONG_MESSAGE);
-            try {
-                const _m: any = JSON.parse(require('./utils/utils.t').BINARY_TO_STRING(__));
+    });
+    App.use(Router);
 
-                if (_m.cmd === _Cmd.__SYNTHESIS)
-                    new (require('./bin/timecut.t')).TC(_Pool, _m['data'], 0);
-                if (_m.cmd === _Cmd.__CREATE_TEMPLATE)
-                    new (require('./bin/timecut.t')).TC(_Pool, _m['data'], 1);
-            } catch (e) {
-                _.send(__);
-            }
-
-        });
-        _.on('close', () => {
-            _OnlineUsers -= 1;
-        });
-        await _.send(
-            require('./utils/utils.t').STRING_TO_BINARY(_Func.STRINGIFY({
-                type: 'connect',
-                data: {
-                    onlineUsers: _OnlineUsers,
-                    tenantID: `ting-${_Func.GET_UUID()}`,
-                    timestamp: new Date().getTime(),
-                    serverInfo: require('./bin/serverInf')
-                }
-            }))
-        );
-    });
-    _App.post(_Router.__GET_TEMPLATE, (_: any, __: any) => {
-        return _Func.GET_TEMPLATE_LIST(__);
-    });
-    _App.post(_Router.__UPLOAD_MEDIA, (_: any, __: any): void => {
-        return _Func.UPLOAD_FILE(_, __);
-    });
-    _App.post(_Router.__GET_UPLOAD_MEDIA, (_: any, __: any): void => {
-        return _Func.GET_UPLOAD_MEDIA(__);
-    });
-    _App.post(_Router.__GET_MEDIA, (_: any, __: any): void => {
-        return _Func.GET_MEDIA(__, _);
-    });
-    _App.post(_Router.__DEL_MEDIA, (_: any, __: any): void => {
-        return _Func.DEL_MEDIA(__, _);
-    });
-    _App.post(_Router.__DEL_TEMPLATE, (_: any, __: any): void => {
-        return _Func.DEL_TEMPLATE(_, __);
-    });
-    _App.post(_Router.__EDIT_TEMPLATE_INFO, (_: any, __: any): void => {
-        return _Func.EDIT_TEMPLATE_INFO(_, __);
-    });
-    _App.get('*', (_: any, __: any): void => {
-        __.json({data: {}, code: 404, message: 'No Found'});
-    });
-    _App.post('*', (_: any, __: any): void => {
-        __.json({data: {}, code: 404, message: 'No Found'});
-    });
-    _N.START_SERVER(_App);
+    Net.START_SERVER(App);
 })();
