@@ -1,5 +1,12 @@
 import TemplateIndex from "../../const/TemplateIndex.y";
-import {InsertLogSql,ResourceStatus,UpdateTemplateInfo,TempLateItem,TempLateItemApp,ResourcesItem} from "../../interface/DataBase.y";
+import {
+    InsertLogSql,
+    ResourcesItem,
+    ResourceStatus,
+    TempLateItem,
+    TempLateItemApp,
+    UpdateTemplateInfo
+} from "../../interface/DataBase.y";
 
 const SqlLite = require('sqlite3');
 const Fs = require('fs-extra');
@@ -14,7 +21,7 @@ class YingDB {
         const dbPath = __dirname + '/db';
 
         // 检查路径是否存在
-        if (Fs.existsSync(ResolvePath(dbPath))) {
+        if (!Fs.existsSync(ResolvePath(dbPath))) {
             Fs.mkdir(ResolvePath(dbPath));
             if (Fs.existsSync(ResolvePath(dbPath + 'db.ting.db'))) {
                 this.Open();
@@ -24,13 +31,8 @@ class YingDB {
                 }, 2000);
             }
         }
-    }
 
-    // 初始化表
-    private InitTable(): void {
-        Promise.all([]).then(() => {
-            // 初始化模板
-        });
+        this.Open();
     }
 
     // 初始化模板
@@ -114,13 +116,8 @@ class YingDB {
         this.DB.run(this.GetUpdateResourceStatusSql(data));
     }
 
-    // 获取更新资源状态Sql
-    private GetUpdateResourceStatusSql(data: ResourceStatus): string {
-        return `UPDATE Resource SET T_Path = '${data.path}',T_Status = '${data.status}' WHERE T_ID = '${data.name}'`;
-    }
-
     // 获取媒体列表
-    public GetMediaList(type: string): Array<any> {
+    public GetMediaList(type: string): Promise<any> {
         return this.SqlQuery(type === '' ? `SELECT * FROM Resource` : `SELECT * FROM "Resource" WHERE _Status = '${type}'`);
     }
 
@@ -129,20 +126,9 @@ class YingDB {
         this.DB.run(this.GetInsertLogSql(data));
     }
 
-    // 获取插入日志sql
-    private GetInsertLogSql(data: InsertLogSql): string {
-        return `INSERT INTO Log(T_Resource_ID, T_Log_File_Path, T_Log_Temp_File_Path) 
-                VALUES ('${data.id}', '${data.logFilePath}', '${data.tempFilePath}');`;
-    }
-
     // 获取模板列表
     public GetTemplateList(): Promise<any> {
         return this.SqlQuery('SELECT * FROM Template');
-    }
-
-    // 通过ID查模板
-    private QueryTemplateById(id: string): Promise<any> {
-        return this.SqlQuery(`SELECT * FROM Template WHERE T_ID = '${id}'`);
     }
 
     // 删除模板
@@ -175,13 +161,15 @@ class YingDB {
                         else
                             reject(`${e}`);
                     });
+                } else {
+                    reject('err');
                 }
             });
         });
     }
 
     // 执行Sql查询
-    public SqlQuery(sql: string): any {
+    public SqlQuery(sql: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             try {
                 this.DB.all(sql, (e: any, list: Array<any>) => {
@@ -196,6 +184,41 @@ class YingDB {
         });
     }
 
+    // 关闭数据量
+    public Close(): void {
+        if (this.DB !== null)
+            this.DB.close();
+    }
+
+    // 获取插入资源项SQL
+    public GetInsertResourceItemSql(item: ResourcesItem): string {
+        return `INSERT INTO Resource (T_Name, T_Path, T_Create_At, T_Status,T_ID) 
+                VALUES ('${item.name}', '${item.path}', '${new Date().getTime()}', '${item.status}','${item.id}');`;
+    }
+
+    // 初始化表
+    private InitTable(): void {
+        Promise.all([]).then(() => {
+            // 初始化模板
+        });
+    }
+
+    // 获取更新资源状态Sql
+    private GetUpdateResourceStatusSql(data: ResourceStatus): string {
+        return `UPDATE Resource SET T_Path = '${data.path}',T_Status = '${data.status}' WHERE T_ID = '${data.name}'`;
+    }
+
+    // 获取插入日志sql
+    private GetInsertLogSql(data: InsertLogSql): string {
+        return `INSERT INTO Log(T_Resource_ID, T_Log_File_Path, T_Log_Temp_File_Path) 
+                VALUES ('${data.id}', '${data.logFilePath}', '${data.tempFilePath}');`;
+    }
+
+    // 通过ID查模板
+    private QueryTemplateById(id: string): Promise<any> {
+        return this.SqlQuery(`SELECT * FROM Template WHERE T_ID = '${id}'`);
+    }
+
     // 打开数据库
     private Open(): void {
         this.DB = new SqlLite.Database(Global.dbConf._path, (e: any) => {
@@ -204,22 +227,10 @@ class YingDB {
         });
     }
 
-    // 关闭数据量
-    public Close(): void {
-        if (this.DB !== null)
-            this.DB.close();
-    }
-
     // 获取插入模板表 sql
     private GetInsertTemplateTableSql(item: TempLateItemApp): string {
         return `INSERT INTO "Template" ( T_Name, T_Id, T_Title, T_Description, T_Path, T_Type ) 
                 VALUES('${item.T_Name}','${item.T_Id}','${item.T_Title}','${item.T_Description}','${item.T_Path}','${item.T_Type}');`;
-    }
-
-    // 获取插入资源项SQL
-    public GetInsertResourceItemSql(item: ResourcesItem): string {
-        return `INSERT INTO Resource (T_Name, T_Path, T_Create_At, T_Status,T_ID) 
-                VALUES ('${item.name}', '${item.path}', '${new Date().getTime()}', '${item.status}','${item.id}');`;
     }
 }
 
