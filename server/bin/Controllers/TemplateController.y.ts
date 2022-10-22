@@ -5,26 +5,19 @@
  * **/
 
 import {Request, Response} from "express";
+import {DeleteTemplate, EditTempInfo, GetTemplateList} from "../BasicsFuncs.y";
 
 class TemplateControllerY {
     // 获取模板
-    static GetTemplate = async (req: Request, res: Response): Promise<void> => {
-        console.log(req);
-        console.log(res);
-        res.send('GetTemplate');
-        console.log('GetTemplate');
+    static GetTemplate = async (req: Request, res: Response): Promise<any> => {
+        await GetTemplateList(res);
+        return req;
     }
     static DeleteTemplate = async (req: Request, res: Response): Promise<void> => {
-        console.log(req);
-        console.log(res);
-        res.send('DeleteTemplate');
-        console.log('DeleteTemplate');
+        await DeleteTemplate(req, res);
     }
     static EditTemplateInfo = async (req: Request, res: Response): Promise<void> => {
-        console.log(req);
-        console.log(res);
-        res.send('EditTemplateInfo');
-        console.log('EditTemplateInfo');
+        await EditTempInfo(req, res);
     }
 }
 
