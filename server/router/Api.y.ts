@@ -34,4 +34,9 @@ _Router
     .route('/DeleteMedia')
     .post(MediaController.DeleteMedia);
 
+// 获取上传媒体文件
+_Router
+    .route('/GetUploadMediaFile')
+    .post(MediaController.GetUploadMediaFile);
+
 export default _Router;
