@@ -2,7 +2,7 @@ import TemplateIndex from "../../const/TemplateIndex.y";
 import {InsertLogSql,ResourceStatus,UpdateTemplateInfo,TempLateItem,TempLateItemApp,ResourcesItem} from "../../interface/DataBase.y";
 
 const SqlLite = require('sqlite3');
-const Fs = require('fs');
+const Fs = require('fs-extra');
 const ResolvePath = require('path').resolve;
 const Global = global;
 

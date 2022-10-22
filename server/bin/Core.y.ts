@@ -10,7 +10,7 @@ import {STRINGIFY, STRING_TO_BINARY, GET_FILE_TYPE, RESOLVE_STATIC_FILE_PATH, FI
 const TimeCut = require('timecut');
 const Ffmpeg = require('fluent-ffmpeg');
 const ResolvePath = require('path').resolve;
-const Fs = require('fs');
+const Fs = require('fs-extra');
 const OS = require('os');
 
 class YingCore {
