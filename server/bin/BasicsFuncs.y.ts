@@ -103,8 +103,9 @@ export async function GetMedia(req: Request, res: Response): Promise<void> {
 
     new YingDB().GetMediaList(type ?? '').then((l: Array<MediaTypeApp>) => {
         l.map((i: MediaTypeApp) => {
+            console.log('item', i);
             list.push({
-                name: i.T_name,
+                name: i.T_Name,
                 path: i.T_Path,
                 create_at: i.T_Create_At,
                 status: i.T_Status,

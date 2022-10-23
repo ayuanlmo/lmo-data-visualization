@@ -1,5 +1,5 @@
 export interface MediaTypeApp {
-    T_name: string;
+    T_Name: string;
     T_Path: string;
     T_Create_At: string;
     T_Status: string;
