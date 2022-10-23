@@ -296,7 +296,7 @@ class YingCore {
             ffmpeg.audioFilters(`volume=${this.Data.config.audio.volume}`);// 音频过滤器
             ffmpeg.audioBitrate('128k');// 采样率
 
-            if (this.Data.config.audio.complete)
+            if (!this.Data.config.audio.complete)
                 ffmpeg.duration(this.Data.config.video.duration);// 设置持续时间
             ffmpeg.output(`${Path.PROCESS_AUDIO.OUTPUT.replace('$y', this.TaskName)}`);// 设置输入目录
             // 完毕
