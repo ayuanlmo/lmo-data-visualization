@@ -1,3 +1,4 @@
+import FS from 'fs-extra';
 import Message from "../conf/Message.y";
 import Conf from "../conf/Conf.y";
 import DefaultConf from "../conf/Default.y";
@@ -11,7 +12,7 @@ import {EditTemplateInfoParams} from "../interface/Template.y";
 import {FileType} from "../interface/File.y";
 import {CREATE_ERROR_MESSAGE, CREATE_SUCCESS_MESSAGE, TO_UTF8} from "../utils/Utils.y";
 
-const Fs = require('fs-extra');
+const Fs: FS = require('fs-extra');
 const Path = require('path');
 
 function FilterMediaFile(list: Array<string>, type: string = '__AUDIO') {

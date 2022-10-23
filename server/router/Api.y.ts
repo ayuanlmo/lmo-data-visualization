@@ -2,7 +2,7 @@ import TemplateController from '../bin/Controllers/TemplateController.y'
 import MediaController from "../bin/Controllers/MediaController.y";
 import {Router} from "express";
 
-const _Router = Router();
+const _Router: Router = Router();
 
 // 获取模板
 _Router

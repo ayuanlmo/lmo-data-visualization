@@ -1,6 +1,6 @@
-import {Router, Request, Response} from "express";
+import {Request, Response, Router} from "express";
 
-const _Router = Router();
+const _Router: Router = Router();
 
 const CreateNotFoundMessage = (): object => {
     return {
