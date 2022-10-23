@@ -10,7 +10,7 @@ import CMD from "../../const/CMD.y";
 import ServerInf from "../ServerInf.y";
 import YingCore from "../Core.y";
 import {MessageType, WsType} from "../../interface/SocketController.y";
-import {STRING_TO_BINARY, STRINGIFY, CHECK_264_LIB, BINARY_TO_STRING, CREATE_UUID} from "../../utils/Utils.y";
+import {BINARY_TO_STRING, CHECK_264_LIB, CREATE_UUID, STRING_TO_BINARY, STRINGIFY} from "../../utils/Utils.y";
 
 class SocketController {
     private readonly Ws: WsType;
