@@ -8,7 +8,7 @@ import YingDB from "../lib/sqlite/DataBase.y";
 import {Request, Response} from "express";
 import {TempLateItemApp} from "../interface/DataBase.y";
 import {DeleteMedia, MediaListType, MediaType, MediaTypeApp} from "../interface/Media.y";
-import {EditTemplateInfoParams} from "../interface/Template.y";
+import {DeleteTemplateParams, EditTemplateInfoParams} from "../interface/Template.y";
 import {FileType} from "../interface/File.y";
 import {CREATE_ERROR_MESSAGE, CREATE_SUCCESS_MESSAGE, TO_UTF8} from "../utils/Utils.y";
 
@@ -63,7 +63,7 @@ export async function DeleteTemplate(req: Request, res: Response): Promise<any> 
         return res.json(CREATE_ERROR_MESSAGE({}, Message.__LIVE_SERVER));
 
     const query: any = req.query;
-    const params: EditTemplateInfoParams = query;
+    const params: DeleteTemplateParams = query;
 
     if (!Object.keys(params).includes('id') || params.id === '')
         res.json(CREATE_ERROR_MESSAGE({}, Message.__DEL_TEMPLATE_ERROR_NT));
@@ -102,7 +102,6 @@ export async function GetMedia(req: Request, res: Response): Promise<void> {
     const list: Array<MediaType> = [];
 
     new YingDB().GetMediaList(type ?? '').then((l: Array<MediaTypeApp>) => {
-        console.log('list', l);
         l.map((i: MediaTypeApp) => {
             list.push({
                 name: i.T_name,
@@ -125,11 +124,17 @@ export async function DeleteMedia(req: Request, res: Response): Promise<void> {
         const data: any = req.query;
         const params: DeleteMedia = data;
 
-        new YingDB().DeleteMediaItem(params.id).then((r: number) => {
-            if (r === 1)
-                res.json(CREATE_SUCCESS_MESSAGE({}))
-            else
-                res.json(CREATE_ERROR_MESSAGE({}, Message.__DEL_MEDIA_ERROR))
+        new YingDB().DeleteMediaItem(params.id).then(async (r: number) => {
+            if (r === 1) {
+                const mediaPath: string = Path.resolve(`server/../${params.path}`);
+                const mediaLogPath: string = Path.resolve(`server/../static/log/${params.id}.y.log`);
+
+                await Fs.unlinkSync(mediaPath);
+                await Fs.unlinkSync(mediaLogPath);
+                await new YingDB().DeleteLog(params.id);
+                await res.json(CREATE_SUCCESS_MESSAGE({}));
+            } else
+                await res.json(CREATE_ERROR_MESSAGE({}, Message.__DEL_MEDIA_ERROR));
         });
     }
 }
@@ -149,7 +154,7 @@ export async function UpLoadMediaFile(req: Request, res: Response): Promise<any>
 
     if (!FileTypes.includes(File.mimetype)) {
         await DeleteTempFile(TempFilePath);
-        return res.json(CREATE_ERROR_MESSAGE({}, Message.__FILE_NS.replace('$y', `[${File.originalname}]`)))
+        return res.json(CREATE_ERROR_MESSAGE({}, Message.__FILE_NS.replace('$y', `[${File.originalname}]`)));
     }
     const Extname: Array<string> = File.originalname.split('.');
     Extname[1].split(' ').join('');

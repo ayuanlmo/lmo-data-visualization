@@ -82,6 +82,7 @@ class YingDB {
     // 删除日志
     public DeleteLog(id: string): void {
         this.DB.run(`DELETE FROM Log WHERE T_Resource_ID = '${id}'`);
+        this.Close();
     }
 
     // 删除媒体项
