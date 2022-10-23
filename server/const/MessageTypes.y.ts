@@ -6,3 +6,5 @@ export const TASK_ERROR: string = 'task_pro_error';
 export const TASK_END: string = 'task_end'; // 任务结束
 export const CREATE_TEMPLATE: string = 'create_template'; // 创建模板
 export const SUCCESS: string = 'success'; // 成功
+export const TASK_PRO_READY: string = 'task_pro_ready'; // 准备转码
+export const TASK_PRO_SUCCESS: string = 'task_pro_success';// 转码成功

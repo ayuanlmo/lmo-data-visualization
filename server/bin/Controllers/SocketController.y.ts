@@ -27,7 +27,7 @@ class SocketController {
     // Socket连接
     private async Connect(): Promise<void> {
         // 不存在ffmpeg
-        if (Conf.__FFMPEG)
+        if (!Conf.__FFMPEG)
             await this.Ws.send(STRING_TO_BINARY(STRINGIFY({
                 type: 'showMessage',
                 data: {

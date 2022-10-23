@@ -12,8 +12,11 @@ import {
     SHOW_MESSAGE,
     SUCCESS,
     TASK_END,
+    TASK_ERROR,
     TASK_PENDING,
     TASK_PRO,
+    TASK_PRO_READY,
+    TASK_PRO_SUCCESS,
     TASK_PROCESSING
 } from "../const/MessageTypes.y";
 import {CopyFileItemType, FluentFfmpegErrorTypes, WsAppType, WsClientsType} from "../interface/Core.y";
@@ -73,10 +76,10 @@ class YingCore {
             this.SendMessage(SHOW_MESSAGE, SHOW_MESSAGE, {
                 message: Message.__LIVE_SERVER
             });
+            return;
         }
 
         this.Init();
-
     }
 
     Init(): void {
@@ -245,31 +248,37 @@ class YingCore {
         }
 
         TimeCut(conf).then(() => {
-            this.ProcessAudio(templateConf.audio.src !== '' ? `${Path.PROCESS_AUDIO.PATH.replace('$y', this.TaskName)}` : '', audioPath).then((r: number) => {
-                    this.WriteLogFile();
+            this.ProcessAudio(templateConf.audio.src !== '' ? `${Path.PROCESS_AUDIO.PATH.replace('$y', this.TaskName)}` : '', audioPath).then(async (r: number) => {
+                    await this.WriteLogFile();
                     const path = Path.SYNTHESIS.OUTPUT.replace('$y', `${this.TaskName}${r === 1 ? '' : '264'}`);
 
-                    this.YingDB.UpdateResourceStatus({
+                    await this.YingDB.UpdateResourceStatus({
                         status: 'Finish',
                         name: this.TaskName,
                         path: path
                     });
 
-                    if (r === 1) {
+                    const sendSuccessMessage: Function = (): void => {
                         setTimeout(async () => {
                             await this.YingDB.Close();
-                            await this.SendMessage(TASK_END, TASK_END, {
+                            await this.SendMessage(TASK_END, TASK_PROCESSING, {
                                 state: 'success',
                                 taskName: this.Name,
                                 path: path
                             });
                         }, 2000);
-                    } else
-                        this.SendMessage(TASK_PRO, TASK_PRO, {
+                    }
+
+                    if (r === 1) {
+                        await sendSuccessMessage();
+                    } else {
+                        this.SendMessage(TASK_PRO, TASK_PRO_SUCCESS, {
                             taskName: this.Name,
                             path: path
                         });
-                    this.DelTempFiles(`${ResolvePath(`./static/temp/${this.TaskName}`)}`)
+                        await sendSuccessMessage();
+                    }
+                    await this.DelTempFiles(`${ResolvePath(`./static/temp/${this.TaskName}`)}`)
                 }
             );
         }).catch(() => {
@@ -283,7 +292,7 @@ class YingCore {
     // 处理音频
     ProcessAudio(src: string, audioPath: string): Promise<number> {
         return new Promise((resolve: any) => {
-            this.SendMessage(TASK_PRO, TASK_PRO, {
+            this.SendMessage(TASK_PRO, TASK_PRO_READY, {
                 taskName: this.Name
             });
             // 音频不存在
@@ -306,7 +315,7 @@ class YingCore {
             });
             // 出现异常
             ffmpeg.on('error', (e: FluentFfmpegErrorTypes) => {
-                this.SendMessage(TASK_PRO, TASK_PRO, {
+                this.SendMessage(TASK_PRO, TASK_ERROR, {
                     message: e.message
                 });
             });
