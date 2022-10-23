@@ -3,3 +3,5 @@ export const SHOW_MESSAGE = 'show_message'; // 显示消息
 export const TASK_PROCESSING = 'task_processing'; // 任务处理中
 export const TASK_PRO = 'task_pro'; // 任务生产
 export const TASK_END = 'task_end'; // 任务结束
+export const CREATE_TEMPLATE = 'create_template'; // 创建模板
+export const SUCCESS = 'success'; // 成功

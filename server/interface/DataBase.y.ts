@@ -5,7 +5,7 @@ export interface InsertLogSql {
 }
 
 export interface ResourceStatus {
-    status: number;
+    status: string;
     name: string;
     path: string;
 }
@@ -37,8 +37,3 @@ export interface ResourcesItem {
     id: string;
 }
 
-export interface ResourceStatus {
-    path: string;
-    status: number;
-    name: string;
-}
