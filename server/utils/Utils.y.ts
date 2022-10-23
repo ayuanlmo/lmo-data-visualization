@@ -26,7 +26,7 @@ export const STRING_TO_BINARY = (STR: string): string => {
  * **/
 export const BINARY_TO_STRING = (STR: string): string => {
     const result: string[] = [];
-    const list: string[] = STR.split('');
+    const list: string[] = STR.split(' ');
 
     for (let i: number = 0; i < list.length; i++) {
         result.push(String.fromCharCode(parseInt(list[i], 2)));
