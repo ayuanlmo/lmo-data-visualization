@@ -16,6 +16,7 @@ export interface MediaType {
 
 export interface DeleteMedia {
     id: string;
+    path: string;
 }
 
 export interface MediaListType {
