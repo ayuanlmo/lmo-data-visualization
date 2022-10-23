@@ -58,10 +58,10 @@ export async function GetTemplateList(res: Response): Promise<void> {
     });
 }
 
-export async function DeleteTemplate(req: Request, res: Response): Promise<void> {
-    if (Conf.__LIVE_SERVER) {
-        res.json(CREATE_ERROR_MESSAGE({}, Message.__LIVE_SERVER));
-    }
+export async function DeleteTemplate(req: Request, res: Response): Promise<any> {
+    if (Conf.__LIVE_SERVER)
+        return res.json(CREATE_ERROR_MESSAGE({}, Message.__LIVE_SERVER));
+
     const query: any = req.query;
     const params: EditTemplateInfoParams = query;
 
