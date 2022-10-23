@@ -1,16 +1,28 @@
+import TC from 'timecut';
+import FFMPEG from 'fluent-ffmpeg';
+import FS from 'fs-extra';
 import Path from "../const/Path.y";
 import Conf from "../conf/Conf.y";
 import DefaultConf from "../conf/Default.y";
 import Message from "../conf/Message.y";
+import YingDB from "../lib/sqlite/DataBase.y";
 import {GET_IMAGE_BASE64_TYPE} from "../const/ImageBase64Type.y";
-import {TASK_PENDING, SHOW_MESSAGE, TASK_PROCESSING, TASK_PRO, TASK_END} from "../const/MessageTypes.y";
-import {WsAppType,WsClientsType,CopyFileItemType,FluentFfmpegErrorTypes} from "../interface/Core.y";
-import {STRINGIFY, STRING_TO_BINARY, GET_FILE_TYPE, RESOLVE_STATIC_FILE_PATH, FILE_TO_BASE64} from "../utils/Utils.y";
+import {
+    CREATE_TEMPLATE,
+    SHOW_MESSAGE,
+    SUCCESS,
+    TASK_END,
+    TASK_PENDING,
+    TASK_PRO,
+    TASK_PROCESSING
+} from "../const/MessageTypes.y";
+import {CopyFileItemType, FluentFfmpegErrorTypes, WsAppType, WsClientsType} from "../interface/Core.y";
+import {FILE_TO_BASE64, GET_FILE_TYPE, RESOLVE_STATIC_FILE_PATH, STRING_TO_BINARY, STRINGIFY} from "../utils/Utils.y";
 
-const TimeCut = require('timecut');
-const Ffmpeg = require('fluent-ffmpeg');
-const ResolvePath = require('path').resolve;
-const Fs = require('fs-extra');
+const TimeCut: TC = require('timecut');
+const Ffmpeg: FFMPEG = require('fluent-ffmpeg');
+const ResolvePath: Function = require('path').resolve;
+const Fs: FS = require('fs-extra');
 const OS = require('os');
 
 class YingCore {
@@ -21,6 +33,7 @@ class YingCore {
     private readonly TaskName: string;// 任务名称
     private readonly Name: string;// 模板名称
     private readonly TaskType: number;// 任务类型 0 or 1
+    private readonly YingDB: YingDB;
 
     constructor(ws: WsAppType, data: any, type: number) {
         this.WsPool = ws;
@@ -30,7 +43,7 @@ class YingCore {
         this.TaskName = `lmo_${new Date().getTime()}`;
         this.Schedule = 0;
         this.Name = this.Data.name === '' ? this.TaskName : this.Data.name;
-
+        this.YingDB = new YingDB();
 
         // 是否允许发起合成
         if (!DefaultConf.__SYNTHESIS) {
@@ -86,7 +99,7 @@ class YingCore {
 
             const origin: string = this.Data.templateConfig.background.image;
             // 检查背景图像
-            if (origin === '') {
+            if (origin !== '') {
                 const base = GET_IMAGE_BASE64_TYPE(GET_FILE_TYPE(origin));
                 const path = ResolvePath(`./${RESOLVE_STATIC_FILE_PATH(this.Data.templateConfig.background.image)}`);
 
@@ -97,7 +110,7 @@ class YingCore {
                     console.warn('YingWarn: [FILE_TO_BASE64]', e);
                 });
             } else
-                this.WriteConfJSFile(this.Data.templateConfig, src);
+                await this.WriteConfJSFile(this.Data.templateConfig, src);
         }
 
         return Promise.resolve(0);
@@ -116,12 +129,10 @@ class YingCore {
             ...data
         })};`, (e: any) => {
             if (!e) {
-                if (this.TaskType === 0) {
-                    // TODO 开始合成
-                }
-                if (this.TaskType === 1) {
-                    // TODO 创建模板
-                }
+                if (this.TaskType === 0)
+                    this.CreateTask(); // 创建合成任务
+                if (this.TaskType === 1)
+                    this.CreateTemplate();// 创建模板
             }
         });
     }
@@ -132,7 +143,7 @@ class YingCore {
         const s: string = '===== BEGIN LMO-DATA-VISUALIZATION TASK LOG =====\n';
         const e: string = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
 
-        if (Fs.existsSync(logPath))
+        if (!Fs.existsSync(logPath))
             Fs.mkdir(logPath);
 
         const path = ResolvePath(`${logPath}/${this.TaskName}.y.log`);
@@ -140,7 +151,11 @@ class YingCore {
         Fs.writeFile(path, `${s}${this.Logs.join('\n')}${e}`, ((e: any) => {
             if (!e) {
                 this.Logs = [];
-                // TODO 写数据库
+                this.YingDB.InsertLog({
+                    id: this.TaskName,
+                    logFilePath: `${Path.LOG.PATH.replace('.', '')}${this.TaskName}.y.log`,
+                    tempFilePath: '/'
+                });
             }
         }));
     }
@@ -156,7 +171,21 @@ class YingCore {
 
     // 创建模板
     CreateTemplate(): void {
+        const sql: string = this.YingDB.GetInsertTemplateTableSql({
+            T_Name: this.TaskName,
+            T_Id: `lmo_data_visualization_template_${this.TaskName}`,
+            T_Title: this.Data.customize.title ?? '自定义模板',
+            T_Description: this.Data.customize.description ?? '这是一个自定义模板',
+            T_Path: '/static/DataVisualizationTemplate/' + this.TaskName + '/index.html',
+            T_Type: 'customize'
+        });
 
+        this.YingDB.RunSql(sql, (e: any) => {
+            if (e)
+                console.warn('[YingWarn]:Core-CreateTemplate');
+            else
+                this.SendMessage(CREATE_TEMPLATE, SUCCESS);
+        });
     }
 
     // 创建任务
@@ -169,7 +198,12 @@ class YingCore {
         this.Logs.push(`CONFIG ${STRINGIFY(this.Data)}\n\n`);
 
         let audioPath: string = '';
-        // TODO DB设置资源
+        this.YingDB.SetResourcesItem({
+            name: this.Name,
+            path: '/',
+            status: 'Processing',
+            id: this.TaskName
+        });
 
         const templateConf = this.Data.config;
         const conf: object = {
@@ -215,12 +249,16 @@ class YingCore {
                     this.WriteLogFile();
                     const path = Path.SYNTHESIS.OUTPUT.replace('$y', `${this.TaskName}${r === 1 ? '' : '264'}`);
 
-                    //TODO 写入数据库
+                    this.YingDB.UpdateResourceStatus({
+                        status: 'Finish',
+                        name: this.TaskName,
+                        path: path
+                    });
 
                     if (r === 1) {
-                        setTimeout(() => {
-                            // todo 关闭数据库
-                            this.SendMessage(TASK_END, TASK_END, {
+                        setTimeout(async () => {
+                            await this.YingDB.Close();
+                            await this.SendMessage(TASK_END, TASK_END, {
                                 state: 'success',
                                 taskName: this.Name,
                                 path: path
@@ -295,8 +333,9 @@ class YingCore {
                 if (Fs.statSync(tmp).isDirectory())
                     this.DelTempFiles(tmp);
                 else
-                    Fs.unlinkSync(path);
+                    Fs.unlinkSync(tmp);
             });
+            Fs.rmdirSync(path);
         }
     }
 
