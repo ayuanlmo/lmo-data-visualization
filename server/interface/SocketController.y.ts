@@ -1,6 +1,8 @@
+import {CreateTaskDataType} from "./Core.y";
+
 export interface MessageType {
     cmd: string;
-    data: object;
+    data: CreateTaskDataType;
 }
 
 

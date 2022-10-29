@@ -10,14 +10,15 @@ import CMD from "../../const/CMD.y";
 import ServerInf from "../ServerInf.y";
 import YingCore from "../Core.y";
 import {MessageType, WsType} from "../../interface/SocketController.y";
+import {WsAppType} from "../../interface/Core.y";
 import {BINARY_TO_STRING, CHECK_264_LIB, CREATE_UUID, STRING_TO_BINARY, STRINGIFY} from "../../utils/Utils.y";
 
 class SocketController {
     private readonly Ws: WsType;
     private readonly OnLineUsers: number;
-    private readonly Pool: any;
+    private readonly Pool: WsAppType;
 
-    constructor(Ws: WsType, OnLineUsers: number, Pool: any) {
+    constructor(Ws: WsType, OnLineUsers: number, Pool: WsAppType) {
         this.Ws = Ws;
         this.OnLineUsers = OnLineUsers;
         this.Pool = Pool;
