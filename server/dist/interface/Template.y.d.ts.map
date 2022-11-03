@@ -1,0 +1,1 @@
+{"version":3,"file":"Template.y.d.ts","sourceRoot":"","sources":["../../interface/Template.y.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,kBAAkB,EAAC,MAAM,cAAc,CAAC;AAEhD,MAAM,WAAW,sBAAuB,SAAQ,kBAAkB;IAC9D,EAAE,EAAE,MAAM,CAAC;CACd;AAED,MAAM,WAAW,oBAAqB,SAAQ,sBAAsB;IAChE,IAAI,EAAE,MAAM,CAAC;CAChB"}
