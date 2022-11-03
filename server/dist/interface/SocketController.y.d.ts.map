@@ -1,1 +1,0 @@
-{"version":3,"file":"SocketController.y.d.ts","sourceRoot":"","sources":["../../interface/SocketController.y.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,kBAAkB,EAAC,MAAM,UAAU,CAAC;AAE5C,MAAM,WAAW,WAAW;IACxB,GAAG,EAAE,MAAM,CAAC;IACZ,IAAI,EAAE,kBAAkB,CAAC;CAC5B;AAGD,MAAM,WAAW,MAAM;IACnB,IAAI,EAAE,GAAG,CAAC;IACV,EAAE,EAAE,GAAG,CAAC;CACX"}
