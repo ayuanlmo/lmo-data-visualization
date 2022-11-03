@@ -1,13 +1,13 @@
 /**
  * @method STRING_TO_BINARY
  * @description 字符串转二进制
- * @param STR {string}
+ * @param str {string}
  * @return string
  * **/
 
-export const STRING_TO_BINARY = (STR: string): string => {
+export const STRING_TO_BINARY = (str: string): string => {
     const result: string[] = [];
-    const list: string[] = STR.split('');
+    const list: string[] = str.split('');
 
     for (let i: number = 0; i < list.length; i++) {
         if (i !== 0)
@@ -21,12 +21,12 @@ export const STRING_TO_BINARY = (STR: string): string => {
 /**
  * @method BINARY_TO_STRING
  * @description 二进制转字符串
- * @param STR {string}
+ * @param str {string}
  * @return string
  * **/
-export const BINARY_TO_STRING = (STR: string): string => {
+export const BINARY_TO_STRING = (str: string): string => {
     const result: string[] = [];
-    const list: string[] = STR.split(' ');
+    const list: string[] = str.split(' ');
 
     for (let i: number = 0; i < list.length; i++) {
         result.push(String.fromCharCode(parseInt(list[i], 2)));
@@ -37,15 +37,15 @@ export const BINARY_TO_STRING = (STR: string): string => {
 /**
  * @method CMD_EXISTS
  * @description 判定某条命令是否存在于系统（仅适用于Windows_NT）
- * @param CMD {string}
+ * @param cmd {string}
  * @return boolean
  * **/
-export const CMD_EXISTS = (CMD: string): boolean => {
+export const CMD_EXISTS = (cmd: string): boolean => {
     try {
         require('child_process').execSync(
             require('os').platform() === 'win32'
-                ? `cmd /c "(help ${CMD} > nul || exit 0) && where ${CMD} > nul 2> nul"`
-                : `command -v ${CMD}`
+                ? `cmd /c "(help ${cmd} > nul || exit 0) && where ${cmd} > nul 2> nul"`
+                : `command -v ${cmd}`
         );
         return true;
     } catch {
@@ -75,14 +75,14 @@ export const CHECK_264_LIB = (): Promise<boolean> => {
 /**
  * @method EXEC_CMD
  * @description 执行命令
- * @param CMD {string}
- * @param OPT {any}
+ * @param cmd {string}
+ * @param opt {any}
  * @return Promise<any>
  * **/
-export const EXEC_CMD = (CMD: string, OPT: any): Promise<any> => {
+export const EXEC_CMD = (cmd: string, opt: any): Promise<any> => {
     return new Promise((resolve, reject) => {
         try {
-            require('child_process').exec(CMD, OPT, (e: any, stdout: string) => {
+            require('child_process').exec(cmd, opt, (e: any, stdout: string) => {
                 if (!e)
                     resolve(stdout);
             });
@@ -95,23 +95,23 @@ export const EXEC_CMD = (CMD: string, OPT: any): Promise<any> => {
 /**
  * @method TO_UTF8
  * @description 转UTF8字符串
- * @param STR {String}
+ * @param str {String}
  * @return String
  * **/
-export const TO_UTF8 = (STR: string): string => {
-    return require('iconv-lite').decode(STR, 'utf8');
+export const TO_UTF8 = (str: string): string => {
+    return require('iconv-lite').decode(str, 'utf8');
 };
 
 /**
  * @method FILE_TO_BASE64
  * @description 文件转base64
- * @param PATH {String} File path
+ * @param path {String} File path
  * @return Promise<string>
  * **/
-export const FILE_TO_BASE64 = (PATH: string): Promise<string> => {
+export const FILE_TO_BASE64 = (path: string): Promise<string> => {
     return new Promise((resolve, reject): any => {
         try {
-            const binary = require('fs').readFileSync(PATH);
+            const binary = require('fs').readFileSync(path);
 
             resolve(Buffer.from(binary, 'binary').toString('base64'));
         } catch (e) {
@@ -123,34 +123,34 @@ export const FILE_TO_BASE64 = (PATH: string): Promise<string> => {
 /**
  * @method RESOLVE_STATIC_FILE_PATH
  * @description 静态文件路径转换
- * @param PATH {String}
+ * @param path {String}
  * @return String
  * **/
-export const RESOLVE_STATIC_FILE_PATH = (PATH: string = ''): string => {
-    if (PATH === '') return '/';
-    return `/static${PATH.split('/static')[1]}`;
+export const RESOLVE_STATIC_FILE_PATH = (path: string = ''): string => {
+    if (path === '') return '/';
+    return `/static${path.split('/static')[1]}`;
 };
 
 /**
  * @method GET_FILE_TYPE
  * @description 获取文件类型
- * @param NAME {String}
+ * @param name {String}
  * @return String
  * **/
-export const GET_FILE_TYPE = (NAME: string): string => {
-    return NAME.split('.')[1];
+export const GET_FILE_TYPE = (name: string): string => {
+    return name.split('.')[1];
 };
 
 /**
  * @method CREATE_SUCCESS_MESSAGE
  * @description 创建成功消息
- * @param DATA {Object}
+ * @param data {Object}
  * @return Object
  * **/
-export const CREATE_SUCCESS_MESSAGE = (DATA: object = {}): object => {
+export const CREATE_SUCCESS_MESSAGE = (data: object = {}): object => {
     return {
         data: {
-            ...DATA
+            ...data
         },
         message: 'success',
         code: 200,
@@ -161,16 +161,16 @@ export const CREATE_SUCCESS_MESSAGE = (DATA: object = {}): object => {
 /**
  * @method GET_ERROR_MESSAGE
  * @description 创建失败消息
- * @param DATA{Object}
- * @param MSG {String}
+ * @param data{Object}
+ * @param msg {String}
  * @return Object
  * **/
-export const CREATE_ERROR_MESSAGE = (DATA: object, MSG: String = ''): object => {
+export const CREATE_ERROR_MESSAGE = (data: object, msg: String = ''): object => {
     return {
         data: {
-            ...DATA
+            ...data
         },
-        message: MSG,
+        message: msg,
         code: 500,
         _t: new Date().getTime()
     };
@@ -179,11 +179,11 @@ export const CREATE_ERROR_MESSAGE = (DATA: object, MSG: String = ''): object => 
 /**
  * @method STRINGIFY
  * @description Object转String
- * @param DATA {Object | Array | null}
+ * @param data {Object | Array | null}
  * @return String
  * **/
-export const STRINGIFY = (DATA: object): string => {
-    return JSON.stringify(DATA);
+export const STRINGIFY = (data: object): string => {
+    return JSON.stringify(data);
 }
 
 /**
