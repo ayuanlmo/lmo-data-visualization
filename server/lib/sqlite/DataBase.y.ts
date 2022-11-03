@@ -99,7 +99,7 @@ class YingDB {
 
     // 获取媒体列表
     public GetMediaList(type: string): Promise<any> {
-        return this.SqlQuery(type === '' ? `SELECT * FROM Resource` : `SELECT * FROM "Resource" WHERE _Status = '${type}'`);
+        return this.SqlQuery(type === '' ? `SELECT * FROM Resource` : `SELECT * FROM "Resource" WHERE T_Status = '${type}'`);
     }
 
     // 获取模板列表

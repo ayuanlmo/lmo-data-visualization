@@ -2,7 +2,7 @@ import Router from "./router/index.y";
 import Conf from "./conf/Conf.y";
 import SocketController from "./bin/Controllers/SocketController.y";
 import TemplateIndex from "./const/TemplateIndex.y";
-import {Net} from "./lib/net/Net.y";
+import Net from "./lib/net/Net.y";
 import {CONNECT} from "./router/Socket.y";
 import {WsObj} from "./interface/Main.y";
 
@@ -36,6 +36,5 @@ import {WsObj} from "./interface/Main.y";
         });
     });
     App.use(Router);
-
-    Net.START_SERVER(App);
+    new Net(App);
 })();

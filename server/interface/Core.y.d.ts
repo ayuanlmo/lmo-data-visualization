@@ -18,7 +18,7 @@ interface CreateTemplateDataType {
     customize: {
         title: string;
         description: string;
-    }
+    };
 }
 
 export interface CreateTaskDataType extends CreateTemplateDataType {
@@ -41,6 +41,6 @@ export interface CreateTaskDataType extends CreateTemplateDataType {
             volume: string;
             complete: boolean;
         };
-    },
-    template: string
+    };
+    template: string;
 }

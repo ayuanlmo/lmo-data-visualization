@@ -5,7 +5,6 @@ export interface MessageType {
     data: CreateTaskDataType;
 }
 
-
 export interface WsType {
     send: any;
     on: any;

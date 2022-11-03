@@ -19,7 +19,13 @@ import {
     TASK_PRO_SUCCESS,
     TASK_PROCESSING
 } from "../const/MessageTypes.y";
-import {CopyFileItemType, FluentFfmpegErrorTypes, WsAppType, WsClientsType} from "../interface/Core.y";
+import {
+    CopyFileItemType,
+    FluentFfmpegErrorTypes,
+    WsAppType,
+    WsClientsType,
+    CreateTaskDataType
+} from "../interface/Core.y";
 import {FILE_TO_BASE64, GET_FILE_TYPE, RESOLVE_STATIC_FILE_PATH, STRING_TO_BINARY, STRINGIFY} from "../utils/Utils.y";
 
 const TimeCut: TC = require('timecut');
@@ -30,7 +36,7 @@ const OS = require('os');
 
 class YingCore {
     private readonly WsPool: WsAppType;// Socket连接池
-    private readonly Data: any;// 模板数据
+    private readonly Data: CreateTaskDataType;// 模板数据
     private Logs: Array<string>;// 日志
     private Schedule: number;// 进度
     private readonly TaskName: string;// 任务名称
@@ -38,7 +44,7 @@ class YingCore {
     private readonly TaskType: number;// 任务类型 0 or 1
     private readonly YingDB: YingDB;
 
-    constructor(ws: WsAppType, data: any, type: number) {
+    constructor(ws: WsAppType, data: CreateTaskDataType, type: number) {
         this.WsPool = ws;
         this.Data = data;
         this.TaskType = type;
