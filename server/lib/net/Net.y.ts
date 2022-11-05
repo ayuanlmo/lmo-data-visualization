@@ -13,6 +13,7 @@ interface TestServerTypes {
 
 import Conf from "../../conf/Conf.y";
 import {Express} from "express";
+
 const _Net: NetTypes = require('net');
 const _Clc: any = require('cli-color');
 const _Global: any = global;
@@ -28,6 +29,10 @@ export default class Net {
     }
 
     private StartServer(): void {
+        if (this.Port === Conf.__SERVER_MAX_PORT){
+            console.warn('已超过当前允许的最大端口范围，程序已退出');
+            return require('process').exit();
+        }
         this.Port++;
         const test_server: TestServerTypes = _Net.createServer().listen(this.Port);
 
