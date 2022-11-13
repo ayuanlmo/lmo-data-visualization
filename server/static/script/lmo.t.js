@@ -24,6 +24,7 @@ class TempLate {
         this.appDom = document.getElementById('app');
         this.setChart();
         this.init();
+        this.initLOGO();
         addEventListener('load', () => {
             if (!this.isCustom && !this.isPreview)
                 parent.postMessage({
@@ -33,6 +34,19 @@ class TempLate {
             parent.postMessage({
                 type: 'TemplateLoad'
             });
+        });
+    }
+
+    initLOGO() {
+        const el = document.createElement('div');
+        const img = document.createElement('img');
+
+        el.style = 'width: 10vw;height: 10vw;position: absolute;z-index: 16;top: 10vh;right: 10vw;background-size: cover;';
+        img.style = 'width:100%;height:100%;border-radius: 50%;';
+        img.src = '../../public/lmo-logo.png';
+        img.addEventListener('load', () => {
+            el.append(img);
+            document.body.append(el);
         });
     }
 
