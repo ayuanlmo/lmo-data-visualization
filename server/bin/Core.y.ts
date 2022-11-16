@@ -44,7 +44,7 @@ class YingCore {
     private readonly TaskType: number;// 任务类型 0 or 1
     private readonly YingDB: YingDB;
 
-    constructor(ws: WsAppType, data: CreateTaskDataType, type: number) {
+    public constructor(public readonly ws: WsAppType, public readonly data: CreateTaskDataType, public readonly type: number) {
         this.WsPool = ws;
         this.Data = data;
         this.TaskType = type;
