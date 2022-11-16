@@ -5,6 +5,7 @@ import TemplateIndex from "./const/TemplateIndex.y";
 import Net from "./lib/net/Net.y";
 import {CONNECT} from "./router/Socket.y";
 import {WsObj} from "./interface/Main.y";
+import {Request, Response} from "express";
 
 ((): void => {
     const Express = require('express');
@@ -26,6 +27,14 @@ import {WsObj} from "./interface/Main.y";
     App.use(Express.urlencoded({
         extended: false
     }));
+    App.use((req: Request, res: Response, next: Function): Request => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Authorization,X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method');
+        res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, PUT, DELETE');
+        res.header('Allow', 'GET, POST');
+        next();
+        return req;
+    });
     App.use(Multer.single('media'));
     App.use(Conf.__STATIC_PATH, Express.static(`${__dirname}${Conf.__STATIC_PATH}`))
     App.ws(CONNECT, async (ws: WsObj) => {
