@@ -10,16 +10,21 @@ export default class LmoAudioPlayer {
     constructor(src = '') {
         this.Audio = null;
         this.src = src;
-        this.init();
+        this.isDestroy = false;
+        this.canplay = false;
+        this.createPlayer();
     }
 
-    // 初始化
-    init() {
-        if (this.Audio === null) {
-            // 创建Audio对象 并加载音频文件
+    // 创建播放器
+    createPlayer() {
+        if (this.Audio === null && !this.isDestroy) {
+            this.Audio = null;
             this.Audio = new Audio(this.src);
-            this.Audio.addEventListener('ended', () => {
+            this.addEventListener('ended', () => {
                 this.pause();
+            });
+            this.addEventListener('canplaythrough', () => {
+                this.canplay = true;
             });
         }
     }
@@ -43,10 +48,13 @@ export default class LmoAudioPlayer {
      * **/
     play(s = true) {
         this.pause().then(() => {
-            if (s) this.Audio.currentTime = 0;
-            setTimeout(() => {
-                this.Audio.play();
-            });
+            if (s) {
+                this.Audio.currentTime = 0;
+                setTimeout(() => {
+                    this.Audio.play();
+                });
+            } else
+                this.continue();
         });
     }
 
@@ -73,10 +81,28 @@ export default class LmoAudioPlayer {
         if (!this.Audio.paused)
             this.Audio.pause();
         this.Audio = null;
+        this.isDestroy = true;
+    }
+
+    // 设置音量
+    setVolume(v) {
+        this.Audio.volume = v;
+    }
+
+    // 添加事件侦听器
+    addEventListener(event, listener) {
+        if (event)
+            this.Audio.addEventListener(event, listener);
+    }
+
+    // 移除事件侦听器
+    removeEventListener(event, listener) {
+        if (event)
+            this.Audio.removeEventListener(event, listener);
     }
 
     // 继续播放
     continue() {
-        this.play(false);
+        this.Audio.play();
     }
 }
