@@ -1,2 +1,7 @@
-declare const _default: object;
-export default _default;
+declare class ServerInf {
+    constructor();
+
+    public init(): object;
+}
+
+export default ServerInf;

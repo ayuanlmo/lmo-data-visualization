@@ -1,4 +1,4 @@
-import {WsAppType, CreateTaskDataType} from "../interface/Core.y";
+import {CreateTaskDataType, WsAppType} from "../interface/Core.y";
 
 declare class YingCore {
     private readonly WsPool;
@@ -10,29 +10,29 @@ declare class YingCore {
     private readonly TaskType;
     private readonly YingDB;
 
-    constructor(ws: WsAppType, data: CreateTaskDataType, type: number);
+    public constructor(ws: WsAppType, data: CreateTaskDataType, type: number);
 
-    Init(): void;
+    private Init(): Promise<void>;
 
-    CopyTempLate(): Promise<number>;
+    private CopyTempLate(): Promise<number>;
 
-    WriteConfJSFile(conf: object, path: string): void;
+    private WriteConfJSFile(conf: object, path: string): void;
 
-    WriteLogFile(): void;
+    private WriteLogFile(): void;
 
-    CopyFile(from: string, to: string): void;
+    private CopyFile(from: string, to: string): void;
 
-    CreateTemplate(): void;
+    private CreateTemplate(): void;
 
-    CreateTask(): void;
+    private CreateTask(): void;
 
-    ProcessAudio(src: string, audioPath: string): Promise<number>;
+    private ProcessAudio(src: string, audioPath: string): Promise<number>;
 
-    DelTempFiles(path: string): void;
+    private DelTempFiles(path: string): void;
 
-    GetVideoClarity(type: string): object;
-
-    SendMessage(type: string, cmd: string, data?: object): void;
+    private GetVideoClarity(type: string): object;
+    
+    private SendMessage(type: string, cmd: string, data?: object): void;
 }
 
 export default YingCore;
