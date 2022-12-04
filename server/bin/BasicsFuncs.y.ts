@@ -4,16 +4,17 @@ import Conf from "../conf/Conf.y";
 import DefaultConf from "../conf/Default.y";
 import FileTypes from "../const/FileTypes.y";
 import MediaTypes from "../const/MediaTypes.Y";
-import YingDB from "../lib/sqlite/DataBase.y";
 import {Request, Response} from "express";
 import {TempLateItemApp} from "../interface/DataBase.y";
 import {DeleteMedia, MediaListType, MediaType, MediaTypeApp} from "../interface/Media.y";
 import {DeleteTemplateParams, EditTemplateInfoParams} from "../interface/Template.y";
 import {FileType} from "../interface/File.y";
 import {CREATE_ERROR_MESSAGE, CREATE_SUCCESS_MESSAGE, TO_UTF8} from "../utils/Utils.y";
+import YingDB from "../lib/db/DataBase.y";
 
 const Fs: FS = require('fs-extra');
 const Path = require('path');
+const DB = new YingDB();
 
 function FilterMediaFile(list: Array<string>, type: string = '__AUDIO') {
     const List: Array<MediaListType> = [];
@@ -40,22 +41,24 @@ async function DeleteTempFile(path: string): Promise<void> {
 export async function GetTemplateList(res: Response): Promise<void> {
     const list: Array<object> = [];
 
-    new YingDB().GetTemplateList().then((r: Array<any>) => {
+    DB.GetTemplateList().then((r: Array<any>) => {
         r.map((i: TempLateItemApp) => {
             list.push({
-                id: i.T_Id,
-                url: i.T_Path,
-                cover: `/static/DataVisualizationTemplate/${i.T_Name}/cover.png`,
-                template: i.T_Name,
-                title: i.T_Title,
-                description: i.T_Description,
-                type: i.T_Type
+                id: i.id,
+                url: i.path,
+                cover: `/static/DataVisualizationTemplate/${i.name}/cover.png`,
+                template: i.name,
+                title: i.title,
+                description: i.description,
+                type: i.type
             });
         });
         res.json(CREATE_SUCCESS_MESSAGE({
             list: list
         }));
-    });
+    }).catch(err => {
+        res.json(CREATE_ERROR_MESSAGE({}, err));
+    })
 }
 
 export async function DeleteTemplate(req: Request, res: Response): Promise<any> {
@@ -67,8 +70,8 @@ export async function DeleteTemplate(req: Request, res: Response): Promise<any> 
 
     if (!Object.keys(params).includes('id') || params.id === '')
         res.json(CREATE_ERROR_MESSAGE({}, Message.__DEL_TEMPLATE_ERROR_NT));
-    else
-        new YingDB().DeleteTemplate(params.id).then(() => {
+    else {
+        DB.DeleteTemplate(params.id).then(() => {
             res.json(CREATE_SUCCESS_MESSAGE());
         }).catch((err: string) => {
             if (err === 'No-template')
@@ -76,6 +79,7 @@ export async function DeleteTemplate(req: Request, res: Response): Promise<any> 
             if (err === 'Prohibited')
                 res.json(CREATE_ERROR_MESSAGE({}, Message.__DEL_PROHIBITED))
         });
+    }
 }
 
 export async function EditTempInfo(req: Request, res: Response): Promise<void> {
@@ -85,7 +89,7 @@ export async function EditTempInfo(req: Request, res: Response): Promise<void> {
     if (!Object.keys(params).includes('id')) {
         res.json(CREATE_ERROR_MESSAGE({}, Message.__NO_MEDIA_ID));
     } else {
-        new YingDB().EditTemplateInfo(params.id, params).then(() => {
+        DB.EditTemplateInfo(params.id, params).then(() => {
             res.json(CREATE_SUCCESS_MESSAGE({}));
         }).catch((e: string) => {
             if (e === 'err')
@@ -101,14 +105,14 @@ export async function GetMedia(req: Request, res: Response): Promise<void> {
     const type: any = req.query.type;
     const list: Array<MediaType> = [];
 
-    new YingDB().GetMediaList(type ?? '').then((l: Array<MediaTypeApp>) => {
-        l.map((i: MediaTypeApp) => {
+    DB.GetMediaList(type ?? '').then((MediaList: Array<MediaTypeApp>) => {
+        MediaList.map((i: MediaTypeApp) => {
             list.push({
-                name: i.T_Name,
-                path: i.T_Path,
-                create_at: i.T_Create_At,
-                status: i.T_Status,
-                id: i.T_ID
+                name: i.name,
+                path: i.path,
+                create_at: i.create_at,
+                status: i.status,
+                id: i.id
             });
         });
         res.json(CREATE_SUCCESS_MESSAGE({
@@ -124,14 +128,14 @@ export async function DeleteMedia(req: Request, res: Response): Promise<void> {
         const data: any = req.query;
         const params: DeleteMedia = data;
 
-        new YingDB().DeleteMediaItem(params.id).then(async (r: number) => {
+        DB.DeleteMediaItem(params.id).then(async (r: number) => {
             if (r === 1) {
                 const mediaPath: string = Path.resolve(`server/../${params.path}`);
                 const mediaLogPath: string = Path.resolve(`server/../static/log/${params.id}.y.log`);
 
                 await Fs.unlinkSync(mediaPath);
                 await Fs.unlinkSync(mediaLogPath);
-                await new YingDB().DeleteLog(params.id);
+                await DB.DeleteLog(params.id);
                 await res.json(CREATE_SUCCESS_MESSAGE({}));
             } else
                 await res.json(CREATE_ERROR_MESSAGE({}, Message.__DEL_MEDIA_ERROR));
