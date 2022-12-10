@@ -12,7 +12,9 @@ interface TestServerTypes {
 }
 
 import Conf from "../../conf/Conf.y";
+import DataBaseConf from "../../conf/DataBase.y";
 import {Express} from "express";
+import {CHECK_264_LIB, CMD_EXISTS} from "../../utils/Utils.y";
 
 const _Net: NetTypes = require('net');
 const _Clc: any = require('cli-color');
@@ -29,7 +31,7 @@ export default class Net {
     }
 
     private StartServer(): void {
-        if (this.Port === Conf.__SERVER_MAX_PORT){
+        if (this.Port === Conf.__SERVER_MAX_PORT) {
             console.warn('已超过当前允许的最大端口范围，程序已退出');
             return require('process').exit();
         }
@@ -56,19 +58,25 @@ export default class Net {
     }
 
     private PrintNetworkInfo(): void {
-        console.log('\n\n=========================================\n\n');
-        console.log('        _                 _ _          _   _             ');
-        console.log('       (_)               | (_)        | | (_)            ');
-        console.log(' __   ___ ___ _   _  __ _| |_ ______ _| |_ _  ___  _ __  ');
-        console.log(' \\ \\ / / / __| | | |/ _` | | |_  / _` | __| |/ _ \\| \'_ \\ ');
-        console.log('  \\ V /| \\__ \\ |_| | (_| | | |/ / (_| | |_| | (_) | | | |');
-        console.log('   \\_/ |_|___/\\__,_|\\__,_|_|_/___\\__,_|\\__|_|\\___/|_| |_|\n\n');
-        console.log(_Clc['red']('\n Server running at:\n'));
-        console.log(`   -Local: ${_Clc['blue'](`  //localhost:${this.Port}/`)}`);
-        this.LocalNetworkInformation().map((i: string) => {
-            console.log(`   -NetWork: ${_Clc.blue(`//${i}:${this.Port}/`)}`);
+        console.log(_Clc.cyan('\n' +
+            ' ____  ____  _                   \n' +
+            '|_  _||_  _|(_)                  \n' +
+            '  \\ \\  / /  __   _ .--.   .--./) \n' +
+            '   \\ \\/ /  [  | [ `.-. | / /\'`\\; \n' +
+            '   _|  |_   | |  | | | | \\ \\._// \n' +
+            '  |______| [___][___||__].\',__`  \n' +
+            '                        ( ( __)) \n'));
+        console.log(_Clc.cyan('MySQL  Port: '), _Clc.bgRedBright(DataBaseConf.port));
+        console.log(_Clc.cyan('Server Port: '), _Clc.bgRedBright(this.Port));
+        console.log(_Clc.cyan('Live Server: '), _Clc.bgRedBright(Conf.__LIVE_SERVER));
+        CHECK_264_LIB().then((result: boolean) => {
+            if (result && CMD_EXISTS('ffmpeg'))
+                console.log(_Clc.bgBlueBright('FFMPEG'), _Clc.blue('H.264lib'), '\n');
+            console.log(`-Local: ${_Clc['blue'](`  //localhost:${this.Port}/`)}`);
+            this.LocalNetworkInformation().map((i: string) => {
+                console.log(`-NetWork: ${_Clc.blue(`//${i}:${this.Port}/`)}`);
+            });
         });
-        console.log('\n\n=========================================');
     }
 
     private LocalNetworkInformation(): Array<string> {
