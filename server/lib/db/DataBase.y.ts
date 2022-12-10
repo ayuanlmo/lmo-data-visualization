@@ -115,6 +115,7 @@ class YingDB {
                     })
                 }
             }).catch(err => {
+                reject(err);
                 console.log('错误', err)
             })
         });
@@ -190,8 +191,13 @@ class YingDB {
         else {
             this.DB = MySQL.createConnection({
                 ...DataBaseConf
-            })
-            this.DB.connect();
+            });
+            this.DB.connect(function (err: any) {
+                if (err != null) {
+                    console.warn('无法连接数据库，程序已退出：\n', err);
+                    require('process').exit();
+                }
+            });
         }
     }
 }
