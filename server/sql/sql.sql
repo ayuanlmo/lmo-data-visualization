@@ -37,7 +37,7 @@ CREATE TABLE `y_resource`  (
   `create_at` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建时间',
   `status` varchar(28) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '状态',
   `id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
-  PRIMARY KEY (`t_id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
