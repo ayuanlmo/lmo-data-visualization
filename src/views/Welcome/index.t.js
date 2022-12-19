@@ -3,6 +3,8 @@ require('./style.t.scss');
 import {set} from "@lib/Storage";
 import {WELCOME_STATE} from "@const/StorageKtys.t";
 
+const icpConf = require('@/config/Icp');
+
 export default {
     name: 'lmo-welcome',
     render(h) {
@@ -74,11 +76,33 @@ export default {
                 h('div', {
                     class: 'lmo_welcome_footer lmo_color_white bounceInLeft animated'
                 }, [
-                    h('span', [
-                        'Powered by ffmpeg and Node.js'
+                    h('div',{},[
+                        h('span', [
+                            'Powered by ffmpeg and Node.js'
+                        ]),
+                        h('span', [
+                            'Design by 阿柒'
+                        ])
                     ]),
-                    h('span', [
-                        'Design by 阿柒'
+                    h('div', {}, [
+                        h('a', {
+                            class:'lmo_color_white lmo_hover_theme_color',
+                            attrs: {
+                                href: 'http://www.beian.miit.gov.cn/',
+                                target: '_blank'
+                            }
+                        }, [
+                            icpConf.icpFilingNo
+                        ]),
+                        h('a', {
+                            class:'lmo_color_white lmo_hover_theme_color',
+                            attrs: {
+                                href: 'http://www.beian.gov.cn/portal/registerSystemInfo',
+                                target: '_blank'
+                            }
+                        }, [
+                            icpConf.publicSecurityNetworkFilingNo
+                        ])
                     ])
                 ])
             ])

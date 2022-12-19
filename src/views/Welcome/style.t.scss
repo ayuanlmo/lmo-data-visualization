@@ -76,8 +76,18 @@
     position: absolute;
     bottom: 0;
     padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
 
     span {
+      font-size: .5rem;
+
+      &:nth-child(2) {
+        margin-left: 2rem;
+      }
+    }
+    a {
       font-size: .5rem;
 
       &:nth-child(2) {
