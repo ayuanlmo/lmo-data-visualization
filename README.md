@@ -73,6 +73,11 @@ PS：不同的模板配置项可能有些差别，这是根据模板内部提供
 
 [演示地址](https://dv.ayuanlmo.cn)
 
+## 文档信息
+
+- 本项目所有文档信息
+- [文档地址](https://show-doc.ayuanlmo.cn/web/#/5)
+
 ## 开发
 
 项目服务端文件在/server目录下。 合成需要ffmpeg支持，[点击这里下载](https://ffmpeg.org/download.html)</a>

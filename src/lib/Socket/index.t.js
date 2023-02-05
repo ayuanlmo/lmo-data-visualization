@@ -10,6 +10,7 @@
  * **/
 
 import {createMessageBox, createNotification} from "@lib/BasicInteraction";
+import Bus from '@/lib/Bus/index.t';
 
 export default class Socket {
     constructor(url, callback = () => {
@@ -70,12 +71,18 @@ export default class Socket {
                     message: `${_msg.data.message}`,
                     type: 'warning'
                 });
-            if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing')
+            if (_msg.type === 'task_processing')
+                return Bus.$emit('task_processing', _msg.data);
+            
+            if (_msg.type === 'task_end' && _msg.data['cmd'] === 'task_processing') {
+                Bus.$emit('task_end', _msg.data);
                 return createNotification({
                     title: '系统消息',
                     message: `[${_msg.data['taskName']}] 合成完毕`,
                     type: 'success'
                 });
+            }
+
             if (_msg.type === 'task_pending')
                 return createNotification({
                     title: '系统消息',

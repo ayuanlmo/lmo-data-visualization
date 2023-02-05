@@ -28,33 +28,37 @@ export default {
                     class: 'lmo_data_visualization_header_option lmo_position_relative'
                 }, [
                     h(ViewResource, {ref: 'ViewResource'}),
-                    h('lmo-button', {
-                        props: {
-                            plain: true,
-                            text: h('i', {
-                                class: 'el-icon-film'
-                            }, [' 资源库'])
-                        },
-                        on: {
-                            click: () => {
-                                this.$refs.ViewResource['show']();
+                    h('div', {
+                        class: 'lmo_data_visualization_header_option_buttons lmo_position_relative'
+                    }, [
+                        h('lmo-button', {
+                            props: {
+                                plain: true,
+                                text: h('i', {
+                                    class: 'el-icon-film'
+                                }, [' 资源库'])
+                            },
+                            on: {
+                                click: () => {
+                                    this.$refs.ViewResource['show']();
+                                }
                             }
-                        }
-                    }),
-                    h(ViewLogs, {ref: 'ViewLogs'}),
-                    h('lmo-button', {
-                        props: {
-                            plain: true,
-                            text: h('i', {
-                                class: 'el-icon-tickets'
-                            }, [' 查看日志'])
-                        },
-                        on: {
-                            click: () => {
-                                this.$refs.ViewLogs['show']();
+                        }),
+                        h('lmo-button', {
+                            props: {
+                                plain: true,
+                                text: h('i', {
+                                    class: 'el-icon-tickets'
+                                }, [' 查看日志'])
+                            },
+                            on: {
+                                click: () => {
+                                    this.$refs.ViewLogs['show']();
+                                }
                             }
-                        }
-                    })
+                        })
+                    ]),
+                    h(ViewLogs, {ref: 'ViewLogs'})
                 ])
             ])
         );

@@ -1,5 +1,7 @@
 require('./style.t.scss');
 
+import {createMessageBox, closeLoading} from "@lib/BasicInteraction";
+
 export default {
     render(h) {
         return (
@@ -7,17 +9,19 @@ export default {
                 ref: 'playerIframeBox',
                 class: 'lmo-data_visualization_edit_preview_player_iframe_box lmo_position_relative'
             }, [
-                <div v-loading={this.iframeLoading}
-                     class={'lmo-data_visualization_edit_preview_mask lmo_position_absolute'}/>,
+                <div class={'lmo-data_visualization_edit_preview_mask lmo_position_absolute'}/>,
                 h('iframe', {
                     class: 'lmo_position_absolute',
+                    ref: 'iframe',
                     style: this.iframeStyle,
                     attrs: {
                         src: `/server${this.url}`,
                         id: 'lmo-player_iframe_box'
                     },
                     on: {
-                        load: () => this.iframeLoading = false
+                        load: () => {
+                            this.checkTemplate();
+                        }
                     }
                 })
             ])
@@ -26,8 +30,7 @@ export default {
     props: {
         url: {
             type: String,
-            default: '',
-            iframeLoading: true
+            default: ''
         }
     },
     data() {
@@ -36,9 +39,27 @@ export default {
         };
     },
     methods: {
+        async checkTemplate() {
+            const el = this.$refs.iframe.contentWindow.document.body.childNodes[0];
+
+            try {
+                if (await el.innerHTML.indexOf('No Found') !== -1) {
+                    createMessageBox({
+                        type: 'error',
+                        title: '模板错误',
+                        message: '无法加载该模板，它貌似并不存在'
+                    }).then(async () => {
+                        await require('@/utils/index').routerPush(this.$router, '/', 'replace');
+                        await closeLoading();
+                    });
+                }
+            } catch (e) {
+                return e;
+            }
+        },
         initPlayerView() {
             const e = this.$refs.playerIframeBox ?? document.getElementById('lmo-player_iframe_box');
-            
+
             if (!e) return;
             const _domHeight = e.offsetHeight;
             const _domWidth = e.offsetWidth;

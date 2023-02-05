@@ -245,7 +245,7 @@ function downloadFile(conf) {
     const a = document.createElement('a');
 
     return new Promise((resolve, reject) => {
-        a.download = `${conf.download}}`;
+        a.download = `${conf.download}`;
         a.href = conf.href;
         resolve(a);
     });
@@ -375,7 +375,7 @@ function createQueryParams(data = {}) {
  * **/
 function isMobileDevice() {
     const _ = navigator.userAgent.match(/Mobile/i);
-    
+
     if (_ === null)
         return false;
     return navigator.userAgent.match(/Mobile/i).length > 0;

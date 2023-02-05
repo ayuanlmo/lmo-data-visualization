@@ -5,7 +5,7 @@ import Path from "../const/Path.y";
 import Conf from "../conf/Conf.y";
 import DefaultConf from "../conf/Default.y";
 import Message from "../conf/Message.y";
-import YingDB from "../lib/sqlite/DataBase.y";
+import YingDB from "../lib/db/DataBase.y";
 import {GET_IMAGE_BASE64_TYPE} from "../const/ImageBase64Type.y";
 import {
     CREATE_TEMPLATE,
@@ -21,10 +21,10 @@ import {
 } from "../const/MessageTypes.y";
 import {
     CopyFileItemType,
+    CreateTaskDataType,
     FluentFfmpegErrorTypes,
     WsAppType,
-    WsClientsType,
-    CreateTaskDataType
+    WsClientsType
 } from "../interface/Core.y";
 import {FILE_TO_BASE64, GET_FILE_TYPE, RESOLVE_STATIC_FILE_PATH, STRING_TO_BINARY, STRINGIFY} from "../utils/Utils.y";
 
@@ -35,16 +35,16 @@ const Fs: FS = require('fs-extra');
 const OS = require('os');
 
 class YingCore {
-    private readonly WsPool: WsAppType;// Socket连接池
-    private readonly Data: CreateTaskDataType;// 模板数据
-    private Logs: Array<string>;// 日志
-    private Schedule: number;// 进度
-    private readonly TaskName: string;// 任务名称
-    private readonly Name: string;// 模板名称
-    private readonly TaskType: number;// 任务类型 0 or 1
+    private readonly WsPool: WsAppType;
+    private readonly Data: CreateTaskDataType;
+    private Logs: Array<string>;
+    private Schedule: number;
+    private readonly TaskName: string;
+    private readonly Name: string;
+    private readonly TaskType: number;
     private readonly YingDB: YingDB;
 
-    constructor(ws: WsAppType, data: CreateTaskDataType, type: number) {
+    public constructor(public readonly ws: WsAppType, public readonly data: CreateTaskDataType, public readonly type: number) {
         this.WsPool = ws;
         this.Data = data;
         this.TaskType = type;
@@ -88,12 +88,11 @@ class YingCore {
         this.Init();
     }
 
-    Init(): void {
-        this.CopyTempLate();
+    private async Init(): Promise<void> {
+        await this.CopyTempLate();
     }
 
-    // 拷贝模板
-    async CopyTempLate(): Promise<number> {
+    private async CopyTempLate(): Promise<number> {
         const tmp: string = ResolvePath(this.TaskType === 0 ? Path.COPY_TEMPLATE.TEMP : Path.COPY_TEMPLATE.ORIGIN + '/');
         const src: string = ResolvePath(`${this.TaskType === 0 ? Path.COPY_TEMPLATE.THIS : Path.COPY_TEMPLATE.ORIGIN + '/'}${this.TaskName}`);
 
@@ -125,8 +124,7 @@ class YingCore {
         return Promise.resolve(0);
     }
 
-    // 写出模板配置文件
-    WriteConfJSFile(conf: object, path: string): void {
+    private WriteConfJSFile(conf: object, path: string): void {
         const data: object = this.TaskType === 1 ? {} : {
             _video: {
                 ...this.Data.config.video
@@ -146,8 +144,7 @@ class YingCore {
         });
     }
 
-    // 写出日志文件
-    WriteLogFile(): void {
+    private WriteLogFile(): void {
         const logPath: string = ResolvePath(Path.LOG.PATH);
         const s: string = '===== BEGIN LMO-DATA-VISUALIZATION TASK LOG =====\n';
         const e: string = '\n\n===== END LMO-DATA-VISUALIZATION TASK LOG =====';
@@ -169,8 +166,7 @@ class YingCore {
         }));
     }
 
-    // 拷贝文件
-    CopyFile(from: string, to: string): void {
+    private CopyFile(from: string, to: string): void {
         Fs.readdirSync(from, {
             withFileTypes: true
         }).forEach((i: CopyFileItemType) => {
@@ -178,27 +174,25 @@ class YingCore {
         });
     }
 
-    // 创建模板
-    CreateTemplate(): void {
+    private CreateTemplate(): void {
         const sql: string = this.YingDB.GetInsertTemplateTableSql({
-            T_Name: this.TaskName,
-            T_Id: `lmo_data_visualization_template_${this.TaskName}`,
-            T_Title: this.Data.customize.title ?? '自定义模板',
-            T_Description: this.Data.customize.description ?? '这是一个自定义模板',
-            T_Path: '/static/DataVisualizationTemplate/' + this.TaskName + '/index.html',
-            T_Type: 'customize'
+            name: this.TaskName,
+            id: `lmo_data_visualization_template_${this.TaskName}`,
+            title: this.Data.customize.title ?? '自定义模板',
+            description: this.Data.customize.description ?? '这是一个自定义模板',
+            path: '/static/DataVisualizationTemplate/' + this.TaskName + '/index.html',
+            type: 'customize'
         });
 
-        this.YingDB.RunSql(sql, (e: any) => {
+        this.YingDB.SqlQuery(sql, true).catch(e => {
             if (e)
                 console.warn('[YingWarn]:Core-CreateTemplate');
-            else
-                this.SendMessage(CREATE_TEMPLATE, SUCCESS);
-        });
+        }).then(() => {
+            this.SendMessage(CREATE_TEMPLATE, SUCCESS);
+        })
     }
 
-    // 创建任务
-    CreateTask(): void {
+    private CreateTask(): void {
         this.Logs.push(`\nCREATE AT: ${new Date().getTime()}`);
         this.Logs.push(`SOURCE TEMPLATE: ${this.Data.template}`);
         this.Logs.push(`PLATFORM: ${OS.type()} / ${OS.platform()} / ${OS.arch()} / ${OS.release()}`);
@@ -212,7 +206,9 @@ class YingCore {
             path: '/',
             status: 'Processing',
             id: this.TaskName
-        });
+        }).catch(e => {
+            console.warn('[Ying warn] CreateTask', e);
+        })
 
         const templateConf = this.Data.config;
         const conf: object = {
@@ -295,8 +291,7 @@ class YingCore {
 
     }
 
-    // 处理音频
-    ProcessAudio(src: string, audioPath: string): Promise<number> {
+    private ProcessAudio(src: string, audioPath: string): Promise<number> {
         return new Promise((resolve: any) => {
             this.SendMessage(TASK_PRO, TASK_PRO_READY, {
                 taskName: this.Name
@@ -336,8 +331,7 @@ class YingCore {
         });
     }
 
-    // 删除临时文件
-    DelTempFiles(path: string): void {
+    private DelTempFiles(path: string): void {
         let files: Array<string> = [];
 
         if (Fs.existsSync(path)) {
@@ -354,8 +348,7 @@ class YingCore {
         }
     }
 
-    // 取得视讯清晰度
-    GetVideoClarity(type: string): object {
+    private GetVideoClarity(type: string): object {
         if (type === '1080P')
             return {
                 width: 1920,
@@ -373,8 +366,7 @@ class YingCore {
             };
     }
 
-    // 发送消息
-    SendMessage(type: string, cmd: string, data: object = {}): void {
+    private SendMessage(type: string, cmd: string, data: object = {}): void {
         if (type !== 'task_pending' && cmd !== 'task_pending')
             this.Logs.push(`[${new Date().getTime()}]${type} ${cmd} > ${STRINGIFY(data)}`);
         this.WsPool.clients.forEach((i: WsClientsType) => {

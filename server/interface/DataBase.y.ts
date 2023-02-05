@@ -15,19 +15,19 @@ export interface UpdateTemplateInfo {
     description: string;
 }
 
-export interface TempLateItem {
+export interface TempLateItem extends TempLateItemApp {
     name: string;
     title: string;
     description: string;
 }
 
 export interface TempLateItemApp {
-    T_Name: string
-    T_Id: string;
-    T_Title: string;
-    T_Description: string;
-    T_Path: string;
-    T_Type: string;
+    name: string
+    id: string;
+    title: string;
+    description: string;
+    path: string;
+    type: string;
 }
 
 export interface ResourcesItem {

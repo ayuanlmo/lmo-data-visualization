@@ -3,7 +3,7 @@
   height: 6vh;
   width: 96%;
   margin: 1rem auto auto;
-  border-radius: 1.33rem;
+  border-radius: .8vw;
   justify-content: space-between;
   background: #fbfbfd14;
 
@@ -14,8 +14,9 @@
   }
 
   .lmo_data_visualization_header_option {
-    top: 1.5vh;
-
+    .lmo_data_visualization_header_option_buttons{
+      top: calc(6vh / 2 - .8rem);
+    }
     button {
       margin-right: .5rem;
     }
