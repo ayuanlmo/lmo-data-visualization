@@ -5,6 +5,8 @@ import {CURRENT_TEMPLATE} from "@const/StorageKtys.t";
 
 require('./style.t.scss');
 
+const AppConfig = require('@/config/AppConfig');
+
 export default {
     name: 'lmo-template_view',
     render(h) {
@@ -86,6 +88,7 @@ export default {
                                             this.editTemplateVisible = true;
                                         },
                                         click: async (i) => {
+                                            document.title = `设计-${i.title}`;
                                             this.$store.commit('SET_CURRENT_TEMPLATE', i);
                                             this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
                                             this.$store.commit('RESET_TEMPLATE_CURRENT_AUDIO_CONFIG');
@@ -119,6 +122,7 @@ export default {
         }
     },
     activated() {
+        document.title = AppConfig.appName;
         this.getTemplate();
     }
 };
