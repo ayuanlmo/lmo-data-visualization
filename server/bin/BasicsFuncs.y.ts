@@ -16,6 +16,16 @@ const Fs: FS = require('fs-extra');
 const Path = require('path');
 const DB = new YingDB();
 
+interface ResponseTemplateItemTypes {
+    id: string;
+    url: string;
+    cover: string;
+    template: string;
+    title: string;
+    description: string;
+    type: string;
+}
+
 function FilterMediaFile(list: Array<string>, type: string = '__AUDIO') {
     const List: Array<MediaListType> = [];
 
@@ -39,26 +49,39 @@ async function DeleteTempFile(path: string): Promise<void> {
 }
 
 export async function GetTemplateList(res: Response): Promise<void> {
-    const list: Array<object> = [];
+    DB.GetTemplateList().then((resp: Array<any>) => {
+        const defaultTemplates: Array<ResponseTemplateItemTypes> = [];
+        const customTemplates: Array<ResponseTemplateItemTypes> = [];
 
-    DB.GetTemplateList().then((r: Array<any>) => {
-        r.map((i: TempLateItemApp) => {
-            list.push({
-                id: i.id,
-                url: i.path,
-                cover: `/static/DataVisualizationTemplate/${i.name}/cover.png`,
-                template: i.name,
-                title: i.title,
-                description: i.description,
-                type: i.type
-            });
+        resp.map((i: TempLateItemApp) => {
+            if (i.type === '0') {
+                defaultTemplates.push({
+                    id: i.id,
+                    url: i.path,
+                    cover: `/static/DataVisualizationTemplate/${i.name}/cover.png`,
+                    template: i.name,
+                    title: i.title,
+                    description: i.description,
+                    type: i.type
+                });
+            } else {
+                customTemplates.push({
+                    id: i.id,
+                    url: i.path,
+                    cover: `/static/DataVisualizationTemplate/${i.name}/cover.png`,
+                    template: i.name,
+                    title: i.title,
+                    description: i.description,
+                    type: i.type
+                });
+            }
         });
         res.json(CREATE_SUCCESS_MESSAGE({
-            list: list
+            list: [...defaultTemplates, ...customTemplates]
         }));
     }).catch(err => {
         res.json(CREATE_ERROR_MESSAGE({}, err));
-    })
+    });
 }
 
 export async function DeleteTemplate(req: Request, res: Response): Promise<any> {
