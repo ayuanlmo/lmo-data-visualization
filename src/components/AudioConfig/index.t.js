@@ -143,7 +143,7 @@ export default {
                             h('div', {
                                 class: 'lmo-audio_controller_slider'
                             }, [
-                                <el-slider v-model={this['audioVolume']} min={0} max={100} onChange={(e) => {
+                                <el-slider disabled={this.audioName === ''} v-model={this['audioVolume']} min={0} max={100} onChange={(e) => {
                                     this.sliderChange(e);
                                 }}/>
                             ])
