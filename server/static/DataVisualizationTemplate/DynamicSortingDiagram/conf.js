@@ -63,11 +63,6 @@ window.chartConfig = {
             value: '#fff',
             label: 'X轴字体颜色',
             type: 'lmo-color-picker'
-        },
-        dynamicTagsColor: {
-            value: '#FBFBFD',
-            label: '动态标签颜色',
-            type: 'lmo-color-picker'
         }
     },
     titleAnimateName: 'rubberBand',
