@@ -337,9 +337,6 @@ export default {
             return num >= parseInt(_[0]) && num <= parseInt(_[1]);
         },
         play() {
-
-            console.log();
-            console.log(set);
             if (this.audioName !== '') {
                 if (require('@/utils').isMobileDevice() && get(MOBILE_AUDIO) === null) {
                     createMessage({
