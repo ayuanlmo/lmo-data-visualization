@@ -10,7 +10,7 @@ import {DeleteTemplate, EditTempInfo, GetTemplateList} from "../BasicsFuncs.y";
 class TemplateControllerY {
     // 获取模板
     static GetTemplate = async (req: Request, res: Response): Promise<any> => {
-        await GetTemplateList(res);
+        await GetTemplateList(req, res);
         return req;
     }
     static DeleteTemplate = async (req: Request, res: Response): Promise<void> => {

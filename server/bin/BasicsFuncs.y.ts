@@ -48,8 +48,15 @@ async function DeleteTempFile(path: string): Promise<void> {
     await Fs.unlink(path);
 }
 
-export async function GetTemplateList(res: Response): Promise<void> {
-    DB.GetTemplateList().then((resp: Array<any>) => {
+export async function GetTemplateList(req: Request, res: Response): Promise<void> {
+    const query: any = req.query;
+    const params: { title: string, type: string } = query;
+    params.title = params.title ?? '';
+    params.type = params.type ?? '';
+    if (params.type === 'all')
+        params.type = '';
+
+    DB.GetTemplateList(params).then((resp: Array<any>) => {
         const defaultTemplates: Array<ResponseTemplateItemTypes> = [];
         const customTemplates: Array<ResponseTemplateItemTypes> = [];
 

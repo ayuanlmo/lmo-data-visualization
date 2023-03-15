@@ -75,8 +75,11 @@ class YingDB {
     }
 
     // 获取模板列表
-    public GetTemplateList(): Promise<Array<object | any>> {
-        return this.SqlQuery('SELECT * FROM y_template');
+    public GetTemplateList(data:{
+        title:string;
+        type:string;
+    }): Promise<Array<object | any>> {
+        return this.SqlQuery(`SELECT * FROM y_template WHERE title LIKE '%${data.title}%' AND  \`type\` LIKE '%${data.type}%'`);
     }
 
     // 删除模板
