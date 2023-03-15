@@ -75,30 +75,38 @@ export default {
                     class: 'lmo-visualization_template animated fadeInUp'
                 }, [
                     this.TemplateData.length === 0 ? <el-empty description="这里暂时啥也没有"></el-empty> :
-                        this.TemplateData.map((i) => {
-                            return (
-                                h(TemplateItem, {
-                                    props: {
-                                        data: i
-                                    },
-                                    on: {
-                                        delItem: this.getTemplate,
-                                        edit: (data) => {
-                                            this.templateInfo = data;
-                                            this.editTemplateVisible = true;
-                                        },
-                                        click: async (i) => {
-                                            document.title = `设计-${i.title}`;
-                                            this.$store.commit('SET_CURRENT_TEMPLATE', i);
-                                            this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
-                                            this.$store.commit('RESET_TEMPLATE_CURRENT_AUDIO_CONFIG');
-                                            await set(CURRENT_TEMPLATE, JSON.stringify(i));
-                                            await require('@/utils').routerPush(this.$router, '/edit', 'push');
-                                        }
-                                    }
+                        <el-row gutter={24}>
+                            {
+                                this.TemplateData.map((i) => {
+                                    return (
+                                        <el-col span={4}>
+                                            {
+                                                h(TemplateItem, {
+                                                    props: {
+                                                        data: i
+                                                    },
+                                                    on: {
+                                                        delItem: this.getTemplate,
+                                                        edit: (data) => {
+                                                            this.templateInfo = data;
+                                                            this.editTemplateVisible = true;
+                                                        },
+                                                        click: async (i) => {
+                                                            document.title = `设计-${i.title}`;
+                                                            this.$store.commit('SET_CURRENT_TEMPLATE', i);
+                                                            this.$store.commit('RESET_CURRENT_TEMPLATE_CONFIG');
+                                                            this.$store.commit('RESET_TEMPLATE_CURRENT_AUDIO_CONFIG');
+                                                            await set(CURRENT_TEMPLATE, JSON.stringify(i));
+                                                            await require('@/utils').routerPush(this.$router, '/edit', 'push');
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        </el-col>
+                                    );
                                 })
-                            );
-                        })
+                            }
+                        </el-row>
                 ])
             ])
         );
