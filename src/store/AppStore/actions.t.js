@@ -5,7 +5,7 @@ import {EDIT_TEMPLATE} from "@const/ActionsTypes.t";
 
 export default {
     [TYPE.GET_TEMPLATE_LIST]({commit}, params) {
-        return _POST_Form_Data(URL.GET_TEMPLATE_DATA, params);
+        return _POST_Form_Data(`${URL.GET_TEMPLATE_DATA}${require('@/utils/index').createQueryParams(params)}`);
     },
     [TYPE.GET_MEDIA]({commit}) {
         return _POST(URL.GET_MEDIA);
