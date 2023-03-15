@@ -4,8 +4,8 @@ import * as URL from '@const/InterfaceUrls';
 import {EDIT_TEMPLATE} from "@const/ActionsTypes.t";
 
 export default {
-    [TYPE.GET_TEMPLATE_LIST]({commit}) {
-        return _POST(URL.GET_TEMPLATE_DATA);
+    [TYPE.GET_TEMPLATE_LIST]({commit}, params) {
+        return _POST_Form_Data(URL.GET_TEMPLATE_DATA, params);
     },
     [TYPE.GET_MEDIA]({commit}) {
         return _POST(URL.GET_MEDIA);

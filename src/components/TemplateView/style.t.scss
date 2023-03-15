@@ -2,10 +2,24 @@
   width: 96%;
   overflow-y: auto;
   margin: auto;
-  padding:  0 1rem;
+  padding: 0 1rem;
   height: calc(100vh - (6vh + 1vh));
 
   .lmo-visualization_template {
     margin-top: 1rem;
   }
+
+  .lmo-data_visualization_template_search-box {
+    justify-content: end;
+    margin-top: 1rem;
+
+    .el-input {
+      margin-right: 1rem;
+    }
+
+    .lmo-data_visualization_template_search {
+      width: 20%;
+    }
+  }
+
 }
