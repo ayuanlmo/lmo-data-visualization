@@ -55,11 +55,13 @@ function formatDate(time) {
  * @return {string}
  * **/
 function getWsUrl(url = location.origin ?? global.location.origin) {
-    const urls = location.origin.split(':');
-    const origin = location.host;
+    if (!origin)
+        throw new Error('Invalid URL');
+    const [protocol, host] = origin.split(':');
 
-    if (urls[0].indexOf('http') !== -1)
-        return urls[0] === 'https' ? `wss:${origin}${url}` : `ws:${origin}${url}`;
+    if (!host)
+        throw new Error('Invalid URL');
+    return protocol === 'https' ? `wss:${host}` : `ws:${host}`;
 }
 
 /**
@@ -69,7 +71,7 @@ function getWsUrl(url = location.origin ?? global.location.origin) {
  * @return {boolean}
  * **/
 function isObject(data = {}) {
-    return typeof data === 'object' && Object.prototype.toString.call(data).toLowerCase() === '[object object]' && data.length;
+    return typeof data === 'object' && data !== null && !Array.isArray(data);
 }
 
 /**
@@ -89,14 +91,17 @@ function stringify(data = null) {
  * @return {string}
  * **/
 function toString(data) {
-    if (typeof data === 'boolean')
-        return `${data}`;
-    if (typeof data === 'string')
-        return data;
-    if (typeof data === 'number')
-        return `${data}`;
-    if (typeof data === 'object' && isObject(data))
-        return stringify(data);
+    const typeHandlers = {
+        boolean: (data) => `${data}`,
+        string: (data) => data,
+        number: (data) => `${data}`,
+        object: (data) => isObject(data) ? stringify(data) : ''
+    };
+    const type = typeof data;
+
+    if (typeHandlers.hasOwnProperty(type)) {
+        return typeHandlers[type](data);
+    }
     return '';
 }
 
@@ -374,9 +379,5 @@ function createQueryParams(data = {}) {
  * @return {boolean}
  * **/
 function isMobileDevice() {
-    const _ = navigator.userAgent.match(/Mobile/i);
-
-    if (_ === null)
-        return false;
-    return navigator.userAgent.match(/Mobile/i).length > 0;
+    !!navigator.userAgent.match(/Mobile/i)?.length;
 }
