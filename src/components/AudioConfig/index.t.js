@@ -119,7 +119,8 @@ export default {
                                             }, [
                                                 h('lmo-switch', {
                                                     props: {
-                                                        value: false
+                                                        value: false,
+                                                        disabled: this.audioName === ''
                                                     },
                                                     on: {
                                                         change: (e) => {
@@ -143,7 +144,8 @@ export default {
                             h('div', {
                                 class: 'lmo-audio_controller_slider'
                             }, [
-                                <el-slider v-model={this['audioVolume']} min={0} max={100} onChange={(e) => {
+                                <el-slider disabled={this.audioName === ''} v-model={this['audioVolume']} min={0}
+                                           max={100} onChange={(e) => {
                                     this.sliderChange(e);
                                 }}/>
                             ])
@@ -337,9 +339,6 @@ export default {
             return num >= parseInt(_[0]) && num <= parseInt(_[1]);
         },
         play() {
-
-            console.log();
-            console.log(set);
             if (this.audioName !== '') {
                 if (require('@/utils').isMobileDevice() && get(MOBILE_AUDIO) === null) {
                     createMessage({

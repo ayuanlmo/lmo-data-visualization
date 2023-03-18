@@ -54,27 +54,27 @@ class YingCore {
         this.Name = this.Data.name === '' ? this.TaskName : this.Data.name;
         this.YingDB = new YingDB();
 
-        // 是否允许发起合成
-        if (!DefaultConf.__SYNTHESIS) {
-            this.SendMessage(SHOW_MESSAGE, SHOW_MESSAGE, {
-                message: Message.__SYNTHESIS_CLOSE
-            });
-            return;
-        }
-
         // 是否合成任务
         if (this.TaskType === 0) {
-            this.SendMessage(TASK_PENDING, TASK_PENDING, {
-                taskName: this.Name
-            });
-        }
-
-        // ffmpeg是否存在
-        if (!Conf.__FFMPEG) {
-            this.SendMessage(SHOW_MESSAGE, SHOW_MESSAGE, {
-                message: Message.__NO_FFMPEG
-            });
-            return;
+            // 是否允许发起合成
+            if (!DefaultConf.__SYNTHESIS) {
+                this.SendMessage(SHOW_MESSAGE, SHOW_MESSAGE, {
+                    message: Message.__SYNTHESIS_CLOSE
+                });
+                return;
+            }else{
+                // ffmpeg是否存在
+                if (!Conf.__FFMPEG) {
+                    this.SendMessage(SHOW_MESSAGE, SHOW_MESSAGE, {
+                        message: Message.__NO_FFMPEG
+                    });
+                    return;
+                }else{
+                    this.SendMessage(TASK_PENDING, TASK_PENDING, {
+                        taskName: this.Name
+                    });
+                }
+            }
         }
 
         // 是否演示服务器

@@ -36,17 +36,20 @@ class SocketController {
                     timestamp: new Date().getTime()
                 }
             })));
-        // 检查ffmpeg是否支持 h.264lib
-        await CHECK_264_LIB().then((r: boolean) => {
-            if (!r)
-                this.Ws.send(STRING_TO_BINARY(STRINGIFY({
-                    type: 'showMessage',
-                    data: {
-                        message: Message.__NO_264LIB,
-                        timestamp: new Date().getTime()
-                    }
-                })));
-        });
+        else {
+            // 检查ffmpeg是否支持 h.264lib
+            await CHECK_264_LIB().then((r: boolean) => {
+                if (!r)
+                    this.Ws.send(STRING_TO_BINARY(STRINGIFY({
+                        type: 'showMessage',
+                        data: {
+                            message: Message.__NO_264LIB,
+                            timestamp: new Date().getTime()
+                        }
+                    })));
+            });
+        }
+
         // 发送基本信息
         await this.Ws.send(STRING_TO_BINARY(STRINGIFY({
             type: 'connect',
