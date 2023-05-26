@@ -2,6 +2,8 @@ require('./style.t.scss');
 
 import {createMessage, createMessageBox} from "@lib/BasicInteraction";
 
+const AppConfig = require('@/config/AppConfig');
+
 export default {
     name: 'lmo-template_item',
     render(h) {
@@ -83,7 +85,7 @@ export default {
                             h('img', {
                                 attrs: {
                                     alt: this.data.cover,
-                                    src: `/server${this.data.cover}`
+                                    src: `${AppConfig.devProxy.http}${this.data.cover}`
                                 }
                             })
                         ]),

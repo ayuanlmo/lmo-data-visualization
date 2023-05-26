@@ -14,6 +14,8 @@ import './lib/Element/index.t';
 import '@/components/Element/index.t';
 import '@/lib/Global/index.t';
 
+const AppConfig = require('@/config/AppConfig');
+
 void ((_) => {
     Vue.config.productionTip = false;
     new Vue({
@@ -23,7 +25,7 @@ void ((_) => {
             );
         },
         created() {
-            Vue['prototype'].ws = new Socket(require('@/config/AppConfig').devProxy.ws, (msg) => {
+            Vue['prototype'].ws = new Socket(AppConfig.dev ? AppConfig.devProxy.ws : AppConfig.devProxy.wsPath, (msg) => {
                 store.commit('SET_SERVER_PUSH_MESSAGE', {
                     currentTime: new Date().getTime(),
                     msg: JSON.stringify(msg)

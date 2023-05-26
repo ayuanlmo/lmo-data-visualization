@@ -15,8 +15,8 @@ module.exports = {
     devProxy: {
         defaultAddress: 'http://localhost:3000/',//默认代理地址
         ws: '/connectSocket',//应用socket地址
-        wsPath: 'ws/connect',//服务器socket地址
-        http: '/server'//应用服务器地址
+        wsPath: '/ws/connect',//服务器socket地址
+        http: process.env.NODE_ENV === 'development' ? '/server' :''//应用服务器地址
     },
     router: {
         keep: true,//路由缓存(非keep-alive)
