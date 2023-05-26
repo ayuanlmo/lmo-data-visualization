@@ -19,7 +19,7 @@ _Router
     })
     .get((req: Request, res: Response) => {
         // 检查包含的目录
-        if (req.url.includes('/css') || req.url.includes('/static') || req.url.includes('/js') || req.url.includes('/style'))
+        if (req.url.includes('/css') || req.url.includes('/static') || req.url.includes('/js') || req.url.includes('/style') || req.url.includes('/favicon.ico'))
             res.sendFile(Path.resolve('./dist/web' + req.url));// 写出文件
         else
             res.sendFile(Path.resolve('./dist/web/index.html'));// 写出索引页
