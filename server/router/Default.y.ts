@@ -1,5 +1,6 @@
 import {Request, Response, Router} from "express";
 
+const Path = require('path');
 const _Router: Router = Router();
 
 const CreateNotFoundMessage = (): object => {
@@ -11,13 +12,17 @@ const CreateNotFoundMessage = (): object => {
 };
 
 _Router
-    .route('')
+    .route('/*')
     .post((req: Request, res: Response) => {
         res.json(CreateNotFoundMessage());
         return req;
     })
     .get((req: Request, res: Response) => {
-        res.json(CreateNotFoundMessage());
+        // 检查包含的目录
+        if (req.url.includes('/css') || req.url.includes('/static') || req.url.includes('/js') || req.url.includes('/style'))
+            res.sendFile(Path.resolve('./dist/web' + req.url));// 写出文件
+        else
+            res.sendFile(Path.resolve('./dist/web/index.html'));// 写出索引页
         return req;
     });
 

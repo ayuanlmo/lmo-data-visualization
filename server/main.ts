@@ -36,7 +36,8 @@ import {Request, Response} from "express";
         return req;
     });
     App.use(Multer.single('media'));
-    App.use(Conf.__STATIC_PATH, Express.static(`${__dirname}${Conf.__STATIC_PATH}`))
+    App.use(Conf.__STATIC_PATH, Express.static(`${__dirname}${Conf.__STATIC_PATH}`));
+    App.use(Conf.__STATIC_PATH, Express.static(`/dist/web`));
     App.ws(CONNECT, async (ws: WsObj) => {
         OnLineUsers++;
         new SocketController(ws, OnLineUsers, Pool);
