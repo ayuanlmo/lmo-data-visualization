@@ -110,6 +110,7 @@ export default {
             type: Object
         }
     },
+
     data() {
         return {
             showDescription: false,
@@ -142,6 +143,14 @@ export default {
                 });
             }
             return '';
+        }
+    },
+    watch: {
+        'data': {
+            deep: true,
+            handler() {
+                this.customizeTemplate = this.data.type === 'customize';
+            }
         }
     }
 };
