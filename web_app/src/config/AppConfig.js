@@ -5,7 +5,7 @@ module.exports = {
     dev: process.env.NODE_ENV === 'development',//开发模式
     publicPath: '/',//应用公共路径
     build: {
-        outputDir: 'server/dist/web',//打包资源输出目录
+        outputDir: '../server/dist/web',//打包资源输出目录
         assetsDir: 'static',//静态文件输出目录(基于outputDir)
         indexPath: 'index.html',//索引
         gzip: true,//开启gzip(如果您的server不支持gzip，也唔使担心)
