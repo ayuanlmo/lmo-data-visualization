@@ -5,6 +5,8 @@ import {mapState} from "vuex";
 import {PostMessage} from "@lib/PostMessage/index.t";
 import {PREVIEW} from '@/const/MessageType.t';
 
+const AppConfig = require('@/config/AppConfig');
+
 export default {
     name: 'lmo-preview',
     render(h) {
@@ -105,7 +107,7 @@ export default {
     },
     computed: {
         ...mapState({
-            url: state => `/server${state.appStore.currentTemplate.url}`,
+            url: state => `${AppConfig.devProxy.http}${state.appStore.currentTemplate.url}`,
             currentConfig: state => state.appStore.currentConfig,
             currentTemplate: state => state.appStore.currentTemplate
         })

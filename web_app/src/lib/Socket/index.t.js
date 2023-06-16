@@ -65,7 +65,7 @@ export default class Socket {
                     type: 'success'
                 });
             }
-            if (_msg.type === 'showMessage')
+            if (_msg.type === 'show_message')
                 return createNotification({
                     title: '系统消息',
                     message: `${_msg.data.message}`,

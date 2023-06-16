@@ -54,14 +54,12 @@ function formatDate(time) {
  * @description 将 http/https 格式url转换为socket专用的 ws/wss 地址
  * @return {string}
  * **/
-function getWsUrl(url = location.origin ?? global.location.origin) {
-    if (!origin)
+function getWsUrl(url) {
+    console.log(url);
+    if (!url || !origin)
         throw new Error('Invalid URL');
-    const [protocol, host] = origin.split(':');
 
-    if (!host)
-        throw new Error('Invalid URL');
-    return protocol === 'https' ? `wss:${host}` : `ws:${host}`;
+    return `${origin.includes('https') ? 'wss' : 'ws'}://${location.host}${url}`;
 }
 
 /**

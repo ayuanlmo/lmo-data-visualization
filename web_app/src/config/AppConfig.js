@@ -5,7 +5,7 @@ module.exports = {
     dev: process.env.NODE_ENV === 'development',//开发模式
     publicPath: '/',//应用公共路径
     build: {
-        outputDir: 'dist',//打包资源输出目录
+        outputDir: '../server/dist/web',//打包资源输出目录
         assetsDir: 'static',//静态文件输出目录(基于outputDir)
         indexPath: 'index.html',//索引
         gzip: true,//开启gzip(如果您的server不支持gzip，也唔使担心)
@@ -15,8 +15,8 @@ module.exports = {
     devProxy: {
         defaultAddress: 'http://localhost:3000/',//默认代理地址
         ws: '/connectSocket',//应用socket地址
-        wsPath: 'ws/connect',//服务器socket地址
-        http: '/server'//应用服务器地址
+        wsPath: '/ws/connect',//服务器socket地址
+        http: process.env.NODE_ENV === 'development' ? '/server' :''//应用服务器地址
     },
     router: {
         keep: true,//路由缓存(非keep-alive)

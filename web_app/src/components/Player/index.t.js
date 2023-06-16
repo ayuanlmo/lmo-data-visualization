@@ -2,6 +2,8 @@ require('./style.t.scss');
 
 import {createMessageBox, closeLoading} from "@lib/BasicInteraction";
 
+const AppConfig = require('@/config/AppConfig');
+
 export default {
     render(h) {
         return (
@@ -15,7 +17,7 @@ export default {
                     ref: 'iframe',
                     style: this.iframeStyle,
                     attrs: {
-                        src: `/server${this.url}`,
+                        src: `${AppConfig.devProxy.http}${this.url}`,
                         id: 'lmo-player_iframe_box'
                     },
                     on: {

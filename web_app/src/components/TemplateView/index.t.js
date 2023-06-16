@@ -23,7 +23,7 @@ export default {
                         <lmo-input value={this.queryParams.title} onChange={(e) => {
                             this.queryParams.title = e;
                         }} placeholder={'输入以搜索模板'} suffixIcon={'el-icon-search'}/>,
-                        <lmo-select onChange={(e) => {
+                        <lmo-select value={this.queryParams.type} onChange={(e) => {
                             this.queryParams.type = e;
                         }} option={this.templateTypeOptions} suffixIcon={'el-icon-search'}/>
                     ])
@@ -146,7 +146,7 @@ export default {
             }],
             queryParams: {
                 title: '',
-                type: ''
+                type: 'all'
             }
         };
     },
