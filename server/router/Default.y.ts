@@ -18,11 +18,15 @@ _Router
         return req;
     })
     .get((req: Request, res: Response) => {
-        // 检查包含的目录
-        if (req.url.includes('/css') || req.url.includes('/static') || req.url.includes('/js') || req.url.includes('/style') || req.url.includes('/favicon.ico'))
-            res.sendFile(Path.resolve('./dist/web' + req.url));// 写出文件
-        else
-            res.sendFile(Path.resolve('./dist/web/index.html'));// 写出索引页
+        const allowedPaths: Array<string> = ['/css', '/static', '/js', '/style', '/favicon.ico'];
+
+        if (allowedPaths.some((path: string) => req.url.includes(path))) {
+            res.sendFile(Path.resolve('./web' + req.url), {}, (e: any) => {
+                if (e)
+                    res.status(e.status).end();
+            });
+        } else
+            res.sendFile(Path.resolve('./web/index.html'));
         return req;
     });
 
