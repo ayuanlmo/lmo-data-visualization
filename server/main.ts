@@ -1,3 +1,4 @@
+require('process').title = 'lmo-Data-Visualization';
 import Router from "./router/index.y";
 import Conf from "./conf/Conf.y";
 import SocketController from "./bin/Controllers/SocketController.y";
