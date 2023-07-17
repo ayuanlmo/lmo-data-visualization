@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "compile": "tsc",
+    "c": "tsc && gulp cjs",
+    "compile": "tsc && gulp cjs",
     "start-server": "ts-node main.ts"
   },
   "dependencies": {
@@ -14,6 +15,8 @@
     "express-ws": "^5.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.1.0",
+    "gulp": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
     "iconv-lite": "^0.6.3",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
