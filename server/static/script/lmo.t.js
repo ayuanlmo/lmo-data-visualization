@@ -286,35 +286,32 @@ function getDiffColor(start, end, step, gamma) {
 function rgbToHex(color = '') {
     const _ = color;
     const _r = /^#([\da-fA-f]{3}|[\da-fA-f]{6})$/;
-
+    
     if (_.indexOf('rgb') === -1)
         return _;
     if (/^(rgb|RGB)/.test(_)) {
         const _color = _.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
-
         let _hex = "#";
 
-        for (let i = 0; i < _color.length; i += 1) {
-            let _h = Number(_color[i]).toString(16);
+        _color.forEach(c => {
+            let _h = Number(c).toString(16);
 
-            if (_h.length < 2)
-                _h = '0' + _h;
+            _h = _h.length < 2 ? '0' + _h : _h;
             _hex += _h;
-        }
-        if (_hex.length !== 7)
-            _hex = _;
-        return _hex;
-    } else if (_r.test(_)) {
+        });
+        return _hex.length === 7 ? _hex : _;
+    }
+    if (_r.test(_)) {
         const _n = _.replace(/#/, "").split("");
 
         if (_n.length === 6)
             return _;
-        else if (_n.length === 3) {
+        if (_n.length === 3) {
             let _nHex = "#";
 
-            for (let i = 0; i < _n.length; i += 1) {
-                _nHex += _n[i] + _n[i];
-            }
+            _n.forEach(n => {
+                _nHex += n + n;
+            });
             return _nHex;
         }
     }
