@@ -16,6 +16,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/node": "^20.5.7",
     "@vitejs/plugin-vue": "^4.2.3",
     "@vitejs/plugin-vue-jsx": "^3.0.2",
     "sass": "^1.66.1",
