@@ -1,0 +1,102 @@
+/**
+  这里提供了一些基本的样式
+  @author ayuanlmo
+**/
+$theme-color: #229EED;
+$warning-color: #e6a23c;
+$danger-color: #f56c6c;
+$color-white: #FBFBFD;
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url("./fonts/JetbrainsMono.ttf");
+}
+
+.lmo_theme_color {
+  color: $theme-color;
+}
+
+.lmo_warning_color {
+  color: $warning-color;
+}
+
+.lmo_danger_color {
+  color: $danger-color;
+}
+
+.lmo_danger_color_hover {
+  &:hover {
+    color: $danger-color;
+  }
+}
+
+.lmo_warning_color_hover {
+  &:hover {
+    color: $warning-color;
+  }
+}
+
+.lmo_hover_theme_color {
+  &:hover {
+    color: $theme-color;
+  }
+}
+
+//v-show replace
+.lmo_hide {
+  display: none !important;
+}
+
+.lmo_theme_color_border {
+  border-color: $theme-color;
+}
+
+.lmo_theme_color_background {
+  background-color: $theme-color;
+}
+
+.lmo_cursor_pointer {
+  cursor: pointer;
+}
+
+.lmo_cursor_pointer_hover {
+  cursor: pointer;
+}
+
+.lmo_none_user_select {
+  user-select: none;
+}
+
+.lmo_flex_box {
+  display: flex;
+}
+
+.lmo_block_box {
+  display: block;
+}
+
+.lmo_position_relative {
+  position: relative;
+}
+
+.lmo_position_absolute {
+  position: absolute;
+}
+
+.lmo_color_white {
+  color: $color-white;
+}
+
+.lmo_color_white_background {
+  background-color: $color-white;
+}
+
+//Router view animation
+.lmo_t-enter-active, .lmo_t-leave-active {
+  transition: all .2s;
+}
+
+.lmo_t-enter, .lmo_t-leave-to {
+  transform: translateY(10%);
+  opacity: 0;
+}
