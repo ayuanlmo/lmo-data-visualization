@@ -1,0 +1,86 @@
+$theme-color: #229EED;
+$warning-color: #e6a23c;
+$danger-color: #f56c6c;
+$color-white: #FBFBFD;
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url("./fonts/JetbrainsMono.ttf");
+}
+
+.app_theme_color {
+  color: $theme-color;
+}
+
+.app_warning_color {
+  color: $warning-color;
+}
+
+.app_danger_color {
+  color: $danger-color;
+}
+
+.app_danger_color_hover {
+  &:hover {
+    color: $danger-color;
+  }
+}
+
+.app_warning_color_hover {
+  &:hover {
+    color: $warning-color;
+  }
+}
+
+.app_hover_theme_color {
+  &:hover {
+    color: $theme-color;
+  }
+}
+
+.app_hide {
+  display: none !important;
+}
+
+.app_theme_color_border {
+  border-color: $theme-color;
+}
+
+.app_theme_color_background {
+  background-color: $theme-color;
+}
+
+.app_cursor_pointer {
+  cursor: pointer;
+}
+
+.app_cursor_pointer_hover {
+  cursor: pointer;
+}
+
+.app_none_user_select {
+  user-select: none;
+}
+
+.app_flex_box {
+  display: flex;
+}
+
+.app_block_box {
+  display: block;
+}
+
+.app_position_relative {
+  position: relative;
+}
+
+.app_position_absolute {
+  position: absolute;
+}
+
+.app_color_white {
+  color: $color-white;
+}
+
+.app_color_white_background {
+  background-color: $color-white;
+}

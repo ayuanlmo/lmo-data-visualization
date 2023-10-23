@@ -1,31 +1,48 @@
 {
-  "name": "lmo-data-visualization",
+  "name": "web_app",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
-  },
   "dependencies": {
-    "axios": "^1.5.0",
-    "element-plus": "^2.3.12",
+    "@reduxjs/toolkit": "^1.9.7",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.59",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
     "nprogress": "^0.2.0",
-    "vue": "^3.3.4",
-    "vue-router": "4",
-    "vuex": "^4.0.2"
-  },
-  "devDependencies": {
-    "@types/node": "^20.5.7",
-    "@vitejs/plugin-vue": "^4.2.3",
-    "@vitejs/plugin-vue-jsx": "^3.0.2",
-    "sass": "^1.66.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.17.0",
+    "react-scripts": "5.0.1",
     "sass-loader": "^13.3.2",
-    "typescript": "^5.0.2",
-    "unplugin-auto-import": "^0.16.6",
-    "unplugin-vue-components": "^0.25.2",
-    "vite": "^4.4.5",
-    "vue-tsc": "^1.8.5"
+    "typescript": "^4.9.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
