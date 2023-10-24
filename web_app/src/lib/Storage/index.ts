@@ -21,3 +21,5 @@ namespace MyStorage {
         return storage.clear();
     }
 }
+
+export default MyStorage;
