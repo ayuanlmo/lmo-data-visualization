@@ -1,10 +1,12 @@
+import TempLate from "../../script/template.js";
+import chartConfig from './conf.js';
+
 void function (echarts, d3) {
     let option = {};
 
     let timer = null;
-    const ChartConfig = window.chartConfig || window['chartConfig'];
+    const ChartConfig = chartConfig;
 
-    // eslint-disable-next-line no-undef
     new TempLate(ChartConfig, render);
 
     function render(text, update = false) {

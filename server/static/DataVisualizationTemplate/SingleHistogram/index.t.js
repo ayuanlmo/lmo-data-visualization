@@ -1,6 +1,8 @@
+import TempLate from "../../script/template.js";
+import chartConfig from './conf.js';
+
 void function () {
-    // eslint-disable-next-line no-undef
-    new TempLate(window['chartConfig'] || window.chartConfig, render, 'd3');
+    new TempLate(chartConfig, render, 'd3');
 
     function render(text, update = false) {
         const canvas = document.getElementById('canvas');
