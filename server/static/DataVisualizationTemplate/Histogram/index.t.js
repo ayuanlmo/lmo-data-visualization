@@ -2,8 +2,11 @@
  * @author You-YH
  * @description 多柱状图模板
  */
+import chartConfig from './conf.js';
+import TempLate from "../../script/template.js";
+
 void function (doc, global, echarts, d3) {
-    const ChartConfig = window['chartConfig'] || window.chartConfig;
+    const ChartConfig = chartConfig;
 
     let timer = null;
 

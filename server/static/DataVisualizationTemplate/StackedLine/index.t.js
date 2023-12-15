@@ -1,11 +1,9 @@
-/**
- * @author You-YH
- * @description 多折线图模板
- */
-void function (doc, global, echarts, d3) {
-    const ChartConfig = window['chartConfig'] || window.chartConfig;
+import chartConfig from './conf.js'
+import TempLate from "../../script/template.js";
 
-    // eslint-disable-next-line no-undef
+void function (doc, global, echarts, d3) {
+    const ChartConfig = chartConfig
+
     new TempLate(ChartConfig, render);
 
     function render(text, update = false) {

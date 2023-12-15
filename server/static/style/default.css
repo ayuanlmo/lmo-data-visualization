@@ -9,6 +9,7 @@
     height: 1080px;
     background: #fff;
     overflow: hidden;
+    position: absolute;
 }
 
 #text {
@@ -54,5 +55,13 @@
     height: 100%;
     position: absolute;
     z-index: 15;
+    top: 0;
+}
+
+#logo {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.26);
+    position: absolute;
     top: 0;
 }

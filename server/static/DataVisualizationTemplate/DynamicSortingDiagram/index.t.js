@@ -1,7 +1,9 @@
-void function (echarts, d3) {
-    const ChartConfig = window.chartConfig || window['chartConfig'];
+import TempLate from "../../script/template.js";
+import chartConfig from './conf.js';
 
-    // eslint-disable-next-line no-undef
+void function (echarts, d3) {
+    const ChartConfig = chartConfig;
+
     new TempLate(ChartConfig, render);
 
     function render(text) {
