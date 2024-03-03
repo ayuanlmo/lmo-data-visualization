@@ -1,27 +1,26 @@
 {
-  "compilerOptions" : {
-    "incremental" : true,
-    "tsBuildInfoFile" : "./dist/lmo",
-    "declaration" : true,
-    "module" : "commonjs",
-    "target" : "es6",
-    "moduleResolution" : "node",
-    "sourceMap" : true,
-    "declarationMap" : true,
-    "outDir" : "dist",
-    "removeComments" : true,
-    "baseUrl" : ".",
-    "listFiles" : true,
-    "noUnusedLocals" : true,
-    "diagnostics" : true,
-    "listEmittedFiles" : true,
-    "noUnusedParameters" : true,
-    "noFallthroughCasesInSwitch" : true,
-    "paths" : {
-      "*" : [
-        "node_modules/*"
-      ]
-    },
-    "allowSyntheticDefaultImports": true
-  }
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/lmo.t",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "outDir": "dist",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": false
+  },
+  "exclude": ["gulpfile.js"]
 }

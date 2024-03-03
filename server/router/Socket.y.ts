@@ -1,1 +1,0 @@
-export const CONNECT: string = '/ws/connect';

@@ -1,0 +1,21 @@
+{
+  "watch": [
+    "bin",
+    "conf",
+    "lib",
+    "utils",
+    "router",
+    "const",
+    "main.ts"
+  ],
+  "ext": "ts,json",
+  "ignore": [
+    "bin/dataBase/*.db",
+    "node_modules",
+    "dist",
+    "test",
+    "coverage",
+    "docs"
+  ],
+  "exec": "ts-node ./main.ts"
+}
