@@ -1,5 +1,5 @@
 import chartConfig from './conf.js'
-import TempLate from "../../script/template.js";
+import TempLate from "../../scripts/template.js";
 
 void function (doc, global, echarts, d3) {
     const ChartConfig = chartConfig

@@ -1,4 +1,4 @@
-import defaultConfigs from "../../script/defaultConfigs.js";
+import defaultConfigs from "../../scripts/defaultConfigs.js";
 
 export default {
     data: null,

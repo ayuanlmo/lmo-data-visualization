@@ -1,4 +1,4 @@
-import TempLate from "../../script/template.js";
+import TempLate from "../../scripts/template.js";
 import chartConfig from './conf.js';
 
 void function (echarts, d3) {

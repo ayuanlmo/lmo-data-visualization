@@ -1,0 +1,58 @@
+* {
+    padding: 0;
+    margin: 0;
+    outline: none;
+}
+
+#app {
+    width: 1920px;
+    height: 1080px;
+    background: #fff;
+    overflow: hidden;
+}
+
+#text {
+    width: 100%;
+    height: 135px;
+}
+
+#canvas {
+    width: 100%;
+    height: 945px;
+}
+
+.title_main {
+    font-size: 3rem;
+    position: absolute;
+    left: 10rem;
+    top: 1.2rem;
+}
+
+.title_sub {
+    font-size: 2rem;
+    position: absolute;
+    left: 23rem;
+    top: 2.2rem;
+}
+
+.from_source {
+    font-size: 2rem;
+    position: absolute;
+    right: 16rem;
+    top: 2.2rem;
+}
+
+.data_source {
+    font-size: 2rem;
+    position: absolute;
+    right: 10rem;
+    top: 2.2rem;
+}
+
+#app_mask {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 15;
+    top: 0;
+}
