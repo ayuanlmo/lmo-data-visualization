@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="yarn" type="js.build_tools.npm">
-    <package-json value="$PROJECT_DIR$/web_app/package.json" />
+  <configuration default="false" name="Run-ServerApp" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/server/package.json" />
     <command value="run" />
     <scripts>
-      <script value="serve" />
+      <script value="start" />
     </scripts>
     <node-interpreter value="project" />
     <envs />
