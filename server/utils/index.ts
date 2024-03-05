@@ -1,6 +1,6 @@
 import errorMessage from "../const/ErrorMessage";
 
-export interface ResponseMessage {
+export interface IResponseMessage {
     code: number;
     message: string;
     errorCode?: string;
@@ -15,7 +15,7 @@ export type ErrorMessage = typeof errorMessage;
 export type ErrorCode = 500 | 404 | 401;
 
 namespace Utils {
-    export const createSuccessMessage = (data = {}, msg: string = 'success', code = 200): ResponseMessage => {
+    export const createSuccessMessage = (data = {}, msg: string = 'success', code = 200): IResponseMessage => {
         return {
             code: code,
             message: msg,
@@ -26,7 +26,7 @@ namespace Utils {
         }
     }
 
-    export const createErrorMessage = <T extends keyof ErrorMessage>(errCode: T, code: ErrorCode = 500, data: object | Array<any> = {}): ResponseMessage => {
+    export const createErrorMessage = <T extends keyof ErrorMessage>(errCode: T, code: ErrorCode = 500, data: object | Array<any> = {}): IResponseMessage => {
         return {
             code: code,
             message: errorMessage[errCode].message,

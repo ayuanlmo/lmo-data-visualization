@@ -7,26 +7,26 @@ import Utils from "../utils";
 import router from "../router";
 import Cli from "../lib/Cli";
 import CreateErrorMessage = Utils.createErrorMessage;
-import {WebSocketServer, WsObj} from "./WebSocketServer";
+import {WebSocketServer, IWsApp} from "./WebSocketServer";
 
-interface ExpressApp extends Express.Application {
-    ws?: (url: string, cb: (ws: WsObj) => void) => void;
+interface IExpressApp extends Express.Application {
+    ws?: (url: string, cb: (ws: IWsApp) => void) => void;
 }
 
-interface WsAppType extends WithWebsocketMethod {
-    getWss?: (url: string) => Array<WsObj>;
+interface IWsAppType extends WithWebsocketMethod {
+    getWss?: (url: string) => Array<IWsApp>;
 }
 
 export default class HttpServer {
-    private readonly App: ExpressApp;
-    public readonly WsApp: WsAppType;
+    private readonly App: IExpressApp;
+    public readonly WsApp: IWsAppType;
     private onLineUsers: number;
-    private readonly WsPool: Array<WsObj>;
+    private readonly WsPool: Array<IWsApp>;
 
     constructor() {
         this.App = Express();
         this.WsApp = require('express-ws')(this.App) as WithWebsocketMethod;
-        this.WsPool = this.WsApp?.getWss?.(AppConfig.__SOCKET_CONNECT) as Array<WsObj>;
+        this.WsPool = this.WsApp?.getWss?.(AppConfig.__SOCKET_CONNECT) as Array<IWsApp>;
         this.onLineUsers = 0;
         this.init();
     }
@@ -63,7 +63,7 @@ export default class HttpServer {
         this.App.listen(AppConfig.__SERVER_PORT, (): void => {
             Cli.log('Server started on port ', AppConfig.__SERVER_PORT)
         });
-        this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: WsObj): void => {
+        this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
             this.onLineUsers++;
             new WebSocketServer(ws, this.onLineUsers, this.WsPool);
             ws?.on('close', (): void => {

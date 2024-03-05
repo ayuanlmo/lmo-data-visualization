@@ -1,17 +1,17 @@
 import AppConfig from "../conf/AppConfig";
 
-export interface WsObj {
+export interface IWsApp {
     send: (msg: string) => void;
     close: () => void;
     on: (key: string, cb: (msg: string) => void) => void;
 }
 
 export class WebSocketServer {
-    private readonly WsApp: WsObj;
+    private readonly WsApp: IWsApp;
     private readonly OnLineUsers: number;
-    private readonly Pool: Array<WsObj>;
+    private readonly Pool: Array<IWsApp>;
 
-    constructor(Ws: WsObj, OnLineUsers: number, Pool: Array<WsObj>) {
+    constructor(Ws: IWsApp, OnLineUsers: number, Pool: Array<IWsApp>) {
         this.WsApp = Ws;
         this.OnLineUsers = OnLineUsers;
         this.Pool = Pool;
