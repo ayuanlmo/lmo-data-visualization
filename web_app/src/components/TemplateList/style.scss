@@ -1,0 +1,11 @@
+.template-list {
+  width: calc(100vw - (2.875rem * 2));
+  margin: 2.75rem auto auto;
+
+  .template-item {
+    height: 12.5rem;
+    border: 0;
+    border-radius: .8rem;
+    background: #1077ec;
+  }
+}

@@ -1,0 +1,47 @@
+.data-visualization {
+  width: 100%;
+  height: 100%;
+  background: #1A2236;
+  position: absolute;
+
+  .data-visualization-header {
+    width: 100vw;
+    height: 4.125rem;
+    background-color: #232f3f;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: space-between;
+
+    .data-visualization-header-app-name {
+      font-size: 20px;
+      color: #ffffff;
+      font-weight: bold;
+      line-height: 66px;
+      margin-left: 2.875rem;
+      transition: all .2s;
+
+      &:hover {
+        color: #0688E5;
+      }
+    }
+
+    .header-item {
+      width: 50%;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .data-visualization-header-option {
+      margin-right: 2.875rem;
+      margin-top: 1rem;
+      display: flex;
+      justify-content: end;
+    }
+  }
+
+  .data-visualization-templates {
+    width: 100vw;
+    height: calc(100vh - 4.125rem);
+    overflow: scroll;
+  }
+}

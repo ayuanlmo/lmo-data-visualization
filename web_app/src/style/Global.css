@@ -8,94 +8,94 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 fieldset, img {
-  border: 0;
+    border: 0;
 }
 
 address, caption, cite, code, dfn, em, strong, th, var {
-  font-style: normal;
-  font-weight: normal;
+    font-style: normal;
+    font-weight: normal;
 }
 
 strong {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 ol, ul {
-  list-style: none;
+    list-style: none;
 }
 
 caption, th {
-  text-align: left;
+    text-align: left;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-size: 200%;
-  font-weight: normal;
+    font-size: 200%;
+    font-weight: normal;
 }
 
 :focus {
-  outline: 0;
+    outline: 0;
 }
 
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 a:hover img {
-  border: none;
+    border: none;
 }
 
 legend {
-  color: #000;
+    color: #000;
 }
 
 fieldset img {
-  border: 0;
+    border: 0;
 }
 
 .clearfix {
-  display: inline-block;
+    display: inline-block;
 }
 
 .clearfix:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
 * html .clearfix {
-  height: 1%;
+    height: 1%;
 }
 
 .clearfix {
-  display: block;
+    display: block;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  background-color: rgba(255, 255, 255, 0);
+    width: 8px;
+    background-color: rgba(255, 255, 255, 0);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0);
-  border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
 }

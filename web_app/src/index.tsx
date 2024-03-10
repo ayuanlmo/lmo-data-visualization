@@ -6,6 +6,7 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Store from "./lib/Store/";
 import AppHome from "./pages/AppHome";
 import "./style/Global.css";
+import "./style/index.scss";
 
 ((): void => {
     const __RootApp: ReactDOM.Root = ReactDOM.createRoot(
