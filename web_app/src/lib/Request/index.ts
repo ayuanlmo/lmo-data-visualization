@@ -9,26 +9,34 @@ axios.interceptors.request.use(conf => {
     Nprogress.start();
     return conf;
 });
-axios.interceptors.response.use(conf => {
-    const data = conf.data;
-    setTimeout((): void => {
-        Nprogress.done();
-    }, 100);
-    if (data.status === 204) {
-        Notification.openNotification('通知', '成功', 'success');
-        return conf.data;
-    }
-    if (data.status === 504) {
-        Notification.openNotification('通知', '服务器错误', 'error');
-        return {};
-    }
+axios.interceptors.response.use(
+    function (response) {
+        const {status, data} = response;
 
-    if (data.code !== 200) {
-        Notification.openNotification(conf.data.code as string, data.message, 'error');
-        return conf.data;
+        setTimeout((): void => {
+            Nprogress.done();
+        }, 100);
+
+        if (status === 204) {
+            return Promise.resolve({});
+        } else if (status === 504) {
+            Notification.openNotification('系统通知', '服务器错误', 'error');
+            return Promise.resolve({});
+        } else if (data && data.code === 200) {
+            return Promise.resolve(data);
+        } else {
+            if ('data' in response && '_app' in response) {
+                return Promise.resolve(response);
+            } else {
+                Notification.openNotification('系统通知', '服务器异常', 'error');
+                return Promise.reject(response);
+            }
+        }
+    },
+    function (error) {
+        return Promise.reject(error);
     }
-    return conf.data;
-});
+);
 
 namespace Request {
     export const getTemplate = (params: object = {}) => {
@@ -36,6 +44,15 @@ namespace Request {
             url: '/template',
             method: 'get',
             params: params,
+            headers: {'Content-Type': 'application/json'}
+        })
+    }
+
+    export const editTemplate = (data: object = {}) => {
+        return axios({
+            url: '/template',
+            method: 'put',
+            data: data,
             headers: {'Content-Type': 'application/json'}
         })
     }
