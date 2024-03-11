@@ -5,6 +5,7 @@ import {Provider} from "react-redux";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Store from "./lib/Store/";
 import AppHome from "./pages/AppHome";
+import AppDesign from "./pages/AppDesign";
 import "./style/Global.css";
 import "./style/index.scss";
 import "./style/animate.min.css";
@@ -21,6 +22,7 @@ import "./style/hi.css";
                 <BrowserRouter>
                     <Routes>
                         <Route index path="/" element={<AppHome/>}/>
+                        <Route index path="/design" element={<AppDesign/>}/>
                     </Routes>
                 </BrowserRouter>
             </React.StrictMode>
