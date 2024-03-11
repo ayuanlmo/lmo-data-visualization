@@ -41,7 +41,8 @@ namespace Utils {
         const type = typeof data;
 
         if (typeHandlers.hasOwnProperty(type)) {
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             return typeHandlers[type](data);
         }
         return '';
