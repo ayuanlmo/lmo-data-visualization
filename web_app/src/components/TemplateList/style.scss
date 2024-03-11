@@ -1,11 +1,97 @@
 .template-list {
   width: calc(100vw - (2.875rem * 2));
-  margin: 2.75rem auto auto;
+  margin: 1.75rem auto auto;
+
+  .template-list-query {
+    margin-bottom: 1.75rem;
+
+    .template-list-query-select {
+      float: right;
+    }
+  }
 
   .template-item {
     height: 12.5rem;
     border: 0;
     border-radius: .8rem;
-    background: #1077ec;
+    background: #232f3f;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: .8rem;
+      transition: all .2s;
+    }
+
+    .img-active {
+      transform: scale(1.1);
+    }
+
+    .template-item-name {
+      position: absolute;
+      top: 80%;
+      font-size: 1.14rem;
+      color: #FFFFFF;
+      background: linear-gradient(180deg, rgba(255, 254, 254, 0) 0%, rgba(217, 217, 217, 0) 0.01%, rgba(0, 0, 0, 0.5) 100%);
+      width: 100%;
+      bottom: 0;
+
+      span {
+        position: relative;
+        left: 6%;
+      }
+    }
+
+    .template-item-mask {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #00000060;
+      top: 0;
+      animation-duration: .2s !important;
+
+      .template-item-mask-option {
+        top: 8%;
+        right: 6%;
+        justify-content: end;
+
+        .template-item-mask-option-item {
+          width: 1.375rem;
+          height: 1.375rem;
+          background: #FFFFFF33;
+          border-radius: .5rem;
+          margin-left: 0.75rem;
+
+          svg {
+            width: 0.75rem;
+            height: 0.75rem;
+            margin-left: 0.3125rem;
+          }
+        }
+
+        .template-item-mask-option-item-primary {
+          background: #0688E5;
+        }
+
+        .template-item-mask-option-item-danger {
+          background: #BE1919;
+        }
+      }
+
+      .template-item-mask-name {
+        font-size: 1.125rem;
+        text-align: center;
+        color: #fff;
+        top: 30%;
+      }
+
+      .template-item-mask-description {
+        font-size: 0.875rem;
+        text-align: center;
+        color: #fff;
+        top: 40%;
+      }
+    }
   }
 }

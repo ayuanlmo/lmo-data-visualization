@@ -7,6 +7,8 @@ import Store from "./lib/Store/";
 import AppHome from "./pages/AppHome";
 import "./style/Global.css";
 import "./style/index.scss";
+import "./style/animate.min.css";
+import "./style/hi.css";
 
 ((): void => {
     const __RootApp: ReactDOM.Root = ReactDOM.createRoot(
