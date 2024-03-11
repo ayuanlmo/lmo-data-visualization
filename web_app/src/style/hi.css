@@ -51,3 +51,28 @@
 .hi-v4-select-option--selected .hi-v4-select-option__title {
     color: #0688E5 !important;
 }
+
+.hi-v4-modal__wrapper {
+    background: #232F3F;
+}
+
+.hi-v4-modal__title {
+    color: #fff;
+    user-select: none;
+}
+
+.hi-v4-modal__header--divided {
+    border-bottom: 1px solid #354459;
+}
+
+.hi-v4-form-label__content__text {
+    color: #fff;
+}
+
+.hi-v4-modal__footer--divided::before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #354459 100%);
+}
+
+.hi-v4-icon-button--effect:hover::before, .hi-v4-icon-button--effect:focus::before {
+    background-color: #354459;
+}
