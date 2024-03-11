@@ -7,19 +7,19 @@ namespace MyStorage {
 
     export const set = (key: string, value: any): void => {
         return storage.setItem(`${namespace}${key}`, Utils.toString(value));
-    }
+    };
 
     export const get = (key: string): string | null => {
         return storage.getItem(`${namespace}${key}}`);
-    }
+    };
 
     export const remove = (key: string): void => {
         return storage.removeItem(key);
-    }
+    };
 
     export const clear = (): void => {
         return storage.clear();
-    }
+    };
 }
 
 export default MyStorage;

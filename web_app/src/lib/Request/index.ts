@@ -24,14 +24,14 @@ axios.interceptors.response.use(
             return Promise.resolve({});
         } else if (data && data.code === 200) {
             return Promise.resolve(data);
-        } else {
+        } 
             if ('data' in response && '_app' in response) {
                 return Promise.resolve(response);
-            } else {
+            } 
                 Notification.openNotification('系统通知', '服务器异常', 'error');
                 return Promise.reject(response);
-            }
-        }
+            
+        
     },
     function (error) {
         return Promise.reject(error);
@@ -45,8 +45,8 @@ namespace Request {
             method: 'get',
             params: params,
             headers: {'Content-Type': 'application/json'}
-        })
-    }
+        });
+    };
 
     export const editTemplate = (data: object = {}) => {
         return axios({
@@ -54,8 +54,8 @@ namespace Request {
             method: 'put',
             data: data,
             headers: {'Content-Type': 'application/json'}
-        })
-    }
+        });
+    };
 }
 
 export default Request;

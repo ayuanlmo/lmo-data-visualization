@@ -27,7 +27,7 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
     const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
     const [editFormValue, setEditFormValue] = useState<{ name: string; description: string; }>({
         name: data.name,
-        description: data.description,
+        description: data.description
     });
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -37,7 +37,7 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
             name: data.name,
             description: data.description
         });
-    }
+    };
 
     return (
         <Col span={colSpan}>
@@ -47,7 +47,7 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                     labelWidth={'6rem'}
                     rules={{
                         name: [{required: true, type: "string", message: "请输入模板名称"}],
-                        description: [{required: true, type: "string", message: "请输入模板介绍",}]
+                        description: [{required: true, type: "string", message: "请输入模板介绍"}]
                     }}
                 >
                     <Modal
@@ -56,7 +56,7 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                         visible={editModalVisible}
                         title={'编辑模板'}
                         footer={[
-                            <FormItem field="description" valueType="string">
+                            <FormItem field="description" key={1} valueType="string">
                                 <div style={{marginTop: '1rem'}}>
                                     <Button onClick={closeModal}>取消</Button>
                                     <FormSubmit

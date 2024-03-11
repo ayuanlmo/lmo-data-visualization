@@ -1,16 +1,15 @@
 import "./style.scss";
 import React, {useEffect, useState} from "react";
-import Grid from "@hi-ui/grid"
+import Grid from "@hi-ui/grid";
 import Request from "../../lib/Request";
 import TemplateItem, {ITemplate} from "./TemplateItem";
-import EmptyState from "@hi-ui/empty-state"
+import EmptyState from "@hi-ui/empty-state";
 import YExtendTemplate from "../YExtendTemplate";
 import {Button, Input, Select} from "@hi-ui/hiui";
 import {SearchOutlined} from "@hi-ui/icons";
 
 function TemplateList(): React.JSX.Element {
     const {Row, Col} = Grid;
-    const colSpan = {lg: 6, xl: 4, md: 6, sm: 12, xs: 24} as const;
     const [templates, setTemplates] = useState<Array<ITemplate>>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [queryParams, setQueryParams] = useState({
@@ -22,8 +21,8 @@ function TemplateList(): React.JSX.Element {
     const [templateType] = React.useState([
         {title: "全部", id: "", disabled: false},
         {title: "预制", id: "0", disabled: false},
-        {title: "自定义", id: "1", disabled: false},
-    ])
+        {title: "自定义", id: "1", disabled: false}
+    ]);
     const getTemplate = (): void => {
         setLoading(true);
         Request.getTemplate(queryParams).then(({data}): void => {
@@ -33,7 +32,7 @@ function TemplateList(): React.JSX.Element {
                 setLoading(false);
             }, 100);
         });
-    }
+    };
 
     useEffect((): void => {
         getTemplate();
@@ -97,7 +96,7 @@ function TemplateList(): React.JSX.Element {
                 <EmptyState/>
             </YExtendTemplate>
         </div>
-    )
+    );
 }
 
 export default TemplateList;

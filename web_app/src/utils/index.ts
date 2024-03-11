@@ -70,7 +70,7 @@ namespace Utils {
     }
 
     export function selectFiles(multiple: boolean = false): Promise<Array<FileList>> {
-        return new Promise((resolve, reject): void => {
+        return new Promise((resolve): void => {
             const i: HTMLInputElement = document.createElement('input');
 
             if (multiple)
@@ -80,7 +80,8 @@ namespace Utils {
             const _ = (): void => {
                 resolve(i.files as unknown as Array<FileList>);
                 i.removeEventListener('change', _);
-            }
+            };
+
             i.addEventListener('change', _);
             i.click();
         });
@@ -90,7 +91,7 @@ namespace Utils {
         download: string;
         href: string;
     }): Promise<HTMLAnchorElement> {
-        return new Promise((resolve, reject): void => {
+        return new Promise((resolve): void => {
             const a: HTMLAnchorElement = document.createElement('a');
 
             a.download = `${conf.download}`;
@@ -118,7 +119,8 @@ namespace Utils {
         const fd: FormData = new FormData();
 
         Object.keys(data).map((i: string): void => {
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             fd.append(i, data[i]);
         });
         return fd;
@@ -128,7 +130,8 @@ namespace Utils {
         let str = '?';
 
         Object.keys(data).map((i: string): void => {
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             str += `${i}=${data[i]}&`;
         });
 

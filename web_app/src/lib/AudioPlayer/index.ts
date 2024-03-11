@@ -28,7 +28,7 @@ class AudioPlayer implements AudioPlayerInterface {
     }
 
     private init(): void {
-        if (this.audioObject === null && (!this.isDestroy)) {
+        if (this.audioObject === null && !this.isDestroy) {
             if (!('Audio' in window)) {
                 throw '(AudioPlayer) Error: Your browser does not support audio playback.';
             }
@@ -50,16 +50,14 @@ class AudioPlayer implements AudioPlayerInterface {
     public async setSrc(url: string): Promise<void> {
         this.url = url;
         await this.pause();
-        // @ts-ignore
-        this.audioObject?.src = this.url;
+        this.audioObject && (this.audioObject.src = this.url);
         this.load();
     }
 
     public play(s: boolean = false): void {
         this.pause().then(async (): Promise<void> => {
             if (s) {
-                // @ts-ignore
-                this.audioObject?.currentTime = 0;
+                this.audioObject && (this.audioObject.currentTime = 0);
                 setTimeout(async (): Promise<void> => {
                     await this.audioObject?.play();
                 });
@@ -69,8 +67,7 @@ class AudioPlayer implements AudioPlayerInterface {
     }
 
     public setVolume(v: number): void {
-        // @ts-ignore
-        this.audioObject?.volume = v;
+        this.audioObject && (this.audioObject.volume = v);
     }
 
     public destroy(): void {
@@ -106,7 +103,7 @@ class AudioPlayer implements AudioPlayerInterface {
                     this.audioObject?.pause();
                 }
                 resolve();
-            })
+            });
         });
     }
 }

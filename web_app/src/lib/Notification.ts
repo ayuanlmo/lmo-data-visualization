@@ -8,7 +8,7 @@ class Notification {
             title: title,
             type: type,
             content: content
-        })
+        });
     }
 
     public static message(title: string, type: 'info' | 'success' | 'error' | 'warning'): void {
@@ -16,7 +16,7 @@ class Notification {
         message.open({
             title: title,
             type: type
-        })
+        });
     }
 }
 

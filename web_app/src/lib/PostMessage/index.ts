@@ -3,7 +3,7 @@ namespace PostMessage {
         const _: HTMLIFrameElement = document.querySelector('iframe') as HTMLIFrameElement;
 
         _.contentWindow?.postMessage(message, location.origin);
-    }
+    };
 }
 
 export default PostMessage;

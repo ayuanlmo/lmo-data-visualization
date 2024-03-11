@@ -1,5 +1,6 @@
 import "./style.scss";
-// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import * as N from "nprogress";
 
 namespace Nprogress {
