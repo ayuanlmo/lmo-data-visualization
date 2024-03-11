@@ -9,6 +9,15 @@ module.exports = {
             ],
         },
     },
+    devServer: {
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3000',
+                changeOrigin: true,
+                pathRewrite: {'^/api': ''},
+            },
+        },
+    },
     webpack: {
         alias: {
             '@': path.resolve(__dirname, 'src/'),
