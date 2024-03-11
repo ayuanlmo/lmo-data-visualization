@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import Grid from "@hi-ui/grid";
 import YExtendTemplate from "../../YExtendTemplate";
+import {Button, Form, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
+import Request from "../../../lib/Request";
+import Notification from "../../../lib/Notification";
 
 export interface ITemplate {
     cover: string;
@@ -16,14 +19,83 @@ export interface ITemplateItemProps {
 }
 
 function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
-    const {data} = props;
+    const [data, seData] = useState(props.data);
     const {Col} = Grid;
     const colSpan = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
     const [isHover, setIsHover] = useState<boolean>(false);
-    const [isCustomTemplate] = useState<boolean>(data.type === 1);
+    const [isCustomTemplate] = useState<boolean>(data.type === 0);
+    const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+    const [editFormValue, setEditFormValue] = useState<{ name: string; description: string; }>({
+        name: data.name,
+        description: data.description,
+    });
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const closeModal = (): void => {
+        setEditModalVisible(false);
+        setEditFormValue({
+            name: data.name,
+            description: data.description
+        });
+    }
 
     return (
         <Col span={colSpan}>
+            <YExtendTemplate show={editModalVisible}>
+                <Form
+                    initialValues={editFormValue}
+                    labelWidth={'6rem'}
+                    rules={{
+                        name: [{required: true, type: "string", message: "请输入模板名称"}],
+                        description: [{required: true, type: "string", message: "请输入模板介绍",}]
+                    }}
+                >
+                    <Modal
+                        onClose={closeModal}
+                        onCancel={closeModal}
+                        visible={editModalVisible}
+                        title={'编辑模板'}
+                        footer={[
+                            <FormItem field="description" valueType="string">
+                                <div style={{marginTop: '1rem'}}>
+                                    <Button onClick={closeModal}>取消</Button>
+                                    <FormSubmit
+                                        type="primary"
+                                        loading={loading}
+                                        onClick={(): void => {
+                                            setLoading(true);
+                                            Request.editTemplate({id: data.id, ...editFormValue})
+                                                .finally((): void => {
+                                                    setLoading(false);
+                                                })
+                                                .then((): void => {
+                                                    Notification.message('修改成功', 'success');
+                                                    seData({...data, ...editFormValue});
+                                                    closeModal();
+                                                });
+                                        }}
+                                    >
+                                        提交
+                                    </FormSubmit>
+                                </div>
+                            </FormItem>
+                        ]}
+                    >
+                        <FormItem field="name" valueType="number" label="模板名称">
+                            <Input onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                setEditFormValue({...editFormValue, name: e.target.value});
+                            }}/>
+                        </FormItem>
+                        <FormItem field="description" valueType="string" label="模板介绍">
+                            <Input onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                setEditFormValue({...editFormValue, description: e.target.value});
+                            }}/>
+                        </FormItem>
+
+                    </Modal>
+
+                </Form>
+            </YExtendTemplate>
             <div
                 className={'template-item app_cursor_pointer app_position_relative'}
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>): void => {
@@ -59,7 +131,11 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                             </div>
                             <YExtendTemplate show={isCustomTemplate}>
                                 <div className={'template-item-mask-option-item'}>
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                                    <svg onClick={
+                                        (): void => {
+                                            setEditModalVisible(true);
+                                        }
+                                    } width="12" height="12" viewBox="0 0 12 12" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M6 2.25H2.625C2.41789 2.25 2.25 2.41789 2.25 2.625V9.375C2.25 9.58211 2.41789 9.75 2.625 9.75H9.375C9.5821 9.75 9.75 9.58211 9.75 9.375V6.28125C9.75 6.02237 9.95987 5.8125 10.2187 5.8125C10.4776 5.8125 10.6875 6.02237 10.6875 6.28125V9.375C10.6875 10.0999 10.0999 10.6875 9.375 10.6875H2.625C1.90012 10.6875 1.3125 10.0999 1.3125 9.375V2.625C1.3125 1.90013 1.90012 1.3125 2.625 1.3125H6C6.25888 1.3125 6.46875 1.52237 6.46875 1.78125C6.46875 2.04013 6.25888 2.25 6 2.25ZM8.89627 2.44417L5.43211 5.90834L5.09793 6.90543L6.09503 6.57124L9.55919 3.10707L8.89627 2.44417ZM9.22773 1.4498L10.5536 2.77562C10.7366 2.95867 10.7366 3.25547 10.5536 3.43853L6.67997 7.31211C6.62869 7.36339 6.56622 7.40206 6.49747 7.42511L4.50328 8.09347C4.13637 8.21645 3.78689 7.86698 3.90987 7.50007L4.57823 5.50587C4.60128 5.43712 4.63996 5.37465 4.69123 5.32338L8.56481 1.4498C8.74787 1.26674 9.04467 1.26674 9.22773 1.4498Z"
