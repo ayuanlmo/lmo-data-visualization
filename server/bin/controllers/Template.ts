@@ -12,14 +12,14 @@ export default class TemplateController {
             name = '',
             pageIndex = 0,
             pageSize = 10
-        } = req.body ?? {};
+        } = req.query ?? {};
 
         TemplateModel.findAndCountAll({
             where: {
                 name: {[Op.like]: `%${name}%`}
             },
-            offset: (pageIndex - 1) * pageIndex,
-            limit: pageSize
+            offset: (Number(pageIndex) - 1) * Number(pageIndex),
+            limit: Number(pageSize)
         }).then(({rows, count}): void => {
             res.json(createSuccessMessage({
                 rows,
