@@ -18,10 +18,10 @@ export namespace Hooks {
         }, [cb, delay]);
     };
 
-    export const useEventListener = <T extends keyof WindowEventMap>(type: T, listener: (...args: Array<WindowEventMap[T]>) => any, delay: number = 100): void => {
+    export const useEventListener = <T extends keyof WindowEventMap>(type: T, listener: (...args: Array<WindowEventMap[T]>) => any): void => {
         useEffect(() => {
             const handler = (...args: Array<WindowEventMap[T]>): void => {
-                useThrottle(listener(...args), delay);
+                listener(...args);
             };
 
             addEventListener(type, handler);
