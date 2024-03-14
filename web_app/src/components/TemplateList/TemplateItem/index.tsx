@@ -4,6 +4,9 @@ import YExtendTemplate from "../../YExtendTemplate";
 import {Button, Form, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
 import Request from "../../../lib/Request";
 import Notification from "../../../lib/Notification";
+import {setCurrentTemplate} from "../../../lib/Store/AppStore";
+import {useDispatch} from "react-redux";
+import {useNavigate} from 'react-router-dom';
 
 export interface ITemplate {
     cover: string;
@@ -30,6 +33,8 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
         description: data.description
     });
     const [loading, setLoading] = useState<boolean>(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const closeModal = (): void => {
         setEditModalVisible(false);
@@ -108,6 +113,12 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                     e.stopPropagation();
                     setIsHover(!isHover);
                 }}
+                onClick={
+                    (): void => {
+                        dispatch(setCurrentTemplate(data));
+                        navigate('/design');
+                    }
+                }
             >
                 <img className={isHover ? 'img-active' : ''} src={'/api' + data.cover} alt={data.name}/>
                 <YExtendTemplate show={!isHover}>
@@ -118,7 +129,9 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                 <YExtendTemplate show={isHover}>
                     <div className={'template-item-mask animated fadeIn'}>
                         <div className={'template-item-mask-option app_flex_box app_position_relative'}>
-                            <div className={'template-item-mask-option-item template-item-mask-option-item-primary'}>
+                            <div onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
+                                e.stopPropagation();
+                            }} className={'template-item-mask-option-item template-item-mask-option-item-primary'}>
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -130,7 +143,9 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                                 </svg>
                             </div>
                             <YExtendTemplate show={isCustomTemplate}>
-                                <div className={'template-item-mask-option-item'}>
+                                <div onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
+                                    e.stopPropagation();
+                                }} className={'template-item-mask-option-item'}>
                                     <svg onClick={
                                         (): void => {
                                             setEditModalVisible(true);
@@ -142,7 +157,9 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                                             fill="white"/>
                                     </svg>
                                 </div>
-                                <div className={'template-item-mask-option-item template-item-mask-option-item-danger'}>
+                                <div onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
+                                    e.stopPropagation();
+                                }} className={'template-item-mask-option-item template-item-mask-option-item-danger'}>
                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path
