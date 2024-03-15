@@ -5,6 +5,10 @@ export default class TempLate {
         this.conf = conf;
         this.initDrag();
         this.initDefaultTextStyle();
+        addEventListener('message', (e) => {
+            this.onMessage(e);
+        });
+        this.initText();
     }
 
 
@@ -16,17 +20,87 @@ export default class TempLate {
         });
     }
 
+    initText(data) {
+        if (!data) {
+            Object.keys(this.conf.config.text).map(i => {
+                this.initText(this.conf.config.text[i]);
+            });
+        } else
+            this.conf.config.text[data.key] = data;
+
+
+        const mainTitle = document.getElementById('main-title');
+        const subTitle = document.getElementById('sub-title');
+        const formSource = document.getElementById('from-source');
+        const mainTitleValue = mainTitle.querySelector('.text-value');
+        const subTitleValue = subTitle.querySelector('.text-value');
+        const formSourceValue = formSource.querySelector('.text-value');
+
+        setValueStyle(mainTitleValue, this.conf.config.text.mainTitle);
+        setValueStyle(subTitleValue, this.conf.config.text.subTitle);
+        setValueStyle(formSourceValue, this.conf.config.text.fromSource);
+
+        setStyle(mainTitle, this.conf.config.text.mainTitle);
+        setStyle(subTitleValue, this.conf.config.text.subTitle);
+        setStyle(formSourceValue, this.conf.config.text.fromSource);
+
+        function setValueStyle(el, config) {
+            el.innerHTML = config.value;
+            el.style.color = config.color;
+            el.style.fontSize = config.fontSize + 'px';
+        }
+
+        function setStyle(el, config) {
+            el.style.top = config.y + 'px';
+            el.style.textAlign = config.align;
+            el.style.left = config.x + 'px';
+            el.style.width = config.width + 'px';
+            el.style.height = config.height + 'px';
+            el.style.display = config.display ? 'block' : 'none';
+        }
+
+    }
+
     sendTemplateSelectTextConfig(el) {
+        const style = getComputedStyle(el);
+        const y = style.top;
+        const x = style.left;
+        const w = style.width;
+        const h = style.height;
+        const key = el.getAttribute('data-name');
+
+        const conf = {
+            width: parseInt(w.substring(0, w.length - 2)),
+            height: parseInt(h.substring(0, h.length - 2)),
+            x: parseInt(x.substring(0, x.length - 2)),
+            y: parseInt(y.substring(0, y.length - 2))
+        }
+
+        this.conf.config.text[key] = {
+            ...this.conf.config.text[key], ...conf, key: key,
+        }
         this.sendMessage('TEMPLATE_SELECT_TEXT_ELEMENT', {
-            ...this.conf.config.text[`${el.getAttribute('data-name')}`]
+            ...this.conf.config.text[key]
         });
     }
 
     sendMessage(type = '', message = '') {
         parent.postMessage({
-            type,
-            message
+            type, message
         }, location.origin);
+    }
+
+    onMessage(e) {
+        if (e.origin !== origin) return;
+        const {data} = e;
+        if ('message' in data && 'message' in data) {
+            const {
+                type, message
+            } = data;
+
+            if (type === 'SET_TEXT_CONFIG') this.initText(message);
+
+        }
     }
 
     initDrag() {
@@ -36,8 +110,8 @@ export default class TempLate {
         const formSource = document.getElementById('from-source');
 
         mainTitle.setAttribute('data-name', 'mainTitle');
-        subTitle.setAttribute('data-name', 'sub-title');
-        formSource.setAttribute('data-name', 'from-source');
+        subTitle.setAttribute('data-name', 'subTitle');
+        formSource.setAttribute('data-name', 'fromSource');
 
         const initInteract = (element) => {
             initSquare(element);
@@ -56,18 +130,12 @@ export default class TempLate {
             let x = 0, y = 0, angle = 0, scale = 1;
             interact(element)
                 .draggable({
-                    inertia: false,
-                    modifiers: [
-                        interact.modifiers.restrictRect({
-                            restriction: 'parent',
-                            endOnly: true
-                        })
-                    ],
-                    onstart: function (event) {
+                    inertia: false, modifiers: [interact.modifiers.restrictRect({
+                        restriction: 'parent', endOnly: true
+                    })], onstart: function (event) {
                         x = event.clientX;
                         y = event.clientY;
-                    },
-                    onmove: function (event) {
+                    }, onmove: function (event) {
                         const dx = event.clientX - x;
                         const dy = event.clientY - y;
                         const newX = parseInt(element.style.left) + dx;
@@ -97,15 +165,11 @@ export default class TempLate {
                             target.setAttribute('data-x', x)
                             target.setAttribute('data-y', y)
                         }
-                    },
-                    modifiers: [
-                        interact.modifiers.restrictEdges({
-                            outer: 'parent'
-                        }),
-                        interact.modifiers.restrictSize({
-                            min: {width: 10, height: 10}
-                        })
-                    ],
+                    }, modifiers: [interact.modifiers.restrictEdges({
+                        outer: 'parent'
+                    }), interact.modifiers.restrictSize({
+                        min: {width: 10, height: 10}
+                    })],
 
                     inertia: true
                 })
@@ -132,8 +196,7 @@ export default class TempLate {
                 let el = e.target;
 
                 // 子元素点击时，切换到父元素
-                if (el.classList.contains('text-value'))
-                    el = el.parentElement;
+                if (el.classList.contains('text-value')) el = el.parentElement;
                 this.sendTemplateSelectTextConfig(el);
 
                 elements.forEach(i => {
@@ -202,16 +265,15 @@ export default class TempLate {
 
         function initGlobalEvent() {
             document.addEventListener('click', (e) => {
-                    elements.forEach(i => {
-                        const idName = e.target.parentElement.id;
+                elements.forEach(i => {
+                    const idName = e.target.parentElement.id;
 
-                        if (i !== idName && elements.includes(idName) || idName === '') {
-                            document.getElementById(i).classList.remove('active');
-                            document.getElementById(i).classList.remove('square-container');
-                        }
-                    });
-                }
-            )
+                    if (i !== idName && elements.includes(idName) || idName === '') {
+                        document.getElementById(i).classList.remove('active');
+                        document.getElementById(i).classList.remove('square-container');
+                    }
+                });
+            })
         }
     }
 
