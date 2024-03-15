@@ -9,7 +9,9 @@ function DesignConfigs(): React.JSX.Element {
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);
-        console.log(e);
+    });
+    useTemplateMessageListener('TEMPLATE_SELECT_TEXT_CLOSE', (): void => {
+        setCurrentTextConfig(null);
     });
 
     return (

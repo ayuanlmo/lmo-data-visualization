@@ -6,6 +6,7 @@ export type TTemplateMessageType =
     | 'TEMPLATE_RENDER_ERROR'
     | 'TEMPLATE_FULL_CONFIG'
     | 'TEMPLATE_SELECT_TEXT_ELEMENT'
+    | 'TEMPLATE_SELECT_TEXT_CLOSE'
 
 export type TDesignAppMessageType =
     'SET_DATA'
