@@ -4,6 +4,27 @@
   overflow: hidden;
   background: #1A2236;
 
+  input[type='color'] {
+    background: #FFFFFF00;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    border: none;
+    height: 2rem;
+    width: 2rem;
+
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: .5rem;
+    }
+
+    &::-moz-color-swatch {
+      border: none;
+      border-radius: .5rem;
+    }
+  }
+
   .data-visualization-design-header {
     width: 100vw;
     height: 4.125rem;

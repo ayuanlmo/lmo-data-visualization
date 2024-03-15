@@ -5,7 +5,7 @@ export type TTemplateMessageType =
     | 'TEMPLATE_RENDER_FINISH'
     | 'TEMPLATE_RENDER_ERROR'
     | 'TEMPLATE_FULL_CONFIG'
-    |'TEMPLATE_SELECT_TEXT_ELEMENT'
+    | 'TEMPLATE_SELECT_TEXT_ELEMENT'
 
 export type TDesignAppMessageType =
     'SET_DATA'
@@ -30,5 +30,6 @@ export interface ITemplateSelectTextElement {
     height: number;
     x: number;
     y: number;
+    key: string;
 }
 
