@@ -76,3 +76,29 @@
 .hi-v4-icon-button--effect:hover::before, .hi-v4-icon-button--effect:focus::before {
     background-color: #354459;
 }
+
+.hi-v4-number-input__input {
+    border: 0;
+    background: #354459;
+    color: #fff;
+    border-radius: 4px;
+
+}
+
+.hi-v4-number-input--appearance-line {
+    border: 0;
+}
+
+.hi-v4-number-input--focused {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.hi-v4-input__prepend {
+    background-color: #354459;
+    border: 0;
+    color: #607189;
+    width: auto;
+    padding: 6px;
+    font-size: .8rem;
+}
