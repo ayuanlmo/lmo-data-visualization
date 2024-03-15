@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import MyStorage from "../lib/Storage";
 import Utils from "../utils";
+import {TTemplateMessageType} from "../types/TemplateMessage";
 
 export namespace Hooks {
     const __UNDEF: undefined = void false;
@@ -59,6 +60,25 @@ export namespace Hooks {
 
         return [value, setValue];
     };
+
+    export const useTemplateMessageListener = <T>(type: TTemplateMessageType, cb: (msg: T) => void): void => {
+        useEffect(() => {
+            const handler = (e: MessageEvent): void => {
+                if (e.origin !== location.origin) return;
+                if (typeof e.data !== 'object') return;
+
+                const {data} = e;
+
+                if ('type' in data && 'message' in data)
+                    if (data.type === type)
+                        cb(data.message);
+            };
+
+            addEventListener('message', handler);
+
+            return (): void => removeEventListener('message', handler);
+        }, [cb]);
+    };
 }
 
 export const {
@@ -67,7 +87,8 @@ export const {
     useTimeout,
     useThrottle,
     useEventListener,
-    useStorage
+    useStorage,
+    useTemplateMessageListener
 } = Hooks;
 
 export default Hooks;
