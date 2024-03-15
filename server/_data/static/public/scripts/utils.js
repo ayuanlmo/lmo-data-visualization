@@ -83,3 +83,26 @@ export function rgbToHex(color = '') {
     }
     return _;
 }
+
+
+export function throttle(func, delay) {
+    let timerId;
+    return function (...args) {
+        if (!timerId) {
+            timerId = setTimeout(() => {
+                func(...args);
+                timerId = null;
+            }, delay);
+        }
+    };
+}
+
+export function useDebounce(func, delay) {
+    let timerId;
+    return function (...args) {
+        clearTimeout(timerId);
+        timerId = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+}

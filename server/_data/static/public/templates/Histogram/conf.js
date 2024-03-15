@@ -7,9 +7,14 @@ export default {
         text: {
             mainTitle: {
                 color: '#fff',
-                vale: '主标题',
+                value: '主标题',
                 display: true,
-                fontSize: '20px'
+                fontSize: 20,
+                align: 'left',
+                width: 100,
+                height: 100,
+                x: 0,
+                y: 0
             }
         }
     },
