@@ -1,4 +1,4 @@
-import {useDebounce} from "./utils.js";
+import {useDebounce, useObserver} from "./utils.js";
 
 export default class TempLate {
     constructor(conf) {
@@ -22,27 +22,34 @@ export default class TempLate {
 
     initText(data) {
         if (!data) {
-            Object.keys(this.conf.config.text).map(i => {
-                this.initText(this.conf.config.text[i]);
+            Object.values(this.conf.config.text).forEach(text => {
+                this.initText(text);
             });
-        } else
+        } else {
             this.conf.config.text[data.key] = data;
+        }
 
+        const elements = {
+            'main-title': {
+                value: this.conf.config.text.mainTitle,
+                style: this.conf.config.text.mainTitle
+            },
+            'sub-title': {
+                value: this.conf.config.text.subTitle,
+                style: this.conf.config.text.subTitle
+            },
+            'from-source': {
+                value: this.conf.config.text.fromSource,
+                style: this.conf.config.text.fromSource
+            }
+        };
 
-        const mainTitle = document.getElementById('main-title');
-        const subTitle = document.getElementById('sub-title');
-        const formSource = document.getElementById('from-source');
-        const mainTitleValue = mainTitle.querySelector('.text-value');
-        const subTitleValue = subTitle.querySelector('.text-value');
-        const formSourceValue = formSource.querySelector('.text-value');
-
-        setValueStyle(mainTitleValue, this.conf.config.text.mainTitle);
-        setValueStyle(subTitleValue, this.conf.config.text.subTitle);
-        setValueStyle(formSourceValue, this.conf.config.text.fromSource);
-
-        setStyle(mainTitle, this.conf.config.text.mainTitle);
-        setStyle(subTitleValue, this.conf.config.text.subTitle);
-        setStyle(formSourceValue, this.conf.config.text.fromSource);
+        Object.entries(elements).forEach(([id, {value, style}]) => {
+            const element = document.getElementById(id);
+            const textValue = element.querySelector('.text-value');
+            setValueStyle(textValue, value);
+            setStyle(element, style);
+        });
 
         function setValueStyle(el, config) {
             el.innerHTML = config.value;
@@ -58,7 +65,6 @@ export default class TempLate {
             el.style.height = config.height + 'px';
             el.style.display = config.display ? 'block' : 'none';
         }
-
     }
 
     sendTemplateSelectTextConfig(el) {
@@ -105,14 +111,10 @@ export default class TempLate {
 
     initDrag() {
         const elements = ['main-title', 'sub-title', 'from-source'];
-        const mainTitle = document.getElementById('main-title');
-        const subTitle = document.getElementById('sub-title');
-        const formSource = document.getElementById('from-source');
-
-        mainTitle.setAttribute('data-name', 'mainTitle');
-        subTitle.setAttribute('data-name', 'subTitle');
-        formSource.setAttribute('data-name', 'fromSource');
-
+        document.getElementById('main-title').setAttribute('data-name', 'mainTitle');
+        document.getElementById('sub-title').setAttribute('data-name', 'subTitle');
+        document.getElementById('from-source').setAttribute('data-name', 'fromSource');
+        const classListObServerConfig = {attributes: true, attributeFilter: ['class']};
         const initInteract = (element) => {
             initSquare(element);
 
@@ -175,81 +177,54 @@ export default class TempLate {
                 })
         }
         const initEvent = (element) => {
-            element.addEventListener('mousedown', (e) => {
-                e.stopPropagation()
+            const handleEvent = (e) => {
+                e.stopPropagation();
+                elements.forEach(i => {
+                    const targetId = e.target.classList.contains('text-value') ? e.target.parentElement.id : e.target.id;
+                    const _ = document.getElementById(i);
+                    if (i !== targetId && _.classList.length > 0) {
+                        _.classList.remove('active');
+                        _.classList.remove('square-container');
+                    }
+                });
+                if (e.type === 'click') {
+                    this.sendTemplateSelectTextConfig(e.target.classList.contains('text-value') ? e.target.parentElement : e.target);
+                }
                 element.classList.add('square-container');
                 element.classList.add('active');
+            };
 
-                elements.forEach(i => {
-                    if (e.target.classList.contains('text-value')) {
-                        const idName = e.target.parentElement.id;
-                        if (i !== idName) {
-                            const _ = document.getElementById(i)
-
-                            _.classList.remove('active');
-                            _.classList.remove('square-container');
-                        }
-                    }
-                })
-            });
-            element.addEventListener('click', (e) => {
-                let el = e.target;
-
-                // 子元素点击时，切换到父元素
-                if (el.classList.contains('text-value')) el = el.parentElement;
-                this.sendTemplateSelectTextConfig(el);
-
-                elements.forEach(i => {
-                    if (e.target.classList.contains('text-value')) {
-                        const idName = e.target.parentElement.id;
-                        if (i !== idName) {
-                            const _ = document.getElementById(i)
-
-                            _.classList.remove('active');
-                            _.classList.remove('square-container');
-                        }
-                    } else {
-                        const idName = e.target.id;
-                        if (i !== idName) {
-                            const _ = document.getElementById(i)
-
-                            _.classList.remove('active');
-                            _.classList.remove('square-container');
-                        }
-                    }
-
-                })
-            });
+            element.addEventListener('mousedown', handleEvent);
+            element.addEventListener('click', handleEvent);
             initGlobalEvent();
-        }
+        };
 
-        initInteract(mainTitle);
-        initInteract(subTitle);
-        initInteract(formSource);
-        initEvent(mainTitle);
-        initEvent(subTitle);
-        initEvent(formSource);
+        elements.map(i => {
+            const el = document.getElementById(i);
+            initInteract(el);
+            initEvent(el);
+            useObserver((e) => {
+                if (e[0].target.classList.length === 0) this.sendMessage('TEMPLATE_SELECT_TEXT_CLOSE', {});
+            }).observe(el, classListObServerConfig);
+        });
 
         function initSquare(element) {
-            const squareTL = document.createElement('div');
-            const squareTR = document.createElement('div');
-            const squareBL = document.createElement('div');
-            const squareBR = document.createElement('div');
+            function createSquare(className) {
+                const square = document.createElement('div');
+                square.classList.add('square');
+                square.classList.add(className);
+                return square;
+            }
 
-            squareTL.classList.add('square');
-            squareTL.classList.add('top-left');
-            squareTR.classList.add('square');
-            squareTR.classList.add('top-right');
-            squareBL.classList.add('square');
-            squareBL.classList.add('bottom-left');
-            squareBR.classList.add('square');
-            squareBR.classList.add('bottom-right');
+            const squareTL = createSquare('top-left');
+            const squareTR = createSquare('top-right');
+            const squareBL = createSquare('bottom-left');
+            const squareBR = createSquare('bottom-right');
 
-            element.append(squareTL);
-            element.append(squareTR);
-            element.append(squareBL);
+            element.append(squareTL, squareTR, squareBL, squareBR);
+
+            initSquareEvent();
             element.append(squareBR);
-
             initSquareEvent();
         }
 
@@ -262,15 +237,18 @@ export default class TempLate {
             });
         }
 
-
         function initGlobalEvent() {
             document.addEventListener('click', (e) => {
                 elements.forEach(i => {
                     const idName = e.target.parentElement.id;
 
                     if (i !== idName && elements.includes(idName) || idName === '') {
-                        document.getElementById(i).classList.remove('active');
-                        document.getElementById(i).classList.remove('square-container');
+                        const classList = document.getElementById(i).classList;
+
+                        if (classList.length !== 0) {
+                            document.getElementById(i).classList.remove('active');
+                            document.getElementById(i).classList.remove('square-container');
+                        }
                     }
                 });
             })
@@ -279,13 +257,7 @@ export default class TempLate {
 
     initDefaultTextStyle() {
         const template = document.getElementById('template');
-        const mainTitle = document.getElementById('main-title');
-        const subTitle = document.getElementById('sub-title');
-        const fromSource = document.getElementById('from-source');
 
         template.style = 'width: 1920px;height: 1080px;';
-        mainTitle.style = 'left: 160px; top: 1.2rem;';
-        subTitle.style = 'left: 368px;top: 35px;';
-        fromSource.style = 'left: 160px; top: 85px;';
     }
 }

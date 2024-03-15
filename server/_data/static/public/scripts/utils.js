@@ -106,3 +106,9 @@ export function useDebounce(func, delay) {
         }, delay);
     };
 }
+
+export function useObserver(cb) {
+    return new MutationObserver((mutation) => {
+        cb(mutation);
+    });
+}
