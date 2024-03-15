@@ -11,12 +11,19 @@ export default class TemplateController {
         const {
             name = '',
             pageIndex = 0,
-            pageSize = 10
+            pageSize = 10,
+            type = ''
         } = req.query ?? {};
+        const whereCondition: any = {
+            name: {[Op.like]: `%${name}%`}
+        };
+
+        if (type !== "")
+            whereCondition.type = type;
 
         TemplateModel.findAndCountAll({
             where: {
-                name: {[Op.like]: `%${name}%`}
+                ...whereCondition
             },
             offset: (Number(pageIndex) - 1) * Number(pageIndex),
             limit: Number(pageSize)
