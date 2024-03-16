@@ -122,8 +122,8 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
             >
                 <img className={isHover ? 'img-active' : ''} src={'/api' + data.cover} alt={data.name}/>
                 <YExtendTemplate show={!isHover}>
-                    <div className={'template-item-name'}>
-                        <span>{data.name}</span>
+                    <div className={'template-item-name '}>
+                        <span className={'animated fadeInDown'}>{data.name}</span>
                     </div>
                 </YExtendTemplate>
                 <YExtendTemplate show={isHover}>
@@ -169,10 +169,10 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                                 </div>
                             </YExtendTemplate>
                         </div>
-                        <div className={'template-item-mask-name app_position_relative'}>
+                        <div className={'template-item-mask-name app_position_relative animated fadeInDown'}>
                             {data.name}
                         </div>
-                        <div className={'template-item-mask-description app_position_relative'}>
+                        <div className={'template-item-mask-description app_position_relative animated fadeInDown'}>
                             {data.description}
                         </div>
                     </div>
