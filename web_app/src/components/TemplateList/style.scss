@@ -1,3 +1,5 @@
+@import "../../style/theme";
+
 .template-list {
   width: calc(100vw - (2.875rem * 2));
   margin: 1.75rem auto auto;
@@ -31,7 +33,7 @@
       position: absolute;
       top: 80%;
       font-size: 1.14rem;
-      color: #FFFFFF;
+      color: $color-white;
       background: linear-gradient(180deg, rgba(255, 254, 254, 0) 0%, rgba(217, 217, 217, 0) 0.01%, rgba(0, 0, 0, 0.5) 100%);
       width: 100%;
       bottom: 0;
@@ -81,7 +83,7 @@
       .template-item-mask-name {
         font-size: 1.125rem;
         text-align: center;
-        color: #fff;
+        color: $color-white;
         top: 30%;
         animation-duration: .3s;
       }
@@ -89,7 +91,7 @@
       .template-item-mask-description {
         font-size: 0.875rem;
         text-align: center;
-        color: #fff;
+        color: $color-white;
         top: 40%;
         animation-duration: .3s;
       }

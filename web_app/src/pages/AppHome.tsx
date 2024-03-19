@@ -6,8 +6,8 @@ import TemplateList from "../components/TemplateList";
 
 function AppHome(): React.JSX.Element {
     return (
-        <div className={'data-visualization app_none_user_select'}>
-            <div className={'data-visualization-header'}>
+        <div className={'data-visualization dark-mode app_none_user_select'}>
+            <div className={'data-visualization-header dark-mode'}>
                 <div className={'data-visualization-header-app-name app_cursor_pointer header-item'}>
                     {AppConfig.appName}
                 </div>

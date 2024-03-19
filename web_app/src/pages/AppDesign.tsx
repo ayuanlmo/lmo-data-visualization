@@ -11,7 +11,7 @@ function AppDesign(): React.JSX.Element {
     const {Row, Col} = Grid;
 
     return (
-        <div className={'data-visualization-design'}>
+        <div className={'data-visualization-design dark-mode'}>
             <DesignHeader/>
 
             <div className={'app_position_relative'} style={{
