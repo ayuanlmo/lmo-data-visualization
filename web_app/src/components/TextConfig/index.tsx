@@ -29,7 +29,7 @@ function TextConfig(props: ITextConfigProps): React.JSX.Element {
 
     return (
         <div className={'text-config app_none_user_select'}>
-            <div className={'text-config-title app_flex_box'}>文字配置</div>
+            <div className={'text-config-title dark-mode app_flex_box'}>文字配置</div>
             <div className={'text-config-item app_flex_box'}>
                 <Row gutter={true} justify={"space-between"}>
                     <Col span={colspan}>
@@ -199,7 +199,7 @@ function TextConfig(props: ITextConfigProps): React.JSX.Element {
                     </Col>
                 </Row>
             </div>
-            <div className={'config-line'}></div>
+            <div className={'config-line dark-mode'}></div>
         </div>
     );
 }

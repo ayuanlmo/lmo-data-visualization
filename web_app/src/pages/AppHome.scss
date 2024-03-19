@@ -1,13 +1,13 @@
+@import "../style/theme";
+
 .data-visualization {
   width: 100%;
   height: 100%;
-  background: #1A2236;
   position: absolute;
 
   .data-visualization-header {
     width: 100vw;
     height: 4.125rem;
-    background-color: #232f3f;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: space-between;
@@ -39,9 +39,19 @@
     }
   }
 
+  .dark-mode {
+    background-color: $__primary-bg-color-dark;
+  }
+
   .data-visualization-templates {
     width: 100vw;
     height: calc(100vh - 4.125rem);
     overflow: scroll;
   }
+
+  &.dark-mode {
+    background-color: $__primary-sub-bg-color-dark;
+  }
 }
+
+

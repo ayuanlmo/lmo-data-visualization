@@ -15,8 +15,8 @@ function DesignConfigs(): React.JSX.Element {
     });
 
     return (
-        <div className={'design-configs'}>
-            <div className={'design-configs-top-options'}>
+        <div className={'design-configs dark-mode'}>
+            <div className={'design-configs-top-options dark-mode'}>
 
             </div>
             <div className={'design-configs-container'}>

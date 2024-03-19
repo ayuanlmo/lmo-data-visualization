@@ -24,14 +24,14 @@ axios.interceptors.response.use(
             return Promise.resolve({});
         } else if (data && data.code === 200) {
             return Promise.resolve(data);
-        } 
-            if ('data' in response && '_app' in response) {
-                return Promise.resolve(response);
-            } 
-                Notification.openNotification('系统通知', '服务器异常', 'error');
-                return Promise.reject(response);
-            
-        
+        }
+        if ('data' in response && '_app' in response) {
+            return Promise.resolve(response);
+        }
+        Notification.openNotification('系统通知', '服务器异常', 'error');
+        return Promise.reject(response);
+
+
     },
     function (error) {
         return Promise.reject(error);

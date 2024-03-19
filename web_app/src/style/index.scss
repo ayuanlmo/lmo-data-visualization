@@ -1,7 +1,5 @@
-$theme-color: #0688E5;
-$warning-color: #e6a23c;
-$danger-color: #f56c6c;
-$color-white: #FBFBFD;
+@import "theme";
+
 @font-face {
   font-family: 'JetBrains Mono';
   src: url("./fonts/JetbrainsMono.ttf");

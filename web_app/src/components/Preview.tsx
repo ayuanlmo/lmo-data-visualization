@@ -49,8 +49,9 @@ function TemplatePreview(): React.JSX.Element {
     });
     return (
         <Loading content={'初始化模板...'} visible={loading}>
-            <div ref={templatePreviewRef} className={'template-preview'}>
+            <div ref={templatePreviewRef} className={'template-preview dark-mode'}>
                 <iframe
+                    className={'dark-mode'}
                     onLoad={(): void => {
                         setLoading(false);
                     }} style={iframeStyle} ref={iframeRef} src={`/api${currentTemplate.path}`}/>
