@@ -3,6 +3,8 @@ import {useEventListener} from "../bin/Hooks";
 import Loading from "@hi-ui/loading";
 import {useSelector} from "react-redux";
 import {RootState} from "../lib/Store";
+import Notification from "../lib/Notification";
+import {useNavigate} from 'react-router-dom';
 
 function TemplatePreview(): React.JSX.Element {
     const templatePreviewRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
@@ -10,6 +12,7 @@ function TemplatePreview(): React.JSX.Element {
     const [iframeStyle, setIframeStyle] = useState<object>({});
     const [loading, setLoading] = useState<boolean>(true);
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
+    const navigate = useNavigate();
     const calculateAspectRatio = (width: number): [number, number] => {
         return [width, width / 16 * 9];
     };
@@ -38,6 +41,15 @@ function TemplatePreview(): React.JSX.Element {
         });
     };
 
+    const toTemplateList = (): void => {
+        Notification.openNotification('错误', '模板加载失败，它貌似并不存在', 'error');
+        setTimeout((): void => {
+            navigate('/', {
+                replace: true
+            });
+        }, 1000);
+    };
+
     useEffect((): void => {
         initHeight();
         initPlayerSize();
@@ -52,7 +64,14 @@ function TemplatePreview(): React.JSX.Element {
             <div ref={templatePreviewRef} className={'template-preview dark-mode'}>
                 <iframe
                     className={'dark-mode'}
+                    onError={(): void => {
+                        toTemplateList();
+                    }}
                     onLoad={(): void => {
+                        const iframeHtml: string = iframeRef.current?.contentWindow?.document?.body.innerHTML || '';
+
+                        if (iframeHtml === '' || iframeHtml.includes('Not found.'))
+                            toTemplateList();
                         setLoading(false);
                     }} style={iframeStyle} ref={iframeRef} src={`/api${currentTemplate.path}`}/>
             </div>
