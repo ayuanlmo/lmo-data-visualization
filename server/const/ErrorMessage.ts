@@ -11,7 +11,8 @@ const ErrorMessage = {
     ext004: {message: 'The file corresponding to the id was not found.'},
     ext005: {message: 'Not a valid id or id is empty.'},
     ext006: {message: 'This template does not exist.'},
-    ext007: {message: 'This template is not editable.'}
+    ext007: {message: 'This template is not editable.'},
+    ext008: {message: 'This template cannot be deleted.'}
 };
 
 export default ErrorMessage;

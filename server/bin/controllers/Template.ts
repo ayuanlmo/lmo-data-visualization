@@ -47,6 +47,38 @@ export default class TemplateController {
         });
     }
 
+    public static copyTemplate(req: Request, res: Response): void {
+        if (AppConfig.__LIVE_SERVER)
+            return void res.json(createErrorMessage('ext00el'));
+
+        const {
+            id = '',
+            name = '',
+            description = ''
+        } = req.body;
+
+        TemplateModel.findOne({
+            where: {
+                id: {[Op.like]: `${id}`}
+            }
+        }).then((template): void => {
+            const {dataValues}: any = template;
+            const data = {
+                ...dataValues,
+                name: name === '' ? dataValues.name : name,
+                description: description === '' ? dataValues.description : description,
+                id: require('uuid').v4(),
+                type: '0'
+            };
+
+            TemplateModel.create(data).then((): void => {
+                res.status(204).send();
+            }).catch((): void => {
+                res.json(createErrorMessage('ext00d'));
+            });
+        });
+    }
+
     public static editTemplate(req: Request, res: Response): void {
         if (AppConfig.__LIVE_SERVER)
             return void res.json(createErrorMessage('ext00el'));
@@ -83,6 +115,36 @@ export default class TemplateController {
                     res.json(createErrorMessage('ext00d1'));
             }).catch((): void => {
                 res.json(createErrorMessage('ext00d'));
+            });
+        });
+    }
+
+    public static deleteTemplate(req: Request, res: Response): void {
+        if (AppConfig.__LIVE_SERVER)
+            return void res.json(createErrorMessage('ext00el'));
+
+        const {id = ''} = req.body ?? {};
+
+        if (id === '')
+            return void res.json(createErrorMessage('ext005'));
+
+        TemplateModel.findOne({
+            where: {
+                id: {[Op.like]: `${id}`}
+            }
+        }).then((template): void => {
+            if (template === null)
+                return void res.json(createErrorMessage('ext005'));
+
+            const {dataValues}: any = template;
+
+            if (dataValues.type === 1)
+                return void res.json(createErrorMessage('ext008'));
+
+            TemplateModel.destroy({
+                where: {id: id}
+            }).then((): void => {
+                res.status(204).send();
             });
         });
     }

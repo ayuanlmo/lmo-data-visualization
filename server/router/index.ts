@@ -17,6 +17,12 @@ _Router.get('/template/:id', (req: Request, res: Response): void => {
 _Router.put('/template', (req: Request, res: Response): void => {
     TemplateController.editTemplate(req, res);
 });
+_Router.delete('/template', (req: Request, res: Response): void => {
+    TemplateController.deleteTemplate(req, res);
+});
+_Router.post('/template/copy', (req: Request, res: Response): void => {
+    TemplateController.copyTemplate(req, res);
+});
 _Router.post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
     File.upload(req, res);
 });
