@@ -1,31 +1,31 @@
-import React from "react";
-import ReactDOM from 'react-dom/client';
+import React, {lazy, StrictMode, Suspense} from "react";
+import {createRoot, Root} from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Store from "./lib/Store/";
-import AppHome from "./pages/AppHome";
-import AppDesign from "./pages/AppDesign";
 import "./style/Global.css";
 import "./style/index.scss";
 import "./style/animate.min.css";
 import "./style/hi.css";
 
 ((): void => {
-    const __RootApp: ReactDOM.Root = ReactDOM.createRoot(
+    const AppHome: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppHome"));
+    const AppDesign: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppDesign"));
+    const __RootApp: Root = createRoot(
         document.getElementById('__lmo_app') as HTMLDivElement
     );
 
     __RootApp.render(
         <Provider store={Store}>
-            <React.StrictMode>
+            <StrictMode>
                 <BrowserRouter>
                     <Routes>
-                        <Route index path="/" element={<AppHome/>}/>
-                        <Route index path="/design" element={<AppDesign/>}/>
+                        <Route index path="/" element={<Suspense><AppHome/></Suspense>}/>
+                        <Route index path="/design" element={<Suspense><AppDesign/></Suspense>}/>
                     </Routes>
                 </BrowserRouter>
-            </React.StrictMode>
+            </StrictMode>
         </Provider>
     );
 })();
