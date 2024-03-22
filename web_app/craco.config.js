@@ -23,6 +23,12 @@ module.exports = {
             '@': path.resolve(__dirname, 'src/'),
         },
         configure: (webpackConfig, {paths}) => {
+
+            webpackConfig.optimization = {
+                splitChunks: {
+                    chunks: 'all',
+                }
+            }
             const oneOfRule = webpackConfig.module.rules.find((rule) => rule.oneOf);
             if (oneOfRule) {
                 oneOfRule.oneOf.unshift({
