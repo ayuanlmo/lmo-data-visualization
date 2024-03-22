@@ -5,7 +5,9 @@ import {ITemplateSelectTextElement} from "../types/TemplateMessage";
 import YExtendTemplate from "./YExtendTemplate";
 
 function DesignConfigs(): React.JSX.Element {
-    const [currentTextConfig, setCurrentTextConfig] = useState<null | ITemplateSelectTextElement>(null);
+    const [currentTextConfig, setCurrentTextConfig]:
+        [null | ITemplateSelectTextElement, React.Dispatch<React.SetStateAction<ITemplateSelectTextElement | null>>]
+        = useState<null | ITemplateSelectTextElement>(null);
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);

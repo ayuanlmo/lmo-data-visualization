@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Input, NumberInput, Select, SelectOption, Switch} from "@hi-ui/hiui";
+import {ColProps, Input, NumberInput, RowProps, Select, SelectOption, Switch} from "@hi-ui/hiui";
 import Grid from "@hi-ui/grid";
 import {ITemplateSelectTextElement, TTemplateTextConfigAlignType} from "../../types/TemplateMessage";
 import PostMessage from "../../lib/PostMessage";
@@ -10,9 +10,15 @@ export interface ITextConfigProps {
 }
 
 function TextConfig(props: ITextConfigProps): React.JSX.Element {
-    const {Col, Row} = Grid;
+    const {Col, Row}:
+        {
+            Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>;
+            Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
+        } = Grid;
     const colspan = {lg: 12, xl: 12, md: 12, sm: 12, xs: 12};
-    const [config, setConfig] = useState(props.config as ITemplateSelectTextElement);
+    const [config, setConfig]:
+        [ITemplateSelectTextElement, React.Dispatch<React.SetStateAction<ITemplateSelectTextElement>>]
+        = useState(props.config as ITemplateSelectTextElement);
 
     useEffect((): void => {
         setConfig(props.config as ITemplateSelectTextElement);

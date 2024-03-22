@@ -4,15 +4,15 @@ import Loading from "@hi-ui/loading";
 import {useSelector} from "react-redux";
 import {RootState} from "../lib/Store";
 import Notification from "../lib/Notification";
-import {useNavigate} from 'react-router-dom';
+import {NavigateFunction, useNavigate} from 'react-router-dom';
 
 function TemplatePreview(): React.JSX.Element {
     const templatePreviewRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
     const iframeRef: React.RefObject<HTMLIFrameElement> = useRef<HTMLIFrameElement>(null);
-    const [iframeStyle, setIframeStyle] = useState<object>({});
-    const [loading, setLoading] = useState<boolean>(true);
+    const [iframeStyle, setIframeStyle]: [object, React.Dispatch<React.SetStateAction<object>>] = useState<object>({});
+    const [loading, setLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(true);
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
-    const navigate = useNavigate();
+    const navigate: NavigateFunction = useNavigate();
     const calculateAspectRatio = (width: number): [number, number] => {
         return [width, width / 16 * 9];
     };

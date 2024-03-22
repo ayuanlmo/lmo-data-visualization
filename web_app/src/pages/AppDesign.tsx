@@ -6,9 +6,13 @@ import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
 import DesignConfigs from "../components/DesignConfigs";
 import YExtendTemplate from "../components/YExtendTemplate";
+import {ColProps, RowProps} from "@hi-ui/hiui";
 
 function AppDesign(): React.JSX.Element {
-    const {Row, Col} = Grid;
+    const {Row, Col}: {
+        Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
+        Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
+    } = Grid;
 
     return (
         <div className={'data-visualization-design dark-mode'}>

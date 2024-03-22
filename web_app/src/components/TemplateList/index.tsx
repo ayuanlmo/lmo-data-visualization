@@ -5,14 +5,26 @@ import Request from "../../lib/Request";
 import TemplateItem, {ITemplate} from "./TemplateItem";
 import EmptyState from "@hi-ui/empty-state";
 import YExtendTemplate from "../YExtendTemplate";
-import {Button, Input, Select} from "@hi-ui/hiui";
+import {Button, ColProps, Input, RowProps, Select} from "@hi-ui/hiui";
 import {SearchOutlined} from "@hi-ui/icons";
 
+interface QueryParams {
+    name: string;
+    pageIndex: number;
+    pageSize: number;
+    type: string;
+}
+
 function TemplateList(): React.JSX.Element {
-    const {Row, Col} = Grid;
-    const [templates, setTemplates] = useState<Array<ITemplate>>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [queryParams, setQueryParams] = useState({
+    const {Row, Col}:
+        {
+            Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
+            Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
+        } = Grid;
+    const [templates, setTemplates]: [
+        ITemplate[], React.Dispatch<React.SetStateAction<ITemplate[]>>] = useState<Array<ITemplate>>([]);
+    const [loading, setLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
+    const [queryParams, setQueryParams]: [QueryParams, React.Dispatch<React.SetStateAction<QueryParams>>] = useState({
         name: '',
         pageIndex: 0,
         pageSize: 50,
