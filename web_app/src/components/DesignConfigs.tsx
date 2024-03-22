@@ -4,7 +4,7 @@ import {useTemplateMessageListener} from "../bin/Hooks";
 import {ITemplateSelectTextElement} from "../types/TemplateMessage";
 import YExtendTemplate from "./YExtendTemplate";
 
-function DesignConfigs(): React.JSX.Element {
+const DesignConfigs = (): React.JSX.Element => {
     const [currentTextConfig, setCurrentTextConfig]:
         [null | ITemplateSelectTextElement, React.Dispatch<React.SetStateAction<ITemplateSelectTextElement | null>>]
         = useState<null | ITemplateSelectTextElement>(null);
@@ -28,6 +28,6 @@ function DesignConfigs(): React.JSX.Element {
             </div>
         </div>
     );
-}
+};
 
 export default DesignConfigs;

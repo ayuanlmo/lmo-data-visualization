@@ -5,7 +5,7 @@ export interface IColorPickerProps {
     onChange?: (value: string) => void;
 }
 
-function ColorPicker(props: IColorPickerProps): React.JSX.Element {
+const ColorPicker = (props: IColorPickerProps): React.JSX.Element => {
     const {
         value,
         onChange
@@ -29,6 +29,6 @@ function ColorPicker(props: IColorPickerProps): React.JSX.Element {
             />
         </>
     );
-}
+};
 
 export default ColorPicker;

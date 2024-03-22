@@ -15,7 +15,7 @@ interface QueryParams {
     type: string;
 }
 
-function TemplateList(): React.JSX.Element {
+const TemplateList = (): React.JSX.Element => {
     const {Row, Col}:
         {
             Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
@@ -111,6 +111,6 @@ function TemplateList(): React.JSX.Element {
             </YExtendTemplate>
         </div>
     );
-}
+};
 
 export default TemplateList;

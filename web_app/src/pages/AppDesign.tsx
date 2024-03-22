@@ -8,7 +8,8 @@ import DesignConfigs from "../components/DesignConfigs";
 import YExtendTemplate from "../components/YExtendTemplate";
 import {ColProps, RowProps} from "@hi-ui/hiui";
 
-function AppDesign(): React.JSX.Element {
+
+const AppDesign = (): React.JSX.Element => {
     const {Row, Col}: {
         Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
         Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
@@ -45,6 +46,6 @@ function AppDesign(): React.JSX.Element {
             </div>
         </div>
     );
-}
+};
 
 export default AppDesign;

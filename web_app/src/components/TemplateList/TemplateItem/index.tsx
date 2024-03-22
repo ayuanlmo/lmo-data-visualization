@@ -29,7 +29,7 @@ export interface EditTemplateValue {
     id?: string;
 }
 
-function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
+const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const {onRefresh} = props;
     const [data, seData]: [ITemplate, React.Dispatch<React.SetStateAction<ITemplate>>] = useState(props.data);
     const {Col}: {
@@ -207,6 +207,6 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
             </div>
         </Col>
     );
-}
+};
 
 export default TemplateItem;

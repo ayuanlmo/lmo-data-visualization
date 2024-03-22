@@ -9,7 +9,7 @@ export interface ITextConfigProps {
     config: null | ITemplateSelectTextElement
 }
 
-function TextConfig(props: ITextConfigProps): React.JSX.Element {
+const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
     const {Col, Row}:
         {
             Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>;
@@ -208,6 +208,6 @@ function TextConfig(props: ITextConfigProps): React.JSX.Element {
             <div className={'config-line dark-mode'}></div>
         </div>
     );
-}
+};
 
 export default TextConfig;

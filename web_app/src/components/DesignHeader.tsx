@@ -8,7 +8,7 @@ export interface IDesignHeaderProps {
     readonly onSynthesis?: () => void;
 }
 
-function DesignHeader(props: IDesignHeaderProps): React.JSX.Element {
+const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
     const {
         onBlack,
         onSave,
@@ -54,6 +54,6 @@ function DesignHeader(props: IDesignHeaderProps): React.JSX.Element {
             </div>
         </div>
     );
-}
+};
 
 export default DesignHeader;

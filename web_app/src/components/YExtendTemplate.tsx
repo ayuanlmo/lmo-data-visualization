@@ -8,7 +8,7 @@ export interface YExtendTemplateProps {
     show?: boolean;
 }
 
-function YExtendTemplate(props: YExtendTemplateProps): YExtendTemplateChildrenElementType {
+const YExtendTemplate = (props: YExtendTemplateProps): YExtendTemplateChildrenElementType => {
     const {
         children,
         show = true
@@ -20,6 +20,6 @@ function YExtendTemplate(props: YExtendTemplateProps): YExtendTemplateChildrenEl
         return <React.Fragment>{children.map(child => child)}</React.Fragment>;
 
     return children;
-}
+};
 
 export default YExtendTemplate;

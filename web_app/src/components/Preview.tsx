@@ -6,7 +6,7 @@ import {RootState} from "../lib/Store";
 import Notification from "../lib/Notification";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 
-function TemplatePreview(): React.JSX.Element {
+const TemplatePreview = (): React.JSX.Element => {
     const templatePreviewRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
     const iframeRef: React.RefObject<HTMLIFrameElement> = useRef<HTMLIFrameElement>(null);
     const [iframeStyle, setIframeStyle]: [object, React.Dispatch<React.SetStateAction<object>>] = useState<object>({});
@@ -77,6 +77,6 @@ function TemplatePreview(): React.JSX.Element {
             </div>
         </Loading>
     );
-}
+};
 
 export default TemplatePreview;

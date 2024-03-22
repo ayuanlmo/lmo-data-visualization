@@ -4,7 +4,7 @@ import AppConfig from "../config/AppConfig";
 import {Button} from "@hi-ui/hiui";
 import TemplateList from "../components/TemplateList";
 
-function AppHome(): React.JSX.Element {
+const AppHome = (): React.JSX.Element => {
     return (
         <div className={'data-visualization dark-mode app_none_user_select'}>
             <div className={'data-visualization-header dark-mode'}>
@@ -21,6 +21,6 @@ function AppHome(): React.JSX.Element {
             </div>
         </div>
     );
-}
+};
 
 export default AppHome;
