@@ -88,7 +88,9 @@ function TemplateList(): React.JSX.Element {
             <YExtendTemplate show={templates.length > 0}>
                 <Row gutter>
                     {
-                        templates.map((i: ITemplate) => <TemplateItem key={i.id} data={i}/>)
+                        templates.map((i: ITemplate) => <TemplateItem onRefresh={(): void => {
+                            getTemplate();
+                        }} key={i.id} data={i}/>)
                     }
                 </Row>
             </YExtendTemplate>

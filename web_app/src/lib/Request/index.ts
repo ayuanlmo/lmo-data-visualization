@@ -56,6 +56,15 @@ namespace Request {
             headers: {'Content-Type': 'application/json'}
         });
     };
+
+    export const copyTemplate = (data: object = {}) => {
+        return axios({
+            url: '/template/copy',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
 }
 
 export default Request;

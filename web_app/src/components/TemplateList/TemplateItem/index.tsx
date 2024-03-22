@@ -19,9 +19,11 @@ export interface ITemplate {
 
 export interface ITemplateItemProps {
     data: ITemplate;
+    onRefresh: () => void;
 }
 
 function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
+    const {onRefresh} = props;
     const [data, seData] = useState(props.data);
     const {Col} = Grid;
     const colSpan = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
@@ -33,15 +35,24 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
         description: data.description
     });
     const [loading, setLoading] = useState<boolean>(false);
+    const [isCopyTemplate, setIsCopyTemplate] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const closeModal = (): void => {
         setEditModalVisible(false);
+        setIsCopyTemplate(false);
         setEditFormValue({
             name: data.name,
             description: data.description
         });
+    };
+
+    const getModalTitle = (): string => {
+        if (isCopyTemplate)
+            return '复制模板';
+
+        return '编辑模板';
     };
 
     return (
@@ -59,7 +70,7 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                         onClose={closeModal}
                         onCancel={closeModal}
                         visible={editModalVisible}
-                        title={'编辑模板'}
+                        title={getModalTitle()}
                         footer={[
                             <FormItem field="description" key={1} valueType="string">
                                 <div style={{marginTop: '1rem'}}>
@@ -69,15 +80,20 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                                         loading={loading}
                                         onClick={(): void => {
                                             setLoading(true);
-                                            Request.editTemplate({id: data.id, ...editFormValue})
-                                                .finally((): void => {
-                                                    setLoading(false);
-                                                })
-                                                .then((): void => {
-                                                    Notification.message('修改成功', 'success');
+                                            const Api = isCopyTemplate ? Request.copyTemplate : Request.editTemplate;
+
+                                            Api({
+                                                id: data.id, ...editFormValue
+                                            }).then((): void => {
+                                                Notification.message(isCopyTemplate ? '复制成功' : '修改成功', 'success');
+                                                if (!isCopyTemplate)
                                                     seData({...data, ...editFormValue});
-                                                    closeModal();
-                                                });
+                                                else
+                                                    onRefresh();
+                                                closeModal();
+                                            }).finally((): void => {
+                                                setLoading(false);
+                                            });
                                         }}
                                     >
                                         提交
@@ -131,6 +147,8 @@ function TemplateItem(props: ITemplateItemProps): React.JSX.Element {
                         <div className={'template-item-mask-option app_flex_box app_position_relative'}>
                             <div onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
                                 e.stopPropagation();
+                                setIsCopyTemplate(true);
+                                setEditModalVisible(true);
                             }} className={'template-item-mask-option-item template-item-mask-option-item-primary'}>
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
