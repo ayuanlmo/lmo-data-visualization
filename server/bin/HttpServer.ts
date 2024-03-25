@@ -1,13 +1,13 @@
 import path from "path";
-import Express = require("express");
 import {WithWebsocketMethod} from "express-ws";
 import {NextFunction, Request, Response} from "express";
 import AppConfig from "../conf/AppConfig";
 import Utils from "../utils";
 import router from "../router";
 import Cli from "../lib/Cli";
+import {IWsApp, WebSocketServer} from "./WebSocketServer";
+import Express = require("express");
 import CreateErrorMessage = Utils.createErrorMessage;
-import {WebSocketServer, IWsApp} from "./WebSocketServer";
 
 interface IExpressApp extends Express.Application {
     ws?: (url: string, cb: (ws: IWsApp) => void) => void;
@@ -34,6 +34,17 @@ export default class HttpServer {
     private init(): void {
         this.App.use(Express.json());
         this.App.use((require('cors')()));
+        this.App.use((_req: Request, res: Response, next: NextFunction): void => {
+            const methods: Array<string> = ['GET', 'PUT', 'DELETE'];
+            const routers: Array<string> = ['uploadFile','template/copy'];
+
+            if (methods.some((i: string): boolean => _req.method === i) || routers.some((i: string) => _req.url.includes(i))) {
+                if (AppConfig.__LIVE_SERVER)
+                    return void res.json(CreateErrorMessage('ext00el'));
+                next();
+            } else
+                next();
+        });
         this.App.use('/api', router);
         this.App.use(Express.urlencoded({
             extended: false
@@ -54,8 +65,9 @@ export default class HttpServer {
                 next(e);
             }
         });
+
         this.App.use((_req: Request, res: Response): void => {
-            res.status(200).json(CreateErrorMessage('ext00n',404));
+            res.status(200).json(CreateErrorMessage('ext00n', 404));
         });
         this.App.use((_err: any, req: Request, res: Response): void => {
             res.status(200).json(CreateErrorMessage('ext00e'));
