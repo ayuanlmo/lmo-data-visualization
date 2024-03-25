@@ -11,9 +11,6 @@ import createSuccessMessage = Utils.createSuccessMessage;
 
 export default class File {
     public static upload(req: Request, res: Response): void {
-        if (AppConfig.__LIVE_SERVER)
-            return void res.json(createErrorMessage('ext00el'));
-
         const File: Express.Multer.File | undefined = req.file;
 
         if (!File)
@@ -54,9 +51,6 @@ export default class File {
     }
 
     public static delete(req: Request, res: Response): void {
-        if (AppConfig.__LIVE_SERVER)
-            return void res.json(createErrorMessage('ext00el'));
-
         const {
             id = ""
         } = req.params;

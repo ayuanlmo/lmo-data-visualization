@@ -2,7 +2,6 @@ import {Op} from "sequelize";
 import {Request, Response} from "express";
 import {TemplateModel} from "../dataBase";
 import Utils from "../../utils";
-import AppConfig from "../../conf/AppConfig";
 import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
 
@@ -48,9 +47,6 @@ export default class TemplateController {
     }
 
     public static copyTemplate(req: Request, res: Response): void {
-        if (AppConfig.__LIVE_SERVER)
-            return void res.json(createErrorMessage('ext00el'));
-
         const {
             id = '',
             name = '',
@@ -80,8 +76,6 @@ export default class TemplateController {
     }
 
     public static editTemplate(req: Request, res: Response): void {
-        if (AppConfig.__LIVE_SERVER)
-            return void res.json(createErrorMessage('ext00el'));
 
         const {id = '', name = '', description = ''} = req.body ?? {};
 
@@ -120,9 +114,6 @@ export default class TemplateController {
     }
 
     public static deleteTemplate(req: Request, res: Response): void {
-        if (AppConfig.__LIVE_SERVER)
-            return void res.json(createErrorMessage('ext00el'));
-
         const {id = ''} = req.body ?? {};
 
         if (id === '')
