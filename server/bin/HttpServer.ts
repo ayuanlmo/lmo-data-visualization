@@ -36,12 +36,13 @@ export default class HttpServer {
         this.App.use((require('cors')()));
         this.App.use((_req: Request, res: Response, next: NextFunction): void => {
             const methods: Array<string> = ['GET', 'PUT', 'DELETE'];
-            const routers: Array<string> = ['uploadFile','template/copy'];
+            const routers: Array<string> = ['uploadFile', 'template/copy'];
 
-            if (methods.some((i: string): boolean => _req.method === i) || routers.some((i: string) => _req.url.includes(i))) {
-                if (AppConfig.__LIVE_SERVER)
+            if (AppConfig.__LIVE_SERVER) {
+                if (methods.some((i: string): boolean => _req.method === i) || routers.some((i: string): boolean => _req.url.includes(i)))
                     return void res.json(CreateErrorMessage('ext00el'));
-                next();
+                else
+                    next();
             } else
                 next();
         });
