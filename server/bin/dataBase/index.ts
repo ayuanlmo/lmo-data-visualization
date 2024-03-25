@@ -24,6 +24,18 @@ const TemplateModel = DB.define('Templates', {
     timestamps: false
 });
 
+const ColorModel = DB.define('Colors', {
+    id: {
+        primaryKey: true,
+        type: DataTypes.TEXT
+    },
+    value: DataTypes.TEXT,
+    cssCode: DataTypes.TEXT,
+    type: DataTypes.INTEGER
+}, {
+    timestamps: false
+});
+
 const ResourcesModel = DB.define('Resources', {
     id: {
         primaryKey: true,
@@ -68,3 +80,4 @@ export default DB;
 export {TemplateModel};
 export {ResourcesModel};
 export {UpLoadFilesModel};
+export {ColorModel};

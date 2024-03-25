@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import TemplateController from "../bin/controllers/Template";
 import File from "../bin/controllers/File";
 import Multer = require("multer");
+import Color from "../bin/controllers/Color";
 
 export const multer: Multer.Multer = Multer({
     dest: require('path').resolve('./_data/static/public/uploads'),
@@ -25,6 +26,9 @@ _Router.post('/template/copy', (req: Request, res: Response): void => {
 });
 _Router.post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
     File.upload(req, res);
+});
+_Router.get('/color', (req: Request, res: Response): void => {
+    Color.getColors(req, res);
 });
 
 export default _Router;
