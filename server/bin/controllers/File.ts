@@ -6,6 +6,7 @@ import AppConfig from "../../conf/AppConfig";
 import UpLoadFileTypes from "../../const/UpLoadFileTypes";
 import {ReadStream, WriteStream} from "node:fs";
 import {UpLoadFilesModel} from "../dataBase";
+import {Op} from "sequelize";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 
@@ -76,6 +77,27 @@ export default class File {
                 } else
                     res.json(createErrorMessage('ext00d'));
             });
+        });
+    }
+
+    public static getFiles(req: Request, res: Response): void {
+        const {
+            name = '',
+            pageIndex = 0,
+            pageSize = 10,
+        } = req.query ?? {};
+
+        UpLoadFilesModel.findAndCountAll({
+            where: {
+                name: {[Op.like]: `%${name}%`}
+            },
+            offset: (Number(pageIndex) - 1) * Number(pageIndex),
+            limit: Number(pageSize)
+        }).then(({rows, count}): void => {
+            res.json(createSuccessMessage({
+                rows,
+                total: count
+            }));
         });
     }
 }
