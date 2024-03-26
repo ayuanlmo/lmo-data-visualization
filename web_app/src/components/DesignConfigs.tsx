@@ -3,6 +3,7 @@ import TextConfig from "./TextConfig";
 import {useTemplateMessageListener} from "../bin/Hooks";
 import {ITemplateSelectTextElement} from "../types/TemplateMessage";
 import YExtendTemplate from "./YExtendTemplate";
+import ColorConfig from "./ColorConfig";
 
 const DesignConfigs = (): React.JSX.Element => {
     const [currentTextConfig, setCurrentTextConfig]:
@@ -25,6 +26,7 @@ const DesignConfigs = (): React.JSX.Element => {
                 <YExtendTemplate show={currentTextConfig !== null}>
                     <TextConfig config={currentTextConfig}/>
                 </YExtendTemplate>
+                <ColorConfig />
             </div>
         </div>
     );

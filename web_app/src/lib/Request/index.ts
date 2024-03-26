@@ -65,6 +65,15 @@ namespace Request {
             headers: {'Content-Type': 'application/json'}
         });
     };
+
+    export const getColors = (data: object = {}) => {
+        return axios({
+            url: '/color',
+            method: 'get',
+            params: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
 }
 
 export default Request;
