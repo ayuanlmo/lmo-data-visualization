@@ -1,4 +1,5 @@
-import "./AppDesign.scss";
+import "./style/AppDesign.scss";
+import "./style/AppDesign-Dack.scss";
 import React from "react";
 import DesignHeader from "../components/DesignHeader";
 import Grid from "@hi-ui/grid";

@@ -61,9 +61,8 @@ const TemplatePreview = (): React.JSX.Element => {
     });
     return (
         <Loading content={'初始化模板...'} visible={loading}>
-            <div ref={templatePreviewRef} className={'template-preview dark-mode'}>
+            <div ref={templatePreviewRef} className={'template-preview'}>
                 <iframe
-                    className={'dark-mode'}
                     onError={(): void => {
                         toTemplateList();
                     }}

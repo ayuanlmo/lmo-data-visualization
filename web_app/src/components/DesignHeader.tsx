@@ -17,7 +17,7 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
     } = props;
 
     return (
-        <div className={'data-visualization-design-header dark-mode app_position_relative app_none_user_select'}>
+        <div className={'data-visualization-design-header app_position_relative app_none_user_select'}>
             <div onClick={(): void => {
                 onBlack && onBlack();
             }} className={'data-visualization-design-header-black app_flex_box app_cursor_pointer'}>

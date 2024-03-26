@@ -1,4 +1,4 @@
-@import "../style/theme";
+@import "../../style/theme";
 
 .data-visualization {
   width: 100%;
@@ -39,19 +39,12 @@
     }
   }
 
-  .dark-mode {
-    background-color: $__primary-bg-color-dark;
-  }
-
   .data-visualization-templates {
     width: 100vw;
     height: calc(100vh - 4.125rem);
     overflow: scroll;
   }
 
-  &.dark-mode {
-    background-color: $__primary-sub-bg-color-dark;
-  }
 }
 
 

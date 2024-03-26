@@ -1,4 +1,4 @@
-@import "../style/theme";
+@import "../../style/theme";
 
 .data-visualization-design {
   width: 100vw;
@@ -55,10 +55,6 @@
       display: flex;
       justify-content: end;
     }
-
-    &.dark-mode {
-      background-color: $__primary-bg-color-dark
-    }
   }
 
   .template-preview {
@@ -71,14 +67,6 @@
       transform: scale(0.48);
       transform-origin: 0 0;
       border-radius: 0.625rem;
-
-      &.dark-mode {
-        background: $__primary-bg-color-dark;
-      }
-    }
-
-    &.dark-mode {
-      background: $__primary-bg-color-dark;
     }
   }
 
@@ -88,10 +76,6 @@
     height: 5.5rem;
     margin-top: 1.5rem;
     box-shadow: 0 6px 4rem 0 rgba(0, 0, 0, 0.25);
-
-    &.dark-mode {
-      background: $__primary-bg-color-dark;
-    }
   }
 
   .design-configs {
@@ -103,10 +87,6 @@
       height: 3rem;
       border-radius: 0.625rem 0.625rem 0 0;
       box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-
-      &.dark-mode {
-        background: #2F3C4E;
-      }
     }
 
     .design-configs-container {
@@ -142,10 +122,29 @@
           }
         }
       }
-    }
 
-    &.dark-mode {
-      background: $__primary-bg-color-dark;
+      .color-config {
+        .color-config-item {
+          margin-bottom: 1.5rem;
+
+          .color-config-item-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+
+            &:before {
+              content: "";
+              width: .25rem;
+              background-color: $theme-color;
+              margin-right: .6rem;
+              border-radius: 6px;
+              display: block;
+              height: 0.75rem;
+              position: relative;
+              top: .3rem;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -153,14 +152,39 @@
     width: 100%;
     height: 1px;
     margin: 2.5rem 0;
-
-    &.dark-mode {
-      background: #2F3E51;
-    }
   }
 
-  &.dark-mode {
-    background: $__primary-sub-bg-color-dark;
+}
+
+.c-select-theme {
+  width: 100%;
+  height: 2.125rem;
+  justify-content: space-between;
+
+  div {
+    background: #1CA8E3;
+    flex: 1;
+
+    &:first-child {
+      border-radius: .5rem 0 0 .5rem;
+    }
+
+    &:last-child {
+      border-radius: 0 .5rem .5rem 0;
+    }
   }
 }
 
+.c-reset-button {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: .5rem;
+
+  svg {
+    margin: auto;
+    width: 0.875rem;
+    display: block;
+    position: relative;
+    top: .3rem;
+  }
+}

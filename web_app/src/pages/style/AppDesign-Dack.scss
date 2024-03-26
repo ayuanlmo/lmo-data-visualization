@@ -1,0 +1,53 @@
+@import "../../style/theme";
+
+.dark-mode {
+  .data-visualization-design {
+    background: $__primary-sub-bg-color-dark;
+
+    .data-visualization-design-header {
+      background-color: $__primary-bg-color-dark
+    }
+
+    .template-preview {
+      background: $__primary-bg-color-dark;
+
+      iframe {
+        background: $__primary-bg-color-dark;
+      }
+    }
+
+    .progress-bar {
+      background: $__primary-bg-color-dark;
+    }
+
+    .design-configs {
+      background: $__primary-bg-color-dark;
+
+      .design-configs-top-options {
+        background: #2F3C4E;
+      }
+
+      .design-configs-container {
+        .text-config {
+          .text-config-title {
+            color: $color-white;
+          }
+        }
+
+        .color-config {
+          .color-config-item-label {
+            color: $color-white;
+          }
+        }
+      }
+    }
+
+    .config-line {
+      background: #2F3E51;
+    }
+  }
+}
+
+.c-reset-button {
+  background: $__form-component-bg-color-dark;
+}

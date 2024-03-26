@@ -1,0 +1,11 @@
+@import "../../style/theme";
+
+.dark-mode {
+  .data-visualization {
+    background-color: $__primary-sub-bg-color-dark;
+
+    .data-visualization-header {
+      background-color: $__primary-bg-color-dark;
+    }
+  }
+}
