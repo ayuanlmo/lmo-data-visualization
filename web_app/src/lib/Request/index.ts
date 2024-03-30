@@ -74,6 +74,24 @@ namespace Request {
             headers: {'Content-Type': 'application/json'}
         });
     };
+
+    export const getFileList = (data: object = {}) => {
+        return axios({
+            url: '/uploadFile',
+            method: 'get',
+            params: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const uploadFile = (data: object = {}) => {
+        return axios({
+            url: '/uploadFile',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'multipart/form-data'}
+        });
+    };
 }
 
 export default Request;

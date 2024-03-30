@@ -189,3 +189,45 @@
     top: .3rem;
   }
 }
+
+
+.c-select-file {
+  height: 100%;
+
+  .c-select-file-search {
+    margin-bottom: 1.125rem;
+    height: 6.5%;
+
+    button {
+      float: right;
+    }
+  }
+
+  .c-select-file-content {
+    height: 80%;
+    overflow-y: auto;
+  }
+
+  .c-select-file-pagination {
+    margin-top: 2%;
+    display: flex;
+    justify-content: end;
+  }
+
+  .c-image-waterfall {
+    column-count: 5;
+    column-gap: 10px;
+    overflow-y: scroll;
+
+    .c-image-waterfall-item {
+      height: 100%;
+      break-inside: avoid;
+      margin-bottom: 10px;
+
+      img {
+        width: 100%;
+        border-radius: 0.625rem;
+      }
+    }
+  }
+}
