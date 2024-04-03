@@ -10,7 +10,7 @@ namespace MyStorage {
     };
 
     export const get = (key: string): string | null => {
-        return storage.getItem(`${namespace}${key}}`);
+        return storage.getItem(`${namespace}${key}`);
     };
 
     export const remove = (key: string): void => {
