@@ -1,53 +1,62 @@
 @import "../../style/theme";
 
-.dark-mode {
+.light-mode {
   .data-visualization-design {
-    background: $__primary-sub-bg-color-dark;
+    background: $__primary-high-bg-color-light;
 
     .data-visualization-design-header {
-      background-color: $__primary-bg-color-dark;
+      background-color: $__primary-sub-bg-color-light;
+      box-shadow: none;
 
       .data-visualization-design-header-black {
-        color: $color-white;
+        color: $__primary-input-color-light;
+
+        svg {
+          background-color: $__primary-input-color-light;
+          border-radius: 50%;
+        }
       }
     }
 
     .template-preview {
-      background: $__primary-bg-color-dark;
+      background: $__primary-sub-bg-color-light;
+      box-shadow: none;
 
       iframe {
-        background: $__primary-bg-color-dark;
+        background: $__primary-sub-bg-color-light;
       }
     }
 
     .progress-bar {
-      background: $__primary-bg-color-dark;
+      background: $__primary-sub-bg-color-light;
+      box-shadow: none;
     }
 
     .design-configs {
-      background: $__primary-bg-color-dark;
+      background: $__primary-sub-bg-color-light;
 
       .design-configs-top-options {
-        background: #2F3C4E;
+        background: $__primary-bg-color-light;
+        box-shadow: none;
       }
 
       .design-configs-container {
         .text-config {
           .text-config-title {
-            color: $color-white;
+            color: $__primary-input-color-light;
           }
         }
 
         .color-config {
           .color-config-item-label {
-            color: $color-white;
+            color: $__primary-input-color-light;
           }
         }
       }
     }
 
     .config-line {
-      background: #2F3E51;
+      background: #EAEAEA;
     }
   }
 
@@ -66,9 +75,4 @@
       background: $theme-color !important;
     }
   }
-
-}
-
-.c-reset-button {
-  background: $__form-component-bg-color-dark;
 }

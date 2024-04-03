@@ -1,0 +1,30 @@
+@import "../../style/theme";
+
+.light-mode {
+  .data-visualization {
+    background-color: $__primary-bg-color-light;
+  }
+
+  .data-visualization-header {
+    background-color: $__primary-sub-bg-color-light;
+
+    .data-visualization-header-app-name {
+      color: $theme-color;
+    }
+  }
+
+  .data-visualization-templates {
+    .hi-v4-input__text {
+      color: #3D3D3D !important;
+    }
+
+    .hi-v4-mock-input {
+      background-color: #fff !important;
+    }
+
+    .hi-v4-input__inner {
+      border: 0 !important;
+      background: #FFF !important;
+    }
+  }
+}

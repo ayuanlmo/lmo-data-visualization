@@ -1,5 +1,6 @@
 import React from "react";
 import {Button} from "@hi-ui/hiui";
+import GlobalComponent from "./GlobalComponent";
 
 export interface IDesignHeaderProps {
     readonly onBlack?: () => void;
@@ -38,6 +39,9 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
                 <div className={'black'}>返回</div>
             </div>
             <div className={'data-visualization-design-header-option'}>
+                <GlobalComponent.SwitchTheme style={{
+                    marginTop: '0'
+                }}/>
                 <Button onClick={
                     (): void => {
                         onSave && onSave();

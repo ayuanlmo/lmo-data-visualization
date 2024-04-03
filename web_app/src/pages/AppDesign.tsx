@@ -1,5 +1,6 @@
 import "./style/AppDesign.scss";
 import "./style/AppDesign-Dack.scss";
+import "./style/AppDesign-Light.scss";
 import React from "react";
 import DesignHeader from "../components/DesignHeader";
 import Grid from "@hi-ui/grid";
@@ -17,7 +18,7 @@ const AppDesign = (): React.JSX.Element => {
     } = Grid;
 
     return (
-        <div className={'data-visualization-design dark-mode'}>
+        <div className={'data-visualization-design'}>
             <DesignHeader/>
 
             <div className={'app_position_relative'} style={{

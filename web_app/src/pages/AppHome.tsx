@@ -1,9 +1,11 @@
 import "./style/AppHome.scss";
 import "./style/AppHome-Dack.scss";
+import "./style/AppHome-Light.scss";
 import React from "react";
 import AppConfig from "../config/AppConfig";
 import {Button} from "@hi-ui/hiui";
 import TemplateList from "../components/TemplateList";
+import GlobalComponent from "../components/GlobalComponent";
 
 const AppHome = (): React.JSX.Element => {
     return (
@@ -13,6 +15,7 @@ const AppHome = (): React.JSX.Element => {
                     {AppConfig.appName}
                 </div>
                 <div className={'data-visualization-header-option header-item'}>
+                    <GlobalComponent.SwitchTheme/>
                     <Button type="secondary">日志</Button>
                     <Button type="primary">资源库</Button>
                 </div>
