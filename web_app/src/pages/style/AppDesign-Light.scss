@@ -52,6 +52,15 @@
             color: $__primary-input-color-light;
           }
         }
+
+        .text-config-item {
+          margin-top: 1.375em;
+
+          .text-config-item-label {
+            color: $__primary-input-color-light;
+          }
+        }
+
       }
     }
 
@@ -73,6 +82,16 @@
 
     &:hover {
       background: $theme-color !important;
+    }
+  }
+
+  .c-reset-button {
+    background: $__primary-input-bg-color-light;
+
+    svg {
+      path {
+        fill: $__primary-input-color-light;
+      }
     }
   }
 }

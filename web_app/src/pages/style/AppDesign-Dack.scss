@@ -38,6 +38,14 @@
           }
         }
 
+        .text-config-item {
+          margin-top: 1.375em;
+
+          .text-config-item-label {
+            color: $color-white;
+          }
+        }
+
         .color-config {
           .color-config-item-label {
             color: $color-white;
@@ -67,8 +75,7 @@
     }
   }
 
-}
-
-.c-reset-button {
-  background: $__form-component-bg-color-dark;
+  .c-reset-button {
+    background: $__form-component-bg-color-dark;
+  }
 }

@@ -14,6 +14,10 @@
   box-shadow: none;
 }
 
+.hi-v4-number-input--appearance-line {
+  border: 0 !important;
+}
+
 .dark-mode {
   .hi-v4-input__text {
     color: #fff !important;
@@ -135,14 +139,6 @@
     background-color: $__primary-input-bg-color-light !important;
   }
 
-  //.hi-v4-picker__body {
-  //  //background-color: $__primary-bg-color-light;
-  //}
-  //
-  //.hi-v4-select-option--selected {
-  //  background-color: $__primary-bg-color-light;
-  //}
-
   .hi-v4-select-option--focused {
     background-color: $theme-color !important;
   }
@@ -186,13 +182,9 @@
 
   .hi-v4-number-input__input {
     border: 0 !important;
-    background: $__form-component-bg-color-dark !important;
-    color: #fff !important;
+    background: $__primary-input-bg-color-light !important;
+    color: $__primary-input-color-light !important;
     border-radius: 4px;
-  }
-
-  .hi-v4-number-input--appearance-line {
-    border: 0 !important;
   }
 
   .hi-v4-number-input--focused {
@@ -201,7 +193,7 @@
   }
 
   .hi-v4-input__prepend {
-    background-color: $__form-component-bg-color-dark !important;
+    background-color: $__primary-input-bg-color-light !important;
     border: 0 !important;;
     color: #607189 !important;;
     width: auto !important;;
