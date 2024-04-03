@@ -18,6 +18,19 @@
   border: 0 !important;
 }
 
+
+.hi-v4-modal__footer--divided::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  content: "";
+  display: block;
+  width: 100%;
+  margin-top: -1rem;
+  height: 1px;
+}
+
 .dark-mode {
   .hi-v4-input__text {
     color: #fff !important;
@@ -86,6 +99,10 @@
     color: #fff !important;
   }
 
+  .hi-v4-modal__footer {
+    padding: 0 1rem;
+  }
+
   .hi-v4-modal__footer--divided::before {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, $__form-component-bg-color-dark 100%) !important;
   }
@@ -122,6 +139,38 @@
   .hi-v4-loading__mask {
     background: #00000096 !important;
   }
+
+  .hi-v4-pagination__item {
+    background: $__form-component-bg-color-dark !important;
+  }
+
+  .hi-v4-pagination__item--active {
+    background: $__form-component-bg-color-dark !important;
+  }
+
+  .hi-v4-pagination__btn > button, .hi-v4-pagination-mini__btn > button {
+    background: $__form-component-bg-color-dark !important;
+
+    &:hover {
+      background: $theme-color !important;
+    }
+  }
+
+  .hi-v4-pagination__item {
+    background: $__form-component-bg-color-dark !important;
+  }
+
+  .hi-v4-pagination__item--active {
+    background: $__form-component-bg-color-dark !important;
+  }
+
+  .hi-v4-pagination__btn > button, .hi-v4-pagination-mini__btn > button {
+    background: $__form-component-bg-color-dark !important;
+
+    &:hover {
+      background: $theme-color !important;
+    }
+  }
 }
 
 .light-mode {
@@ -156,28 +205,28 @@
   }
 
   .hi-v4-modal__wrapper {
-    background: #232F3F !important;
+    background: $__primary-sub-bg-color-light !important;
   }
 
   .hi-v4-modal__title {
-    color: #fff;
+    color: $__primary-input-color-light;
     user-select: none;
   }
 
   .hi-v4-modal__header--divided {
-    border-bottom: 1px solid $__form-component-bg-color-dark;
+    border-bottom: 1px solid #EAEAEA;
   }
 
   .hi-v4-form-label__content__text {
-    color: #fff !important;
+    color: $__primary-input-color-light !important;
   }
 
   .hi-v4-modal__footer--divided::before {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, $__form-component-bg-color-dark 100%) !important;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #EAEAEA 100%) !important;
   }
 
   .hi-v4-icon-button--effect:hover::before, .hi-v4-icon-button--effect:focus::before {
-    background-color: $__form-component-bg-color-dark;
+    background-color: #EAEAEA;
   }
 
   .hi-v4-number-input__input {
@@ -210,6 +259,7 @@
     background-color: $__primary-input-bg-color-light !important;
     color: $__primary-input-color-light !important;
   }
+
 }
 
 .hi-v4-loading__wrapper {

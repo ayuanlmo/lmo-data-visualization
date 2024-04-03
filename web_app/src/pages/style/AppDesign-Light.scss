@@ -69,21 +69,6 @@
     }
   }
 
-  .hi-v4-pagination__item {
-    background: $__form-component-bg-color-dark !important;
-  }
-
-  .hi-v4-pagination__item--active {
-    background: $__form-component-bg-color-dark !important;
-  }
-
-  .hi-v4-pagination__btn > button, .hi-v4-pagination-mini__btn > button {
-    background: $__form-component-bg-color-dark !important;
-
-    &:hover {
-      background: $theme-color !important;
-    }
-  }
 
   .c-reset-button {
     background: $__primary-input-bg-color-light;
