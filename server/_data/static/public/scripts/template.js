@@ -31,16 +31,11 @@ export default class TempLate {
 
         const elements = {
             'main-title': {
-                value: this.conf.config.text.mainTitle,
-                style: this.conf.config.text.mainTitle
-            },
-            'sub-title': {
-                value: this.conf.config.text.subTitle,
-                style: this.conf.config.text.subTitle
-            },
-            'from-source': {
-                value: this.conf.config.text.fromSource,
-                style: this.conf.config.text.fromSource
+                value: this.conf.config.text.mainTitle, style: this.conf.config.text.mainTitle
+            }, 'sub-title': {
+                value: this.conf.config.text.subTitle, style: this.conf.config.text.subTitle
+            }, 'from-source': {
+                value: this.conf.config.text.fromSource, style: this.conf.config.text.fromSource
             }
         };
 
@@ -74,12 +69,16 @@ export default class TempLate {
         const w = style.width;
         const h = style.height;
         const key = el.getAttribute('data-name');
-
+        const subTextValueEl = el.querySelector('.text-value');
         const conf = {
             width: parseInt(w.substring(0, w.length - 2)),
             height: parseInt(h.substring(0, h.length - 2)),
             x: parseInt(x.substring(0, x.length - 2)),
-            y: parseInt(y.substring(0, y.length - 2))
+            y: parseInt(y.substring(0, y.length - 2)),
+        }
+
+        if (subTextValueEl) {
+            conf.value = subTextValueEl.textContent
         }
 
         this.conf.config.text[key] = {
@@ -105,7 +104,6 @@ export default class TempLate {
             } = data;
 
             if (type === 'SET_TEXT_CONFIG') this.initText(message);
-
         }
     }
 
@@ -177,18 +175,40 @@ export default class TempLate {
                 })
         }
         const initEvent = (element) => {
+            let isInputChinese = false;
+
             const handleEvent = (e) => {
-                e.stopPropagation();
+
+                const inputHandleEvent = () => {
+                    if (e.type === 'click')
+                        this.sendTemplateSelectTextConfig(e.target.classList.contains('text-value') ? e.target.parentElement : e.target);
+                }
+
+                if (e.type === 'compositionstart') {
+                    isInputChinese = true;
+                    return;
+                }
+                if (e.type === 'input') {
+                    if (!isInputChinese)
+                        return inputHandleEvent();
+                }
+                if (e.type === 'compositionend') {
+                    isInputChinese = false;
+                    return inputHandleEvent();
+                }
+
                 elements.forEach(i => {
                     const targetId = e.target.classList.contains('text-value') ? e.target.parentElement.id : e.target.id;
                     const _ = document.getElementById(i);
+
                     if (i !== targetId && _.classList.length > 0) {
                         _.classList.remove('active');
                         _.classList.remove('square-container');
                     }
                 });
                 if (e.type === 'click') {
-                    this.sendTemplateSelectTextConfig(e.target.classList.contains('text-value') ? e.target.parentElement : e.target);
+                    e.stopPropagation();
+                    inputHandleEvent();
                 }
                 element.classList.add('square-container');
                 element.classList.add('active');
@@ -196,6 +216,9 @@ export default class TempLate {
 
             element.addEventListener('mousedown', handleEvent);
             element.addEventListener('click', handleEvent);
+            element.addEventListener('input', handleEvent);
+            element.addEventListener('compositionend', handleEvent);
+            element.addEventListener('compositionstart', handleEvent);
             initGlobalEvent();
         };
 
