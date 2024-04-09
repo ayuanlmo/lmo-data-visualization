@@ -2,6 +2,7 @@ import path = require('path');
 import {DataTypes, Sequelize} from 'sequelize';
 import Cli from "../../lib/Cli";
 import AppConfig from "../../conf/AppConfig";
+import initDefaultData from "./init";
 
 const DB: Sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -66,8 +67,9 @@ const UpLoadFilesModel = DB.define('UpLoadFiles', {
     try {
         (async (): Promise<void> => {
             await DB.authenticate();
-            DB.sync().then((): void => {
+            DB.sync().then(async (): Promise<void> => {
                 Cli.debug('Models synced successfully.');
+                await initDefaultData();
             });
         })();
     } catch (error) {
