@@ -32,7 +32,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
     const FormItem = Form.Item;
     const uploadFromRef = useRef<FormHelpers>(null);
     const [pageTotal, setPageTotal] = useState<number>(0);
-    const [visible, setVisible] = useState<boolean>(true);
+    const [visible, setVisible] = useState<boolean>(false);
 
     const open = (): void => setVisible(!visible);
 

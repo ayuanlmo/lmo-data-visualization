@@ -35,6 +35,10 @@
     .design-configs {
       background: $__primary-sub-bg-color-light;
 
+      .select-bg-image {
+        background-color: #EDF2F5;
+      }
+
       .design-configs-top-options {
         background: $__primary-bg-color-light;
         box-shadow: none;

@@ -82,6 +82,20 @@
     height: 100%;
     border-radius: 0.625rem;
 
+    .select-bg-image {
+      overflow: hidden;
+      height: 10.5rem;
+      text-align: center;
+      line-height: 10.5rem;
+      color: rgba(0, 0, 0, 0.6);
+      font-size: .8rem;
+      border-radius: 0.625rem;
+
+      img {
+        height: 100%;
+      }
+    }
+
     .design-configs-top-options {
       height: 3rem;
       border-radius: 0.625rem 0.625rem 0 0;

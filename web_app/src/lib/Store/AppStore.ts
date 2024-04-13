@@ -11,17 +11,38 @@ const AppStore = createSlice({
             name: "",
             path: "",
             type: 0
+        },
+        currentTemplateConfig: {
+            config: {
+                background: {
+                    type: '',
+                    color: '',
+                    image: '',
+                    arrangement: ''
+                }
+            }
         }
     },
     reducers: {
+        // 设置当前模板
         setCurrentTemplate(state, {payload}): void {
             state.currentTemplate = payload;
+        },
+        // 设置模板配置文件
+        setCurrentTemplateConfig(state, {payload}): void {
+            state.currentTemplateConfig = payload;
+        },
+        // 设置模板背景
+        setCurrentTemplateBackground(state, {payload}): void {
+            state.currentTemplateConfig.config.background = payload;
         }
     }
 });
 
 export const {
-    setCurrentTemplate
+    setCurrentTemplate,
+    setCurrentTemplateConfig,
+    setCurrentTemplateBackground
 } = AppStore.actions;
 
 export default AppStore.reducer;

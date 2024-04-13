@@ -4,14 +4,21 @@ import {useTemplateMessageListener} from "../bin/Hooks";
 import {ITemplateSelectTextElement} from "../types/TemplateMessage";
 import YExtendTemplate from "./YExtendTemplate";
 import ColorConfig from "./ColorConfig";
+import {Dispatch} from "@reduxjs/toolkit";
+import {useDispatch} from "react-redux";
+import {setCurrentTemplateConfig} from "../lib/Store/AppStore";
 
 const DesignConfigs = (): React.JSX.Element => {
+    const dispatch: Dispatch = useDispatch();
     const [currentTextConfig, setCurrentTextConfig]:
         [null | ITemplateSelectTextElement, React.Dispatch<React.SetStateAction<ITemplateSelectTextElement | null>>]
         = useState<null | ITemplateSelectTextElement>(null);
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);
+    });
+    useTemplateMessageListener('TEMPLATE_FULL_CONFIG', (e: ITemplateSelectTextElement): void => {
+        dispatch(setCurrentTemplateConfig(e));
     });
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_CLOSE', (): void => {
         setCurrentTextConfig(null);
@@ -26,7 +33,7 @@ const DesignConfigs = (): React.JSX.Element => {
                 <YExtendTemplate show={currentTextConfig !== null}>
                     <TextConfig config={currentTextConfig}/>
                 </YExtendTemplate>
-                <ColorConfig />
+                <ColorConfig/>
             </div>
         </div>
     );

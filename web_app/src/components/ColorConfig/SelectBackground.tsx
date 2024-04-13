@@ -9,7 +9,11 @@ interface IColorType {
     value: string;
 }
 
-const SelectBackground = (): React.JSX.Element => {
+export interface ISelectBackgroundProps {
+    onSelect?: (cssCode: string) => void;
+}
+
+const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
     const {Col, Row} = Grid;
     const [colors, setColors]: [
         Array<IColorType>,
@@ -25,7 +29,9 @@ const SelectBackground = (): React.JSX.Element => {
         const str: string = `linear-gradient(90deg, ${colors[0]} 0%, ${colors[1]} 100%)`;
 
         return (
-            <div className={'app_cursor_pointer'} style={{
+            <div onClick={(): void => {
+                props.onSelect && props.onSelect(str);
+            }} className={'app_cursor_pointer'} style={{
                 background: str,
                 width: '100%',
                 height: '2.125rem',
