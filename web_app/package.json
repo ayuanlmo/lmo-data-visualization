@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "@handsontable/react": "^14.2.0",
     "@hi-ui/core": "^4.0.5",
     "@hi-ui/hiui": "^4.3.3",
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.7",
+    "handsontable": "^14.2.0",
     "less-loader": "^12.2.0",
     "nprogress": "^0.2.0",
     "react": "^18.2.0",
