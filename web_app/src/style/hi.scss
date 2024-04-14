@@ -171,6 +171,14 @@
       background: $theme-color !important;
     }
   }
+
+  .hi-v4-drawer__wrapper {
+    .hi-v4-drawer__title {
+      color: #fff;
+    }
+
+    background: $__form-component-bg-color-dark;
+  }
 }
 
 .light-mode {
