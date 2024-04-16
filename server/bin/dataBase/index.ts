@@ -19,6 +19,7 @@ const TemplateModel = DB.define('Templates', {
     description: DataTypes.TEXT,
     path: DataTypes.TEXT,
     cover: DataTypes.TEXT,
+    gifCover: DataTypes.TEXT,
     createTime: DataTypes.TEXT,
     type: DataTypes.INTEGER
 }, {

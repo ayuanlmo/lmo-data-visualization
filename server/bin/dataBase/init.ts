@@ -46,6 +46,7 @@ const initTemplate = () => {
             'conf.js',
             'data.json',
             'cover.png',
+            'cover.gif',
             'index.html',
             'config.json',
             'index.js'
@@ -62,6 +63,7 @@ const initTemplate = () => {
                     id: require('uuid').v4(),
                     ...templateConfig,
                     cover: `${templateRoot.replace('/public', '')}/cover.png`,
+                    gifCover: `${templateRoot.replace('/public', '')}/cover.gif`,
                     path: `${templateRoot.replace('/public', '')}/index.html`,
                     createTime: new Date().getTime()
                 };
