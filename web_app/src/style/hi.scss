@@ -31,6 +31,10 @@
   height: 1px;
 }
 
+.hi-v4-popover {
+  padding: 0.625rem !important;
+}
+
 .dark-mode {
   .hi-v4-input__text {
     color: #fff !important;
@@ -177,7 +181,21 @@
       color: #fff;
     }
 
-    background: $__form-component-bg-color-dark;
+    background: $__primary-bg-color-dark !important;
+  }
+
+  .hi-v4-popper__container {
+    .hi-v4-popper__arrow {
+      &::before {
+        border-right-color: $__primary-bg-color-dark !important;
+      }
+    }
+
+    background-color: $__primary-bg-color-dark !important;
+
+    .hi-v4-popover {
+      background-color: $__primary-bg-color-dark !important;
+    }
   }
 }
 
