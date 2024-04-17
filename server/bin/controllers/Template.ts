@@ -4,6 +4,7 @@ import {TemplateModel} from "../dataBase";
 import Utils from "../../utils";
 import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
+import initDefaultData from "../dataBase/init";
 
 export default class TemplateController {
     public static getTemplates(req: Request, res: Response): void {
@@ -137,6 +138,12 @@ export default class TemplateController {
             }).then((): void => {
                 res.status(204).send();
             });
+        });
+    }
+
+    public static refreshTemplate(_req: Request, res: Response): void {
+        initDefaultData().then((): void => {
+            res.status(204).send();
         });
     }
 }
