@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Grid from "@hi-ui/grid";
 import YExtendTemplate from "../../YExtendTemplate";
-import {Button, ColProps, Form, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
+import {Button, Form, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
 import Request from "../../../lib/Request";
 import Notification from "../../../lib/Notification";
 import {setCurrentTemplate} from "../../../lib/Store/AppStore";
@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 import {Dispatch} from "@reduxjs/toolkit";
 import Popover from "@hi-ui/popover";
+import Loading from "@hi-ui/loading";
 
 export interface ITemplate {
     cover: string;
@@ -34,9 +35,6 @@ export interface EditTemplateValue {
 const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const {onRefresh} = props;
     const [data, seData]: [ITemplate, React.Dispatch<React.SetStateAction<ITemplate>>] = useState(props.data);
-    const {Col}: {
-        Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
-    } = Grid;
     const colSpan = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
     const [isHover, setIsHover]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
     const [isCustomTemplate]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(data.type === 0);
@@ -46,7 +44,9 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
         description: data.description
     });
     const [loading, setLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
+    const [gifLoading, setGifLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(true);
     const [isCopyTemplate, setIsCopyTemplate]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
+    const [gifElement, setGifElement] = useState<React.JSX.Element | null>(null);
     const dispatch: Dispatch = useDispatch();
     const navigate: NavigateFunction = useNavigate();
 
@@ -66,12 +66,28 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
         return '编辑模板';
     };
 
-    useEffect((): void => {
-        fetch('/api' + data.gifCover);
-    }, [data]);
+    const getGifImage = (src: string, alt: string = ''): React.JSX.Element => {
+        if (gifElement)
+            return gifElement;
+
+        setGifElement(
+            <img
+                src={src}
+                alt={alt}
+                className={isHover ? 'img-active' : ''}
+                onLoad={
+                    (): void => {
+                        setGifLoading(false);
+                    }
+                }
+            />
+        );
+
+        return gifElement as unknown as React.JSX.Element;
+    };
 
     return (
-        <Col span={colSpan}>
+        <Grid.Col span={colSpan}>
             <YExtendTemplate show={editModalVisible}>
                 <Form
                     initialValues={editFormValue}
@@ -161,11 +177,20 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                 </YExtendTemplate>
                 <YExtendTemplate show={isHover}>
                     <Popover placement={'right'} trigger={'hover'} content={
-                        <div>
-                            <img style={{
-                                height: '12.5rem',
-                                borderRadius: '0.8rem'
-                            }} className={isHover ? 'img-active' : ''} src={'/api' + data.gifCover} alt={data.name}/>
+                        <div style={{
+                            minWidth: '22.5rem',
+                            minHeight: '12.5rem'
+                        }}>
+                            <Loading
+                                visible={gifLoading}
+                                style={{
+                                    height: ' 12.5rem'
+                                }}
+                            >
+                                {
+                                    getGifImage('/api' + data.gifCover, data.name)
+                                }
+                            </Loading>
                         </div>
                     }>
                         <div className={'template-item-mask animated fadeIn'}>
@@ -223,7 +248,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                     </Popover>
                 </YExtendTemplate>
             </div>
-        </Col>
+        </Grid.Col>
     );
 };
 

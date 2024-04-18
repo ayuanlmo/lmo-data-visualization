@@ -21,12 +21,7 @@ const AppDesign = (): React.JSX.Element => {
         <div className={'data-visualization-design'}>
             <DesignHeader/>
 
-            <div className={'app_position_relative'} style={{
-                // width: "calc(100% - (2.5rem * 2))",
-                // margin: "1.5rem auto",
-                padding: "1.5rem",
-                height: "calc(100vh - (4.125rem + 1.5rem))"
-            }}>
+            <div className={'app_position_relative'}>
                 <div style={{
                     padding: "1.5rem"
                 }}>
