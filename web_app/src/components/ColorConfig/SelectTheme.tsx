@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import Grid from "@hi-ui/grid";
-import {Loading} from "@hi-ui/hiui";
+import {Grid, Loading} from "@hi-ui/hiui";
 import Request from "../../lib/Request";
+import {ReactState} from "../../types/ReactTypes";
 
 export interface ISelectThemeProps {
     span?: number;
@@ -14,18 +14,9 @@ interface IColorType {
 }
 
 function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
-    const {
-        span = 12
-    } = props;
-    const {Col, Row} = Grid;
-    const [colors, setColors]: [
-        Array<IColorType>,
-        React.Dispatch<React.SetStateAction<Array<IColorType>>>
-    ] = useState<Array<IColorType>>([]);
-    const [loading, setLoading]: [
-        boolean,
-        React.Dispatch<React.SetStateAction<boolean>>
-    ] = useState<boolean>(true);
+    const {span = 12} = props;
+    const [colors, setColors]: ReactState<Array<IColorType>> = useState<Array<IColorType>>([]);
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
 
     useEffect((): void => {
         Request.getColors({type: 'theme'})
@@ -38,7 +29,7 @@ function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
     return (
         <>
             <Loading visible={loading}>
-                <Row style={{
+                <Grid.Row style={{
                     width: '100%',
                     maxHeight: '13rem',
                     overflow: 'scroll'
@@ -46,7 +37,7 @@ function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
                     {
                         colors.map((i: IColorType): React.JSX.Element => {
                             return (
-                                <Col span={span} key={i.id}>
+                                <Grid.Col span={span} key={i.id}>
                                     <div className={'c-select-theme app_flex_box app_cursor_pointer'}>
                                         {
                                             JSON.parse(i.value).map((j: string, k: number): React.JSX.Element => {
@@ -56,11 +47,11 @@ function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
                                             })
                                         }
                                     </div>
-                                </Col>
+                                </Grid.Col>
                             );
                         })
                     }
-                </Row>
+                </Grid.Row>
             </Loading>
         </>
     );

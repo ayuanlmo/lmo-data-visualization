@@ -5,14 +5,26 @@ import {useSelector} from "react-redux";
 import {RootState} from "../lib/Store";
 import Notification from "../lib/Notification";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
+import {ReactState} from "../types/ReactTypes";
+
+interface ICurrentTemplate {
+    cover: string;
+    createTime: string;
+    description: string;
+    id: string;
+    name: string;
+    path: string;
+    type: number;
+}
 
 const TemplatePreview = (): React.JSX.Element => {
     const templatePreviewRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
     const iframeRef: React.RefObject<HTMLIFrameElement> = useRef<HTMLIFrameElement>(null);
-    const [iframeStyle, setIframeStyle]: [object, React.Dispatch<React.SetStateAction<object>>] = useState<object>({});
-    const [loading, setLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(true);
-    const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
+    const [iframeStyle, setIframeStyle]: ReactState<object> = useState<object>({});
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
+    const currentTemplate: ICurrentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
     const navigate: NavigateFunction = useNavigate();
+    
     const calculateAspectRatio = (width: number): [number, number] => {
         return [width, width / 16 * 9];
     };

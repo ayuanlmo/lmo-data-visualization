@@ -8,6 +8,7 @@ import Hooks from "../bin/Hooks";
 import {CellChange, ChangeSource} from "handsontable/common";
 import PostMessage from "../lib/PostMessage";
 import {registerAllModules} from 'handsontable/registry';
+import {ReactState} from "../types/ReactTypes";
 import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 
 registerAllModules();
@@ -17,14 +18,10 @@ export interface IEditDataTable {
 }
 
 const EditDataTable = React.forwardRef((_props: {}, ref: React.ForwardedRef<IEditDataTable>) => {
-    const [visible, setVisible]: [
-        boolean,
-        React.Dispatch<React.SetStateAction<boolean>>
-    ] = useState<boolean>(false);
+    const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
     const [data, setData] = useState<Array<Array<string | number>>>([[]]);
     const hotTableRef = useRef(null);
-
-
+    
     useImperativeHandle(ref, (): IEditDataTable => ({
         open
     }));

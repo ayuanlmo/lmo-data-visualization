@@ -1,7 +1,7 @@
-import Grid from "@hi-ui/grid";
 import React, {useEffect, useState} from "react";
 import Request from "../../lib/Request";
-import {Loading} from "@hi-ui/hiui";
+import {Grid, Loading} from "@hi-ui/hiui";
+import {ReactState} from "../../types/ReactTypes";
 
 interface IColorType {
     id: string;
@@ -14,15 +14,8 @@ export interface ISelectBackgroundProps {
 }
 
 const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
-    const {Col, Row} = Grid;
-    const [colors, setColors]: [
-        Array<IColorType>,
-        React.Dispatch<React.SetStateAction<Array<IColorType>>>
-    ] = useState<Array<IColorType>>([]);
-    const [loading, setLoading]: [
-        boolean,
-        React.Dispatch<React.SetStateAction<boolean>>
-    ] = useState<boolean>(true);
+    const [colors, setColors]: ReactState<Array<IColorType>> = useState<Array<IColorType>>([]);
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
 
     const getBackgroundItem = (color: string): React.JSX.Element => {
         const colors: string[] = JSON.parse(color);
@@ -50,7 +43,7 @@ const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
 
     return (
         <Loading visible={loading}>
-            <Row style={{
+            <Grid.Row style={{
                 width: '100%',
                 maxHeight: '13rem',
                 overflow: 'scroll'
@@ -58,15 +51,15 @@ const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
                 {
                     colors.map((i: IColorType): React.JSX.Element => {
                         return (
-                            <Col key={i.id} span={4}>
+                            <Grid.Col key={i.id} span={4}>
                                 {
                                     getBackgroundItem(i.value)
                                 }
-                            </Col>
+                            </Grid.Col>
                         );
                     })
                 }
-            </Row>
+            </Grid.Row>
         </Loading>
     );
 };

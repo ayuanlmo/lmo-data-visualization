@@ -3,6 +3,7 @@ import SelectFile from "../SelectFile";
 import YExtendTemplate from "../YExtendTemplate";
 import {useSelector} from "react-redux";
 import {RootState} from "../../lib/Store";
+import {ReactState} from "../../types/ReactTypes";
 
 export interface ISelectBackgroundImageProps {
     onSelect: (path: string) => void;
@@ -14,9 +15,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
         }
     });
     const backgroundConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.background);
-    const [path, setPath]:
-        [string, React.Dispatch<React.SetStateAction<string>>]
-        = useState('');
+    const [path, setPath]: ReactState<string> = useState('');
 
     const open = (): void => {
         sf.current.open && sf.current.open();

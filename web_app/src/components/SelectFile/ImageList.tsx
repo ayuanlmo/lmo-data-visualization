@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import Request from "../../lib/Request";
 import YExtendTemplate from "../YExtendTemplate";
-import EmptyState from "@hi-ui/empty-state";
+import {EmptyState} from "@hi-ui/hiui";
 import LoadingImage from "./LoadingImage";
+import {ReactState} from "../../types/ReactTypes";
 
 export interface IImageItem {
     id: string;
@@ -22,9 +23,7 @@ export interface IImageListProps {
 
 const ImageList = (props: IImageListProps): React.JSX.Element => {
     const {onSelect} = props;
-    const [images, setImages]:
-        [Array<IImageItem>, React.Dispatch<React.SetStateAction<Array<IImageItem>>>]
-        = useState<Array<IImageItem>>([]);
+    const [images, setImages]: ReactState<Array<IImageItem>> = useState<Array<IImageItem>>([]);
 
     useEffect((): void => {
         Request.getFileList({...props.query}).then((res): void => {

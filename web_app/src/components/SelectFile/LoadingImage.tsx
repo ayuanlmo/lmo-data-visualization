@@ -1,5 +1,6 @@
 import React, {useState} from "react";
-import Loading from "@hi-ui/loading";
+import {Loading} from "@hi-ui/hiui";
+import {ReactState} from "../../types/ReactTypes";
 
 interface ILoadingImageProps {
     src: string;
@@ -8,9 +9,8 @@ interface ILoadingImageProps {
 }
 
 const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
-    const {src, alt, className} = props;
-    const [loading, setLoading]:
-        [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(true);
+    const {src, alt, className}: ILoadingImageProps = props;
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
 
     return (
         <Loading visible={loading}>

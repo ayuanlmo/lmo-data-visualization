@@ -8,36 +8,28 @@ import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
 import DesignConfigs from "../components/DesignConfigs";
 import YExtendTemplate from "../components/YExtendTemplate";
-import {ColProps, RowProps} from "@hi-ui/hiui";
-
 
 const AppDesign = (): React.JSX.Element => {
-    const {Row, Col}: {
-        Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
-        Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
-    } = Grid;
-
     return (
         <div className={'data-visualization-design'}>
             <DesignHeader/>
-
             <div className={'app_position_relative'}>
                 <div style={{
                     padding: "1.5rem"
                 }}>
-                    <Row style={{
+                    <Grid.Row style={{
                         height: '98%'
                     }} justify={'space-between'}>
                         <YExtendTemplate show={true}>
-                            <Col span={{lg: 16, xl: 18, md: 24, sm: 24, xs: 24}}>
+                            <Grid.Col span={{lg: 16, xl: 18, md: 24, sm: 24, xs: 24}}>
                                 <TemplatePreview/>
                                 <ProgressBar/>
-                            </Col>
-                            <Col span={{lg: 7, xl: 5.5, md: 24, sm: 24, xs: 24}}>
+                            </Grid.Col>
+                            <Grid.Col span={{lg: 7, xl: 5.5, md: 24, sm: 24, xs: 24}}>
                                 <DesignConfigs/>
-                            </Col>
+                            </Grid.Col>
                         </YExtendTemplate>
-                    </Row>
+                    </Grid.Row>
                 </div>
 
             </div>

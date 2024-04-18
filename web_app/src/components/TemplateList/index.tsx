@@ -1,12 +1,11 @@
 import "./style.scss";
 import React, {useEffect, useState} from "react";
-import Grid from "@hi-ui/grid";
 import Request from "../../lib/Request";
 import TemplateItem, {ITemplate} from "./TemplateItem";
-import EmptyState from "@hi-ui/empty-state";
 import YExtendTemplate from "../YExtendTemplate";
-import {Button, ColProps, Input, RowProps, Select} from "@hi-ui/hiui";
+import {Button, EmptyState, Grid, Input, Select, SelectMergedItem} from "@hi-ui/hiui";
 import {SearchOutlined} from "@hi-ui/icons";
+import {ReactState} from "../../types/ReactTypes";
 
 interface QueryParams {
     name: string;
@@ -16,25 +15,19 @@ interface QueryParams {
 }
 
 const TemplateList = (): React.JSX.Element => {
-    const {Row, Col}:
-        {
-            Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
-            Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
-        } = Grid;
-    const [templates, setTemplates]: [
-        ITemplate[], React.Dispatch<React.SetStateAction<ITemplate[]>>] = useState<Array<ITemplate>>([]);
-    const [loading, setLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
-    const [queryParams, setQueryParams]: [QueryParams, React.Dispatch<React.SetStateAction<QueryParams>>] = useState({
+    const [templates, setTemplates]: ReactState<Array<ITemplate>> = useState<Array<ITemplate>>([]);
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(false);
+    const [queryParams, setQueryParams]: ReactState<QueryParams> = useState({
         name: '',
         pageIndex: 0,
         pageSize: 50,
         type: ''
     });
-    const [templateType] = React.useState([
+    const templateType: SelectMergedItem[] = [
         {title: "全部", id: "", disabled: false},
         {title: "预制", id: "0", disabled: false},
         {title: "自定义", id: "1", disabled: false}
-    ]);
+    ];
     const getTemplate = (): void => {
         setLoading(true);
         Request.getTemplate(queryParams).then(({data}): void => {
@@ -53,8 +46,8 @@ const TemplateList = (): React.JSX.Element => {
     return (
         <div className={'template-list'}>
             <div className={'template-list-query'}>
-                <Row gutter={true} justify={"flex-end"}>
-                    <Col
+                <Grid.Row gutter={true} justify={"flex-end"}>
+                    <Grid.Col
                         span={{lg: 6, xl: 4, md: 12, sm: 12, xs: 12}}
                     >
                         <div className={'template-list-query-select'}>
@@ -70,8 +63,8 @@ const TemplateList = (): React.JSX.Element => {
                                 clearable={false}
                             />
                         </div>
-                    </Col>
-                    <Col span={{lg: 6, xl: 4, md: 12, sm: 12, xs: 12}}>
+                    </Grid.Col>
+                    <Grid.Col span={{lg: 6, xl: 4, md: 12, sm: 12, xs: 12}}>
                         <Input
                             clearable
                             placeholder={'输入名称开始查询'}
@@ -94,17 +87,17 @@ const TemplateList = (): React.JSX.Element => {
                                 />
                             }
                         />
-                    </Col>
-                </Row>
+                    </Grid.Col>
+                </Grid.Row>
             </div>
             <YExtendTemplate show={templates.length > 0}>
-                <Row gutter>
+                <Grid.Row gutter>
                     {
                         templates.map((i: ITemplate) => <TemplateItem onRefresh={(): void => {
                             getTemplate();
                         }} key={i.id} data={i}/>)
                     }
-                </Row>
+                </Grid.Row>
             </YExtendTemplate>
             <YExtendTemplate show={templates.length === 0}>
                 <EmptyState/>

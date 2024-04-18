@@ -1,6 +1,5 @@
 import React, {ReactText, useEffect} from "react";
-import Grid from "@hi-ui/grid";
-import {Select, SelectOption} from "@hi-ui/hiui";
+import {Grid, Select, SelectOption} from "@hi-ui/hiui";
 import ResetButton from "../ResetButton";
 import SelectBackground from "../ColorConfig/SelectBackground";
 import SelectBackgroundImage from "../ColorConfig/SelectBackgroundImage";
@@ -10,11 +9,11 @@ import {RootState} from "../../lib/Store";
 import {setCurrentTemplateBackground} from '../../lib/Store/AppStore';
 import postMessage from "../../lib/PostMessage";
 import ColorPicker from "../ColorPicker";
+import {Dispatch} from "@reduxjs/toolkit";
 
 const BackgroundConfig = (): React.JSX.Element => {
-    const {Col, Row} = Grid;
     const backgroundConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.background);
-    const dispatch = useDispatch();
+    const dispatch: Dispatch = useDispatch();
 
     useEffect((): void => {
         postMessage.send({
@@ -26,23 +25,23 @@ const BackgroundConfig = (): React.JSX.Element => {
     return (
         <b>
             <div className={'color-config-item'}>
-                <Row style={{
+                <Grid.Row style={{
                     width: '100%'
                 }} gutter={true} justify={"space-between"}>
-                    <Col span={8}>
+                    <Grid.Col span={8}>
                         <div className={'color-config-item-label app_flex_box'}>背景配置</div>
-                    </Col>
-                    <Col justify={'flex-end'} span={16}>
-                        <Row gutter={true} justify={"space-between"}>
-                            <Col span={6}>
+                    </Grid.Col>
+                    <Grid.Col justify={'flex-end'} span={16}>
+                        <Grid.Row gutter={true} justify={"space-between"}>
+                            <Grid.Col span={6}>
                                 <ResetButton onClick={(): void => {
                                     dispatch(setCurrentTemplateBackground({
                                         ...backgroundConfig,
                                         type: ''
                                     }));
                                 }}/>
-                            </Col>
-                            <Col span={18}>
+                            </Grid.Col>
+                            <Grid.Col span={18}>
                                 <Select onSelect={(e: ReactText): void => {
                                     dispatch(setCurrentTemplateBackground({
                                         ...backgroundConfig,
@@ -53,10 +52,10 @@ const BackgroundConfig = (): React.JSX.Element => {
                                     <SelectOption value={'image'}>图片</SelectOption>
                                     <SelectOption value={'color'}>纯色</SelectOption>
                                 </Select>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
+                            </Grid.Col>
+                        </Grid.Row>
+                    </Grid.Col>
+                </Grid.Row>
             </div>
             <div className={'text-config-item app_flex_box'}>
                 <YExtendTemplate show={backgroundConfig.type === 'theme'}>
@@ -67,24 +66,24 @@ const BackgroundConfig = (): React.JSX.Element => {
                         }));
                     }}/>
                 </YExtendTemplate>
-                <Row style={{
+                <Grid.Row style={{
                     width: '100%',
                     display: backgroundConfig.type === 'image' ? 'block' : 'none'
                 }}>
-                    <Col span={24}>
+                    <Grid.Col span={24}>
                         <SelectBackgroundImage onSelect={(path: string): void => {
                             dispatch(setCurrentTemplateBackground({
                                 ...backgroundConfig,
                                 image: path
                             }));
                         }}/>
-                    </Col>
-                </Row>
+                    </Grid.Col>
+                </Grid.Row>
                 <YExtendTemplate show={backgroundConfig.type === 'color'}>
-                    <Row style={{
+                    <Grid.Row style={{
                         width: '100%'
                     }}>
-                        <Col span={24}>
+                        <Grid.Col span={24}>
                             <ColorPicker
                                 onChange={(value: string): void => {
                                     dispatch(setCurrentTemplateBackground({
@@ -98,8 +97,8 @@ const BackgroundConfig = (): React.JSX.Element => {
                                 }}
                                 value={backgroundConfig.color}
                             />
-                        </Col>
-                    </Row>
+                        </Grid.Col>
+                    </Grid.Row>
                 </YExtendTemplate>
             </div>
         </b>

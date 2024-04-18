@@ -1,10 +1,8 @@
-import {Button, ColProps, Input, Modal, RowProps, Search, Upload} from "@hi-ui/hiui";
+import {Button, Form, FormHelpers, FormItemProps, Grid, Input, Modal, Pagination, Search, Upload} from "@hi-ui/hiui";
 import React, {useImperativeHandle, useRef, useState} from "react";
 import ImageList, {IImageItem} from "./ImageList";
-import Grid from "@hi-ui/grid";
-import Form, {FormHelpers} from "@hi-ui/form";
 import Request from "../../lib/Request";
-import Pagination from "@hi-ui/pagination";
+import {ReactState} from "../../types/ReactTypes";
 
 export interface ISelectFileProps {
     onSelect?: (data: IImageItem) => void;
@@ -14,25 +12,29 @@ export interface ISelectFileRef {
     open: () => void;
 }
 
+interface IQuery {
+    name: string;
+    pageIndex: number;
+    pageSize: number;
+}
+
+interface IUploadFrom {
+    name: string;
+    media: File
+}
+
 const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.ForwardedRef<ISelectFileRef>) => {
     const {onSelect} = props;
-    const {Row, Col}:
-        {
-            Row: React.ForwardRefExoticComponent<RowProps & React.RefAttributes<HTMLDivElement | null>>;
-            Col: React.ForwardRefExoticComponent<ColProps & React.RefAttributes<HTMLDivElement | null>>
-        } = Grid;
-    const [query, setQuery] = useState({
+    const [query, setQuery]: ReactState<IQuery> = useState({
         name: '',
         pageIndex: 0,
         pageSize: 10
     });
-    const [isUpload, setIsUpLoad]:
-        [boolean, React.Dispatch<React.SetStateAction<boolean>>]
-        = useState<boolean>(false);
-    const FormItem = Form.Item;
-    const uploadFromRef = useRef<FormHelpers>(null);
-    const [pageTotal, setPageTotal] = useState<number>(0);
-    const [visible, setVisible] = useState<boolean>(false);
+    const [isUpload, setIsUpLoad]: ReactState<boolean> = useState<boolean>(false);
+    const FormItem: React.FC<FormItemProps> = Form.Item;
+    const uploadFromRef: React.RefObject<FormHelpers<IUploadFrom>> = useRef<FormHelpers>(null);
+    const [pageTotal, setPageTotal]: ReactState<number> = useState<number>(0);
+    const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
 
     const open = (): void => setVisible(!visible);
 
@@ -52,8 +54,8 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
         >
             <div className={'c-select-file'}>
                 <div className={'c-select-file-search'}>
-                    <Row gutter={true} justify={"space-between"}>
-                        <Col span={{lg: 12, xl: 12, md: 16, sm: 16, xs: 16}}>
+                    <Grid.Row gutter={true} justify={"space-between"}>
+                        <Grid.Col span={{lg: 12, xl: 12, md: 16, sm: 16, xs: 16}}>
                             <Search
                                 placeholder={'输入名称搜索...'}
                                 onSearch={(data: string): void => {
@@ -63,16 +65,16 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                     });
                                 }}
                             />
-                        </Col>
-                        <Col span={8}>
+                        </Grid.Col>
+                        <Grid.Col span={8}>
                             <Button
                                 type={'primary'}
                                 onClick={(): void => {
                                     setIsUpLoad(!isUpload);
                                 }}
                             >上传</Button>
-                        </Col>
-                    </Row>
+                        </Grid.Col>
+                    </Grid.Row>
                 </div>
                 <div className={'c-select-file-content animated fadeIn'}>
                     <ImageList onSelect={

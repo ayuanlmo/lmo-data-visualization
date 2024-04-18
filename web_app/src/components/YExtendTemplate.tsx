@@ -12,7 +12,7 @@ const YExtendTemplate = (props: YExtendTemplateProps): YExtendTemplateChildrenEl
     const {
         children,
         show = true
-    } = props;
+    }: YExtendTemplateProps = props;
 
     if (!show) return <></>;
 

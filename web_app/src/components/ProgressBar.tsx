@@ -1,10 +1,9 @@
 import React from "react";
-import Grid from "@hi-ui/grid";
+import {Grid, GridResponsiveSize} from "@hi-ui/hiui";
 
 const ProgressBar = (): React.JSX.Element => {
-    // const colspanIcon = {lg: 2, xl: 2, md: 2, sm: 2, xs: 2};
-    const colspanTime = {lg: 4, xl: 3, md: 4, sm: 5, xs: 6};
-    const colspanSlider = {lg: 16, xl: 20, md: 18, sm: 16, xs: 14};
+    const colspanTime: GridResponsiveSize<number> = {lg: 4, xl: 3, md: 4, sm: 5, xs: 6};
+    const colspanSlider: GridResponsiveSize<number> = {lg: 16, xl: 20, md: 18, sm: 16, xs: 14};
 
     return (
         <div className={'progress-bar app_none_user_select'}>

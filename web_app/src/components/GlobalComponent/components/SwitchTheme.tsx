@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import YExtendTemplate from "../../YExtendTemplate";
 import MyStorage from "../../../lib/Storage";
+import {ReactState} from "../../../types/ReactTypes";
 
 const darkModeClassName: string = 'dark-mode' as const;
 const lightModeClassName: string = 'light-mode' as const;
@@ -11,9 +12,7 @@ export interface ISwitchThemeProps {
 
 const SwitchTheme = (props: ISwitchThemeProps): React.JSX.Element => {
     const localMode: string | null = MyStorage.get('theme-mode');
-    const [isDark, setIsDark]
-        : [boolean, React.Dispatch<React.SetStateAction<boolean>>]
-        = useState<boolean>(localMode === null ? false : localMode === 'dark-mode');
+    const [isDark, setIsDark]: ReactState<boolean> = useState<boolean>(localMode === null ? false : localMode === 'dark-mode');
     const darkModeQuery: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
     const toggleClassName = (className: string, add: boolean): void => document.body.classList[add ? 'add' : 'remove'](className);
 

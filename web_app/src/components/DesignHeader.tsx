@@ -15,7 +15,7 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
         onSave,
         onPreview,
         onSynthesis
-    } = props;
+    }: IDesignHeaderProps = props;
 
     return (
         <div className={'data-visualization-design-header app_position_relative app_none_user_select'}>

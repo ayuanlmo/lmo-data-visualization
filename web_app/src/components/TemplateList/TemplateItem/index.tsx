@@ -1,15 +1,24 @@
 import React, {useState} from "react";
-import Grid from "@hi-ui/grid";
 import YExtendTemplate from "../../YExtendTemplate";
-import {Button, Form, FormItem, FormSubmit, Input, Modal} from "@hi-ui/hiui";
+import {
+    Button,
+    Form,
+    FormItem,
+    FormSubmit,
+    Grid,
+    GridResponsiveSize,
+    Input,
+    Loading,
+    Modal,
+    Popover
+} from "@hi-ui/hiui";
 import Request from "../../../lib/Request";
 import Notification from "../../../lib/Notification";
 import {setCurrentTemplate} from "../../../lib/Store/AppStore";
 import {useDispatch} from "react-redux";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 import {Dispatch} from "@reduxjs/toolkit";
-import Popover from "@hi-ui/popover";
-import Loading from "@hi-ui/loading";
+import {ReactState} from "../../../types/ReactTypes";
 
 export interface ITemplate {
     cover: string;
@@ -34,19 +43,19 @@ export interface EditTemplateValue {
 
 const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const {onRefresh} = props;
-    const [data, seData]: [ITemplate, React.Dispatch<React.SetStateAction<ITemplate>>] = useState(props.data);
-    const colSpan = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
-    const [isHover, setIsHover]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
-    const [isCustomTemplate]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(data.type === 0);
-    const [editModalVisible, setEditModalVisible]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
-    const [editFormValue, setEditFormValue]: [EditTemplateValue, React.Dispatch<React.SetStateAction<EditTemplateValue>>] = useState<EditTemplateValue>({
+    const [data, seData]: ReactState<ITemplate> = useState(props.data);
+    const colSpan: GridResponsiveSize<number> = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
+    const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
+    const [isCustomTemplate]: ReactState<boolean> = useState<boolean>(data.type === 0);
+    const [editModalVisible, setEditModalVisible]: ReactState<boolean> = useState<boolean>(false);
+    const [editFormValue, setEditFormValue]: ReactState<EditTemplateValue> = useState<EditTemplateValue>({
         name: data.name,
         description: data.description
     });
-    const [loading, setLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
-    const [gifLoading, setGifLoading]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(true);
-    const [isCopyTemplate, setIsCopyTemplate]: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = useState<boolean>(false);
-    const [gifElement, setGifElement] = useState<React.JSX.Element | null>(null);
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(false);
+    const [gifLoading, setGifLoading]: ReactState<boolean> = useState<boolean>(true);
+    const [isCopyTemplate, setIsCopyTemplate]: ReactState<boolean> = useState<boolean>(false);
+    const [gifElement, setGifElement]: ReactState<React.JSX.Element | null> = useState<React.JSX.Element | null>(null);
     const dispatch: Dispatch = useDispatch();
     const navigate: NavigateFunction = useNavigate();
 

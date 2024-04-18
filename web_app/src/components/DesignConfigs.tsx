@@ -8,18 +8,16 @@ import {Dispatch} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 import {setCurrentTemplateConfig} from "../lib/Store/AppStore";
 import EditDataTable, {IEditDataTable} from "./EditDataTable";
-import Grid from "@hi-ui/grid";
+import {Grid} from "@hi-ui/hiui";
 import SyntheticConfig from "./SyntheticConfig";
+import {ReactState} from "../types/ReactTypes";
 
 export type TOptionType = 'style' | 'config' | 'data';
 const DesignConfigs = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
-    const {Col, Row} = Grid;
-    const [optionType, setOptionType] = useState<TOptionType>('style');
-    const [currentTextConfig, setCurrentTextConfig]:
-        [null | ITemplateSelectTextElement, React.Dispatch<React.SetStateAction<ITemplateSelectTextElement | null>>]
-        = useState<null | ITemplateSelectTextElement>(null);
-    const editDataTableRef = useRef<IEditDataTable>(null);
+    const [optionType, setOptionType]: ReactState<TOptionType> = useState<TOptionType>('style');
+    const [currentTextConfig, setCurrentTextConfig]: ReactState<null | ITemplateSelectTextElement> = useState<null | ITemplateSelectTextElement>(null);
+    const editDataTableRef: React.RefObject<IEditDataTable> = useRef<IEditDataTable>(null);
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);
@@ -32,35 +30,35 @@ const DesignConfigs = (): React.JSX.Element => {
     });
 
     const getClassName = (type: TOptionType): string => {
-        if (type === optionType) {
+        if (type === optionType)
             return 'design-configs-top-options-item active app_cursor_pointer';
-        }
+
         return 'design-configs-top-options-item app_cursor_pointer';
     };
 
     return (
         <div className={'design-configs'}>
             <div className={'design-configs-top-options app_flex_box app_none_user_select'}>
-                <Row gutter={30}>
-                    <Col span={8}>
+                <Grid.Row gutter={30}>
+                    <Grid.Col span={8}>
                         <div className={getClassName('style')} onClick={(): void => {
                             setOptionType('style');
                         }}>图表样式
                         </div>
-                    </Col>
-                    <Col span={8}>
+                    </Grid.Col>
+                    <Grid.Col span={8}>
                         <div className={getClassName('config')} onClick={(): void => {
                             setOptionType('config');
                         }}>合成配置
                         </div>
-                    </Col>
-                    <Col span={8}>
+                    </Grid.Col>
+                    <Grid.Col span={8}>
                         <div className={getClassName('data')} onClick={(): void => {
                             editDataTableRef.current?.open();
                         }}>编辑数据
                         </div>
-                    </Col>
-                </Row>
+                    </Grid.Col>
+                </Grid.Row>
             </div>
             <div className={'design-configs-container'}>
                 <YExtendTemplate show={optionType === 'style'}>
