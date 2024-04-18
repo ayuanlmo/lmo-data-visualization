@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux";
 import {setCurrentTemplateConfig} from "../lib/Store/AppStore";
 import EditDataTable, {IEditDataTable} from "./EditDataTable";
 import Grid from "@hi-ui/grid";
+import SyntheticConfig from "./SyntheticConfig";
 
 export type TOptionType = 'style' | 'config' | 'data';
 const DesignConfigs = (): React.JSX.Element => {
@@ -67,6 +68,9 @@ const DesignConfigs = (): React.JSX.Element => {
                         <TextConfig config={currentTextConfig}/>
                     </YExtendTemplate>
                     <ColorConfig/>
+                </YExtendTemplate>
+                <YExtendTemplate show={optionType === 'config'}>
+                    <SyntheticConfig/>
                 </YExtendTemplate>
                 <EditDataTable ref={editDataTableRef}/>
             </div>

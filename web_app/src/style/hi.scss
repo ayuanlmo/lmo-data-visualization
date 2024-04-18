@@ -197,6 +197,19 @@
       background-color: $__primary-bg-color-dark !important;
     }
   }
+
+  .hi-v4-radio--type-button {
+    background-color: #334358 !important;
+  }
+
+  .hi-v4-radio--type-button:hover, .hi-v4-radio--type-button[data-checked] {
+    background: #237ffa !important;
+    color: $__primary-bg-color-light;
+  }
+
+  .hi-v4-radio-group--placement-horizontal .hi-v4-radio--type-button::after {
+    background: #595959 !important;
+  }
 }
 
 .light-mode {
