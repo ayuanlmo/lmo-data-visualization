@@ -1,6 +1,6 @@
 import React from "react";
 import {Button} from "@hi-ui/hiui";
-import GlobalComponent from "./GlobalComponent";
+import GlobalComponent from "../GlobalComponent";
 
 export interface IDesignHeaderProps {
     readonly onBlack?: () => void;

@@ -7,10 +7,7 @@ export interface IColorPickerProps {
 }
 
 const ColorPicker = (props: IColorPickerProps): React.JSX.Element => {
-    const {
-        value,
-        onChange
-    } = props;
+    const {value, onChange}: IColorPickerProps = props;
     const ref: React.RefObject<HTMLInputElement> = useRef(null);
 
     useEffect((): void => {

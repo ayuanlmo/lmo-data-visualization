@@ -17,11 +17,11 @@ export interface IEditDataTable {
     open: () => void;
 }
 
-const EditDataTable = React.forwardRef((_props: {}, ref: React.ForwardedRef<IEditDataTable>) => {
+const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDataTable>> = React.forwardRef((_props: {}, ref: React.ForwardedRef<IEditDataTable>) => {
     const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
     const [data, setData] = useState<Array<Array<string | number>>>([[]]);
     const hotTableRef = useRef(null);
-    
+
     useImperativeHandle(ref, (): IEditDataTable => ({
         open
     }));

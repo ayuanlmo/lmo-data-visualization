@@ -14,7 +14,7 @@ interface IColorType {
 }
 
 function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
-    const {span = 12} = props;
+    const {span = 12}: ISelectThemeProps = props;
     const [colors, setColors]: ReactState<Array<IColorType>> = useState<Array<IColorType>>([]);
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
 

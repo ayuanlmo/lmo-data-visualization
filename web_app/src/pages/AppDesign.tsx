@@ -2,17 +2,17 @@ import "./style/AppDesign.scss";
 import "./style/AppDesign-Dack.scss";
 import "./style/AppDesign-Light.scss";
 import React from "react";
-import DesignHeader from "../components/DesignHeader";
 import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
 import DesignConfigs from "../components/DesignConfigs";
 import YExtendTemplate from "../components/YExtendTemplate";
+import Header from "../components/Header";
 
 const AppDesign = (): React.JSX.Element => {
     return (
         <div className={'data-visualization-design'}>
-            <DesignHeader/>
+            <Header.Design/>
             <div className={'app_position_relative'}>
                 <div style={{
                     padding: "1.5rem"
