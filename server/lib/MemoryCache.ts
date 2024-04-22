@@ -11,7 +11,7 @@ class MemoryCache {
         return this.Cache.set(key, value, ttl);
     }
 
-    public get<T>(key: string, value: any): T | undefined {
+    public get<T>(key: string): T | undefined {
         return this.Cache.get(key);
     }
 
