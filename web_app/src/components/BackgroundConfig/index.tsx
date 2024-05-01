@@ -10,6 +10,7 @@ import {setCurrentTemplateBackground} from '../../lib/Store/AppStore';
 import postMessage from "../../lib/PostMessage";
 import ColorPicker from "../ColorPicker";
 import {Dispatch} from "@reduxjs/toolkit";
+import GlobalComponent from "../GlobalComponent";
 
 const BackgroundConfig = (): React.JSX.Element => {
     const backgroundConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.background);
@@ -58,14 +59,14 @@ const BackgroundConfig = (): React.JSX.Element => {
                 </Grid.Row>
             </div>
             <div className={'text-config-item app_flex_box'}>
-                <YExtendTemplate show={backgroundConfig.type === 'theme'}>
+                <GlobalComponent.TDisplayTemplate show={backgroundConfig.type === 'theme'} style={{width: '100%'}}>
                     <SelectBackground onSelect={(cssCode: string): void => {
                         dispatch(setCurrentTemplateBackground({
                             ...backgroundConfig,
                             color: cssCode
                         }));
                     }}/>
-                </YExtendTemplate>
+                </GlobalComponent.TDisplayTemplate>
                 <Grid.Row style={{
                     width: '100%',
                     display: backgroundConfig.type === 'image' ? 'block' : 'none'

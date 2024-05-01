@@ -6,16 +6,18 @@ type TChildren = React.JSX.Element | React.JSX.Element[] | string[] | string | n
 interface TDisplayTemplateProps {
     show: boolean;
     children: TChildren;
+    style?: React.CSSProperties | undefined;
 }
 
 const TDisplayTemplate = (props: TDisplayTemplateProps): React.JSX.Element => {
-    const {show, children} = props;
+    const {show, children, style = {}} = props;
     const [catchTemplate]: ReactState<TChildren> = useState<TChildren>(children);
 
     return (
         <main
             style={{
-                display: show ? 'block' : 'none'
+                display: show ? 'block' : 'none',
+                ...style
             }}>
             {catchTemplate}
         </main>

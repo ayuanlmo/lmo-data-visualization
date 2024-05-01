@@ -11,6 +11,7 @@ import EditDataTable, {IEditDataTable} from "./EditDataTable";
 import {Grid} from "@hi-ui/hiui";
 import SyntheticConfig from "./SyntheticConfig";
 import {ReactState} from "../types/ReactTypes";
+import GlobalComponent from "./GlobalComponent";
 
 export type TOptionType = 'style' | 'config' | 'data';
 const DesignConfigs = (): React.JSX.Element => {
@@ -61,12 +62,12 @@ const DesignConfigs = (): React.JSX.Element => {
                 </Grid.Row>
             </div>
             <div className={'design-configs-container'}>
-                <YExtendTemplate show={optionType === 'style'}>
+                <GlobalComponent.TDisplayTemplate show={optionType === 'style'}>
                     <YExtendTemplate show={currentTextConfig !== null}>
                         <TextConfig config={currentTextConfig}/>
                     </YExtendTemplate>
                     <ColorConfig/>
-                </YExtendTemplate>
+                </GlobalComponent.TDisplayTemplate>
                 <YExtendTemplate show={optionType === 'config'}>
                     <SyntheticConfig/>
                 </YExtendTemplate>
