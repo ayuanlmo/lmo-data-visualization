@@ -20,6 +20,9 @@ const AppStore = createSlice({
                     image: '',
                     arrangement: ''
                 }
+            },
+            otherConfig: {
+                values: {}
             }
         }
     },
@@ -35,6 +38,10 @@ const AppStore = createSlice({
         // 设置模板背景
         setCurrentTemplateBackground(state, {payload}): void {
             state.currentTemplateConfig.config.background = payload;
+        },
+        // 设置模板其他配置
+        setCurrentTemplateOtherConfigValues(state, {payload}): void {
+            state.currentTemplateConfig.otherConfig.values = payload;
         }
     }
 });
@@ -42,7 +49,8 @@ const AppStore = createSlice({
 export const {
     setCurrentTemplate,
     setCurrentTemplateConfig,
-    setCurrentTemplateBackground
+    setCurrentTemplateBackground,
+    setCurrentTemplateOtherConfigValues
 } = AppStore.actions;
 
 export default AppStore.reducer;

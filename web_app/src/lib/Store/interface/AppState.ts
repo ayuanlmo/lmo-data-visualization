@@ -21,4 +21,29 @@ interface AppState {
     currentTemplate: null
 }
 
+export interface IAppStore {
+    currentTemplate: {
+        cover: string;
+        createTime: string;
+        description: string;
+        id: string;
+        name: string;
+        path: string;
+        type: number;
+    },
+    currentTemplateConfig: {
+        config: {
+            background: {
+                type: string;
+                color: string;
+                image: string;
+                arrangement: string;
+            }
+        },
+        otherConfig: {
+            values: {}
+        }
+    }
+}
+
 export default AppState;
