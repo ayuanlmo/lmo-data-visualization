@@ -1,6 +1,6 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import TextConfig from "./TextConfig";
-import {useTemplateMessageListener} from "../bin/Hooks";
+import {Hooks, useTemplateMessageListener} from "../bin/Hooks";
 import {ITemplateSelectTextElement} from "../types/TemplateMessage";
 import YExtendTemplate from "./YExtendTemplate";
 import ColorConfig from "./ColorConfig";
@@ -12,13 +12,18 @@ import {Grid} from "@hi-ui/hiui";
 import SyntheticConfig from "./SyntheticConfig";
 import {ReactState} from "../types/ReactTypes";
 import GlobalComponent from "./GlobalComponent";
+import TemplateOtherConfig from "./TemplateOtherConfig";
+import useEventListener = Hooks.useEventListener;
 
 export type TOptionType = 'style' | 'config' | 'data';
+
 const DesignConfigs = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
     const [optionType, setOptionType]: ReactState<TOptionType> = useState<TOptionType>('style');
     const [currentTextConfig, setCurrentTextConfig]: ReactState<null | ITemplateSelectTextElement> = useState<null | ITemplateSelectTextElement>(null);
     const editDataTableRef: React.RefObject<IEditDataTable> = useRef<IEditDataTable>(null);
+    const designConfigsElRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+    const [designConfigsElStyle, setDesignConfigsElStyle]: ReactState<React.CSSProperties> = useState<React.CSSProperties>({});
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);
@@ -29,6 +34,28 @@ const DesignConfigs = (): React.JSX.Element => {
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_CLOSE', (): void => {
         setCurrentTextConfig(null);
     });
+    useEventListener('resize', (): void => {
+        setDesignConfigsElStyle({});
+    });
+    useEffect((): void => {
+        if (!('width' in designConfigsElStyle))
+            changeElSize();
+    }, [designConfigsElStyle]);
+    useEffect((): void => {
+        changeElSize();
+    }, []);
+
+    const changeElSize = (): void => {
+        if (designConfigsElRef.current) {
+            const {offsetWidth, offsetHeight} = designConfigsElRef.current;
+
+            setDesignConfigsElStyle({
+                width: `${offsetWidth}px`,
+                height: `${offsetHeight}px`,
+                overflowY: 'scroll'
+            });
+        }
+    };
 
     const getClassName = (type: TOptionType): string => {
         if (type === optionType)
@@ -38,7 +65,7 @@ const DesignConfigs = (): React.JSX.Element => {
     };
 
     return (
-        <div className={'design-configs'}>
+        <div className={'design-configs'} ref={designConfigsElRef} style={designConfigsElStyle}>
             <div className={'design-configs-top-options app_flex_box app_none_user_select'}>
                 <Grid.Row gutter={30}>
                     <Grid.Col span={8}>
@@ -62,16 +89,21 @@ const DesignConfigs = (): React.JSX.Element => {
                 </Grid.Row>
             </div>
             <div className={'design-configs-container'}>
-                <GlobalComponent.TDisplayTemplate show={optionType === 'style'}>
-                    <YExtendTemplate show={currentTextConfig !== null}>
+                <div>
+                    <YExtendTemplate show={currentTextConfig !== null && optionType === 'style'}>
                         <TextConfig config={currentTextConfig}/>
                     </YExtendTemplate>
-                    <ColorConfig/>
-                </GlobalComponent.TDisplayTemplate>
-                <YExtendTemplate show={optionType === 'config'}>
-                    <SyntheticConfig/>
-                </YExtendTemplate>
-                <EditDataTable ref={editDataTableRef}/>
+                    <GlobalComponent.TDisplayTemplate show={optionType === 'style'}>
+                        <ColorConfig/>
+                    </GlobalComponent.TDisplayTemplate>
+                    <GlobalComponent.TDisplayTemplate show={optionType === 'style'}>
+                        <TemplateOtherConfig/>
+                    </GlobalComponent.TDisplayTemplate>
+                    <YExtendTemplate show={optionType === 'config'}>
+                        <SyntheticConfig/>
+                    </YExtendTemplate>
+                    <EditDataTable ref={editDataTableRef}/>
+                </div>
             </div>
         </div>
     );
