@@ -19,6 +19,7 @@ import {useDispatch} from "react-redux";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 import {Dispatch} from "@reduxjs/toolkit";
 import {ReactState} from "../../../types/ReactTypes";
+import Storage from "../../../lib/Storage";
 
 export interface ITemplate {
     cover: string;
@@ -173,6 +174,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                 }}
                 onClick={
                     (): void => {
+                        Storage.set('current_template', data);
                         dispatch(setCurrentTemplate(data));
                         navigate('/design');
                     }

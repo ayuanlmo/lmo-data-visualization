@@ -1,15 +1,31 @@
 import "./style/AppDesign.scss";
 import "./style/AppDesign-Dack.scss";
 import "./style/AppDesign-Light.scss";
-import React from "react";
+import React, {useEffect} from "react";
 import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
 import DesignConfigs from "../components/DesignConfigs";
 import YExtendTemplate from "../components/YExtendTemplate";
 import Header from "../components/Header";
+import {Dispatch} from "@reduxjs/toolkit";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../lib/Store";
+import Storage from "../lib/Storage";
+import {setCurrentTemplate} from "../lib/Store/AppStore";
 
 const AppDesign = (): React.JSX.Element => {
+    const dispatch: Dispatch = useDispatch();
+    const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
+
+    useEffect((): void => {
+        if (currentTemplate.id === '') {
+            const currentTemplate = JSON.parse(Storage.get('current_template') ?? '');
+
+            if (Object.keys(currentTemplate).length > 0)
+                dispatch(setCurrentTemplate(currentTemplate));
+        }
+    }, []);
     return (
         <div className={'data-visualization-design'}>
             <Header.Design/>
