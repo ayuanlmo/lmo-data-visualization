@@ -1,8 +1,8 @@
 import 'handsontable/dist/handsontable.full.min.css';
 import {HotTable} from '@handsontable/react';
-import React, {useImperativeHandle, useRef, useState} from "react";
+import React, {useEffect, useImperativeHandle, useRef, useState} from "react";
 import Drawer from "@hi-ui/drawer";
-import {Button} from "@hi-ui/hiui";
+import {Button, Space, Switch} from "@hi-ui/hiui";
 import utils from "../utils";
 import Hooks from "../bin/Hooks";
 import {CellChange, ChangeSource} from "handsontable/common";
@@ -21,6 +21,8 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
     const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
     const [data, setData] = useState<Array<Array<string | number>>>([[]]);
     const hotTableRef = useRef(null);
+    const [isLiveUpdate, setIsLiveUpdate]: ReactState<boolean> = useState<boolean>(true);
+    const [isChangeData, setIsChangeData]: ReactState<boolean> = useState<boolean>(false);
 
     useImperativeHandle(ref, (): IEditDataTable => ({
         open
@@ -29,6 +31,15 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
     useTemplateMessageListener('TEMPLATE_DATA', (e: Array<Array<string | number>>): void => {
         setData(e);
     });
+
+    useEffect((): void => {
+        if (isLiveUpdate) return;
+        if (!visible && isChangeData) {
+            sendData(processData(data));
+            setIsChangeData(false);
+            console.log(processData(data));
+        }
+    }, [visible]);
 
     const open = (): void => {
         setVisible(!visible);
@@ -54,7 +65,19 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
 
         });
     };
-    const sendData = (data: Array<Array<string | number>>): void => PostMessage.send({type: 'SET_DATA', message: data});
+    const sendData = (_data: Array<Array<string | number>>): void => PostMessage.send({
+        type: 'SET_DATA',
+        message: _data
+    });
+    const processData = (_data: Array<Array<string | number>>): (number | string)[][] => {
+        return _data.map((subArr: Array<any>) => {
+            return subArr.filter((i: any): boolean => {
+                return i;
+            });
+        }).filter((i: Array<any>): boolean => {
+            return i.length > 0;
+        });
+    };
     // const exportDefaultData = (): void => {
     // };
 
@@ -75,13 +98,22 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                         marginBottom: '1rem'
                     }
                 }>
-                    <Button type={'primary'} onClick={selectLocalFile}>加载本地数据</Button>
-                    {/*<Button onClick={exportDefaultData}>导出默认数据</Button>*/}
+                    <Space size={16}>
+                        <Button type={'primary'} onClick={selectLocalFile}>加载本地数据</Button>
+                        <Switch
+                            checked={isLiveUpdate}
+                            onChange={(e: boolean): void => {
+                                setIsLiveUpdate(e);
+                            }}
+                            content={["即时更新", "即时更新"]}
+                        />
+                        {/*<Button onClick={exportDefaultData}>导出默认数据</Button>*/}
+                    </Space>
                 </div>
                 <div>
                     <HotTable
                         minRows={50}
-                        minCols={50}
+                        minCols={100}
                         data={data}
                         ref={hotTableRef}
                         width="auto"
@@ -93,10 +125,12 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                         afterChange={(changes: CellChange[] | null, source: ChangeSource): void => {
                             if (source === 'edit') {
                                 const hotInstance: any = hotTableRef.current;
-                                const _data = hotInstance.__hotInstance.getData();
-                                const nd = _data.map((subArr: any) => subArr.filter((item: any): boolean => item !== null)).filter((i: Array<string | number | null>): boolean => i.length !== 0);
+                                const _data: (string | number)[][] = hotInstance.__hotInstance.getData();
+                                const nd: (string | number)[][] = processData(_data);
 
-                                sendData(nd);
+                                if (isLiveUpdate)
+                                    sendData(nd);
+                                setIsChangeData(true);
                             }
                         }}
                         licenseKey="non-commercial-and-evaluation"
