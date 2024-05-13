@@ -12,11 +12,13 @@ export interface ISwitchThemeProps {
 
 const SwitchTheme = (props: ISwitchThemeProps): React.JSX.Element => {
     const localMode: string | null = MyStorage.get('theme-mode');
-    const [isDark, setIsDark]: ReactState<boolean> = useState<boolean>(localMode === null ? false : localMode === 'dark-mode');
+    const [isDark, setIsDark]: ReactState<boolean> = useState<boolean>(false);
     const darkModeQuery: MediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
     const toggleClassName = (className: string, add: boolean): void => document.body.classList[add ? 'add' : 'remove'](className);
 
     useEffect((): void => {
+        if (localMode === null)
+            setIsDark(darkModeQuery.matches);
         const themeMode: string = isDark ? darkModeClassName : lightModeClassName;
 
         MyStorage.set('theme-mode', themeMode);
