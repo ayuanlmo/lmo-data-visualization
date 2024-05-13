@@ -44,7 +44,7 @@ export interface EditTemplateValue {
 
 const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const {onRefresh} = props;
-    const [data, seData]: ReactState<ITemplate> = useState(props.data);
+    const [data, setData]: ReactState<ITemplate> = useState(props.data);
     const colSpan: GridResponsiveSize<number> = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
     const [isCustomTemplate]: ReactState<boolean> = useState<boolean>(data.type === 0);
@@ -128,7 +128,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                                             }).then((): void => {
                                                 Notification.message(isCopyTemplate ? '复制成功' : '修改成功', 'success');
                                                 if (!isCopyTemplate)
-                                                    seData({...data, ...editFormValue});
+                                                    setData(Object.assign(data, editFormValue));
                                                 else
                                                     onRefresh();
                                                 closeModal();
