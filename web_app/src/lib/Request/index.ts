@@ -30,11 +30,11 @@ axios.interceptors.response.use(
         }
         Notification.openNotification('系统通知', '服务器异常', 'error');
         return Promise.reject(response);
-
-
     },
-    function (error) {
-        return Promise.reject(error);
+    function () {
+        Notification.openNotification('系统通知', '网络异常，无法与服务器取得联系，请稍后再试。', 'error');
+        Nprogress.done();
+        return Promise.resolve({});
     }
 );
 
@@ -80,6 +80,33 @@ namespace Request {
             url: '/uploadFile',
             method: 'get',
             params: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const getFileCategory = (data: object = {}) => {
+        return axios({
+            url: '/uploadFileCategory',
+            method: 'get',
+            params: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const addFileCategory = (data: object = {}) => {
+        return axios({
+            url: '/uploadFileCategory',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const deleteFileCategory = (data: object = {}) => {
+        return axios({
+            url: '/uploadFileCategory',
+            method: 'delete',
+            data: data,
             headers: {'Content-Type': 'application/json'}
         });
     };
