@@ -64,6 +64,27 @@ const UpLoadFilesModel = DB.define('UpLoadFiles', {
     timestamps: false
 });
 
+export const UpLoadFilesCategoryModel = DB.define('UpLoadFilesCategory', {
+    id: {
+        primaryKey: true,
+        type: DataTypes.TEXT
+    },
+    name: DataTypes.TEXT
+}, {
+    timestamps: false
+});
+UpLoadFilesCategoryModel.hasMany(UpLoadFilesCategoryModel, {
+    as: 'subCategory',
+    foreignKey: 'parentId'
+});
+UpLoadFilesCategoryModel.belongsTo(UpLoadFilesCategoryModel, {
+    as: 'parentCategory',
+    foreignKey: 'parentId'
+});
+UpLoadFilesModel.belongsTo(UpLoadFilesCategoryModel, {
+    foreignKey: 'categoryId'
+});
+
 ((): void => {
     try {
         (async (): Promise<void> => {

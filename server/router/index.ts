@@ -2,8 +2,8 @@ import {Request, Response, Router} from "express";
 import TemplateController from "../bin/controllers/Template";
 import File from "../bin/controllers/File";
 import Color from "../bin/controllers/Color";
-import Multer = require("multer");
 import Catch from "../bin/controllers/Catch";
+import Multer = require("multer");
 
 export const multer: Multer.Multer = Multer({
     dest: require('path').resolve('./_data/static/public/uploads'),
@@ -31,9 +31,17 @@ _Router.post('/template/refresh', (req: Request, res: Response): void => {
 _Router.post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
     File.upload(req, res);
 });
-
-_Router.get('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
+_Router.get('/uploadFile', (req: Request, res: Response): void => {
     File.getFiles(req, res);
+});
+_Router.get('/uploadFileCategory', (req: Request, res: Response): void => {
+    File.getFileCategory(req, res);
+});
+_Router.post('/uploadFileCategory', (req: Request, res: Response): void => {
+    File.addFileCategory(req, res);
+});
+_Router.delete('/uploadFileCategory', (req: Request, res: Response): void => {
+    File.deleteFileCategory(req, res);
 });
 _Router.get('/color', (req: Request, res: Response): void => {
     Color.getColors(req, res);
