@@ -3,6 +3,7 @@ import React, {useImperativeHandle, useRef, useState} from "react";
 import ImageList, {IImageItem} from "./ImageList";
 import Request from "../../lib/Request";
 import {ReactState} from "../../types/ReactTypes";
+import FileCategoryTree from "./FileCategoryTree";
 
 export interface ISelectFileProps {
     onSelect?: (data: IImageItem) => void;
@@ -16,6 +17,7 @@ interface IQuery {
     name: string;
     pageIndex: number;
     pageSize: number;
+    categoryId: string;
 }
 
 interface IUploadFrom {
@@ -23,12 +25,21 @@ interface IUploadFrom {
     media: File
 }
 
+export interface ICategory {
+    id: string;
+    name: string;
+    title?: string;
+    parentId: null | string;
+    children: Array<ICategory>;
+}
+
 const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.ForwardedRef<ISelectFileRef>) => {
     const {onSelect} = props;
     const [query, setQuery]: ReactState<IQuery> = useState({
         name: '',
         pageIndex: 0,
-        pageSize: 10
+        pageSize: 10,
+        categoryId: ''
     });
     const [isUpload, setIsUpLoad]: ReactState<boolean> = useState<boolean>(false);
     const FormItem: React.FC<FormItemProps> = Form.Item;
@@ -52,7 +63,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
             onClose={(): void => open()}
             onCancel={(): void => open()}
         >
-            <div className={'c-select-file'}>
+            <div className={'c-select-file app_position_relative'}>
                 <div className={'c-select-file-search'}>
                     <Grid.Row gutter={true} justify={"space-between"}>
                         <Grid.Col span={{lg: 12, xl: 12, md: 16, sm: 16, xs: 16}}>
@@ -76,27 +87,55 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                         </Grid.Col>
                     </Grid.Row>
                 </div>
-                <div className={'c-select-file-content animated fadeIn'}>
-                    <ImageList onSelect={
-                        (data): void => {
-                            onSelect && onSelect(data);
-                        }
-                    } query={{...query}} onRequest={({total}): void => {
-                        setPageTotal(total);
-                    }}/>
-                </div>
-                <div className={'c-select-file-pagination'}>
-                    <Pagination
-                        pageSize={query.pageSize}
-                        total={pageTotal}
-                        showTotal
-                        onChange={(...args) => {
-                            setQuery({
-                                ...query,
-                                pageIndex: args[0]
-                            });
+                <div style={{
+                    height: 'calc(100% - 6.5%)'
+                }}>
+                    <Grid.Row
+                        justify={'space-between'}
+                        style={{
+                            height: '100%'
                         }}
-                    />
+                    >
+                        <Grid.Col span={4}>
+                            <div style={{
+                                background: 'whitesmoke',
+                                height: '100%'
+                            }}>
+                                <FileCategoryTree
+                                    onSelectTree={(e: string | null | React.ReactText): void => {
+                                        setQuery({
+                                            ...query,
+                                            categoryId: `${e ?? ''}`
+                                        });
+                                    }}
+                                />
+                            </div>
+                        </Grid.Col>
+                        <Grid.Col span={20}>
+                            <div className={'c-select-file-content animated fadeIn'}>
+                                <ImageList onSelect={
+                                    (data): void => {
+                                        onSelect && onSelect(data);
+                                    }
+                                } query={{...query}} onRequest={({total}): void => {
+                                    setPageTotal(total);
+                                }}/>
+                            </div>
+                            <div className={'c-select-file-pagination'}>
+                                <Pagination
+                                    pageSize={query.pageSize}
+                                    total={pageTotal}
+                                    showTotal
+                                    onChange={(...args) => {
+                                        setQuery({
+                                            ...query,
+                                            pageIndex: args[0]
+                                        });
+                                    }}
+                                />
+                            </div>
+                        </Grid.Col>
+                    </Grid.Row>
                 </div>
             </div>
             <Modal

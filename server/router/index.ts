@@ -31,6 +31,12 @@ _Router.post('/template/refresh', (req: Request, res: Response): void => {
 _Router.post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
     File.upload(req, res);
 });
+_Router.post('/editFileInfo', (req: Request, res: Response): void => {
+    File.edit(req, res);
+});
+_Router.delete('/deleteFile', (req: Request, res: Response): void => {
+    File.delete(req, res);
+});
 _Router.get('/uploadFile', (req: Request, res: Response): void => {
     File.getFiles(req, res);
 });

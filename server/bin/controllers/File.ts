@@ -60,7 +60,7 @@ export default class File {
     public static delete(req: Request, res: Response): void {
         const {
             id = ""
-        } = req.params;
+        } = req.body;
 
         if (id === '')
             return void res.json(createErrorMessage('ext003'));
@@ -83,6 +83,34 @@ export default class File {
                 } else
                     res.json(createErrorMessage('ext00d'));
             });
+        });
+    }
+
+    public static edit(req: Request, res: Response): void {
+        const {
+            id = '',
+            name = '',
+            categoryId = null
+        } = req.body;
+
+        UpLoadFilesModel.findOne({
+            where: {id: id}
+        }).then((data) => {
+            if (data) {
+                UpLoadFilesModel.update({
+                    name,
+                    categoryId
+                }, {
+                    where: {id: id}
+                }).then((editRes): void => {
+                    if (editRes)
+                        res.status(204).send();
+                    else
+                        res.json(createErrorMessage('ext00d'));
+                });
+            } else {
+                res.json(createErrorMessage('ext00e'));
+            }
         });
     }
 
@@ -173,7 +201,6 @@ export default class File {
             });
         } else
             res.json(createErrorMessage('ext00e'));
-
     }
 
     public static deleteFileCategory(req: Request, res: Response): void {

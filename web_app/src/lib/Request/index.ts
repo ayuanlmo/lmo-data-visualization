@@ -9,32 +9,30 @@ axios.interceptors.request.use(conf => {
     Nprogress.start();
     return conf;
 });
-axios.interceptors.response.use(
-    function (response) {
-        const {status, data} = response;
+axios.interceptors.response.use((response): Promise<any> => {
+        const {status} = response;
 
         setTimeout((): void => {
             Nprogress.done();
         }, 100);
 
         if (status === 204) {
-            return Promise.resolve({});
-        } else if (status === 504) {
-            Notification.openNotification('系统通知', '服务器错误', 'error');
-            return Promise.resolve({});
-        } else if (data && data.code === 200) {
-            return Promise.resolve(data);
+            return Promise.resolve();
         }
-        if ('data' in response && '_app' in response) {
-            return Promise.resolve(response);
+
+        if ('data' in response) {
+            if (response.data.code === 500) {
+                Notification.openNotification('系统通知', '服务器错误', 'error');
+                return Promise.reject({});
+            }
+            if (response.data.code === 200)
+                return Promise.resolve(response.data);
         }
-        Notification.openNotification('系统通知', '服务器异常', 'error');
+        if (status === 504) {
+            Notification.openNotification('系统通知', '网络异常，无法与服务器取得联系，请稍后再试。', 'error');
+            return Promise.reject({});
+        }
         return Promise.reject(response);
-    },
-    function () {
-        Notification.openNotification('系统通知', '网络异常，无法与服务器取得联系，请稍后再试。', 'error');
-        Nprogress.done();
-        return Promise.resolve({});
     }
 );
 
@@ -117,6 +115,24 @@ namespace Request {
             method: 'post',
             data: data,
             headers: {'Content-Type': 'multipart/form-data'}
+        });
+    };
+
+    export const editFileInfo = (data: object = {}) => {
+        return axios({
+            url: '/editFileInfo',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const deleteFile = (data: object = {}) => {
+        return axios({
+            url: '/deleteFile',
+            method: 'delete',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
         });
     };
 }

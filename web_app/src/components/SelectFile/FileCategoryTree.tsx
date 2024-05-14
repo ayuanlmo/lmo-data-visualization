@@ -4,15 +4,22 @@ import {FlattedTreeNodeData} from "@hi-ui/tree/lib/types/types";
 import Request from "../../lib/Request";
 import {ReactState} from "../../types/ReactTypes";
 import Notification from "../../lib/Notification";
-import {Button, Input, Modal, PopConfirm} from "@hi-ui/hiui";
+import {Button, Input, Modal, PopConfirm, TreeSelect} from "@hi-ui/hiui";
 import {ICategory} from "./index";
+import YExtendTemplate from "../YExtendTemplate";
 
 interface ITreeActionProps {
     onSelectTree: (data: null | React.ReactText | string) => void;
+    type?: 'TreeAction' | 'TreeSelect';
+    value?: string;
 }
 
 const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
-    const {onSelectTree}: ITreeActionProps = props;
+    const {
+        onSelectTree,
+        type = "TreeAction",
+        value = ""
+    }: ITreeActionProps = props;
     const TreeAction: React.ForwardRefExoticComponent<EditableTreeProps & React.RefAttributes<HTMLUListElement | null>> = useTreeAction(Tree);
     const [inputValue, setInputValue]: ReactState<string> = useState<string>('');
     const [categoryTree, setCategoryTree] = useState([]);
@@ -66,87 +73,100 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
 
     return (
         <>
-            <TreeAction
-                showLine
-                expandOnSelect={false}
-                data={categoryTree}
-                editPlaceholder="请填写菜单"
-                expandedIds={activeIds}
-                menuOptions={[
-                    {
-                        type: "addChildNode",
-                        title: "新建子分类"
-                    },
-                    {
-                        type: "editNode",
-                        title: "编辑当前分类"
-                    },
-                    {
-                        title: "删除当前分类",
-                        onClick(node, action) {
-                            action.closeMenu();
-                            Modal.confirm({
-                                title: "提示",
-                                type: "warning",
-                                content: "您确定删除吗？",
-                                onConfirm: (): void => {
-                                    Request.deleteFileCategory({
-                                        id: node.id
-                                    }).then((): void => {
-                                        action.deleteNode();
-                                        Notification.message('删除成功', 'success');
-                                    }).catch((): void => {
-                                        Notification.message('删除失败,可能存在子分类而无法删除', 'error');
-                                    });
-                                }
-                            });
+            <YExtendTemplate show={type === 'TreeAction'}>
+                <TreeAction
+                    showLine
+                    expandOnSelect={false}
+                    data={categoryTree}
+                    editPlaceholder="请填写菜单"
+                    expandedIds={activeIds}
+                    menuOptions={[
+                        {
+                            type: "addChildNode",
+                            title: "新建子分类"
+                        },
+                        {
+                            type: "editNode",
+                            title: "编辑当前分类"
+                        },
+                        {
+                            title: "删除当前分类",
+                            onClick(node, action) {
+                                action.closeMenu();
+                                Modal.confirm({
+                                    title: "提示",
+                                    type: "warning",
+                                    content: "您确定删除吗？",
+                                    onConfirm: (): void => {
+                                        Request.deleteFileCategory({
+                                            id: node.id
+                                        }).then((): void => {
+                                            action.deleteNode();
+                                            Notification.message('删除成功', 'success');
+                                        }).catch((): void => {
+                                            Notification.message('删除失败,可能存在子分类而无法删除', 'error');
+                                        });
+                                    }
+                                });
+                            }
                         }
-                    }
-                ]}
-                onSave={(data: FlattedTreeNodeData): void => {
-                    add(data);
-                }}
-                onSelect={(e) => {
-                    onSelectTree(e);
-                }}
-            />
-            <PopConfirm
-                title={'新增分类'}
-                placement={'right'}
-                onConfirm={(): void => {
-                    if (inputValue === '' || inputValue.length > 16)
-                        return Notification.message('分类名称不能为空或者超过16个字符', 'error');
-                    Request.addFileCategory({
-                        id: '', name: inputValue
-                    }).then((): void => {
-                        setInputValue('');
-                        Notification.message('新增成功 ', 'success');
-                        onRefresh();
-                    });
-                }}
-                content={
-                    <Input
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                            setInputValue(e.target.value);
-                        }}
-                    />
-                }
-            >
-                <div
-                    style={{
-                        width: '88%',
-                        margin: 'auto'
+                    ]}
+                    onSave={(data: FlattedTreeNodeData): void => {
+                        add(data);
                     }}
+                    onSelect={(e) => {
+                        onSelectTree(e);
+                    }}
+                />
+                <PopConfirm
+                    title={'新增分类'}
+                    placement={'right'}
+                    onConfirm={(): void => {
+                        if (inputValue === '' || inputValue.length > 16)
+                            return Notification.message('分类名称不能为空或者超过16个字符', 'error');
+                        Request.addFileCategory({
+                            id: '', name: inputValue
+                        }).then((): void => {
+                            setInputValue('');
+                            Notification.message('新增成功 ', 'success');
+                            onRefresh();
+                        });
+                    }}
+                    content={
+                        <Input
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                setInputValue(e.target.value);
+                            }}
+                        />
+                    }
                 >
-                    <Button
-                        type="primary"
-                        size={'sm'}
+                    <div
                         style={{
-                            width: '100%'
+                            width: '88%',
+                            margin: 'auto'
                         }}
-                    >新增</Button>
-                </div>
-            </PopConfirm>
+                    >
+                        <Button
+                            type="primary"
+                            size={'sm'}
+                            style={{
+                                width: '100%'
+                            }}
+                        >新增</Button>
+                    </div>
+                </PopConfirm>
+            </YExtendTemplate>
+            <YExtendTemplate show={type == 'TreeSelect'}>
+                <TreeSelect
+                    clearable
+                    value={value}
+                    defaultExpandAll={true}
+                    onChange={(e: React.ReactText | string): void => {
+                        onSelectTree(e);
+                    }}
+                    data={categoryTree}
+                />
+            </YExtendTemplate>
         </>
     );
 };
