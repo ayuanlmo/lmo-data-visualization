@@ -24,6 +24,7 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
     const [inputValue, setInputValue]: ReactState<string> = useState<string>('');
     const [categoryTree, setCategoryTree] = useState([]);
     const [activeIds, setActiveIds]: ReactState<Array<string>> = useState<Array<string>>([]);
+    const [selectValue, setSelectValue]: ReactState<string | React.ReactText> = useState<string | React.ReactText>(value || '');
 
     const getFileCategory = (): void => {
         Request.getFileCategory().then((res) => {
@@ -159,10 +160,11 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
             <YExtendTemplate show={type == 'TreeSelect'}>
                 <TreeSelect
                     clearable
-                    value={value}
+                    value={selectValue}
                     defaultExpandAll={true}
                     onChange={(e: React.ReactText | string): void => {
                         onSelectTree(e);
+                        setSelectValue(e);
                     }}
                     data={categoryTree}
                 />
