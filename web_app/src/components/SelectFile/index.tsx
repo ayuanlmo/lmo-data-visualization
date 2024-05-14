@@ -1,9 +1,9 @@
-import {Button, Form, FormHelpers, FormItemProps, Grid, Input, Modal, Pagination, Search, Upload} from "@hi-ui/hiui";
-import React, {useImperativeHandle, useRef, useState} from "react";
+import {Grid, Modal, Pagination, Search} from "@hi-ui/hiui";
+import React, {useImperativeHandle, useState} from "react";
 import ImageList, {IImageItem} from "./ImageList";
-import Request from "../../lib/Request";
 import {ReactState} from "../../types/ReactTypes";
 import FileCategoryTree from "./FileCategoryTree";
+import UploadFile from "./UploadFile";
 
 export interface ISelectFileProps {
     onSelect?: (data: IImageItem) => void;
@@ -18,11 +18,6 @@ interface IQuery {
     pageIndex: number;
     pageSize: number;
     categoryId: string;
-}
-
-interface IUploadFrom {
-    name: string;
-    media: File
 }
 
 export interface ICategory {
@@ -41,9 +36,6 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
         pageSize: 10,
         categoryId: ''
     });
-    const [isUpload, setIsUpLoad]: ReactState<boolean> = useState<boolean>(false);
-    const FormItem: React.FC<FormItemProps> = Form.Item;
-    const uploadFromRef: React.RefObject<FormHelpers<IUploadFrom>> = useRef<FormHelpers>(null);
     const [pageTotal, setPageTotal]: ReactState<number> = useState<number>(0);
     const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
 
@@ -78,12 +70,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                             />
                         </Grid.Col>
                         <Grid.Col span={8}>
-                            <Button
-                                type={'primary'}
-                                onClick={(): void => {
-                                    setIsUpLoad(!isUpload);
-                                }}
-                            >上传</Button>
+                            <UploadFile/>
                         </Grid.Col>
                     </Grid.Row>
                 </div>
@@ -138,42 +125,6 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                     </Grid.Row>
                 </div>
             </div>
-            <Modal
-                onClose={(): void => {
-                    setIsUpLoad(!isUpload);
-                }}
-                onCancel={(): void => {
-                    setIsUpLoad(!isUpload);
-                }}
-                onConfirm={(): void => {
-                    Request.uploadFile(uploadFromRef.current?.getFieldsValue())
-                        .then((): void => setIsUpLoad(!isUpload));
-                }}
-                visible={isUpload}
-                title={'上传素材'}
-                unmountOnClose
-            >
-                <div className={'animated fadeIn'}>
-                    <Form innerRef={uploadFromRef} labelPlacement="top" initialValues={{name: '', media: null}}>
-                        <FormItem label="自定义名称" field="name" valueType="string">
-                            <Input placeholder="请输入"/>
-                        </FormItem>
-                        <FormItem required={true} label="文件" field="media" valueType="integer">
-                            <Upload
-                                type="drag"
-                                data={[]}
-                                accept=".png,.jpg,.jpeg,.svg"
-                                customUpload={(file: FileList | null): void => {
-                                    if (file) {
-                                        uploadFromRef.current?.setFieldValue('name', file[0].name.split('.')[0]);
-                                        uploadFromRef.current?.setFieldValue('media', file[0]);
-                                    }
-                                }}
-                            />
-                        </FormItem>
-                    </Form>
-                </div>
-            </Modal>
         </Modal>
     );
 });
