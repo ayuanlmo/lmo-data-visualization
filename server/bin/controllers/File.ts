@@ -141,7 +141,7 @@ export default class File {
             pageSize = 10,
             categoryId = '',
             type = ''
-        } = req.body ?? {};
+        } = req.query ?? {};
         const where: IQueryCriteria = {
             name: {[Op.like]: `%${name}%`},
             type: {[Op.like]: `%${type}%`}
