@@ -7,8 +7,11 @@ import UpLoadFileTypes from "../../const/UpLoadFileTypes";
 import {ReadStream, WriteStream} from "node:fs";
 import {UpLoadFilesCategoryModel, UpLoadFilesModel} from "../dataBase";
 import {Op} from "sequelize";
+import FFMPEG from "../../lib/ffmpeg";
+import Cli from "../../lib/Cli";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
+import getAudioVisualizationDiagram = FFMPEG.getAudioVisualizationDiagram;
 
 interface IQueryCriteria {
     [key: string]: any;
@@ -33,10 +36,13 @@ export default class File {
         const fr: ReadStream = fs.createReadStream(File.path);
         const fileName: string = '/' + File.filename + `${fileExtension}`;
         const fw: WriteStream = fs.createWriteStream(File.destination + fileName);
+        const filePath: string = `${AppConfig.__STATIC_PATH}/uploads` + fileName;
+        const fileId: string = require('uuid').v4();
         const data = {
-            id: require('uuid').v4(),
+            id: fileId,
             name: name,
-            path: `${AppConfig.__STATIC_PATH}/uploads` + fileName,
+            path: filePath,
+            cover: '',
             type: File.mimetype,
             createTime: new Date().getTime().toString(),
             categoryId: categoryId
@@ -44,15 +50,29 @@ export default class File {
 
         fr.pipe(fw);
         fw.on('finish', (): void => {
-            fs.unlink(File.path, (err: NodeJS.ErrnoException | null): void => {
+            fs.unlink(File.path, async (err: NodeJS.ErrnoException | null): Promise<void> => {
                 if (err)
                     return void res.json(createErrorMessage('ext00e'));
-                else
+                else {
+                    if (File.mimetype.includes('audio')) {
+                        const audioCoverName: string = fileId + '-v.t.png';
+                        const audioCoverStaticPath: string = `${AppConfig.__STATIC_PATH}/uploads/` + audioCoverName;
+                        const audioCoverPath: string = path.resolve(__dirname, '../../_data/static/public/uploads/' + audioCoverName);
+
+                        try {
+                            await getAudioVisualizationDiagram(path.resolve(File.destination + fileName), audioCoverPath);
+
+                            data.cover = audioCoverStaticPath;
+                        } catch (e) {
+                            Cli.debug(e);
+                        }
+                    }
                     UpLoadFilesModel.create(data).then((): void => {
                         res.json(createSuccessMessage(data));
                     }).catch((): void => {
                         res.json(createErrorMessage('ext00d'));
                     });
+                }
             });
         });
     }
@@ -119,10 +139,12 @@ export default class File {
             name = '',
             pageIndex = 0,
             pageSize = 10,
-            categoryId = ''
-        } = req.query ?? {};
+            categoryId = '',
+            type = ''
+        } = req.body ?? {};
         const where: IQueryCriteria = {
-            name: {[Op.like]: `%${name}%`}
+            name: {[Op.like]: `%${name}%`},
+            type: {[Op.like]: `%${type}%`}
         }
 
         if (categoryId !== '')

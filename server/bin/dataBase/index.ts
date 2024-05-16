@@ -58,6 +58,7 @@ const UpLoadFilesModel = DB.define('UpLoadFiles', {
     },
     name: DataTypes.TEXT,
     path: DataTypes.TEXT,
+    cover: DataTypes.TEXT,
     createTime: DataTypes.TEXT,
     type: DataTypes.TEXT
 }, {
