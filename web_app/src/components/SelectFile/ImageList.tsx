@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from "react";
-import Request from "../../lib/Request";
+import React, {useEffect, useImperativeHandle, useState} from "react";
 import YExtendTemplate from "../YExtendTemplate";
 import {EmptyState, Preview} from "@hi-ui/hiui";
 import LoadingImage from "./LoadingImage";
 import {ReactState} from "../../types/ReactTypes";
+import {TFileType} from "./index";
+import Request from "../../lib/Request";
 
 export interface IImageItem {
     id: string;
@@ -15,16 +16,27 @@ export interface IImageItem {
 }
 
 export interface IImageListProps {
+    readonly fileType: TFileType;
     query: object;
-    onRequest: (data: {
-        total: number;
-    }) => void;
-    onSelect?: (data: IImageItem) => void;
+    setPageTotal: React.Dispatch<React.SetStateAction<number>>;
+    readonly onEdit?: (item: IImageItem) => void;
+    readonly onDelete?: (item: IImageItem) => void;
+    readonly onUse?: (item: IImageItem) => void;
 }
 
-const ImageList = (props: IImageListProps): React.JSX.Element => {
-    const {onSelect} = props;
-    const [images, setImages]: ReactState<Array<IImageItem>> = useState<Array<IImageItem>>([]);
+export interface IImageListRef {
+    getFileList: () => void;
+}
+
+const ImageList = React.forwardRef((props: IImageListProps, ref: React.ForwardedRef<IImageListRef>) => {
+    const {
+        fileType,
+        query,
+        setPageTotal,
+        onEdit,
+        onDelete,
+        onUse
+    }: IImageListProps = props;
     const [previewVisible, setPreviewVisible]: ReactState<boolean> = useState<boolean>(false);
     const [previewInfo, setPreviewInfo]: ReactState<IImageItem> = useState<IImageItem>({
         createTime: "",
@@ -35,22 +47,26 @@ const ImageList = (props: IImageListProps): React.JSX.Element => {
         categoryId: ""
     });
 
+    const [fileList, setFileList]: ReactState<Array<IImageItem>> = useState<Array<IImageItem>>([]);
+
     const getFileList = (): void => {
-        Request.getFileList({...props.query}).then((res): void => {
-            setImages(res.data.rows);
-            props.onRequest({
-                total: res.data.total
+        if (fileType === 'image')
+            Request.getFileList({...query}).then((res): void => {
+                setFileList(res.data.rows);
+                setPageTotal(res.data.total);
             });
-        });
     };
+
+    useImperativeHandle(ref, (): IImageListRef => ({
+        getFileList
+    }));
 
     useEffect((): void => {
         getFileList();
-    }, [props]);
-
+    }, [query]);
     return (
         <>
-            <YExtendTemplate show={images.length > 0}>
+            <YExtendTemplate show={fileList.length > 0 && fileType === 'image'}>
                 <div className={'c-image-waterfall'}>
                     <Preview
                         title={previewInfo.name}
@@ -60,12 +76,11 @@ const ImageList = (props: IImageListProps): React.JSX.Element => {
                             setPreviewVisible(false);
                         }}
                     />
-                    {images.map((image: IImageItem): React.JSX.Element =>
+                    {fileList.map((image: IImageItem): React.JSX.Element =>
                         <div
                             key={image.id}
                             className={'c-image-waterfall-item app_position_relative'}
                             onClick={(): void => {
-                                onSelect && onSelect(image);
                                 setPreviewInfo(image);
                                 setPreviewVisible(true);
                             }}
@@ -75,27 +90,31 @@ const ImageList = (props: IImageListProps): React.JSX.Element => {
                                 src={'/api' + image.path}
                                 alt={image.name}
                                 item={image}
-                                onDelete={getFileList}
-                                onUpdate={(name: string, id: string): void => {
-                                    setImages(images.map((item: IImageItem): IImageItem => {
-                                        if (item.id === id)
-                                            return {
-                                                ...item,
-                                                name: name
-                                            };
-                                        return item;
-                                    }));
+                                onEdit={(data: IImageItem): void => {
+                                    onEdit && onEdit(data);
+                                }}
+                                onDelete={(data: IImageItem): void => {
+                                    onDelete && onDelete(data);
+                                }}
+                                onUse={(data: IImageItem): void => {
+                                    onUse && onUse(data);
+                                }}
+                                onPreview={(data: IImageItem): void => {
+                                    setPreviewInfo(data);
+                                    setPreviewVisible(true);
                                 }}
                             />
                         </div>
                     )}
                 </div>
             </YExtendTemplate>
-            <YExtendTemplate show={images.length === 0}>
+            <YExtendTemplate show={fileList.length === 0}>
                 <EmptyState/>
             </YExtendTemplate>
         </>
     );
-};
+});
+
+ImageList.displayName = 'ImageList';
 
 export default ImageList;

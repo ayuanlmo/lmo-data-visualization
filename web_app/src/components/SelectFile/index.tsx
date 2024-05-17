@@ -1,23 +1,29 @@
-import {Grid, Modal, Pagination, Search} from "@hi-ui/hiui";
-import React, {useImperativeHandle, useState} from "react";
-import ImageList, {IImageItem} from "./ImageList";
+import {Form, FormItem, Grid, Input, Modal, Pagination, Search, TabPane, Tabs} from "@hi-ui/hiui";
+import React, {useImperativeHandle, useRef, useState} from "react";
+import ImageList, {IImageItem, IImageListRef} from "./ImageList";
 import {ReactState} from "../../types/ReactTypes";
 import FileCategoryTree from "./FileCategoryTree";
 import UploadFile from "./UploadFile";
+import AudioList, {IAudioListRef} from "./AudioList";
+import YExtendTemplate from "../YExtendTemplate";
+import Request from "../../lib/Request";
+import Notification from "../../lib/Notification";
 
 export interface ISelectFileProps {
     onSelect?: (data: IImageItem) => void;
+    type?: TFileType;
 }
 
 export interface ISelectFileRef {
     open: () => void;
 }
 
-interface IQuery {
+export interface IQuery {
     name: string;
     pageIndex: number;
     pageSize: number;
     categoryId: string;
+    type: TFileType;
 }
 
 export interface ICategory {
@@ -28,20 +34,59 @@ export interface ICategory {
     children: Array<ICategory>;
 }
 
+export type TFileType = 'image' | 'audio';
+
 const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.ForwardedRef<ISelectFileRef>) => {
-    const {onSelect} = props;
+    const {
+        onSelect,
+        type = 'image'
+    }: ISelectFileProps = props;
     const [query, setQuery]: ReactState<IQuery> = useState({
         name: '',
         pageIndex: 0,
         pageSize: 10,
-        categoryId: ''
+        categoryId: '',
+        type: type
     });
     const [pageTotal, setPageTotal]: ReactState<number> = useState<number>(0);
     const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
+    const [fileType, setFileType]: ReactState<TFileType> = useState(type);
+    const [editItem, setEditItem]: ReactState<IImageItem | null> = useState<IImageItem | null>(null);
+    const [modalLoading, setModalLoading]: ReactState<boolean> = useState<boolean>(false);
+    const [editModalVisible, setEditModalVisible]: ReactState<boolean> = useState<boolean>(false);
+    const imageListRef: React.RefObject<IImageListRef> = useRef<IImageListRef>(null);
+    const audioListRef: React.RefObject<IAudioListRef> = useRef<IAudioListRef>(null);
 
     const open = (): void => setVisible(!visible);
 
-    useImperativeHandle(ref, () => ({
+    const onEdit = (data: IImageItem): void => {
+        setEditItem(data);
+        setEditModalVisible(true);
+    };
+    const getList = (): void => {
+        if (fileType == 'image')
+            imageListRef.current?.getFileList();
+        else
+            audioListRef.current?.getFileList();
+    };
+    const onUse = (data: IImageItem): void => {
+        onSelect && onSelect(data);
+    };
+    const onDelete = (data: IImageItem): void => {
+        Modal.confirm({
+            title: '您确定要删除该素材吗?',
+            onConfirm: (): void => {
+                Request.deleteFile({
+                    id: data.id
+                }).then((): void => {
+                    getList();
+                    Notification.message('删除成功', 'success');
+                });
+            }
+        });
+    };
+
+    useImperativeHandle(ref, (): ISelectFileRef => ({
         open
     }));
 
@@ -70,6 +115,24 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                             />
                         </Grid.Col>
                         <Grid.Col span={8}>
+                            <Tabs
+                                activeId={fileType}
+                                style={{
+                                    marginTop: '-8px'
+                                }}
+                                onChange={(e: React.ReactText | TFileType): void => {
+                                    setFileType(e as TFileType);
+                                    setQuery({
+                                        ...query,
+                                        type: e as TFileType
+                                    });
+                                }}
+                            >
+                                <TabPane tabId="image" tabTitle="图片"/>
+                                <TabPane tabId="audio" tabTitle="音频"/>
+                            </Tabs>
+                        </Grid.Col>
+                        <Grid.Col span={4}>
                             <UploadFile/>
                         </Grid.Col>
                     </Grid.Row>
@@ -100,13 +163,80 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                         </Grid.Col>
                         <Grid.Col span={20}>
                             <div className={'c-select-file-content animated fadeIn'}>
-                                <ImageList onSelect={
-                                    (data): void => {
-                                        onSelect && onSelect(data);
-                                    }
-                                } query={{...query}} onRequest={({total}): void => {
-                                    setPageTotal(total);
-                                }}/>
+                                <YExtendTemplate show={editModalVisible}>
+                                    <Modal
+                                        title={'修改'}
+                                        visible={editModalVisible}
+                                        confirmLoading={modalLoading}
+                                        onCancel={(): void => {
+                                            setEditModalVisible(false);
+                                        }}
+                                        onConfirm={(): void => {
+                                            setModalLoading(true);
+                                            Request.editFileInfo({
+                                                name: editItem?.name,
+                                                id: editItem?.id,
+                                                categoryId: editItem?.categoryId
+                                            }).then((): void => {
+                                                setTimeout((): void => {
+                                                    setModalLoading(false);
+                                                    setEditModalVisible(false);
+                                                    getList();
+                                                    Notification.message('修改成功', 'success');
+                                                }, 500);
+                                            });
+                                        }}
+                                    >
+                                        <Form labelPlacement="top" initialValues={{}}>
+                                            <FormItem label={'分类'}>
+                                                <FileCategoryTree
+                                                    type={'TreeSelect'}
+                                                    value={editItem?.categoryId}
+                                                    onSelectTree={(e: React.ReactText | null): void => {
+                                                        setEditItem({
+                                                            ...editItem as IImageItem,
+                                                            categoryId: e as string
+                                                        });
+                                                    }}
+                                                />
+                                            </FormItem>
+                                            <FormItem label={'名称'}>
+                                                <Input
+                                                    defaultValue={editItem?.name}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                                        setEditItem({
+                                                            ...editItem as IImageItem,
+                                                            name: e.target.value
+                                                        });
+                                                    }}
+                                                />
+                                            </FormItem>
+                                        </Form>
+                                    </Modal>
+                                </YExtendTemplate>
+                                <YExtendTemplate show={fileType === 'image'}>
+                                    <ImageList
+                                        onUse={onUse}
+                                        onEdit={onEdit}
+                                        setPageTotal={setPageTotal}
+                                        fileType={fileType}
+                                        ref={imageListRef}
+                                        query={query}
+                                        onDelete={onDelete}
+                                    />
+                                </YExtendTemplate>
+                                <YExtendTemplate show={fileType === 'audio'}>
+                                    <AudioList
+                                        onUse={onUse}
+                                        modalVisible={visible}
+                                        setPageTotal={setPageTotal}
+                                        fileType={fileType}
+                                        ref={audioListRef}
+                                        query={query}
+                                        onEdit={onEdit}
+                                        onDelete={onDelete}
+                                    />
+                                </YExtendTemplate>
                             </div>
                             <div className={'c-select-file-pagination'}>
                                 <Pagination

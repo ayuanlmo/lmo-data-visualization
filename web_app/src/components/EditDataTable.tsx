@@ -37,7 +37,6 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
         if (!visible && isChangeData) {
             sendData(processData(data));
             setIsChangeData(false);
-            console.log(processData(data));
         }
     }, [visible]);
 
