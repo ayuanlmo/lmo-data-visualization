@@ -46,6 +46,18 @@
         margin-left: .4rem;
         margin-top: -.15rem;
       }
+
+      &:hover {
+        div {
+          svg {
+            background-color: $theme-color;
+          }
+        }
+
+        .black {
+          color: $theme-color;
+        }
+      }
     }
 
     .data-visualization-design-header-option {
