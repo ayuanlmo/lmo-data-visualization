@@ -24,9 +24,9 @@
     "uuid": "^9.0.1"
   },
   "scripts": {
-    "start": "set NODE_ENV=development && nodemon",
-    "live-server": "setNODE_ENV=liveServer && tsc",
-    "c": "set NODE_ENV=prod && tsc && gulp cjs"
+    "start": "nodemon",
+    "live-server": "tsc",
+    "prod": "tsc && gulp cjs"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

@@ -1,18 +1,46 @@
-import OS from "node:os";
+export interface ParsedArgs {
+    [key: string]: string | boolean;
+}
 
-const _ENV: string = process.env.NODE_ENV as string;
+export type TAppModeType = 'development' | 'live-server' | 'prod';
+
+export interface IArgsParams {
+    p: string;
+    proc: string;
+    af: boolean;
+    mode: TAppModeType;
+}
+
+function getArgvParams(): IArgsParams {
+    const args: string[] = process.argv.slice(2);
+    const parsedArgs: ParsedArgs = {};
+    let currentKey: string | null = null;
+
+    for (let i: number = 0; i < args.length; i++) {
+        if (args[i].startsWith('-')) {
+            currentKey = args[i].slice(1);
+            parsedArgs[currentKey] = true;
+        } else if (currentKey) {
+            parsedArgs[currentKey] = args[i];
+            currentKey = null;
+        }
+    }
+
+    return parsedArgs as unknown as IArgsParams;
+}
+
+const argv: IArgsParams = getArgvParams();
 const AppConfig = {
     __APP_NAME: 'lmo-Data-Visualization-Server-Application',
     __APP_AUTHOR: 'ayuanlmo',
-    __SERVER_PORT: 3000,
+    __SERVER_PORT: Number(argv.p) || 3000,
     __STATIC_PATH: '/static',
     __SOCKET_CONNECT: '/connect',
     __SOCKET_PONG_KEY: 'ping',
     __SOCKET_PONG_MESSAGE: 'pong',
-    __DEV_SERVER: _ENV.trim() === 'development',
-    __LIVE_SERVER: _ENV.trim() === 'liveServer',
-    __MAX_PROCESS: OS.cpus().length,
-    __AUTO_FORK: true
+    __DEV_SERVER: argv.mode === 'development',
+    __LIVE_SERVER: argv.mode === 'live-server',
+    __ARGV: argv as IArgsParams
 } as const;
 
 export default AppConfig;

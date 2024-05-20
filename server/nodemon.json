@@ -17,5 +17,5 @@
     "coverage",
     "docs"
   ],
-  "exec": "ts-node ./main.ts"
+  "exec": "ts-node ./main.ts -p 3000 -proc 2 -af -mode development"
 }
