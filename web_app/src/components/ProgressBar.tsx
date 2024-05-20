@@ -1,16 +1,57 @@
-import React from "react";
+import React, {useState} from "react";
 import {Grid, GridResponsiveSize} from "@hi-ui/hiui";
+import {useSelector} from "react-redux";
+import Hooks from "../bin/Hooks";
+import useTemplateMessageListener = Hooks.useTemplateMessageListener;
+import {RootState} from "../lib/Store";
+import {ReactState} from "../types/ReactTypes";
+import postMessage from "../lib/PostMessage";
+import Utils from "../utils";
+
+let currentProgress: number = 0;
+let timer: any = 0;
 
 const ProgressBar = (): React.JSX.Element => {
     const colspanTime: GridResponsiveSize<number> = {lg: 4, xl: 3, md: 4, sm: 5, xs: 6};
     const colspanSlider: GridResponsiveSize<number> = {lg: 16, xl: 20, md: 18, sm: 16, xs: 14};
+    const duration: number = useSelector((state: RootState) => state.app.currentTemplateConfig.config.video.duration);
+    const [width, setWidth]: ReactState<number> = useState<number>(0);
+
+    const initProgress = (): void => {
+        currentProgress = 0;
+        clearInterval(timer);
+        setWidth(0);
+        timer = setInterval((): void => {
+            requestAnimationFrame((): void => {
+                currentProgress += 1;
+                setWidth(currentProgress);
+                if (currentProgress === 100) {
+                    clearInterval(timer);
+                    currentProgress = 0;
+                }
+            });
+        }, duration / 100);
+    };
+
+    useTemplateMessageListener('TEMPLATE_RENDER', (): void => {
+        initProgress();
+    });
 
     return (
         <div className={'progress-bar app_none_user_select'}>
             <div className={'progress-bar-content'}>
                 <Grid.Row justify={'space-between'}>
                     <Grid.Col span={1}>
-                        <div className={'progress-bar-play-icon app_cursor_pointer'}>
+                        <div
+                            className={'progress-bar-play-icon app_cursor_pointer'}
+                            onClick={(): void => {
+                                postMessage.send({
+                                    type: 'RENDER',
+                                    message: {}
+                                });
+                                initProgress();
+                            }}
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34"
                                  fill="none">
                                 <circle cx="17" cy="17" r="17" fill="#0688E5"/>
@@ -22,11 +63,28 @@ const ProgressBar = (): React.JSX.Element => {
                     </Grid.Col>
                     <Grid.Col span={colspanSlider}>
                         <div className={'progress-bar-slider'}>
-                            <div className={'progress-bar-slider-track'}></div>
+                            <div
+                                className={'progress-bar-slider-track'}
+                                style={{
+                                    width: `${width}%`
+                                }}
+                            />
                         </div>
                     </Grid.Col>
                     <Grid.Col span={colspanTime}>
-                        <div className={'progress-bar-time'}>00:01/00:10</div>
+                        <div className={'progress-bar-time app_none_user_select'}>
+                            <span>
+                                {
+                                    Utils.formatSec(duration * (width / 100), true)
+                                }
+                            </span>
+                            <span> / </span>
+                            <span>
+                                {
+                                    Utils.formatSec(duration, true)
+                                }
+                            </span>
+                        </div>
                     </Grid.Col>
                 </Grid.Row>
             </div>

@@ -22,6 +22,7 @@ export type TDesignAppMessageType =
     | 'PREVIEW_MODE' // 预览模式
     | 'PLAY_MODE' // 设计器播放模式
     | 'SET_OTHER_CONFIG' // 设置其他配置
+    | 'RENDER' // 执行渲染
     ;
 
 export interface ITemplateSelectTextElement {

@@ -24,8 +24,19 @@ const AppStore = createSlice({
                     color: '',
                     image: '',
                     arrangement: ''
+                },
+                video: {
+                    duration: 5000,
+                    fps: 30,
+                    clarity: '1080P'
+                },
+                audio: {
+                    path: '',
+                    full: false,
+                    volume: 100
                 }
             },
+
             otherConfig: {
                 values: {}
             }
