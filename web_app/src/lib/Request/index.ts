@@ -100,11 +100,10 @@ namespace Request {
         });
     };
 
-    export const deleteFileCategory = (data: object = {}) => {
+    export const deleteFileCategory = (id: string) => {
         return axios({
-            url: '/uploadFileCategory',
+            url: `/uploadFileCategory/${id}`,
             method: 'delete',
-            data: data,
             headers: {'Content-Type': 'application/json'}
         });
     };
@@ -118,10 +117,10 @@ namespace Request {
         });
     };
 
-    export const editFileInfo = (data: object = {}) => {
+    export const editFileInfo = (id: string, data: object = {}) => {
         return axios({
-            url: '/editFileInfo',
-            method: 'post',
+            url: `/editFileInfo/${id}`,
+            method: 'put',
             data: data,
             headers: {'Content-Type': 'application/json'}
         });

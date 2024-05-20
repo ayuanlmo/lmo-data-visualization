@@ -173,9 +173,8 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                         }}
                                         onConfirm={(): void => {
                                             setModalLoading(true);
-                                            Request.editFileInfo({
+                                            Request.editFileInfo( editItem?.id as string,{
                                                 name: editItem?.name,
-                                                id: editItem?.id,
                                                 categoryId: editItem?.categoryId
                                             }).then((): void => {
                                                 setTimeout((): void => {

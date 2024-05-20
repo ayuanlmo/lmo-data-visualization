@@ -99,9 +99,7 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                                     type: "warning",
                                     content: "您确定删除吗？",
                                     onConfirm: (): void => {
-                                        Request.deleteFileCategory({
-                                            id: node.id
-                                        }).then((): void => {
+                                        Request.deleteFileCategory(node.id as string).then((): void => {
                                             action.deleteNode();
                                             Notification.message('删除成功', 'success');
                                         }).catch((): void => {

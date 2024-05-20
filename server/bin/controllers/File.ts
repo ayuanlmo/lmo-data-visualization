@@ -107,11 +107,14 @@ export default class File {
     }
 
     public static edit(req: Request, res: Response): void {
+        const {id} = req.params;
         const {
-            id = '',
             name = '',
             categoryId = null
         } = req.body;
+
+        if(id === '')
+            return void res.json(createErrorMessage('ext003'));
 
         UpLoadFilesModel.findOne({
             where: {id: id}
@@ -228,7 +231,7 @@ export default class File {
     public static deleteFileCategory(req: Request, res: Response): void {
         const {
             id = ""
-        } = req.body;
+        } = req.params;
 
         if (id === "")
             return void res.json(createErrorMessage('ext003'));

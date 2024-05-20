@@ -31,7 +31,7 @@ _Router.post('/template/refresh', (req: Request, res: Response): void => {
 _Router.post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
     File.upload(req, res);
 });
-_Router.post('/editFileInfo', (req: Request, res: Response): void => {
+_Router.put('/editFileInfo/:id', (req: Request, res: Response): void => {
     File.edit(req, res);
 });
 _Router.delete('/deleteFile', (req: Request, res: Response): void => {
@@ -46,7 +46,7 @@ _Router.get('/uploadFileCategory', (req: Request, res: Response): void => {
 _Router.post('/uploadFileCategory', (req: Request, res: Response): void => {
     File.addFileCategory(req, res);
 });
-_Router.delete('/uploadFileCategory', (req: Request, res: Response): void => {
+_Router.delete('/uploadFileCategory/:id', (req: Request, res: Response): void => {
     File.deleteFileCategory(req, res);
 });
 _Router.get('/color', (req: Request, res: Response): void => {
