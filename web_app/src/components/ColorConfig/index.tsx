@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from "react";
+import {Dispatch} from "@reduxjs/toolkit";
+import {useDispatch, useSelector} from "react-redux";
 import {Grid, Select} from "@hi-ui/hiui";
-import ResetButton from "../ResetButton";
 import SelectTheme from "./SelectTheme";
 import BackgroundConfig from "../BackgroundConfig";
-import {useSelector} from "react-redux";
 import {RootState} from "../../lib/Store";
 import {ReactState} from "../../types/ReactTypes";
+import YExtendTemplate from "../YExtendTemplate";
+import GradientColorPicker from "./GradientColorPicker";
+import SingleColorPicker from "./SingleColorPicker";
+import {setCurrentTemplateThemeConfig} from "../../lib/Store/AppStore";
+import PostMessage from "../../lib/PostMessage";
 
 interface IThemeConfigItem {
     title: string;
@@ -21,6 +26,40 @@ function ColorConfig(): React.JSX.Element {
     } = useSelector((state: RootState) => state.app.currentTemplateConfig.config.theme);
     const [themeConfigs, setThemeConfigs]: ReactState<Array<IThemeConfigItem>> = useState<Array<IThemeConfigItem>>([]);
     const [themeType, setThemeType]: ReactState<string> = useState<string>('');
+    const currentTemplateConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.theme);
+    const dispatch: Dispatch = useDispatch();
+
+    const setStore = (data: object = {}): void => {
+        dispatch(setCurrentTemplateThemeConfig({
+            ...currentTemplateConfig,
+            ...data
+        }));
+        sendMessage();
+    };
+    const getDefaultColor = (): Array<string> => {
+        const {type, value} = currentTemplateConfig;
+
+        if (type === 'Gradient' && value.length > 1)
+            return [value[0], value[value.length - 1]];
+
+        if (type === 'Single')
+            return [value[0]];
+
+        return value;
+    };
+    const sendMessage = (): void => {
+        PostMessage.send({
+            type: 'SET_THEME_COLOR',
+            message: {
+                type: themeType,
+                value: currentTemplateConfig.value
+            }
+        });
+    };
+
+    useEffect((): void => {
+        sendMessage();
+    }, [themeType]);
 
     useEffect((): void => {
         setThemeConfigs([
@@ -28,6 +67,7 @@ function ColorConfig(): React.JSX.Element {
             {title: "渐变色", id: 'Gradient', disabled: !configTheme.configs.includes('Gradient')},
             {title: "单色", id: 'Single', disabled: !configTheme.configs.includes('Single')}
         ]);
+
         setThemeType(configTheme.type);
     }, [configTheme]);
 
@@ -42,14 +82,18 @@ function ColorConfig(): React.JSX.Element {
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={16}>
                         <Grid.Row gutter={true} justify={"space-between"}>
-                            <Grid.Col span={6}>
-                                <ResetButton/>
-                            </Grid.Col>
-                            <Grid.Col span={18}>
+                            <Grid.Col span={24}>
                                 <Select
                                     data={themeConfigs}
                                     defaultValue={themeType}
                                     value={themeType}
+                                    onChange={(e: React.ReactText | string): void => {
+                                        setStore({
+                                            type: e as string,
+                                            value: getDefaultColor()
+                                        });
+                                        setThemeType(e as string);
+                                    }}
                                 />
                             </Grid.Col>
                         </Grid.Row>
@@ -57,7 +101,33 @@ function ColorConfig(): React.JSX.Element {
                 </Grid.Row>
             </div>
             <div className={'text-config-item app_flex_box'}>
-                <SelectTheme/>
+                <YExtendTemplate show={themeType === 'Theme'}>
+                    <SelectTheme onChange={(data: Array<string>): void => {
+                        setStore({
+                            value: data
+                        });
+                    }}/>
+                </YExtendTemplate>
+                <YExtendTemplate show={themeType === 'Gradient'}>
+                    <GradientColorPicker
+                        value={currentTemplateConfig.value as unknown as [string, string]}
+                        onChange={(e: [string, string]): void => {
+                            setStore({
+                                value: e
+                            });
+                        }}
+                    />
+                </YExtendTemplate>
+                <YExtendTemplate show={themeType === 'Single'}>
+                    <SingleColorPicker
+                        value={currentTemplateConfig.value[0]}
+                        onChange={(e: string): void => {
+                            setStore({
+                                value: [e]
+                            });
+                        }}
+                    />
+                </YExtendTemplate>
             </div>
             <div className={'config-line '}></div>
             <BackgroundConfig/>
