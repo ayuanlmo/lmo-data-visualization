@@ -7,12 +7,13 @@ import {ReactState} from "../../types/ReactTypes";
 import PostMessage from "../../lib/PostMessage";
 import {Dispatch} from "@reduxjs/toolkit";
 import {setCurrentTemplateOtherConfigValues} from "../../lib/Store/AppStore";
+import ColorPicker from "../ColorPicker";
 
 interface IConfigTypes {
     label: string;
     value: number | string | boolean;
     key: string;
-    type: 'switch' | 'input' | 'input-number' | 'select' | 'radio';
+    type: 'switch' | 'input' | 'input-number' | 'select' | 'radio' | 'color';
     options: {
         label: string;
         value: string;
@@ -33,10 +34,18 @@ const TemplateOtherConfig = (): React.JSX.Element => {
     const [values, setValues]: ReactState<object> = useState({});
     const dispatch: Dispatch = useDispatch();
 
+    const setValue = (key: string, value: string | number | boolean): void => {
+        setValues({
+            ...values,
+            [key]: value
+        });
+    };
+
     useEffect((): void => {
         if (currentTemplateOtherConfig && Array.isArray(currentTemplateOtherConfig.configs))
             setValues(currentTemplateOtherConfig.values);
     }, []);
+
     useEffect((): void => {
         dispatch(setCurrentTemplateOtherConfigValues({
             ...values
@@ -58,10 +67,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                         <Switch
                             defaultChecked={item.value as boolean}
                             onChange={(e: boolean): void => {
-                                setValues({
-                                    ...values,
-                                    [item.key]: e
-                                });
+                                setValue(item.key, e);
                             }}
                         />
                     </YExtendTemplate>
@@ -69,10 +75,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                         <Select
                             defaultValue={item.value as string}
                             onChange={(e: React.ReactText | string): void => {
-                                setValues({
-                                    ...values,
-                                    [item.key]: e
-                                });
+                                setValue(item.key, e);
                             }}
                         >
                             {
@@ -87,10 +90,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                             trimValueOnBlur={true}
                             defaultValue={item.value as string}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                                setValues({
-                                    ...values,
-                                    [item.key]: e.target.value
-                                });
+                                setValue(item.key, e.target.value as string);
                             }}
                         />
                     </YExtendTemplate>
@@ -98,10 +98,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                         <NumberInput
                             defaultValue={item.value as number}
                             onChange={(e: number | null): void => {
-                                setValues({
-                                    ...values,
-                                    [item.key]: e ?? 0
-                                });
+                                setValue(item.key, e ?? 0 as number);
                             }}
                         />
                     </YExtendTemplate>
@@ -120,10 +117,15 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                                     }) : []
                             }
                             onChange={(e: React.ReactText | string): void => {
-                                setValues({
-                                    ...values,
-                                    [item.key]: e
-                                });
+                                setValue(item.key, e);
+                            }}
+                        />
+                    </YExtendTemplate>
+                    <YExtendTemplate show={item.type === 'color'}>
+                        <ColorPicker
+                            value={item.value as string}
+                            onChange={(e: string): void => {
+                                setValue(item.key, e);
                             }}
                         />
                     </YExtendTemplate>
