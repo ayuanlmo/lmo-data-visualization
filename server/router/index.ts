@@ -3,6 +3,7 @@ import TemplateController from "../bin/controllers/Template";
 import File from "../bin/controllers/File";
 import Color from "../bin/controllers/Color";
 import Catch from "../bin/controllers/Catch";
+import Player from "../bin/Player";
 import Multer = require("multer");
 
 export const multer: Multer.Multer = Multer({
@@ -55,5 +56,7 @@ _Router.get('/color', (req: Request, res: Response): void => {
 _Router.post('/clearCatch', (req: Request, res: Response): void => {
     Catch.clearCatch(req, res);
 });
-
+_Router.get('/player/:id', (req: Request, res: Response): void => {
+    new Player(req, res);
+});
 export default _Router;
