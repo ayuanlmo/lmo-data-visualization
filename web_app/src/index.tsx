@@ -8,6 +8,12 @@ import "./style/Global.css";
 import "./style/index.scss";
 import "./style/animate.min.css";
 import "./style/hi.scss";
+import "./pages/style/AppHome.scss";
+import "./pages/style/AppHome-Dack.scss";
+import "./pages/style/AppHome-Light.scss";
+import "./pages/style/AppDesign.scss";
+import "./pages/style/AppDesign-Dack.scss";
+import "./pages/style/AppDesign-Light.scss";
 
 ((): void => {
     const AppHome: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppHome"));

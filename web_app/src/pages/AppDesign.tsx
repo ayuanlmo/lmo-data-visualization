@@ -1,6 +1,3 @@
-import "./style/AppDesign.scss";
-import "./style/AppDesign-Dack.scss";
-import "./style/AppDesign-Light.scss";
 import React, {useEffect} from "react";
 import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";

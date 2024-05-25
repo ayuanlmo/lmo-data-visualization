@@ -1,6 +1,3 @@
-import "./style/AppHome.scss";
-import "./style/AppHome-Dack.scss";
-import "./style/AppHome-Light.scss";
 import React from "react";
 import TemplateList from "../components/TemplateList";
 import Header from "../components/Header";
