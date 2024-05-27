@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Request from "../../lib/Request";
-import {Grid, Loading} from "@hi-ui/hiui";
+import {EmptyState, Grid, Loading} from "@hi-ui/hiui";
 import {ReactState} from "../../types/ReactTypes";
 
 interface IColorType {
@@ -43,23 +43,28 @@ const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
 
     return (
         <Loading visible={loading}>
-            <Grid.Row style={{
-                width: '100%',
-                maxHeight: '13rem',
-                overflow: 'scroll'
-            }} gutter={true}>
-                {
-                    colors.map((i: IColorType): React.JSX.Element => {
-                        return (
-                            <Grid.Col key={i.id} span={4}>
-                                {
-                                    getBackgroundItem(i.value)
-                                }
-                            </Grid.Col>
-                        );
-                    })
-                }
-            </Grid.Row>
+            {
+                colors.length == 0 ?
+                    <EmptyState title={'暂时没有可供使用的颜色组合'}/>
+                    :
+                    <Grid.Row style={{
+                        width: '100%',
+                        maxHeight: '13rem',
+                        overflow: 'scroll'
+                    }} gutter={true}>
+                        {
+                            colors.map((i: IColorType): React.JSX.Element => {
+                                return (
+                                    <Grid.Col key={i.id} span={4}>
+                                        {
+                                            getBackgroundItem(i.value)
+                                        }
+                                    </Grid.Col>
+                                );
+                            })
+                        }
+                    </Grid.Row>
+            }
         </Loading>
     );
 };

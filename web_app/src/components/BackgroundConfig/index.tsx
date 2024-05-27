@@ -102,6 +102,7 @@ const BackgroundConfig = (): React.JSX.Element => {
                     </Grid.Row>
                 </YExtendTemplate>
             </div>
+            <div className={'config-line '}/>
         </b>
     );
 };
