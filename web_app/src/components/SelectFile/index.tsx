@@ -9,8 +9,12 @@ import YExtendTemplate from "../YExtendTemplate";
 import Request from "../../lib/Request";
 import Notification from "../../lib/Notification";
 
+export interface ISelectFile extends IImageItem {
+    cover?: string;
+}
+
 export interface ISelectFileProps {
-    onSelect?: (data: IImageItem) => void;
+    onSelect?: (data: ISelectFile) => void;
     type?: TFileType;
 }
 
@@ -173,7 +177,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                         }}
                                         onConfirm={(): void => {
                                             setModalLoading(true);
-                                            Request.editFileInfo( editItem?.id as string,{
+                                            Request.editFileInfo(editItem?.id as string, {
                                                 name: editItem?.name,
                                                 categoryId: editItem?.categoryId
                                             }).then((): void => {
