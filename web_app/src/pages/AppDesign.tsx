@@ -3,7 +3,6 @@ import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
 import DesignConfigs from "../components/DesignConfigs";
-import YExtendTemplate from "../components/YExtendTemplate";
 import Header from "../components/Header";
 import {Dispatch} from "@reduxjs/toolkit";
 import {useDispatch, useSelector} from "react-redux";
@@ -33,15 +32,13 @@ const AppDesign = (): React.JSX.Element => {
                     <Grid.Row style={{
                         height: '98%'
                     }} justify={'space-between'}>
-                        <YExtendTemplate show={true}>
-                            <Grid.Col span={{lg: 16, xl: 18, md: 24, sm: 24, xs: 24}}>
-                                <TemplatePreview/>
-                                <ProgressBar/>
-                            </Grid.Col>
-                            <Grid.Col span={{lg: 7, xl: 5.5, md: 24, sm: 24, xs: 24}}>
-                                <DesignConfigs/>
-                            </Grid.Col>
-                        </YExtendTemplate>
+                        <Grid.Col span={{lg: 12, xl: 18, md: 24, sm: 24, xs: 24}}>
+                            <TemplatePreview/>
+                            <ProgressBar/>
+                        </Grid.Col>
+                        <Grid.Col span={{lg: 10, xl: 5, md: 24, sm: 24, xs: 24}}>
+                            <DesignConfigs/>
+                        </Grid.Col>
                     </Grid.Row>
                 </div>
 

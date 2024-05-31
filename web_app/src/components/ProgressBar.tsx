@@ -2,11 +2,11 @@ import React, {useState} from "react";
 import {Grid, GridResponsiveSize} from "@hi-ui/hiui";
 import {useSelector} from "react-redux";
 import Hooks from "../bin/Hooks";
-import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 import {RootState} from "../lib/Store";
 import {ReactState} from "../types/ReactTypes";
 import postMessage from "../lib/PostMessage";
 import Utils from "../utils";
+import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 
 let currentProgress: number = 0;
 let timer: any = 0;

@@ -11,10 +11,12 @@ import postMessage from "../../lib/PostMessage";
 import ColorPicker from "../ColorPicker";
 import {Dispatch} from "@reduxjs/toolkit";
 import GlobalComponent from "../GlobalComponent";
+import {useTranslation} from "react-i18next";
 
 const BackgroundConfig = (): React.JSX.Element => {
     const backgroundConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.background);
     const dispatch: Dispatch = useDispatch();
+    const {t} = useTranslation();
 
     useEffect((): void => {
         postMessage.send({
@@ -29,29 +31,41 @@ const BackgroundConfig = (): React.JSX.Element => {
                 <Grid.Row style={{
                     width: '100%'
                 }} gutter={true} justify={"space-between"}>
-                    <Grid.Col span={8}>
-                        <div className={'color-config-item-label app_flex_box'}>背景配置</div>
+                    <Grid.Col span={11}>
+                        <div className={'color-config-item-label app_flex_box'}>{t('backgroundConfig')}</div>
                     </Grid.Col>
-                    <Grid.Col justify={'flex-end'} span={16}>
-                        <Grid.Row gutter={true} justify={"space-between"}>
-                            <Grid.Col span={6}>
-                                <ResetButton onClick={(): void => {
-                                    dispatch(setCurrentTemplateBackground({
-                                        ...backgroundConfig,
-                                        type: ''
-                                    }));
-                                }}/>
-                            </Grid.Col>
-                            <Grid.Col span={18}>
-                                <Select onSelect={(e: ReactText): void => {
-                                    dispatch(setCurrentTemplateBackground({
-                                        ...backgroundConfig,
-                                        type: e
-                                    }));
-                                }}>
-                                    <SelectOption value={'theme'}>颜色渐变</SelectOption>
-                                    <SelectOption value={'image'}>图片</SelectOption>
-                                    <SelectOption value={'color'}>纯色</SelectOption>
+                    <Grid.Col justify={'flex-end'} span={13}>
+                        <Grid.Row gutter={true} justify={"space-between"} style={{
+                            width: '100%',
+                            justifyContent: 'end'
+                        }}>
+                            <YExtendTemplate show={false}>
+                                <Grid.Col span={12}>
+                                    <ResetButton onClick={(): void => {
+                                        dispatch(setCurrentTemplateBackground({
+                                            ...backgroundConfig,
+                                            type: ''
+                                        }));
+                                    }}/>
+                                </Grid.Col>
+                            </YExtendTemplate>
+                            <Grid.Col
+                                span={18}
+                                style={{
+                                    width: '100%'
+                                }}
+                            >
+                                <Select
+                                    placeholder={t('pleaseSelect')}
+                                    onSelect={(e: ReactText): void => {
+                                        dispatch(setCurrentTemplateBackground({
+                                            ...backgroundConfig,
+                                            type: e
+                                        }));
+                                    }}>
+                                    <SelectOption value={'theme'}>{t('gradientColor')}</SelectOption>
+                                    <SelectOption value={'image'}>{t('image')}</SelectOption>
+                                    <SelectOption value={'color'}>{t('singleColor')}</SelectOption>
                                 </Select>
                             </Grid.Col>
                         </Grid.Row>

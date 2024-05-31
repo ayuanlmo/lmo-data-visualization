@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Button, Loading, Popover, Space} from "@hi-ui/hiui";
 import {ReactState} from "../../types/ReactTypes";
 import {IImageItem} from "./ImageList";
+import {useTranslation} from "react-i18next";
 
 interface ILoadingImageProps {
     src: string;
@@ -27,6 +28,7 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
     }: ILoadingImageProps = props;
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
     const stopPropagation = (e: React.MouseEvent<HTMLElement | HTMLDivElement | SVGSVGElement> | React.MouseEvent<Element, MouseEvent>): void => e.stopPropagation();
+    const {t} = useTranslation();
 
     return (
         <Loading visible={loading}>
@@ -50,7 +52,7 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
                                         onPreview && onPreview(props.item);
                                     }}
                                 >
-                                    预览
+                                    {t('preview')}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -60,7 +62,7 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
                                         onUse && onUse(props.item);
                                     }}
                                 >
-                                    使用
+                                    {t('use')}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -70,7 +72,7 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
                                         onEdit && onEdit(props.item);
                                     }}
                                 >
-                                    修改
+                                    {t('edit')}
                                 </Button>
                                 <Button
                                     size="sm"
@@ -80,7 +82,7 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
                                         onDelete && onDelete(props.item);
                                     }}
                                 >
-                                    删除
+                                    {t('delete')}
                                 </Button>
                             </Space>
                         </>

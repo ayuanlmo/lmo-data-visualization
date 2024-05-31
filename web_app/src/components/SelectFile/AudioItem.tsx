@@ -2,6 +2,7 @@ import {Button, Card, Space, Tag} from "@hi-ui/hiui";
 import React, {useEffect, useState} from "react";
 import {ReactState} from "../../types/ReactTypes";
 import {IImageItem} from "./ImageList";
+import {useTranslation} from "react-i18next";
 
 export interface IAudioItemProps {
     readonly onPlay?: (item: IAudioItem) => void;
@@ -37,6 +38,7 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
     }: IAudioItemProps = props;
     const elRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
     const [currentProgress, setCurrentProgress]: ReactState<number> = useState<number>(0);
+    const {t} = useTranslation();
 
     const mousedownHandler = (e: MouseEvent): void => {
         e.preventDefault();
@@ -110,7 +112,7 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
                         }}
                     >
                         {
-                            playing && id === item.id ? '暂停' : '播放'
+                            playing && id === item.id ? t('pause') : t('play')
                         }
                     </Button>
                     <Button
@@ -120,7 +122,7 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
                             onUse && onUse(item);
                         }}
                     >
-                        使用
+                        {t('use')}
                     </Button>
                     <Button
                         size="sm"
@@ -129,7 +131,7 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
                             onEdit && onEdit(item);
                         }}
                     >
-                        修改
+                        {t('edit')}
                     </Button>
                     <Button
                         size="sm"
@@ -138,7 +140,7 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
                             onDelete && onDelete(item);
                         }}
                     >
-                        删除
+                        {t('delete')}
                     </Button>
                 </>
             }

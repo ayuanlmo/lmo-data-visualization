@@ -13,6 +13,7 @@ import SyntheticConfig from "./SyntheticConfig";
 import {ReactState} from "../types/ReactTypes";
 import GlobalComponent from "./GlobalComponent";
 import TemplateOtherConfig from "./TemplateOtherConfig";
+import {useTranslation} from "react-i18next";
 import useEventListener = Hooks.useEventListener;
 
 export type TOptionType = 'style' | 'config' | 'data';
@@ -24,6 +25,7 @@ const DesignConfigs = (): React.JSX.Element => {
     const editDataTableRef: React.RefObject<IEditDataTable> = useRef<IEditDataTable>(null);
     const designConfigsElRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
     const [designConfigsElStyle, setDesignConfigsElStyle]: ReactState<React.CSSProperties> = useState<React.CSSProperties>({});
+    const {t} = useTranslation();
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);
@@ -67,23 +69,31 @@ const DesignConfigs = (): React.JSX.Element => {
     return (
         <div className={'design-configs'} ref={designConfigsElRef} style={designConfigsElStyle}>
             <div className={'design-configs-top-options app_flex_box app_none_user_select'}>
-                <Grid.Row gutter={30}>
+                <Grid.Row
+                    gutter={12}
+                    style={{
+                        width: '100%'
+                    }}
+                >
                     <Grid.Col span={8}>
                         <div className={getClassName('style')} onClick={(): void => {
                             setOptionType('style');
-                        }}>图表样式
+                        }}>
+                            {t('chartStyle')}
                         </div>
                     </Grid.Col>
                     <Grid.Col span={8}>
                         <div className={getClassName('config')} onClick={(): void => {
                             setOptionType('config');
-                        }}>合成配置
+                        }}>
+                            {t('synthesisConfig')}
                         </div>
                     </Grid.Col>
                     <Grid.Col span={8}>
                         <div className={getClassName('data')} onClick={(): void => {
                             editDataTableRef.current?.open();
-                        }}>编辑数据
+                        }}>
+                            {t('editData')}
                         </div>
                     </Grid.Col>
                 </Grid.Row>

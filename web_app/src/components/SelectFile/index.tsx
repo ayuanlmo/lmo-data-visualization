@@ -8,6 +8,7 @@ import AudioList, {IAudioListRef} from "./AudioList";
 import YExtendTemplate from "../YExtendTemplate";
 import Request from "../../lib/Request";
 import Notification from "../../lib/Notification";
+import {useTranslation} from "react-i18next";
 
 export interface ISelectFile extends IImageItem {
     cover?: string;
@@ -60,6 +61,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
     const [editModalVisible, setEditModalVisible]: ReactState<boolean> = useState<boolean>(false);
     const imageListRef: React.RefObject<IImageListRef> = useRef<IImageListRef>(null);
     const audioListRef: React.RefObject<IAudioListRef> = useRef<IAudioListRef>(null);
+    const {t} = useTranslation();
 
     const open = (): void => setVisible(!visible);
 
@@ -78,13 +80,15 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
     };
     const onDelete = (data: IImageItem): void => {
         Modal.confirm({
-            title: '您确定要删除该素材吗?',
+            title: t('deleteConfirm'),
+            cancelText: t('cancel'),
+            confirmText: t('confirm'),
             onConfirm: (): void => {
                 Request.deleteFile({
                     id: data.id
                 }).then((): void => {
                     getList();
-                    Notification.message('删除成功', 'success');
+                    Notification.message(t('deleteSuccess'), 'success');
                 });
             }
         });
@@ -98,9 +102,11 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
         <Modal
             footer={null}
             visible={visible}
-            title={'素材库'}
+            title={t('materialLib')}
             width={'50%'}
             height={'60%'}
+            cancelText={t('cancel')}
+            confirmText={t('confirm')}
             onClose={(): void => open()}
             onCancel={(): void => open()}
         >
@@ -109,7 +115,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                     <Grid.Row gutter={true} justify={"space-between"}>
                         <Grid.Col span={{lg: 12, xl: 12, md: 16, sm: 16, xs: 16}}>
                             <Search
-                                placeholder={'输入名称搜索...'}
+                                placeholder={t('enterNameToStartQuery')}
                                 onSearch={(data: string): void => {
                                     setQuery({
                                         ...query,
@@ -132,8 +138,8 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                     });
                                 }}
                             >
-                                <TabPane tabId="image" tabTitle="图片"/>
-                                <TabPane tabId="audio" tabTitle="音频"/>
+                                <TabPane tabId="image" tabTitle={t('image')}/>
+                                <TabPane tabId="audio" tabTitle={t('audio')}/>
                             </Tabs>
                         </Grid.Col>
                         <Grid.Col span={4}>
@@ -169,9 +175,11 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                             <div className={'c-select-file-content animated fadeIn'}>
                                 <YExtendTemplate show={editModalVisible}>
                                     <Modal
-                                        title={'修改'}
+                                        title={t('edit')}
                                         visible={editModalVisible}
                                         confirmLoading={modalLoading}
+                                        cancelText={t('cancel')}
+                                        confirmText={t('confirm')}
                                         onCancel={(): void => {
                                             setEditModalVisible(false);
                                         }}
@@ -185,13 +193,13 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                                     setModalLoading(false);
                                                     setEditModalVisible(false);
                                                     getList();
-                                                    Notification.message('修改成功', 'success');
+                                                    Notification.message(t('editSuccess'), 'success');
                                                 }, 500);
                                             });
                                         }}
                                     >
                                         <Form labelPlacement="top" initialValues={{}}>
-                                            <FormItem label={'分类'}>
+                                            <FormItem label={t('categories')}>
                                                 <FileCategoryTree
                                                     type={'TreeSelect'}
                                                     value={editItem?.categoryId}
@@ -203,7 +211,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                                     }}
                                                 />
                                             </FormItem>
-                                            <FormItem label={'名称'}>
+                                            <FormItem label={t('name')}>
                                                 <Input
                                                     defaultValue={editItem?.name}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -245,7 +253,6 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                 <Pagination
                                     pageSize={query.pageSize}
                                     total={pageTotal}
-                                    showTotal
                                     onChange={(...args) => {
                                         setQuery({
                                             ...query,

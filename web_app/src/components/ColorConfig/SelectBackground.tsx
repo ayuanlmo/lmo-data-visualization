@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import Request from "../../lib/Request";
 import {EmptyState, Grid, Loading} from "@hi-ui/hiui";
 import {ReactState} from "../../types/ReactTypes";
+import {useTranslation} from "react-i18next";
 
 interface IColorType {
     id: string;
@@ -16,6 +17,7 @@ export interface ISelectBackgroundProps {
 const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
     const [colors, setColors]: ReactState<Array<IColorType>> = useState<Array<IColorType>>([]);
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
+    const {t} = useTranslation();
 
     const getBackgroundItem = (color: string): React.JSX.Element => {
         const colors: string[] = JSON.parse(color);
@@ -45,7 +47,7 @@ const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
         <Loading visible={loading}>
             {
                 colors.length == 0 ?
-                    <EmptyState title={'暂时没有可供使用的颜色组合'}/>
+                    <EmptyState title={t('noData')}/>
                     :
                     <Grid.Row style={{
                         width: '100%',

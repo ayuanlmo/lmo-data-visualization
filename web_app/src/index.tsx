@@ -14,6 +14,7 @@ import "./pages/style/AppHome-Light.scss";
 import "./pages/style/AppDesign.scss";
 import "./pages/style/AppDesign-Dack.scss";
 import "./pages/style/AppDesign-Light.scss";
+import "./i18n";
 
 ((): void => {
     const AppHome: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppHome"));
@@ -38,3 +39,17 @@ import "./pages/style/AppDesign-Light.scss";
 })();
 
 reportWebVitals();
+
+((_GLOBAL: Window): void => {
+    'use strict';
+
+    const getId = (): string => (new Date().getTime() / Math.random()).toFixed(0).toString() + Math.random().toString(36).substring(2, 5).toString();
+
+    _GLOBAL.__LMO_APP_CONFIG = {
+        __PLAYER_EL_ID: `__lmo_dv_app_player_${getId()}`,
+        __PREVIEWER_EL_ID: `__lmo_dv_app_preview_${getId()}`
+    } as const;
+
+    Object.freeze(_GLOBAL.__LMO_APP_CONFIG);
+
+})(this ?? window);

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {EmptyState, Grid, Loading} from "@hi-ui/hiui";
 import Request from "../../lib/Request";
 import {ReactState} from "../../types/ReactTypes";
+import {useTranslation} from "react-i18next";
 
 export interface ISelectThemeProps {
     span?: number;
@@ -22,6 +23,7 @@ function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
     const [colors, setColors]: ReactState<Array<IColorType>> = useState<Array<IColorType>>([]);
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
     const [currentThemeId, setCurrentThemeId]: ReactState<string> = useState<string>('');
+    const {t} = useTranslation();
 
     useEffect((): void => {
         Request.getColors({type: 'theme'})
@@ -46,7 +48,7 @@ function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
                     {
                         colors.length === 0 ?
                             <EmptyState
-                                title={'暂时没有可供使用的颜色组合'}
+                                title={t('noData')}
                             /> :
                             colors.map((i: IColorType): React.JSX.Element => {
                                 return (

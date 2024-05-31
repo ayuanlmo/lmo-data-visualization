@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, PopConfirm} from "@hi-ui/hiui";
+import {useTranslation} from "react-i18next";
 import GlobalComponent from "../GlobalComponent";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 
@@ -16,12 +17,14 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
         onSynthesis
     }: IDesignHeaderProps = props;
     const navigate: NavigateFunction = useNavigate();
+    const {t} = useTranslation();
 
     return (
         <div className={'data-visualization-design-header app_position_relative app_none_user_select'}>
             <PopConfirm
-                title={'此操作将不会保存您当前模板数据，是否继续?'}
-                confirmText={'继续'}
+                title={t('returnDesc')}
+                confirmText={t('continue')}
+                cancelText={t('cancel')}
                 onConfirm={
                     (): void => navigate('/')
                 }
@@ -41,7 +44,7 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
                             </defs>
                         </svg>
                     </div>
-                    <div className={'black'}>返回</div>
+                    <div className={'black'}>{t('return')}</div>
                 </div>
             </PopConfirm>
             <div className={'data-visualization-design-header-option'}>
@@ -52,15 +55,15 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
                     (): void => {
                         onSave && onSave();
                     }
-                } size={'sm'} type="secondary">保存为自定义模板</Button>
+                } size={'sm'} type="secondary">{t('saveAsCustomizeTemplate')}</Button>
                 <Button onClick={
                     (): void => {
                         onPreview && onPreview();
                     }
-                } size={'sm'} type="secondary">预览</Button>
+                } size={'sm'} type="secondary">{t('preview')}</Button>
                 <Button onClick={(): void => {
                     onSynthesis && onSynthesis();
-                }} size={'sm'} type="primary">合成</Button>
+                }} size={'sm'} type="primary">{t('synthesis')}</Button>
             </div>
         </div>
     );

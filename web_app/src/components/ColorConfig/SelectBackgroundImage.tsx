@@ -5,6 +5,7 @@ import SelectFile, {TFileType} from "../SelectFile";
 import YExtendTemplate from "../YExtendTemplate";
 import {RootState} from "../../lib/Store";
 import {ReactState} from "../../types/ReactTypes";
+import {useTranslation} from "react-i18next";
 
 export interface ISelectBackgroundImageProps {
     readonly onSelect: (path: string) => void;
@@ -24,6 +25,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
     const [path, setPath]: ReactState<string> = useState<string>('');
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
     const [openPreview, setOpenPreview]: ReactState<boolean> = useState<boolean>(false);
+    const {t} = useTranslation();
 
     const open = (): void => {
         sf.current.open && sf.current.open();
@@ -72,7 +74,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                 onMouseLeave={onMouseLeave}
             >
                 <YExtendTemplate show={path === ''}>
-                    <div>请选择图片</div>
+                    <div>{t('pleaseSelect')}</div>
                 </YExtendTemplate>
                 <YExtendTemplate show={path !== ''}>
                     <YExtendTemplate show={isHover}>
@@ -93,7 +95,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                                     onClick={(): void => {
                                         setOpenPreview(true);
                                     }}
-                                >预览</Button>
+                                >{t('preview')}</Button>
                             </YExtendTemplate>
                             <Button
                                 size={'sm'}
@@ -103,7 +105,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                                     open();
                                     setIsHover(false);
                                 }}
-                            >替换</Button>
+                            >{t('replace')}</Button>
                             <Button
                                 size={'sm'}
                                 type="danger"
@@ -111,7 +113,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                                 onClick={(): void => {
                                     setPath('');
                                 }}
-                            >删除</Button>
+                            >{t('delete')}</Button>
                         </div>
                     </YExtendTemplate>
                     <div

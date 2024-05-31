@@ -11,6 +11,7 @@ import GradientColorPicker from "./GradientColorPicker";
 import SingleColorPicker from "./SingleColorPicker";
 import {setCurrentTemplateThemeConfig} from "../../lib/Store/AppStore";
 import PostMessage from "../../lib/PostMessage";
+import {useTranslation} from "react-i18next";
 
 interface IThemeConfigItem {
     title: string;
@@ -28,6 +29,7 @@ function ColorConfig(): React.JSX.Element {
     const [themeType, setThemeType]: ReactState<string> = useState<string>('');
     const currentTemplateConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.theme);
     const dispatch: Dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const setStore = (data: object = {}): void => {
         dispatch(setCurrentTemplateThemeConfig({
@@ -63,9 +65,9 @@ function ColorConfig(): React.JSX.Element {
 
     useEffect((): void => {
         setThemeConfigs([
-            {title: "主题色", id: 'Theme', disabled: !configTheme.configs.includes('Theme')},
-            {title: "渐变色", id: 'Gradient', disabled: !configTheme.configs.includes('Gradient')},
-            {title: "单色", id: 'Single', disabled: !configTheme.configs.includes('Single')}
+            {title: t('themeColor'), id: 'Theme', disabled: !configTheme.configs.includes('Theme')},
+            {title: t('gradientColor'), id: 'Gradient', disabled: !configTheme.configs.includes('Gradient')},
+            {title: t('singleColor'), id: 'Single', disabled: !configTheme.configs.includes('Single')}
         ]);
 
         setThemeType(configTheme.type);
@@ -77,10 +79,10 @@ function ColorConfig(): React.JSX.Element {
                 <Grid.Row style={{
                     width: '100%'
                 }} gutter={true} justify={"space-between"}>
-                    <Grid.Col span={8}>
-                        <div className={'color-config-item-label app_flex_box'}>主题配置</div>
+                    <Grid.Col span={12}>
+                        <div className={'color-config-item-label app_flex_box'}>{t('themeConfig')}</div>
                     </Grid.Col>
-                    <Grid.Col justify={'flex-end'} span={16}>
+                    <Grid.Col justify={'flex-end'} span={12}>
                         <Grid.Row gutter={true} justify={"space-between"}>
                             <Grid.Col span={24}>
                                 <Select

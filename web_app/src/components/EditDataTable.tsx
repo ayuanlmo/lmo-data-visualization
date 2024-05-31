@@ -9,6 +9,7 @@ import {CellChange, ChangeSource} from "handsontable/common";
 import PostMessage from "../lib/PostMessage";
 import {registerAllModules} from 'handsontable/registry';
 import {ReactState} from "../types/ReactTypes";
+import {useTranslation} from "react-i18next";
 import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 
 registerAllModules();
@@ -23,6 +24,7 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
     const hotTableRef = useRef(null);
     const [isLiveUpdate, setIsLiveUpdate]: ReactState<boolean> = useState<boolean>(true);
     const [isChangeData, setIsChangeData]: ReactState<boolean> = useState<boolean>(false);
+    const {t} = useTranslation();
 
     useImperativeHandle(ref, (): IEditDataTable => ({
         open
@@ -82,7 +84,7 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
 
     return (
         <Drawer
-            title={'编辑数据'}
+            title={t('editData')}
             width={1000}
             closeOnEsc
             preload
@@ -98,13 +100,13 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                     }
                 }>
                     <Space size={16}>
-                        <Button type={'primary'} onClick={selectLocalFile}>加载本地数据</Button>
+                        <Button type={'primary'} onClick={selectLocalFile}>{t('loadLocalData')}</Button>
                         <Switch
                             checked={isLiveUpdate}
                             onChange={(e: boolean): void => {
                                 setIsLiveUpdate(e);
                             }}
-                            content={["即时更新", "即时更新"]}
+                            content={[t('renewedOnTime'), t('renewedOnTime')]}
                         />
                         {/*<Button onClick={exportDefaultData}>导出默认数据</Button>*/}
                     </Space>

@@ -6,6 +6,7 @@ import YExtendTemplate from "../YExtendTemplate";
 import {Button, EmptyState, Grid, Input, Select, SelectMergedItem} from "@hi-ui/hiui";
 import {SearchOutlined} from "@hi-ui/icons";
 import {ReactState} from "../../types/ReactTypes";
+import {useTranslation} from "react-i18next";
 
 interface QueryParams {
     name: string;
@@ -15,6 +16,7 @@ interface QueryParams {
 }
 
 const TemplateList = (): React.JSX.Element => {
+    const {t} = useTranslation();
     const [templates, setTemplates]: ReactState<Array<ITemplate>> = useState<Array<ITemplate>>([]);
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(false);
     const [queryParams, setQueryParams]: ReactState<QueryParams> = useState({
@@ -24,10 +26,11 @@ const TemplateList = (): React.JSX.Element => {
         type: ''
     });
     const templateType: SelectMergedItem[] = [
-        {title: "全部", id: "", disabled: false},
-        {title: "预制", id: "0", disabled: false},
-        {title: "自定义", id: "1", disabled: false}
+        {title: t('all'), id: "", disabled: false},
+        {title: t('defaultTemplate'), id: "0", disabled: false},
+        {title: t('customizeTemplate'), id: "1", disabled: false}
     ];
+
     const getTemplate = (): void => {
         setLoading(true);
         Request.getTemplate(queryParams).then(({data}): void => {
@@ -52,6 +55,7 @@ const TemplateList = (): React.JSX.Element => {
                     >
                         <div className={'template-list-query-select'}>
                             <Select
+                                placeholder={t('pleaseSelect')}
                                 onChange={(e: React.ReactText): void => {
                                     setQueryParams({
                                         ...queryParams,
@@ -67,7 +71,7 @@ const TemplateList = (): React.JSX.Element => {
                     <Grid.Col span={{lg: 6, xl: 4, md: 12, sm: 12, xs: 12}}>
                         <Input
                             clearable
-                            placeholder={'输入名称开始查询'}
+                            placeholder={t('enterNameToStartQuery')}
                             onChange={(e: React.FormEvent<HTMLInputElement>): void => {
                                 setQueryParams({
                                     ...queryParams,

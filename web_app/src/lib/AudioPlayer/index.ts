@@ -14,10 +14,10 @@ export interface AudioPlayerInterface {
 }
 
 class AudioPlayer implements AudioPlayerInterface {
-    private audioObject: HTMLAudioElement | null;
-    private url: string;
     public isDestroy: boolean;
     public canplay: boolean;
+    private audioObject: HTMLAudioElement | null;
+    private url: string;
 
     constructor(url: string) {
         this.url = url;
@@ -25,21 +25,6 @@ class AudioPlayer implements AudioPlayerInterface {
         this.isDestroy = false;
         this.canplay = false;
         this.init();
-    }
-
-    private init(): void {
-        if (this.audioObject === null && !this.isDestroy) {
-            if (!('Audio' in window)) {
-                throw '(AudioPlayer) Error: Your browser does not support audio playback.';
-            }
-            this.audioObject = new Audio(this.url);
-            this.audioObject.addEventListener('ended', (): void => {
-                this.audioObject?.pause();
-            });
-            this.audioObject.addEventListener('canplaythrough', (): void => {
-                this.canplay = true;
-            });
-        }
     }
 
     public load(): void {
@@ -105,6 +90,21 @@ class AudioPlayer implements AudioPlayerInterface {
                 resolve();
             });
         });
+    }
+
+    private init(): void {
+        if (this.audioObject === null && !this.isDestroy) {
+            if (!('Audio' in window)) {
+                throw '(AudioPlayer) Error: Your browser does not support audio playback.';
+            }
+            this.audioObject = new Audio(this.url);
+            this.audioObject.addEventListener('ended', (): void => {
+                this.audioObject?.pause();
+            });
+            this.audioObject.addEventListener('canplaythrough', (): void => {
+                this.canplay = true;
+            });
+        }
     }
 }
 

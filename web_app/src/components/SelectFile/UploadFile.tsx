@@ -4,6 +4,7 @@ import {ReactState} from "../../types/ReactTypes";
 import FileCategoryTree from "./FileCategoryTree";
 import Request from "../../lib/Request";
 import Notification from "../../lib/Notification";
+import {useTranslation} from "react-i18next";
 
 export interface IUploadFileProps {
     buttonText?: string;
@@ -17,9 +18,10 @@ export interface IUploadFrom {
 }
 
 const UploadFile = (props: IUploadFileProps): React.JSX.Element => {
+    const {t} = useTranslation();
     const {
-        buttonText = '上传',
-        modalTitle = '上传素材',
+        buttonText = t('upload'),
+        modalTitle = t('upload'),
         onRefresh
     }: IUploadFileProps = props;
     const [upLoadModalVisible, setUpLoadModalVisible]: ReactState<boolean> = useState<boolean>(false);
@@ -46,7 +48,7 @@ const UploadFile = (props: IUploadFileProps): React.JSX.Element => {
                 setTimeout((): void => {
                     setSelectFiles(selectFiles.filter((item, index) => index !== index));
                     setFileNameValues(fileNameValues.filter((item, index) => index !== index));
-                    Notification.message(`[${file.name}] 上传成功`, 'success');
+                    Notification.message(`[${file.name}] ${t('uploadSuccess')}`, 'success');
                 }, 200);
             });
             index += 1;
@@ -68,6 +70,8 @@ const UploadFile = (props: IUploadFileProps): React.JSX.Element => {
                 unmountOnClose
                 title={modalTitle}
                 visible={upLoadModalVisible}
+                cancelText={t('cancel')}
+                confirmText={t('confirm')}
                 onClose={(): void => {
                     setUpLoadModalVisible(!upLoadModalVisible);
                 }}
@@ -79,7 +83,7 @@ const UploadFile = (props: IUploadFileProps): React.JSX.Element => {
                 }}
             >
                 <Form innerRef={uploadFromRef} labelPlacement="top" initialValues={{name: '', media: null}}>
-                    <FormItem label={'分类'}>
+                    <FormItem label={t('categories')}>
                         <FileCategoryTree
                             type={'TreeSelect'}
                             onSelectTree={(e: React.ReactText | null): void => {
@@ -93,7 +97,7 @@ const UploadFile = (props: IUploadFileProps): React.JSX.Element => {
                                 <FormItem key={k} label={i.defaultName}>
                                     <Input
                                         defaultValue={i.defaultName}
-                                        placeholder="请输入"
+                                        placeholder={t('pleaseInputFileName')}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                             const data = [...fileNameValues];
 
@@ -105,10 +109,11 @@ const UploadFile = (props: IUploadFileProps): React.JSX.Element => {
                             );
                         })
                     }
-                    <FormItem required={true} label="文件" field="media" valueType="integer">
+                    <FormItem required={true} label={t('file')} field="media" valueType="integer">
                         <Upload
                             type="drag"
                             data={[]}
+                            content={t('dropUpload')}
                             multiple={true}
                             accept=".png,.jpg,.jpeg,.svg"
                             customUpload={(file: FileList | null): void => {

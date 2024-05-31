@@ -20,6 +20,7 @@ import {NavigateFunction, useNavigate} from 'react-router-dom';
 import {Dispatch} from "@reduxjs/toolkit";
 import {ReactState} from "../../../types/ReactTypes";
 import Storage from "../../../lib/Storage";
+import {useTranslation} from "react-i18next";
 
 export interface ITemplate {
     cover: string;
@@ -44,6 +45,7 @@ export interface EditTemplateValue {
 
 const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const {onRefresh} = props;
+    const {t} = useTranslation();
     const [data, setData]: ReactState<ITemplate> = useState(props.data);
     const colSpan: GridResponsiveSize<number> = {lg: 6, xl: 4, md: 8, sm: 12, xs: 24} as const;
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
@@ -71,9 +73,9 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
 
     const getModalTitle = (): string => {
         if (isCopyTemplate)
-            return '复制模板';
+            return t('copyTemplate');
 
-        return '编辑模板';
+        return t('editTemplate');
     };
 
     const getGifImage = (src: string, alt: string = ''): React.JSX.Element => {
@@ -103,8 +105,8 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                     initialValues={editFormValue}
                     labelWidth={'6rem'}
                     rules={{
-                        name: [{required: true, type: "string", message: "请输入模板名称"}],
-                        description: [{required: true, type: "string", message: "请输入模板介绍"}]
+                        name: [{required: true, type: "string", message: t('pleaseInput')}],
+                        description: [{required: true, type: "string", message: t('pleaseInput')}]
                     }}
                 >
                     <Modal
@@ -115,7 +117,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                         footer={[
                             <FormItem field="description" key={1} valueType="string">
                                 <div style={{marginTop: '1rem'}}>
-                                    <Button onClick={closeModal}>取消</Button>
+                                    <Button onClick={closeModal}>{t('cancel')}</Button>
                                     <FormSubmit
                                         type="primary"
                                         loading={loading}
@@ -137,18 +139,18 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                                             });
                                         }}
                                     >
-                                        提交
+                                        {t('confirm')}
                                     </FormSubmit>
                                 </div>
                             </FormItem>
                         ]}
                     >
-                        <FormItem field="name" valueType="number" label="模板名称">
+                        <FormItem field="name" valueType="number" label={t('templateName')}>
                             <Input onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 setEditFormValue({...editFormValue, name: e.target.value});
                             }}/>
                         </FormItem>
-                        <FormItem field="description" valueType="string" label="模板介绍">
+                        <FormItem field="description" valueType="string" label={t('templateDes')}>
                             <Input onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 setEditFormValue({...editFormValue, description: e.target.value});
                             }}/>

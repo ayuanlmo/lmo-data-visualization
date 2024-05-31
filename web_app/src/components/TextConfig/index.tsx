@@ -4,6 +4,7 @@ import {ITemplateSelectTextElement, TTemplateTextConfigAlignType} from "../../ty
 import PostMessage from "../../lib/PostMessage";
 import ColorPicker from "../ColorPicker";
 import {ReactState} from "../../types/ReactTypes";
+import {useTranslation} from "react-i18next";
 
 export interface ITextConfigProps {
     config: null | ITemplateSelectTextElement
@@ -12,6 +13,7 @@ export interface ITextConfigProps {
 const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
     const colspan: GridResponsiveSize<number> = {lg: 12, xl: 12, md: 12, sm: 12, xs: 12};
     const [config, setConfig]: ReactState<ITemplateSelectTextElement> = useState<ITemplateSelectTextElement>(props.config as ITemplateSelectTextElement);
+    const {t} = useTranslation();
 
     useEffect((): void => {
         setConfig(props.config as ITemplateSelectTextElement);
@@ -28,11 +30,11 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
 
     return (
         <div className={'text-config app_none_user_select'}>
-            <div className={'text-config-title app_flex_box'}>文字配置</div>
+            <div className={'text-config-title app_flex_box'}>{t('textConfig')}</div>
             <div className={'text-config-item app_flex_box'}>
                 <Grid.Row gutter={true} justify={"space-between"}>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>显示</div>
+                        <div className={'text-config-item-label'}>{t('display')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <Switch
@@ -48,7 +50,7 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
                         />
                     </Grid.Col>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>文字内容</div>
+                        <div className={'text-config-item-label'}>{t('textContent')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <Input
@@ -65,7 +67,7 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
                         />
                     </Grid.Col>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>字号</div>
+                        <div className={'text-config-item-label'}>{t('fontSize')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <NumberInput
@@ -79,7 +81,7 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
                         />
                     </Grid.Col>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>颜色</div>
+                        <div className={'text-config-item-label'}>{t('fontColor')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <div>
@@ -97,7 +99,7 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
                         </div>
                     </Grid.Col>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>对齐方式</div>
+                        <div className={'text-config-item-label'}>{t('textAlign')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <div>
@@ -112,14 +114,14 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
                                     }
                                 }
                             >
-                                <SelectOption value={'left'}>居左</SelectOption>
-                                <SelectOption value={'center'}>居中</SelectOption>
-                                <SelectOption value={'right'}>居右</SelectOption>
+                                <SelectOption value={'left'}>{t('textAlignLeft')}</SelectOption>
+                                <SelectOption value={'center'}>{t('textAlignCenter')}</SelectOption>
+                                <SelectOption value={'right'}>{t('textAlignRight')}</SelectOption>
                             </Select>
                         </div>
                     </Grid.Col>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>位置</div>
+                        <div className={'text-config-item-label'}>{t('textPosition')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <div className={'text-config-item-flex-box app_flex_box'}>
@@ -158,7 +160,7 @@ const TextConfig = (props: ITextConfigProps): React.JSX.Element => {
                         </div>
                     </Grid.Col>
                     <Grid.Col span={colspan}>
-                        <div className={'text-config-item-label'}>大小</div>
+                        <div className={'text-config-item-label'}>{t('size')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
                         <div className={'text-config-item-flex-box app_flex_box'}>

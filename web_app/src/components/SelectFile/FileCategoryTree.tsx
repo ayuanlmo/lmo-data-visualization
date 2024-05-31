@@ -7,6 +7,7 @@ import Notification from "../../lib/Notification";
 import {Button, Input, Modal, PopConfirm, TreeSelect} from "@hi-ui/hiui";
 import {ICategory} from "./index";
 import YExtendTemplate from "../YExtendTemplate";
+import {useTranslation} from "react-i18next";
 
 interface ITreeActionProps {
     onSelectTree: (data: null | React.ReactText | string) => void;
@@ -25,6 +26,7 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
     const [categoryTree, setCategoryTree] = useState([]);
     const [activeIds, setActiveIds]: ReactState<Array<string>> = useState<Array<string>>([]);
     const [selectValue, setSelectValue]: ReactState<string | React.ReactText> = useState<string | React.ReactText>(value || '');
+    const {t} = useTranslation();
 
     const getFileCategory = (): void => {
         Request.getFileCategory().then((res) => {
@@ -61,7 +63,7 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
 
         Request.addFileCategory(params).then((): void => {
             onRefresh();
-            Notification.message('新增成功 ', 'success');
+            Notification.message(t('addSuccess'), 'success');
         });
     };
     const onRefresh = (): void => {
@@ -79,31 +81,31 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                     showLine
                     expandOnSelect={false}
                     data={categoryTree}
-                    editPlaceholder="请填写菜单"
+                    editPlaceholder={t('pleaseInput')}
                     expandedIds={activeIds}
                     menuOptions={[
                         {
                             type: "addChildNode",
-                            title: "新建子分类"
+                            title: t('addSubCategories')
                         },
                         {
                             type: "editNode",
-                            title: "编辑当前分类"
+                            title: t('editCategories')
                         },
                         {
-                            title: "删除当前分类",
-                            onClick(node, action) {
+                            title: t('deleteCategories'),
+                            onClick(node, action): void {
                                 action.closeMenu();
                                 Modal.confirm({
-                                    title: "提示",
+                                    title: t('tip'),
                                     type: "warning",
-                                    content: "您确定删除吗？",
+                                    content: t('deleteConfirm'),
                                     onConfirm: (): void => {
                                         Request.deleteFileCategory(node.id as string).then((): void => {
                                             action.deleteNode();
-                                            Notification.message('删除成功', 'success');
+                                            Notification.message(t('deleteSuccess'), 'success');
                                         }).catch((): void => {
-                                            Notification.message('删除失败,可能存在子分类而无法删除', 'error');
+                                            Notification.message(t('deleteCategoriesError'), 'error');
                                         });
                                     }
                                 });
@@ -120,19 +122,22 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                 <PopConfirm
                     title={'新增分类'}
                     placement={'right'}
+                    cancelText={t('cancel')}
+                    confirmText={t('confirm')}
                     onConfirm={(): void => {
                         if (inputValue === '' || inputValue.length > 16)
-                            return Notification.message('分类名称不能为空或者超过16个字符', 'error');
+                            return Notification.message(t('addCategoriesMaxLength'), 'error');
                         Request.addFileCategory({
                             id: '', name: inputValue
                         }).then((): void => {
                             setInputValue('');
-                            Notification.message('新增成功 ', 'success');
+                            Notification.message(t('addSuccess'), 'success');
                             onRefresh();
                         });
                     }}
                     content={
                         <Input
+                            placeholder={t('pleaseInput')}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 setInputValue(e.target.value);
                             }}
@@ -151,13 +156,14 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                             style={{
                                 width: '100%'
                             }}
-                        >新增</Button>
+                        >{t('add')}</Button>
                     </div>
                 </PopConfirm>
             </YExtendTemplate>
             <YExtendTemplate show={type == 'TreeSelect'}>
                 <TreeSelect
                     clearable
+                    placeholder={t('pleaseInput')}
                     value={selectValue}
                     defaultExpandAll={true}
                     onChange={(e: React.ReactText | string): void => {

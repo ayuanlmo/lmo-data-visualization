@@ -28,7 +28,7 @@ export interface IImageListRef {
     getFileList: () => void;
 }
 
-const ImageList = React.forwardRef((props: IImageListProps, ref: React.ForwardedRef<IImageListRef>) => {
+const ImageList: React.ForwardRefExoticComponent<IImageListProps & React.RefAttributes<IImageListRef>> = React.forwardRef((props: IImageListProps, ref: React.ForwardedRef<IImageListRef>) => {
     const {
         fileType,
         query,
