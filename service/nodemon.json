@@ -1,0 +1,8 @@
+{
+  "watch": [
+    "bin",
+    "main.ts"
+  ],
+  "ext": "ts,json",
+  "exec": "tsc && node --experimental-modules --es-module-specifier-resolution=node dist/main.js"
+}

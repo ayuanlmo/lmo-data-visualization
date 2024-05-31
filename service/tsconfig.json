@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/lmo.t",
+    "module": "esnext",
+    "target": "esnext",
+    "sourceMap": false,
+    "outDir": "dist",
+    "baseUrl": "/",
+    "paths": {
+      "*": [
+        "*.js",
+        "node_modules/*"
+      ]
+    },
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": false,
+    "isolatedModules": false,
+    "noEmit": false,
+    "moduleResolution": "node"
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": [
+    "node_modules"
+  ]
+}

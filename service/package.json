@@ -1,0 +1,23 @@
+{
+  "name": "lmo-dv-service",
+  "version": "1.0.0",
+  "main": "main.ts",
+  "type": "module",
+  "author": "ayuanlmo",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "cli-color": "^2.0.4",
+    "ffmpeg-static": "^5.2.0",
+    "typescript": "^5.4.5",
+    "web-video-creator": "^0.0.34"
+  },
+  "scripts": {
+    "start": "nodemon",
+    "live-server": "tsc",
+    "c": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "nodemon": "^3.1.0"
+  }
+}
