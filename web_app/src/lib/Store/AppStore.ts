@@ -26,7 +26,7 @@ const AppStore = createSlice({
                     arrangement: ''
                 },
                 video: {
-                    duration: 5000,
+                    duration: 5,
                     fps: 30,
                     clarity: '1080P'
                 },
@@ -62,6 +62,14 @@ const AppStore = createSlice({
         // 设置模板主题配置
         setCurrentTemplateThemeConfig(state, {payload}): void {
             state.currentTemplateConfig.config.theme = payload;
+        },
+        // 设置模板音频配置
+        setCurrentTemplateAudioConfig(state, {payload}): void {
+            state.currentTemplateConfig.config.audio = payload;
+        },
+        // 设置模板视频配置
+        setCurrentTemplateVideoConfig(state, {payload}): void {
+            state.currentTemplateConfig.config.video = payload;
         }
     }
 });
@@ -71,7 +79,9 @@ export const {
     setCurrentTemplateConfig,
     setCurrentTemplateBackground,
     setCurrentTemplateOtherConfigValues,
-    setCurrentTemplateThemeConfig
+    setCurrentTemplateThemeConfig,
+    setCurrentTemplateAudioConfig,
+    setCurrentTemplateVideoConfig
 } = AppStore.actions;
 
 export default AppStore.reducer;

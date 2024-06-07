@@ -8,7 +8,7 @@ import {ReactState} from "../../types/ReactTypes";
 import {useTranslation} from "react-i18next";
 
 export interface ISelectBackgroundImageProps {
-    readonly onSelect: (path: string) => void;
+    readonly onSelect: (path: string, src?: string) => void;
     type?: TFileType;
 }
 
@@ -23,6 +23,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
     });
     const backgroundConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.background);
     const [path, setPath]: ReactState<string> = useState<string>('');
+    const [audioPath, setAudioPath]: ReactState<string> = useState<string>('');
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
     const [openPreview, setOpenPreview]: ReactState<boolean> = useState<boolean>(false);
     const {t} = useTranslation();
@@ -44,6 +45,9 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
     };
 
     useEffect((): void => {
+        if (type === 'audio') {
+            return onSelect(path, audioPath);
+        }
         onSelect(path);
     }, [path]);
 
@@ -74,7 +78,7 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                 onMouseLeave={onMouseLeave}
             >
                 <YExtendTemplate show={path === ''}>
-                    <div>{t('pleaseSelect')}</div>
+                    <div className={'app_cursor_pointer'}>{t('pleaseSelect')}</div>
                 </YExtendTemplate>
                 <YExtendTemplate show={path !== ''}>
                     <YExtendTemplate show={isHover}>
@@ -131,9 +135,10 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                 <SelectFile
                     onSelect={
                         ({path, cover}): void => {
-                            if (typeof type === 'string' && type === 'audio' && cover)
+                            if (typeof type === 'string' && type === 'audio' && cover) {
                                 setPath(cover);
-                            else
+                                setAudioPath(path);
+                            } else
                                 setPath(path);
 
                             open();

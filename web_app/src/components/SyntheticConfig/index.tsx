@@ -1,11 +1,27 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Grid, GridResponsiveSize, Radio, Slider, Switch} from "@hi-ui/hiui";
 import {clarityConfigs, durationConfigs, fpsConfigs} from './config';
 import {useTranslation} from "react-i18next";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../lib/Store";
+import {setCurrentTemplateAudioConfig, setCurrentTemplateVideoConfig} from "../../lib/Store/AppStore";
+import {Dispatch} from "@reduxjs/toolkit";
+import SelectBackgroundImage from "../ColorConfig/SelectBackgroundImage";
 
 const SyntheticConfig = (): React.JSX.Element => {
     const colspan: GridResponsiveSize<number> = {lg: 12, xl: 12, md: 12, sm: 12, xs: 12};
+    const currentTemplateVideoConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.video);
+    const currentTemplateAudioConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.audio);
+    const dispatch: Dispatch = useDispatch();
     const {t} = useTranslation();
+
+    useEffect((): void => {
+        if (currentTemplateVideoConfig.duration > 1000)
+            dispatch(setCurrentTemplateVideoConfig({
+                ...currentTemplateVideoConfig,
+                duration: currentTemplateVideoConfig.duration / 1000
+            }));
+    }, []);
 
     return (
         <div className={'text-config app_none_user_select'}>
@@ -22,13 +38,30 @@ const SyntheticConfig = (): React.JSX.Element => {
                         <div className={'text-config-item-label'}>{t('fullAudio')}</div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={colspan}>
-                        <Switch/>
+                        <Switch
+                            defaultChecked={currentTemplateAudioConfig.full}
+                            onChange={(checked: boolean): void => {
+                                dispatch(setCurrentTemplateAudioConfig({
+                                    ...currentTemplateAudioConfig,
+                                    full: checked
+                                }));
+                            }}
+                        />
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={24}>
-                        <div className={'select-bg-image app_cursor_pointer app_position_relative'} style={{
-                            width: '100%'
-                        }}>
-                            {t('pleaseSelectAudio')}
+                        <div
+                            style={{
+                                width: '100%'
+                            }}>
+                            <SelectBackgroundImage
+                                type={'audio'}
+                                onSelect={(e: string, src: string | undefined): void => {
+                                    dispatch(setCurrentTemplateAudioConfig({
+                                        ...currentTemplateAudioConfig,
+                                        src: src ?? ''
+                                    }));
+                                }}
+                            />
                         </div>
                     </Grid.Col>
                     <Grid.Col justify={'flex-end'} span={24}>
@@ -44,11 +77,19 @@ const SyntheticConfig = (): React.JSX.Element => {
                                 <div style={{
                                     marginTop: '-4px'
                                 }}>
-                                    <Slider defaultValue={100}/>
+                                    <Slider
+                                        defaultValue={currentTemplateAudioConfig.volume}
+                                        onChange={(e: number): void => {
+                                            dispatch(setCurrentTemplateAudioConfig({
+                                                ...currentTemplateAudioConfig,
+                                                volume: e
+                                            }));
+                                        }}
+                                    />
                                 </div>
                             </Grid.Col>
                             <Grid.Col span={4}>
-                                <div className={'text-config-item-label'}>100</div>
+                                <div className={'text-config-item-label'}>{currentTemplateAudioConfig.volume}</div>
                             </Grid.Col>
                         </Grid.Row>
                     </Grid.Col>
@@ -75,7 +116,19 @@ const SyntheticConfig = (): React.JSX.Element => {
                                     justifyContent: 'end',
                                     width: '100%'
                                 }}>
-                                <Radio.Group type={"button"} autoWidth={true} data={fpsConfigs}/>
+                                <Radio.Group
+                                    defaultValue={currentTemplateVideoConfig.fps}
+                                    value={currentTemplateVideoConfig.fps}
+                                    type={"button"}
+                                    autoWidth={true}
+                                    data={fpsConfigs}
+                                    onChange={(e: React.ReactText): void => {
+                                        dispatch(setCurrentTemplateVideoConfig({
+                                            ...currentTemplateVideoConfig,
+                                            fps: e as number
+                                        }));
+                                    }}
+                                />
                             </div>
                         </div>
                     </Grid.Col>
@@ -100,7 +153,19 @@ const SyntheticConfig = (): React.JSX.Element => {
                                     justifyContent: 'end',
                                     width: '100%'
                                 }}>
-                                <Radio.Group type={"button"} autoWidth={true} data={durationConfigs}/>
+                                <Radio.Group
+                                    type={"button"}
+                                    autoWidth={true}
+                                    data={durationConfigs}
+                                    defaultValue={currentTemplateVideoConfig.duration}
+                                    value={currentTemplateVideoConfig.duration}
+                                    onChange={(e: React.ReactText): void => {
+                                        dispatch(setCurrentTemplateVideoConfig({
+                                            ...currentTemplateVideoConfig,
+                                            duration: e as number
+                                        }));
+                                    }}
+                                />
                             </div>
                         </div>
                     </Grid.Col>
@@ -125,7 +190,19 @@ const SyntheticConfig = (): React.JSX.Element => {
                                     justifyContent: 'end',
                                     width: '100%'
                                 }}>
-                                <Radio.Group type={"button"} autoWidth={true} data={clarityConfigs}/>
+                                <Radio.Group
+                                    type={"button"}
+                                    autoWidth={true}
+                                    data={clarityConfigs}
+                                    value={currentTemplateVideoConfig.clarity}
+                                    defaultValue={currentTemplateVideoConfig.clarity}
+                                    onChange={(e: React.ReactText): void => {
+                                        dispatch(setCurrentTemplateVideoConfig({
+                                            ...currentTemplateVideoConfig,
+                                            clarity: e as number
+                                        }));
+                                    }}
+                                />
                             </div>
                         </div>
                     </Grid.Col>
