@@ -4,6 +4,7 @@ import File from "../bin/controllers/File";
 import Color from "../bin/controllers/Color";
 import Catch from "../bin/controllers/Catch";
 import Player from "../bin/Player";
+import Task from "../bin/controllers/Task";
 import Multer = require("multer");
 
 export const multer: Multer.Multer = Multer({
@@ -58,5 +59,8 @@ _Router.post('/clearCatch', (req: Request, res: Response): void => {
 });
 _Router.get('/player/:id', (req: Request, res: Response): void => {
     new Player(req, res);
+});
+_Router.post('/createTask', (req: Request, res: Response): void => {
+    Task.createTask(req, res);
 });
 export default _Router;

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
@@ -9,10 +9,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../lib/Store";
 import Storage from "../lib/Storage";
 import {setCurrentTemplate} from "../lib/Store/AppStore";
+import Task, {ICreateTaskRef} from "../components/Task";
 
 const AppDesign = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
+    const taskRef: React.RefObject<ICreateTaskRef> = useRef<ICreateTaskRef>(null);
 
     useEffect((): void => {
         if (currentTemplate.id === '') {
@@ -24,7 +26,12 @@ const AppDesign = (): React.JSX.Element => {
     }, []);
     return (
         <div className={'data-visualization-design'}>
-            <Header.Design/>
+            <Header.Design
+                onSynthesis={(): void => {
+                    taskRef.current?.open();
+                }}
+            />
+            <Task ref={taskRef}/>
             <div className={'app_position_relative'}>
                 <div style={{
                     padding: "1.5rem"

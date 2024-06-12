@@ -47,6 +47,8 @@ const ResourcesModel = DB.define('Resources', {
     template: DataTypes.TEXT,
     filePath: DataTypes.TEXT,
     createTime: DataTypes.TEXT,
+    templatePath: DataTypes.TEXT,
+    url: DataTypes.TEXT
 }, {
     timestamps: false
 });

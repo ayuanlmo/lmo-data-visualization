@@ -13,6 +13,7 @@ const AppStore = createSlice({
             type: 0
         },
         currentTemplateConfig: {
+            data: [],
             config: {
                 theme: {
                     type: '',

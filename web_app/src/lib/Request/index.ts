@@ -134,6 +134,15 @@ namespace Request {
             headers: {'Content-Type': 'application/json'}
         });
     };
+
+    export const createTask = (data: object = {}) => {
+        return axios({
+            url: '/createTask',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
 }
 
 export default Request;

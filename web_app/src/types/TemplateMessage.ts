@@ -7,7 +7,8 @@ export type TTemplateMessageType =
     | 'TEMPLATE_FULL_CONFIG'
     | 'TEMPLATE_SELECT_TEXT_ELEMENT'
     | 'TEMPLATE_SELECT_TEXT_CLOSE'
-    | 'TEMPLATE_DATA';
+    | 'TEMPLATE_DATA'
+    | 'GET_TEMPLATE_DATA';
 
 export type TDesignAppMessageType =
     'SET_DATA' // 设置数据
@@ -23,6 +24,7 @@ export type TDesignAppMessageType =
     | 'PLAY_MODE' // 设计器播放模式
     | 'SET_OTHER_CONFIG' // 设置其他配置
     | 'RENDER' // 执行渲染
+    | 'GET_TEMPLATE_DATA' // 获取模板数据
     ;
 
 export interface ITemplateSelectTextElement {
