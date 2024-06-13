@@ -15,6 +15,7 @@ import "./pages/style/AppDesign.scss";
 import "./pages/style/AppDesign-Dack.scss";
 import "./pages/style/AppDesign-Light.scss";
 import "./i18n";
+import "./lib/Socket";
 
 ((): void => {
     const AppHome: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppHome"));

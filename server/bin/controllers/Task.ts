@@ -5,6 +5,7 @@ import Utils from "../../utils";
 import {ResourcesModel, TemplateModel} from "../dataBase";
 import AppConfig from "../../conf/AppConfig";
 import socketClient from "../Socket";
+import {WebSocketServer} from "../WebSocketServer";
 import createErrorMessage = Utils.createErrorMessage;
 
 export default class Task {
@@ -54,7 +55,7 @@ export default class Task {
 
                 try {
                     (async (): Promise<void> => {
-                        await ResourcesModel.create({
+                        const dbData = {
                             id: dbId,
                             template: id,
                             filePath: '',
@@ -62,7 +63,9 @@ export default class Task {
                             templatePath: dirPath,
                             createTime: new Date().getTime(),
                             url: `${templateStaticPath}/index.html?__type=h`
-                        });
+                        };
+
+                        await ResourcesModel.create(dbData);
 
                         res.status(204).send();
 
@@ -79,6 +82,15 @@ export default class Task {
                                 optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`)
                             })
                         });
+
+                        // 通知页面
+                        WebSocketServer.sendMessage(JSON.stringify({
+                            type: 'TASK_READY',
+                            message: {
+                                id: dbId,
+                                name: dbData.name
+                            }
+                        }));
                     })();
                 } catch (e) {
                     res.json(createErrorMessage('ext00d'));

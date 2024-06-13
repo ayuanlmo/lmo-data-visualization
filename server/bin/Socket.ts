@@ -1,6 +1,7 @@
 import {createConnection, Socket} from 'node:net';
 import {ResourcesModel} from "./dataBase";
 import {Op} from "sequelize";
+import {WebSocketServer} from "./WebSocketServer";
 
 export interface ISocketSendMessage {
     type: string;
@@ -47,7 +48,20 @@ class SocketClient {
                         id: {[Op.like]: `${data?.id}`}
                     }
                 }).then((): void => {
-                    console.log('写入成功')
+                    ResourcesModel.findOne({
+                        where: {
+                            id: data?.id
+                        }
+                    }).then(resources => {
+                        WebSocketServer.sendMessage(JSON.stringify({
+                            type: type,
+                            message: {
+                                id: data?.id,
+                                name: resources?.dataValues.name,
+                                filePath: `/static/output/${data?.id}.mp4`
+                            }
+                        }));
+                    });
                 });
             }
         }

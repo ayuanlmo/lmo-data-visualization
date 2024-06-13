@@ -18,8 +18,8 @@ interface IWsAppType extends WithWebsocketMethod {
 }
 
 export default class HttpServer {
-    private readonly App: IExpressApp;
     public readonly WsApp: IWsAppType;
+    private readonly App: IExpressApp;
     private onLineUsers: number;
     private readonly WsPool: Array<IWsApp>;
 
@@ -27,6 +27,9 @@ export default class HttpServer {
         this.App = Express();
         this.WsApp = require('express-ws')(this.App) as WithWebsocketMethod;
         this.WsPool = this.WsApp?.getWss?.(AppConfig.__SOCKET_CONNECT) as Array<IWsApp>;
+        const _: any = global;
+        
+        _.WebSocketPool = this.WsApp;
         this.onLineUsers = 0;
         this.init();
     }
@@ -34,6 +37,13 @@ export default class HttpServer {
     private init(): void {
         this.App.use(Express.json());
         this.App.use((require('cors')()));
+        this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
+            this.onLineUsers++;
+            new WebSocketServer(ws, this.onLineUsers, this.WsPool);
+            ws?.on('close', (): void => {
+                this.onLineUsers--;
+            });
+        });
         this.App.use((_req: Request, res: Response, next: NextFunction): void => {
             const methods: Array<string> = ['GET', 'PUT', 'DELETE'];
             const routers: Array<string> = ['uploadFile', 'template/copy'];
@@ -66,7 +76,6 @@ export default class HttpServer {
                 next(e);
             }
         });
-
         this.App.use((_req: Request, res: Response): void => {
             res.status(200).json(CreateErrorMessage('ext00n', 404));
         });
@@ -75,13 +84,6 @@ export default class HttpServer {
         });
         this.App.listen(AppConfig.__SERVER_PORT, (): void => {
             Cli.log('Server started on port ', AppConfig.__SERVER_PORT)
-        });
-        this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
-            this.onLineUsers++;
-            new WebSocketServer(ws, this.onLineUsers, this.WsPool);
-            ws?.on('close', (): void => {
-                this.onLineUsers--;
-            });
         });
     }
 }

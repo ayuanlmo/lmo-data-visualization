@@ -16,6 +16,12 @@ module.exports = {
                 changeOrigin: true,
                 pathRewrite: {'^/api': ''},
             },
+            '/connect': {
+                target: 'http://localhost:3000/connect',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {'^/connect': ''},
+            },
         },
     },
     webpack: {

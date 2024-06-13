@@ -1,4 +1,9 @@
 import AppConfig from "../conf/AppConfig";
+import OS from "node:os";
+
+const platform: string = OS.platform();
+const cpuName: string = OS.cpus()[0].model;
+const arch: string = OS.arch();
 
 export interface IWsApp {
     send: (msg: string) => void;
@@ -18,11 +23,32 @@ export class WebSocketServer {
         this.initConnect();
     }
 
+    public static sendMessage(message: string): void {
+        const _: any = global;
+
+        _.WebSocketPool.getWss().clients.forEach((ws: IWsApp): void => {
+            ws.send?.(message);
+        });
+    }
+
     private initConnect(): void {
         this.WsApp.send?.(JSON.stringify({
             type: 'connect',
             success: true,
-            onLineUser: this.OnLineUsers
+            onLineUser: this.OnLineUsers,
+            serverInfo: {
+                __isX86Windows: platform === 'win32' && arch === 'x64',
+                __isArmWindows: platform === 'win32' && arch === 'arm64',
+                __isLinux: platform === 'linux',
+                __isIntelMac: platform === 'darwin' && arch === 'x64',
+                __isAppleSiliconMac: platform === 'darwin' && arch === 'arm64' && cpuName.includes('Apple'),
+                __encoding: 'CPU.H64',
+                __cpuEnCod: {
+                    __AMD: cpuName.includes('AMD'),
+                    __intel: cpuName.includes('Intel'),
+                    __AppleSilicon: cpuName.includes('Apple')
+                }
+            }
         }));
 
         this.WsApp.on('message', (msg: string): void => {
