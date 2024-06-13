@@ -26,7 +26,7 @@ export class WebSocketServer {
     public static sendMessage(message: string): void {
         const _: any = global;
 
-        _.WebSocketPool.getWss().clients.forEach((ws: IWsApp): void => {
+        _.WebSocketPool?.getWss()?.clients?.forEach((ws: IWsApp): void => {
             ws.send?.(message);
         });
     }
