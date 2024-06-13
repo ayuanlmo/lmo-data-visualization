@@ -1,4 +1,5 @@
 import Notification from "../Notification";
+import i18n from "../../i18n";
 
 class Socket {
     private ws: WebSocket | undefined;
@@ -33,9 +34,13 @@ class Socket {
             const data = JSON.parse(message);
 
             if (data.type === 'TASK_END')
-                Notification.openNotification('系统消息', `[${data.message.name ?? '未知'}] 合成已完毕`, 'success');
+                Notification.openNotification(i18n.t('systemMessage'), `[${data.message.name ?? i18n.t('unknown')}] ${i18n.t('synthesisSuccess')}`, 'success');
             if (data.type === 'TASK_READY')
-                Notification.openNotification('系统消息', `[${data.message.name ?? '未知'}] 任务已就绪`, 'info');
+                Notification.openNotification(i18n.t('systemMessage'), `[${data.message.name ?? i18n.t('unknown')}] ${i18n.t('synthesisRead')}`, 'info');
+            if (data.type === 'SERVICE_RE_CONNECT_SUCCESS')
+                Notification.openNotification(i18n.t('systemMessage'), i18n.t('serviceReConnect'), 'success');
+            if (data.type === 'SERVICE_CONNECT_CLOSE')
+                Notification.openNotification(i18n.t('systemMessage'), i18n.t('serviceConnectClose'), 'warning');
 
         } catch (e) {
             console.log('error', e);

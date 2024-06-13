@@ -91,5 +91,11 @@
   "addSuccess": "追加に成功しました",
   "file": "ファイル",
   "textConfig": "テキスト設定",
-  "addCategoriesMaxLength": "カテゴリ名は16文字を超えることはできません"
+  "addCategoriesMaxLength": "カテゴリ名は16文字を超えることはできません",
+  "systemMessage": "システムメッセージ",
+  "serviceReConnect": "合成サービスが再接続されました",
+  "serviceConnectClose": "合成サービスの接続が失われました、再接続を試みています...",
+  "unknown": "不明",
+  "synthesisSuccess": "合成完了",
+  "synthesisRead": "合成準備完了"
 }

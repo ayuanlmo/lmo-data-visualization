@@ -91,5 +91,11 @@
   "addSuccess": "Added successfully",
   "file": "File",
   "textConfig": "Text Configuration",
-  "addCategoriesMaxLength": "Category name cannot exceed 16 characters"
+  "addCategoriesMaxLength": "Category name cannot exceed 16 characters",
+  "systemMessage": "System Message",
+  "serviceReConnect": "Synthesis service has been reconnected",
+  "serviceConnectClose": "Synthesis service connection lost, attempting to reconnect...",
+  "unknown": "Unknown",
+  "synthesisSuccess": "Synthesis completed",
+  "synthesisRead": "Synthesis ready"
 }

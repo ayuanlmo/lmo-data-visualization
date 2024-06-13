@@ -91,5 +91,11 @@
   "addSuccess": "新增成功",
   "file": "文件",
   "textConfig": "文字設定",
-  "addCategoriesMaxLength": "分類名稱不可超過16個字符"
+  "addCategoriesMaxLength": "分類名稱不可超過16個字符",
+  "systemMessage": "系統訊息",
+  "serviceReConnect": "合成服務已重新連接",
+  "serviceConnectClose": "合成服務連接丟失，正在嘗試重新連接...",
+  "unknown": "未知",
+  "synthesisSuccess": "合成完成",
+  "synthesisRead": "合成就緒"
 }

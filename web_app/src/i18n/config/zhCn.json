@@ -91,5 +91,11 @@
   "addSuccess": "新增成功",
   "file": "文件",
   "textConfig": "文字配置",
-  "addCategoriesMaxLength": "分类名称不可超过16个字符"
+  "addCategoriesMaxLength": "分类名称不可超过16个字符",
+  "systemMessage": "系统消息",
+  "serviceReConnect": "合成服务已经重新连接",
+  "serviceConnectClose": "合成服务连接丢失，正在尝试重连...",
+  "unknown": "未知",
+  "synthesisSuccess": "合成完毕",
+  "synthesisRead": "合成就绪"
 }
