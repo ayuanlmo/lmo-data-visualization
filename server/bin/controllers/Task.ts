@@ -79,7 +79,9 @@ export default class Task {
                                 width: 1920,
                                 height: 1080,
                                 fps: 24,
-                                optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`)
+                                optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`),
+                                fileName: `${dbId}`,
+                                folder: path.resolve(`./_data/static/public/output/`)
                             })
                         });
 

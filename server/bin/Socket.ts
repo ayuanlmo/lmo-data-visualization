@@ -84,32 +84,38 @@ class SocketClient {
 
     private onData = (msg: Buffer): void => {
         if (msg.toString() !== 'pong') {
-            const {data, type} = JSON.parse(msg.toString());
+            try {
+                const {data, type} = JSON.parse(msg.toString());
 
-            // 合成结束
-            if (type === 'TASK_END') {
-                ResourcesModel.update({
-                    filePath: `/static/output/${data?.id}.mp4`
-                }, {
-                    where: {
-                        id: {[Op.like]: `${data?.id}`}
-                    }
-                }).then((): void => {
-                    ResourcesModel.findOne({
+                // 合成结束
+                if (type === 'TASK_END') {
+                    ResourcesModel.update({
+                        filePath: `/static/output/${data?.id}.mp4`,
+                        videoCover: `/static/output/${data?.videoCover}.png`,
+                        gifPath: `/static/output/${data?.gifPath}.gif`,
+                    }, {
                         where: {
-                            id: data?.id
+                            id: {[Op.like]: `${data?.id}`}
                         }
-                    }).then(resources => {
-                        WebSocketServer.sendMessage(JSON.stringify({
-                            type: type,
-                            message: {
-                                id: data?.id,
-                                name: resources?.dataValues.name,
-                                filePath: `/static/output/${data?.id}.mp4`
+                    }).then((): void => {
+                        ResourcesModel.findOne({
+                            where: {
+                                id: data?.id
                             }
-                        }));
+                        }).then(resources => {
+                            WebSocketServer.sendMessage(JSON.stringify({
+                                type: type,
+                                message: {
+                                    id: data?.id,
+                                    name: resources?.dataValues.name,
+                                    filePath: `/static/output/${data?.id}.mp4`
+                                }
+                            }));
+                        });
                     });
-                });
+                }
+            } catch (e) {
+                Cli.debug(e);
             }
         }
     }
