@@ -5,6 +5,7 @@ import Color from "../bin/controllers/Color";
 import Catch from "../bin/controllers/Catch";
 import Player from "../bin/Player";
 import Task from "../bin/controllers/Task";
+import Resources from "../bin/controllers/Resources";
 import Multer = require("multer");
 
 export const multer: Multer.Multer = Multer({
@@ -12,55 +13,26 @@ export const multer: Multer.Multer = Multer({
 });
 const _Router: Router = Router();
 
-_Router.get('/template', (req: Request, res: Response): void => {
-    TemplateController.getTemplates(req, res);
-});
-_Router.get('/template/:id', (req: Request, res: Response): void => {
-    TemplateController.getTemplate(req, res);
-});
-_Router.put('/template', (req: Request, res: Response): void => {
-    TemplateController.editTemplate(req, res);
-});
-_Router.delete('/template', (req: Request, res: Response): void => {
-    TemplateController.deleteTemplate(req, res);
-});
-_Router.post('/template/copy', (req: Request, res: Response): void => {
-    TemplateController.copyTemplate(req, res);
-});
-_Router.post('/template/refresh', (req: Request, res: Response): void => {
-    TemplateController.refreshTemplate(req, res);
-});
-_Router.post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => {
-    File.upload(req, res);
-});
-_Router.put('/editFileInfo/:id', (req: Request, res: Response): void => {
-    File.edit(req, res);
-});
-_Router.delete('/deleteFile', (req: Request, res: Response): void => {
-    File.delete(req, res);
-});
-_Router.get('/uploadFile', (req: Request, res: Response): void => {
-    File.getFiles(req, res);
-});
-_Router.get('/uploadFileCategory', (req: Request, res: Response): void => {
-    File.getFileCategory(req, res);
-});
-_Router.post('/uploadFileCategory', (req: Request, res: Response): void => {
-    File.addFileCategory(req, res);
-});
-_Router.delete('/uploadFileCategory/:id', (req: Request, res: Response): void => {
-    File.deleteFileCategory(req, res);
-});
-_Router.get('/color', (req: Request, res: Response): void => {
-    Color.getColors(req, res);
-});
-_Router.post('/clearCatch', (req: Request, res: Response): void => {
-    Catch.clearCatch(req, res);
-});
-_Router.get('/player/:id', (req: Request, res: Response): void => {
-    new Player(req, res);
-});
-_Router.post('/createTask', (req: Request, res: Response): void => {
-    Task.createTask(req, res);
-});
+_Router
+    .get('/template', (req: Request, res: Response): void => TemplateController.getTemplates(req, res))
+    .get('/template/:id', (req: Request, res: Response): void => TemplateController.getTemplate(req, res))
+    .put('/template', (req: Request, res: Response): void => TemplateController.editTemplate(req, res))
+    .delete('/template', (req: Request, res: Response): void => TemplateController.deleteTemplate(req, res))
+    .post('/template/copy', (req: Request, res: Response): void => TemplateController.copyTemplate(req, res))
+    .post('/template/refresh', (req: Request, res: Response): void => TemplateController.refreshTemplate(req, res))
+    .post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => File.upload(req, res))
+    .put('/editFileInfo/:id', (req: Request, res: Response): void => File.edit(req, res))
+    .delete('/deleteFile', (req: Request, res: Response): void => File.delete(req, res))
+    .get('/uploadFile', (req: Request, res: Response): void => File.getFiles(req, res))
+    .get('/uploadFileCategory', (req: Request, res: Response): void => File.getFileCategory(req, res))
+    .post('/uploadFileCategory', (req: Request, res: Response): void => File.addFileCategory(req, res))
+    .delete('/uploadFileCategory/:id', (req: Request, res: Response): void => File.deleteFileCategory(req, res))
+    .get('/color', (req: Request, res: Response): void => Color.getColors(req, res))
+    .post('/clearCatch', (req: Request, res: Response): void => Catch.clearCatch(req, res))
+    .get('/player/:id', (req: Request, res: Response): void => void new Player(req, res))
+    .post('/createTask', (req: Request, res: Response): void => Task.createTask(req, res))
+    .get('/resources', (req: Request, res: Response): void => Resources.getResources(req, res))
+    .delete('/resources/:id', (req: Request, res: Response): void => Resources.deleteResources(req, res))
+;
+
 export default _Router;
