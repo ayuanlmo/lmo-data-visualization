@@ -7,11 +7,10 @@ import UpLoadFileTypes from "../../const/UpLoadFileTypes";
 import {ReadStream, WriteStream} from "node:fs";
 import {UpLoadFilesCategoryModel, UpLoadFilesModel} from "../dataBase";
 import {Op} from "sequelize";
-import FFMPEG from "../../lib/ffmpeg";
 import Cli from "../../lib/Cli";
+import socketClient from "../Socket";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
-import getAudioVisualizationDiagram = FFMPEG.getAudioVisualizationDiagram;
 
 interface IQueryCriteria {
     [key: string]: any;
@@ -50,7 +49,7 @@ export default class File {
 
         fr.pipe(fw);
         fw.on('finish', (): void => {
-            fs.unlink(File.path, async (err: NodeJS.ErrnoException | null): Promise<void> => {
+            fs.unlink(File.path, (err: NodeJS.ErrnoException | null): void => {
                 if (err)
                     return void res.json(createErrorMessage('ext00e'));
                 else {
@@ -60,7 +59,13 @@ export default class File {
                         const audioCoverPath: string = path.resolve(__dirname, '../../_data/static/public/uploads/' + audioCoverName);
 
                         try {
-                            await getAudioVisualizationDiagram(path.resolve(File.destination + fileName), audioCoverPath);
+                            socketClient.sendMessage({
+                                type: 'GENERATING-AUDIO-VISUALIZATIONS',
+                                data: JSON.stringify({
+                                    audioPath: path.resolve(File.destination + fileName),
+                                    optPath: audioCoverPath
+                                })
+                            });
 
                             data.cover = audioCoverStaticPath;
                         } catch (e) {
@@ -113,7 +118,7 @@ export default class File {
             categoryId = null
         } = req.body;
 
-        if(id === '')
+        if (id === '')
             return void res.json(createErrorMessage('ext003'));
 
         UpLoadFilesModel.findOne({
