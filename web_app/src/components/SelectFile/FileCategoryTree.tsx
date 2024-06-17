@@ -29,7 +29,7 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
     const {t} = useTranslation();
 
     const getFileCategory = (): void => {
-        Request.getFileCategory().then((res) => {
+        Request.getFileCategory().then((res): void => {
             res.data.tree.map((i: ICategory) => {
                 return convertNameToTitle(i);
             });
@@ -77,50 +77,8 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
     return (
         <>
             <YExtendTemplate show={type === 'TreeAction'}>
-                <TreeAction
-                    showLine
-                    expandOnSelect={false}
-                    data={categoryTree}
-                    editPlaceholder={t('pleaseInput')}
-                    expandedIds={activeIds}
-                    menuOptions={[
-                        {
-                            type: "addChildNode",
-                            title: t('addSubCategories')
-                        },
-                        {
-                            type: "editNode",
-                            title: t('editCategories')
-                        },
-                        {
-                            title: t('deleteCategories'),
-                            onClick(node, action): void {
-                                action.closeMenu();
-                                Modal.confirm({
-                                    title: t('tip'),
-                                    type: "warning",
-                                    content: t('deleteConfirm'),
-                                    onConfirm: (): void => {
-                                        Request.deleteFileCategory(node.id as string).then((): void => {
-                                            action.deleteNode();
-                                            Notification.message(t('deleteSuccess'), 'success');
-                                        }).catch((): void => {
-                                            Notification.message(t('deleteCategoriesError'), 'error');
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    ]}
-                    onSave={(data: FlattedTreeNodeData): void => {
-                        add(data);
-                    }}
-                    onSelect={(e) => {
-                        onSelectTree(e);
-                    }}
-                />
                 <PopConfirm
-                    title={'新增分类'}
+                    title={t('addCategories')}
                     placement={'right'}
                     cancelText={t('cancel')}
                     confirmText={t('confirm')}
@@ -147,7 +105,8 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                     <div
                         style={{
                             width: '88%',
-                            margin: 'auto'
+                            marginTop: '1rem',
+                            marginLeft: '14px'
                         }}
                     >
                         <Button
@@ -159,6 +118,50 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                         >{t('add')}</Button>
                     </div>
                 </PopConfirm>
+                <div>
+                    <TreeAction
+                        showLine
+                        expandOnSelect={false}
+                        data={categoryTree}
+                        editPlaceholder={t('pleaseInput')}
+                        expandedIds={activeIds}
+                        menuOptions={[
+                            {
+                                type: "addChildNode",
+                                title: t('addSubCategories')
+                            },
+                            {
+                                type: "editNode",
+                                title: t('editCategories')
+                            },
+                            {
+                                title: t('deleteCategories'),
+                                onClick(node, action): void {
+                                    action.closeMenu();
+                                    Modal.confirm({
+                                        title: t('tip'),
+                                        type: "warning",
+                                        content: t('deleteConfirm'),
+                                        onConfirm: (): void => {
+                                            Request.deleteFileCategory(node.id as string).then((): void => {
+                                                action.deleteNode();
+                                                Notification.message(t('deleteSuccess'), 'success');
+                                            }).catch((): void => {
+                                                Notification.message(t('deleteCategoriesError'), 'error');
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        ]}
+                        onSave={(data: FlattedTreeNodeData): void => {
+                            add(data);
+                        }}
+                        onSelect={(e) => {
+                            onSelectTree(e);
+                        }}
+                    />
+                </div>
             </YExtendTemplate>
             <YExtendTemplate show={type == 'TreeSelect'}>
                 <TreeSelect

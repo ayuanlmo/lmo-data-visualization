@@ -48,7 +48,7 @@ const HomeHeader = (): React.JSX.Element => {
                 >{t('materialLib')}</Button>
                 <SwitchLang/>
                 <Resources ref={resourcesRef}/>
-                <SelectFile ref={selectFileRef}/>
+                <SelectFile isUse={false} ref={selectFileRef}/>
             </div>
         </div>
     );

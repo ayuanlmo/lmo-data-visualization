@@ -22,6 +22,7 @@ export interface IImageListProps {
     readonly onEdit?: (item: IImageItem) => void;
     readonly onDelete?: (item: IImageItem) => void;
     readonly onUse?: (item: IImageItem) => void;
+    isUse?: boolean;
 }
 
 export interface IImageListRef {
@@ -35,7 +36,8 @@ const ImageList: React.ForwardRefExoticComponent<IImageListProps & React.RefAttr
         setPageTotal,
         onEdit,
         onDelete,
-        onUse
+        onUse,
+        isUse
     }: IImageListProps = props;
     const [previewVisible, setPreviewVisible]: ReactState<boolean> = useState<boolean>(false);
     const [previewInfo, setPreviewInfo]: ReactState<IImageItem> = useState<IImageItem>({
@@ -90,6 +92,7 @@ const ImageList: React.ForwardRefExoticComponent<IImageListProps & React.RefAttr
                                 src={'/api' + image.path}
                                 alt={image.name}
                                 item={image}
+                                isUse={isUse}
                                 onEdit={(data: IImageItem): void => {
                                     onEdit && onEdit(data);
                                 }}

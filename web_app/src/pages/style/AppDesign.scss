@@ -272,8 +272,7 @@
   height: 100%;
 
   .c-select-file-search {
-    margin-bottom: 1.125rem;
-    height: 6.5%;
+    height: 5.5%;
 
     button {
       float: right;
@@ -281,8 +280,8 @@
   }
 
   .c-select-file-content {
-    height: 80%;
-    overflow-y: auto;
+    height: 400px;
+    overflow-y: scroll;
   }
 
   .c-select-file-pagination {

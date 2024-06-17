@@ -1,8 +1,9 @@
-import {Button, Card, Space, Tag} from "@hi-ui/hiui";
+import {Button, Card, EllipsisTooltip, Tag} from "@hi-ui/hiui";
 import React, {useEffect, useState} from "react";
 import {ReactState} from "../../types/ReactTypes";
 import {IImageItem} from "./ImageList";
 import {useTranslation} from "react-i18next";
+import YExtendTemplate from "../YExtendTemplate";
 
 export interface IAudioItemProps {
     readonly onPlay?: (item: IAudioItem) => void;
@@ -15,6 +16,7 @@ export interface IAudioItemProps {
     readonly onEdit?: (item: IImageItem) => void;
     readonly onDelete?: (item: IImageItem) => void;
     readonly onUse?: (item: IImageItem) => void;
+    isUse: boolean;
 }
 
 export interface IAudioItem extends IImageItem {
@@ -34,7 +36,8 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
         progressChange,
         onEdit,
         onDelete,
-        onUse
+        onUse,
+        isUse
     }: IAudioItemProps = props;
     const elRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
     const [currentProgress, setCurrentProgress]: ReactState<number> = useState<number>(0);
@@ -91,12 +94,23 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
     return (
         <Card
             title={
-                <Space size={8}>
-                    <span>{item.name}</span>
-                    <Tag size={'sm'} type="primary" appearance="solid">
+                <div className={'app_flex_box'}>
+                    <div>
+                        <EllipsisTooltip>
+                            {item.name}
+                        </EllipsisTooltip>
+                    </div>
+                    <Tag
+                        size={'sm'}
+                        type="primary"
+                        appearance="solid"
+                        style={{
+                            marginLeft: '1rem'
+                        }}
+                    >
                         {item.type}
                     </Tag>
-                </Space>
+                </div>
             }
             size={'sm'}
             extra={
@@ -115,33 +129,37 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
                             playing && id === item.id ? t('pause') : t('play')
                         }
                     </Button>
-                    <Button
-                        size={'sm'}
-                        type={'secondary'}
-                        onClick={(): void => {
-                            onUse && onUse(item);
-                        }}
-                    >
-                        {t('use')}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="default"
-                        onClick={(): void => {
-                            onEdit && onEdit(item);
-                        }}
-                    >
-                        {t('edit')}
-                    </Button>
-                    <Button
-                        size="sm"
-                        type="danger"
-                        onClick={(): void => {
-                            onDelete && onDelete(item);
-                        }}
-                    >
-                        {t('delete')}
-                    </Button>
+                    <YExtendTemplate show={isUse}>
+                        <Button
+                            size={'sm'}
+                            type={'secondary'}
+                            onClick={(): void => {
+                                onUse && onUse(item);
+                            }}
+                        >
+                            {t('use')}
+                        </Button>
+                    </YExtendTemplate>
+                    <YExtendTemplate show={!isUse}>
+                        <Button
+                            size="sm"
+                            type="default"
+                            onClick={(): void => {
+                                onEdit && onEdit(item);
+                            }}
+                        >
+                            {t('edit')}
+                        </Button>
+                        <Button
+                            size="sm"
+                            type="danger"
+                            onClick={(): void => {
+                                onDelete && onDelete(item);
+                            }}
+                        >
+                            {t('delete')}
+                        </Button>
+                    </YExtendTemplate>
                 </>
             }
         >

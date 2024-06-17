@@ -3,6 +3,7 @@ import {Button, Loading, Popover, Space} from "@hi-ui/hiui";
 import {ReactState} from "../../types/ReactTypes";
 import {IImageItem} from "./ImageList";
 import {useTranslation} from "react-i18next";
+import YExtendTemplate from "../YExtendTemplate";
 
 interface ILoadingImageProps {
     src: string;
@@ -14,6 +15,7 @@ interface ILoadingImageProps {
     readonly onDelete?: (item: IImageItem) => void;
     readonly onUse?: (item: IImageItem) => void;
     readonly onPreview?: (item: IImageItem) => void;
+    isUse?: boolean;
 }
 
 const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
@@ -24,7 +26,8 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
         onEdit,
         onDelete,
         onUse,
-        onPreview
+        onPreview,
+        isUse
     }: ILoadingImageProps = props;
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
     const stopPropagation = (e: React.MouseEvent<HTMLElement | HTMLDivElement | SVGSVGElement> | React.MouseEvent<Element, MouseEvent>): void => e.stopPropagation();
@@ -54,36 +57,40 @@ const LoadingImage = (props: ILoadingImageProps): React.JSX.Element => {
                                 >
                                     {t('preview')}
                                 </Button>
-                                <Button
-                                    size="sm"
-                                    type="primary"
-                                    onClick={(e: React.MouseEvent<Element, MouseEvent>): void => {
-                                        stopPropagation(e);
-                                        onUse && onUse(props.item);
-                                    }}
-                                >
-                                    {t('use')}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    type="primary"
-                                    onClick={(e: React.MouseEvent<Element, MouseEvent>): void => {
-                                        stopPropagation(e);
-                                        onEdit && onEdit(props.item);
-                                    }}
-                                >
-                                    {t('edit')}
-                                </Button>
-                                <Button
-                                    size="sm"
-                                    type="danger"
-                                    onClick={(e: React.MouseEvent<Element, MouseEvent>): void => {
-                                        stopPropagation(e);
-                                        onDelete && onDelete(props.item);
-                                    }}
-                                >
-                                    {t('delete')}
-                                </Button>
+                                <YExtendTemplate show={isUse}>
+                                    <Button
+                                        size="sm"
+                                        type="primary"
+                                        onClick={(e: React.MouseEvent<Element, MouseEvent>): void => {
+                                            stopPropagation(e);
+                                            onUse && onUse(props.item);
+                                        }}
+                                    >
+                                        {t('use')}
+                                    </Button>
+                                </YExtendTemplate>
+                                <YExtendTemplate show={!isUse}>
+                                    <Button
+                                        size="sm"
+                                        type="primary"
+                                        onClick={(e: React.MouseEvent<Element, MouseEvent>): void => {
+                                            stopPropagation(e);
+                                            onEdit && onEdit(props.item);
+                                        }}
+                                    >
+                                        {t('edit')}
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        type="danger"
+                                        onClick={(e: React.MouseEvent<Element, MouseEvent>): void => {
+                                            stopPropagation(e);
+                                            onDelete && onDelete(props.item);
+                                        }}
+                                    >
+                                        {t('delete')}
+                                    </Button>
+                                </YExtendTemplate>
                             </Space>
                         </>
                     }

@@ -1,5 +1,6 @@
-import {Form, FormItem, Grid, Input, Modal, Pagination, Search, TabPane, Tabs} from "@hi-ui/hiui";
 import React, {useImperativeHandle, useRef, useState} from "react";
+import {Form, FormItem, Grid, Input, Modal, Pagination, Search, TabPane, Tabs} from "@hi-ui/hiui";
+import {SearchOutlined} from "@hi-ui/icons";
 import ImageList, {IImageItem, IImageListRef} from "./ImageList";
 import {ReactState} from "../../types/ReactTypes";
 import FileCategoryTree from "./FileCategoryTree";
@@ -17,6 +18,9 @@ export interface ISelectFile extends IImageItem {
 export interface ISelectFileProps {
     onSelect?: (data: ISelectFile) => void;
     type?: TFileType;
+    isUse?: boolean;
+    audio?: boolean;
+    image?: boolean;
 }
 
 export interface ISelectFileRef {
@@ -41,10 +45,13 @@ export interface ICategory {
 
 export type TFileType = 'image' | 'audio';
 
-const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.ForwardedRef<ISelectFileRef>) => {
+const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAttributes<ISelectFileRef>> = React.forwardRef((props: ISelectFileProps, ref: React.ForwardedRef<ISelectFileRef>) => {
     const {
         onSelect,
-        type = 'image'
+        type = 'image',
+        isUse = true,
+        audio = true,
+        image = true
     }: ISelectFileProps = props;
     const [query, setQuery]: ReactState<IQuery> = useState({
         name: '',
@@ -103,8 +110,8 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
             footer={null}
             visible={visible}
             title={t('materialLib')}
-            width={'50%'}
-            height={'60%'}
+            width={'1200px'}
+            height={'642px'}
             cancelText={t('cancel')}
             confirmText={t('confirm')}
             onClose={(): void => open()}
@@ -113,10 +120,44 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
             <div className={'c-select-file app_position_relative'}>
                 <div className={'c-select-file-search'}>
                     <Grid.Row gutter={true} justify={"space-between"}>
+                        <Grid.Col span={4}>
+                            <YExtendTemplate show={visible}>
+                                <Tabs
+                                    activeId={fileType}
+                                    style={{
+                                        marginTop: '-8px'
+                                    }}
+                                    onChange={(e: React.ReactText | TFileType): void => {
+                                        setFileType(e as TFileType);
+                                        setQuery({
+                                            ...query,
+                                            type: e as TFileType
+                                        });
+                                    }}
+                                >
+                                    <TabPane
+                                        disabled={!image}
+                                        tabId="image"
+                                        tabTitle={t('image')}
+                                    />
+                                    <TabPane
+                                        disabled={!audio}
+                                        tabId="audio"
+                                        tabTitle={t('audio')}
+                                    />
+                                </Tabs>
+                            </YExtendTemplate>
+                        </Grid.Col>
                         <Grid.Col span={{lg: 12, xl: 12, md: 16, sm: 16, xs: 16}}>
                             <Search
                                 placeholder={t('enterNameToStartQuery')}
+                                prepend={
+                                    <SearchOutlined/>
+                                }
+                                append={null}
                                 onSearch={(data: string): void => {
+                                    if (data === '' && query.name === '')
+                                        return;
                                     setQuery({
                                         ...query,
                                         name: data
@@ -124,31 +165,16 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                 }}
                             />
                         </Grid.Col>
-                        <Grid.Col span={8}>
-                            <Tabs
-                                activeId={fileType}
-                                style={{
-                                    marginTop: '-8px'
-                                }}
-                                onChange={(e: React.ReactText | TFileType): void => {
-                                    setFileType(e as TFileType);
-                                    setQuery({
-                                        ...query,
-                                        type: e as TFileType
-                                    });
-                                }}
-                            >
-                                <TabPane tabId="image" tabTitle={t('image')}/>
-                                <TabPane tabId="audio" tabTitle={t('audio')}/>
-                            </Tabs>
-                        </Grid.Col>
                         <Grid.Col span={4}>
                             <UploadFile/>
                         </Grid.Col>
                     </Grid.Row>
                 </div>
                 <div style={{
-                    height: 'calc(100% - 6.5%)'
+                    marginTop: '1.88rem',
+                    marginBottom: '1.88rem',
+                    overflowX: 'hidden',
+                    overflowY: 'scroll'
                 }}>
                     <Grid.Row
                         justify={'space-between'}
@@ -159,7 +185,8 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                         <Grid.Col span={4}>
                             <div style={{
                                 background: 'whitesmoke',
-                                height: '100%'
+                                height: '460px',
+                                overflowY: 'scroll'
                             }}>
                                 <FileCategoryTree
                                     onSelectTree={(e: string | null | React.ReactText): void => {
@@ -233,6 +260,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                         fileType={fileType}
                                         ref={imageListRef}
                                         query={query}
+                                        isUse={isUse}
                                         onDelete={onDelete}
                                     />
                                 </YExtendTemplate>
@@ -244,6 +272,7 @@ const SelectFile = React.forwardRef((props: ISelectFileProps, ref: React.Forward
                                         fileType={fileType}
                                         ref={audioListRef}
                                         query={query}
+                                        isUse={isUse}
                                         onEdit={onEdit}
                                         onDelete={onDelete}
                                     />

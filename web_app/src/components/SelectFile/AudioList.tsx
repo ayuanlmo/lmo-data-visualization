@@ -13,6 +13,7 @@ export interface IAudioListProps {
     readonly fileType: TFileType;
     setPageTotal: React.Dispatch<React.SetStateAction<number>>;
     modalVisible: boolean;
+    isUse: boolean;
     readonly onEdit?: (item: IImageItem) => void;
     readonly onDelete?: (item: IImageItem) => void;
     readonly onUse?: (item: IImageItem) => void;
@@ -33,7 +34,8 @@ const AudioList = React.forwardRef((props: IAudioListProps, ref: React.Forwarded
         modalVisible,
         onEdit,
         onDelete,
-        onUse
+        onUse,
+        isUse
     }: IAudioListProps = props;
     const [isPlaying, setIsPlaying]: ReactState<boolean> = useState<boolean>(false);
     const [fileList, setFileList]: ReactState<Array<IAudioItem>> = useState<Array<IAudioItem>>([]);
@@ -109,6 +111,7 @@ const AudioList = React.forwardRef((props: IAudioListProps, ref: React.Forwarded
                                         key={i.id}
                                         id={playerId}
                                         playing={isPlaying}
+                                        isUse={isUse}
                                         onEdit={(data: IImageItem): void => {
                                             onEdit && onEdit(data);
                                         }}
