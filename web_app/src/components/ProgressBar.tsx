@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Grid, GridResponsiveSize} from "@hi-ui/hiui";
 import {useSelector} from "react-redux";
 import Hooks from "../bin/Hooks";
@@ -32,6 +32,23 @@ const ProgressBar = (): React.JSX.Element => {
             });
         }, duration / 100);
     };
+    const initRender = (): void => {
+        postMessage.send({
+            type: 'RENDER',
+            message: {}
+        });
+        initProgress();
+    };
+    const visibilitychange = (): void => {
+        if (!document.hidden)
+            initRender();
+    };
+
+    useEffect((): () => void => {
+        document.addEventListener('visibilitychange', visibilitychange);
+
+        return () => document.removeEventListener('visibilitychange', visibilitychange);
+    }, []);
 
     useTemplateMessageListener('TEMPLATE_RENDER', (): void => {
         initProgress();
@@ -45,11 +62,7 @@ const ProgressBar = (): React.JSX.Element => {
                         <div
                             className={'progress-bar-play-icon app_cursor_pointer'}
                             onClick={(): void => {
-                                postMessage.send({
-                                    type: 'RENDER',
-                                    message: {}
-                                });
-                                initProgress();
+                                initRender();
                             }}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34"
