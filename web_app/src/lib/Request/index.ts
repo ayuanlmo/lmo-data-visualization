@@ -143,6 +143,23 @@ namespace Request {
             headers: {'Content-Type': 'application/json'}
         });
     };
+
+    export const resourcesList = (data: object = {}) => {
+        return axios({
+            url: '/resources',
+            method: 'get',
+            params: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const deleteResources = (id: string) => {
+        return axios({
+            url: `/resources/${id}`,
+            method: 'delete',
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
 }
 
 export default Request;

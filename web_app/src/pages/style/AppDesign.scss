@@ -345,3 +345,90 @@
     }
   }
 }
+
+.c-resources-item {
+  width: 100%;
+  height: 14.625rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  border: 1px solid #EEEFF1;
+  background: #FFF;
+
+  .c-resources-item-mask {
+    background: rgba(0, 0, 0, 0.30);
+
+    .c-resources-item-play-box {
+      width: 2rem;
+      height: 2rem;
+      flex-shrink: 0;
+      border-radius: 50%;
+      left: calc((100% - 2rem) / 2);
+      top: calc((100% - 2rem) / 2);
+      background: rgba(255, 255, 255, 0.50);
+
+      .c-resources-item-play-box-content {
+        margin-left: 0.8rem;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  .c-resources-item-cover-box {
+    width: 100%;
+    height: 9.75rem;
+    flex-shrink: 0;
+    border-radius: 0.75rem 0.75rem 0rem 0rem;
+    border: 1px solid #EEEFF1;
+
+
+    .c-resources-item-option {
+      margin-top: .62rem;
+      justify-content: end;
+      margin-right: calc(1.26rem - .62rem);
+
+      .c-resources-item-option-item {
+        width: 1.375rem;
+        height: 1.375rem;
+        flex-shrink: 0;
+        border-radius: 0.5rem;
+        margin-right: .62rem;
+
+        svg {
+          width: 0.75rem;
+          height: 0.75rem;
+          flex-shrink: 0;
+          fill: #FFFFFF;
+          left: calc((1.375rem - 0.75rem) / 2);
+        }
+      }
+    }
+
+    img {
+      width: 100%;
+      border-radius: 0.75rem 0.75rem 0rem 0rem;
+    }
+  }
+
+  .c-resources-item-info {
+    .c-resources-item-info-content {
+      padding: 1.31rem 1.25rem;
+
+      .c-resources-item-info-title {
+        color: #333;
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+      }
+
+      .c-resources-item-info-time {
+        color: #999;
+        font-size: 0.625rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-top: .5rem;
+      }
+    }
+  }
+}

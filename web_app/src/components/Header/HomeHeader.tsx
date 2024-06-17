@@ -6,9 +6,11 @@ import {Button} from "@hi-ui/hiui";
 import SelectFile, {ISelectFileRef} from "../SelectFile";
 import SwitchLang from "../GlobalComponent/components/SwitchLang";
 import YExtendTemplate from "../YExtendTemplate";
+import Resources, {IResourcesRef} from "../Resources";
 
 const HomeHeader = (): React.JSX.Element => {
     const selectFileRef: React.MutableRefObject<null | ISelectFileRef> = useRef<null | ISelectFileRef>(null);
+    const resourcesRef: React.MutableRefObject<null | IResourcesRef> = useRef<null | IResourcesRef>(null);
     const {t} = useTranslation();
 
     return (
@@ -28,7 +30,15 @@ const HomeHeader = (): React.JSX.Element => {
                 <YExtendTemplate show={false}>
                     <Button size={'sm'} type="secondary">{t('log')}</Button>
                 </YExtendTemplate>
-                <Button size={'sm'} type="primary">{t('resLib')}</Button>
+                <Button
+                    size={'sm'}
+                    type="primary"
+                    onClick={(): void => {
+                        resourcesRef.current?.open();
+                    }}
+                >
+                    {t('resLib')}
+                </Button>
                 <Button
                     size={'sm'}
                     type="default"
@@ -37,6 +47,7 @@ const HomeHeader = (): React.JSX.Element => {
                     }}
                 >{t('materialLib')}</Button>
                 <SwitchLang/>
+                <Resources ref={resourcesRef}/>
                 <SelectFile ref={selectFileRef}/>
             </div>
         </div>
