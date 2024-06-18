@@ -183,11 +183,13 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
                         }}
                     >
                         <Grid.Col span={4}>
-                            <div style={{
-                                background: 'whitesmoke',
-                                height: '460px',
-                                overflowY: 'scroll'
-                            }}>
+                            <div
+                                className={'category-tree-box'}
+                                style={{
+                                    background: 'whitesmoke',
+                                    height: '460px',
+                                    overflowY: 'scroll'
+                                }}>
                                 <FileCategoryTree
                                     onSelectTree={(e: string | null | React.ReactText): void => {
                                         setQuery({

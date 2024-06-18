@@ -18,6 +18,10 @@
   border: 0 !important;
 }
 
+.hi-v4-modal__footer--divided::before {
+  display: none !important;
+  //background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, $__form-component-bg-color-dark 0%) !important;
+}
 
 .hi-v4-modal__footer--divided::before {
   position: absolute;
@@ -104,11 +108,7 @@
   }
 
   .hi-v4-modal__footer {
-    padding: 0 1rem;
-  }
-
-  .hi-v4-modal__footer--divided::before {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, $__form-component-bg-color-dark 100%) !important;
+    padding: .6rem;
   }
 
   .hi-v4-icon-button--effect:hover::before, .hi-v4-icon-button--effect:focus::before {
@@ -209,6 +209,69 @@
 
   .hi-v4-radio-group--placement-horizontal .hi-v4-radio--type-button::after {
     background: #595959 !important;
+  }
+
+  .hi-v4-dropdown-menu {
+    background-color: #334358 !important;
+
+    .hi-v4-dropdown-menu-item__trigger {
+      color: $color-white !important;
+    }
+  }
+
+  .hi-v4-dropdown-menu-item:not(.hi-v4-dropdown-menu-item--disabled) > .hi-v4-dropdown-menu-item__trigger {
+    background-color: #334358 !important;
+  }
+
+  .hi-v4-dropdown-menu-item:not(.hi-v4-dropdown-menu-item--disabled) > .hi-v4-dropdown-menu-item__trigger:hover {
+    background-color: #232F3F !important;
+  }
+
+  .hi-v4-tree__popper .hi-v4-tree-action__item:hover {
+    background-color: #2E3D4E !important;
+  }
+
+  .hi-v4-tree-node--focused .hi-v4-tree-node__wrap {
+    background-color: #22303F;
+  }
+
+  .hi-v4-tree-node__wrap {
+    color: $color-white !important;
+  }
+
+  .hi-v4-tree-node__wrap:hover {
+    background-color: #22303F !important;
+    color: $color-white !important;
+  }
+
+  .hi-v4-tree--editable .hi-v4-tree-action-wrap--visible .hi-v4-tree-action-btn {
+    color: $color-white !important;
+  }
+
+  .hi-v4-tree-node--focused .hi-v4-tree-node__title {
+    color: $color-white !important;
+  }
+
+  .hi-v4-tree__popper .hi-v4-tree-action {
+    background-color: #22303F !important;
+    box-shadow: 0 2px 8px 0 #575757 !important;
+
+    .hi-v4-tree-action__item {
+      color: $color-white !important;
+    }
+  }
+
+  .hi-v4-upload--drag {
+    background: #334559;
+    border: 2px dashed $__primary-bg-color-dark !important;
+  }
+
+  .hi-v4-pop-confirm {
+    background: #141A22 !important;
+
+    .hi-v4-pop-confirm__content-title {
+      color: $color-white;
+    }
   }
 }
 

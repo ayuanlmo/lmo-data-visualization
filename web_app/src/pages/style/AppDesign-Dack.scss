@@ -70,4 +70,30 @@
   .c-reset-button {
     background: $__form-component-bg-color-dark;
   }
+
+  .hi-v4-card {
+    background: #334358;
+  }
+
+  .hi-v4-card--bordered {
+    border: 1px solid #ffffff00;
+  }
+
+  .category-tree-box {
+    background: #2F3C4E !important;
+  }
+
+  .c-audio-item-name {
+    color: $color-white;
+  }
+
+  .c-resources-item {
+    background: #334358;
+    border: 1px solid #eeeff100;
+
+    .c-resources-item-info-title {
+      color: $color-white !important;
+    }
+  }
+
 }

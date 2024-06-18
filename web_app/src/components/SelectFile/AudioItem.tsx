@@ -96,7 +96,7 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
             title={
                 <div className={'app_flex_box'}>
                     <div>
-                        <EllipsisTooltip>
+                        <EllipsisTooltip className={'c-audio-item-name'}>
                             {item.name}
                         </EllipsisTooltip>
                     </div>
