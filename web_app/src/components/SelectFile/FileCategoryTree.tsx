@@ -139,9 +139,10 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                                 onClick(node, action): void {
                                     action.closeMenu();
                                     Modal.confirm({
-                                        title: t('tip'),
+                                        title: t('deleteConfirm'),
                                         type: "warning",
-                                        content: t('deleteConfirm'),
+                                        cancelText: t('cancel'),
+                                        confirmText: t('confirm'),
                                         onConfirm: (): void => {
                                             Request.deleteFileCategory(node.id as string).then((): void => {
                                                 action.deleteNode();
@@ -150,7 +151,8 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
                                                 Notification.message(t('deleteCategoriesError'), 'error');
                                             });
                                         }
-                                    });
+                                    })
+                                    ;
                                 }
                             }
                         ]}
