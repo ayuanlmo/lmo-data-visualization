@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import YExtendTemplate from "../../YExtendTemplate";
 import {
     Button,
@@ -59,6 +59,10 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const [gifLoading, setGifLoading]: ReactState<boolean> = useState<boolean>(true);
     const [isCopyTemplate, setIsCopyTemplate]: ReactState<boolean> = useState<boolean>(false);
     const [gifElement, setGifElement]: ReactState<React.JSX.Element | null> = useState<React.JSX.Element | null>(null);
+    const popoverRef: React.Ref<{
+        open: () => void;
+        close: () => void;
+    }> = useRef(null);
     const dispatch: Dispatch = useDispatch();
     const navigate: NavigateFunction = useNavigate();
 
@@ -92,11 +96,18 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                         setGifLoading(false);
                     }
                 }
+                onMouseEnter={(): void => {
+                    setIsHover(false);
+                }}
             />
         );
 
         return gifElement as unknown as React.JSX.Element;
     };
+
+    useEffect((): void => {
+        popoverRef.current?.[isHover ? 'open' : 'close']?.();
+    }, [isHover]);
 
     return (
         <Grid.Col span={colSpan}>
@@ -128,7 +139,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                                             Api({
                                                 id: data.id, ...editFormValue
                                             }).then((): void => {
-                                                Notification.message(isCopyTemplate ? '复制成功' : '修改成功', 'success');
+                                                Notification.message(isCopyTemplate ? t('addSuccess') : t('editSuccess'), 'success');
                                                 if (!isCopyTemplate)
                                                     setData(Object.assign(data, editFormValue));
                                                 else
@@ -167,12 +178,12 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>): void => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setIsHover(!isHover);
+                    setIsHover(true);
                 }}
                 onMouseLeave={(e: React.MouseEvent<HTMLDivElement>): void => {
                     e.preventDefault();
                     e.stopPropagation();
-                    setIsHover(!isHover);
+                    setIsHover(false);
                 }}
                 onClick={
                     (): void => {
@@ -189,7 +200,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                     </div>
                 </YExtendTemplate>
                 <YExtendTemplate show={isHover}>
-                    <Popover placement={'right'} trigger={'hover'} content={
+                    <Popover innerRef={popoverRef} placement={'right'} content={
                         <div style={{
                             minWidth: '22.5rem',
                             minHeight: '12.5rem'
