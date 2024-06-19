@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Dropdown, EllipsisTooltip} from "@hi-ui/hiui";
+import React, {useEffect, useState} from "react";
+import {Dropdown, EllipsisTooltip, Loading} from "@hi-ui/hiui";
 import {DeleteOutlined, DownloadOutlined} from "@hi-ui/icons";
 import {useTranslation} from "react-i18next";
 import YExtendTemplate from "../YExtendTemplate";
@@ -26,6 +26,7 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
     const {data, onDownload, onPlay, onDelete} = props;
     const {t} = useTranslation();
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
+    const [isLoading, setIsLoading]: ReactState<boolean> = useState<boolean>(true);
     const downloadTypes = [
         {
             id: 0,
@@ -36,6 +37,11 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
             title: "GIF"
         }
     ];
+
+    useEffect((): void => {
+        if (isHover && !isLoading)
+            setIsLoading(true);
+    }, [isHover]);
 
     return (
         <div className={'c-resources-item app_position_relative'}>
@@ -97,7 +103,17 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
                     setIsHover(true);
                 }}
             >
-                <img src={`/api${data.videoCover}`} alt=""/>
+                <Loading visible={isLoading}>
+                    <img
+                        src={isHover ? `/api${data.gifPath}` : `/api${data.videoCover}`}
+                        alt={data.name ?? ''}
+                        onLoad={
+                            (): void => {
+                                setIsLoading(false);
+                            }
+                        }
+                    />
+                </Loading>
             </div>
             <div className={'c-resources-item-info'}>
                 <div className={'c-resources-item-info-content'}>
