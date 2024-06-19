@@ -54,18 +54,28 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                 }
             }
 
-            Request.createTask({
+            const requestData = {
                 ...fromValue,
                 currentTemplateConfig: {
                     ...fromValue.currentTemplateConfig,
                     config: {
                         ...fromValue.currentTemplateConfig.config,
+                        video: {
+                            ...fromValue.currentTemplateConfig.config.video,
+                            duration: fromValue.currentTemplateConfig.config.video.duration < 100 ?
+                                fromValue.currentTemplateConfig.config.video.duration * 1000 :
+                                fromValue.currentTemplateConfig.config.video.duration
+                        },
                         background: {
                             ...fromValue.currentTemplateConfig.config.background,
                             image
                         }
                     }
                 }
+            };
+
+            Request.createTask({
+                ...requestData
             }).then((): void => {
                 setVisible(false);
             });
