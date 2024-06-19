@@ -4,7 +4,7 @@ import path from "path";
 import Utils from "../../utils";
 import {ResourcesModel, TemplateModel} from "../dataBase";
 import AppConfig from "../../conf/AppConfig";
-import socketClient from "../Socket";
+import TaskScheduler from "../TaskScheduler";
 import {WebSocketServer} from "../WebSocketServer";
 import createErrorMessage = Utils.createErrorMessage;
 
@@ -55,6 +55,16 @@ export default class Task {
 
                 try {
                     (async (): Promise<void> => {
+                        const taskConfig = {
+                            id: dbId,
+                            path: `http://localhost:${AppConfig.__SERVER_PORT}${templateStaticPath}?__type=h`,
+                            duration: currentTemplateConfig.config.video.duration ?? 5000 as number,
+                            ...Task.getVideoClarity(currentTemplateConfig.config.video.clarity ?? ''),
+                            fps: currentTemplateConfig.config.video.fps ?? 30 as number,
+                            optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`),
+                            fileName: `${dbId}`,
+                            folder: path.resolve(`./_data/static/public/output/`)
+                        };
                         const dbData = {
                             id: dbId,
                             template: id,
@@ -62,32 +72,25 @@ export default class Task {
                             name: taskName === '' ? require('uuid').v4() : taskName,
                             templatePath: dirPath,
                             createTime: new Date().getTime(),
-                            url: `${templateStaticPath}/index.html?__type=h`
+                            url: `${templateStaticPath}/index.html?__type=h`,
+                            clarity: currentTemplateConfig.config.video.clarity ?? '1080P',
+                            status: 'pending',
+                            taskConfig: JSON.stringify(taskConfig)
                         };
 
                         await ResourcesModel.create(dbData);
 
                         res.status(204).send();
 
-                        // 通知合成服务，准备合成
-                        socketClient.sendMessage({
-                            type: "COMPOSITE-VIDEO",
-                            data: JSON.stringify({
-                                id: dbId,
-                                path: `http://localhost:${AppConfig.__SERVER_PORT}${templateStaticPath}?__type=h`,
-                                duration: 5000,
-                                width: 1920,
-                                height: 1080,
-                                fps: 24,
-                                optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`),
-                                fileName: `${dbId}`,
-                                folder: path.resolve(`./_data/static/public/output/`)
-                            })
+                        // @ts-ignore
+                        TaskScheduler.push({
+                            ...taskConfig,
+                            name: dbData.name
                         });
 
                         // 通知页面
                         WebSocketServer.sendMessage(JSON.stringify({
-                            type: 'TASK_READY',
+                            type: 'TASK_PENDING',
                             message: {
                                 id: dbId,
                                 name: dbData.name
@@ -100,5 +103,33 @@ export default class Task {
             } else
                 res.json(createErrorMessage('ext00e'));
         });
+    }
+
+    private static getVideoClarity = (clarity: string): {
+        width: number;
+        height: number;
+    } => {
+        switch (clarity) {
+            case '1080P':
+                return {
+                    width: 1920,
+                    height: 1080
+                }
+            case '2K':
+                return {
+                    width: 2560,
+                    height: 1440
+                }
+            case '4K':
+                return {
+                    width: 4096,
+                    height: 2160
+                }
+            default:
+                return {
+                    width: 1920,
+                    height: 1080
+                }
+        }
     }
 }

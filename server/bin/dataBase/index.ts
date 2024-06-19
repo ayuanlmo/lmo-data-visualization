@@ -50,7 +50,10 @@ const ResourcesModel = DB.define('Resources', {
     templatePath: DataTypes.TEXT,
     url: DataTypes.TEXT,
     gifPath: DataTypes.TEXT,
-    videoCover: DataTypes.TEXT
+    videoCover: DataTypes.TEXT,
+    clarity: DataTypes.TEXT,
+    status: DataTypes.TEXT,
+    taskConfig: DataTypes.TEXT
 }, {
     timestamps: false
 });

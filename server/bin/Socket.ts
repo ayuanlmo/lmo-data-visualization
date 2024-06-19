@@ -3,6 +3,7 @@ import {ResourcesModel} from "./dataBase";
 import {Op} from "sequelize";
 import {WebSocketServer} from "./WebSocketServer";
 import Cli from "../lib/Cli";
+import TaskScheduler from "./TaskScheduler";
 
 export interface ISocketSendMessage {
     type: string;
@@ -83,7 +84,7 @@ class SocketClient {
     }
 
     private onData = (msg: Buffer): void => {
-        if (msg.toString() !== 'pong') {
+        if (msg.toString() !== 'pong' || (!msg.includes('pong'))) {
             try {
                 const {data, type} = JSON.parse(msg.toString());
 
@@ -93,6 +94,7 @@ class SocketClient {
                         filePath: `/static/output/${data?.id}.mp4`,
                         videoCover: `/static/output/${data?.videoCover}.png`,
                         gifPath: `/static/output/${data?.gifPath}.gif`,
+                        status: 'end'
                     }, {
                         where: {
                             id: {[Op.like]: `${data?.id}`}
@@ -103,6 +105,7 @@ class SocketClient {
                                 id: data?.id
                             }
                         }).then(resources => {
+                            TaskScheduler.removeTask();
                             WebSocketServer.sendMessage(JSON.stringify({
                                 type: type,
                                 message: {
