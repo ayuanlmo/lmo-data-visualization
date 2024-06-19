@@ -15,6 +15,7 @@ const AppStore = createSlice({
         currentTemplateConfig: {
             data: [],
             config: {
+                text: {},
                 theme: {
                     type: '',
                     configs: [],
@@ -37,8 +38,9 @@ const AppStore = createSlice({
                     volume: 100
                 }
             },
-
             otherConfig: {
+                label: '',
+                configs: [],
                 values: {}
             }
         }

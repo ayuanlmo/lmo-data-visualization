@@ -30,18 +30,56 @@ export interface IAppStore {
         name: string;
         path: string;
         type: number;
-    },
+    };
     currentTemplateConfig: {
+        data: any;
         config: {
+            text: {
+                [key: string]: {
+                    color: string;
+                    value: string;
+                    display: boolean;
+                    fontSize: number;
+                    align: string;
+                    width: number;
+                    height: number;
+                    x: number;
+                    y: number;
+                }
+            };
+            theme: {
+                type: string;
+                configs: Array<string>;
+                values: Array<string>;
+            },
             background: {
                 type: string;
                 color: string;
                 image: string;
                 arrangement: string;
+            },
+            video: {
+                duration: number;
+                fps: number;
+                clarity: string;
+            },
+            audio: {
+                path: string;
+                full: boolean;
+                volume: number;
             }
         },
         otherConfig: {
-            values: {}
+            label: string;
+            configs: Array<{
+                label: string;
+                key: string;
+                type: string;
+                value: any;
+            }>;
+            values: {
+                [key: string]: any;
+            }
         }
     }
 }
