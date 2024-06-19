@@ -32,12 +32,59 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
     const open = (): void => setVisible(!visible);
 
     const createTask = (): void => {
-        formRef.current?.validate().then((): void => {
-            Request.createTask(fromValue).then((): void => {
+        formRef.current?.validate().then(async (): Promise<void> => {
+            let image: string = '';
+
+            if (fromValue.currentTemplateConfig.config.background.image !== '') {
+                try {
+                    image = await fetch(`/api${fromValue.currentTemplateConfig.config.background.image}`)
+                        .then((data: Response) => data.blob())
+                        .then((img: Blob) => {
+                            return new Promise((resolve, reject): void => {
+                                const fr: FileReader = new FileReader();
+
+                                fr.onloadend = (): void => resolve(fr.result as string ?? '');
+                                fr.onerror = () => reject('');
+                                fr.readAsDataURL(img);
+                            });
+                        });
+                } catch (e) {
+                    console.error(e);
+                    throw e;
+                }
+            }
+
+            Request.createTask({
+                ...fromValue,
+                currentTemplateConfig: {
+                    ...fromValue.currentTemplateConfig,
+                    config: {
+                        ...fromValue.currentTemplateConfig.config,
+                        background: {
+                            ...fromValue.currentTemplateConfig.config.background,
+                            image
+                        }
+                    }
+                }
+            }).then((): void => {
                 setVisible(false);
             });
         });
     };
+
+    useTemplateMessageListener('GET_CONFIG', (data: any): void => {
+        setFromValue({
+            ...fromValue,
+            currentTemplateConfig: {
+                ...currentTemplateConfig,
+                data: data.data ?? [],
+                config: {
+                    ...currentTemplateConfig.config,
+                    text: data.config.text
+                }
+            }
+        });
+    });
 
     useTemplateMessageListener('GET_TEMPLATE_DATA', (data): void => {
         setFromValue({
@@ -54,11 +101,16 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
     }));
 
     useEffect((): void => {
-        if (visible)
+        if (visible) {
             PostMessage.send({
                 type: 'GET_TEMPLATE_DATA',
                 message: {}
             });
+            PostMessage.send({
+                type: 'GET_CONFIG',
+                message: {}
+            });
+        }
     }, [visible]);
 
     useEffect((): void => {
