@@ -77,7 +77,8 @@ const BackgroundConfig = (): React.JSX.Element => {
                     <SelectBackground onSelect={(cssCode: string): void => {
                         dispatch(setCurrentTemplateBackground({
                             ...backgroundConfig,
-                            color: cssCode
+                            color: cssCode,
+                            type: 'theme'
                         }));
                     }}/>
                 </GlobalComponent.TDisplayTemplate>
@@ -89,7 +90,8 @@ const BackgroundConfig = (): React.JSX.Element => {
                         <SelectBackgroundImage onSelect={(path: string): void => {
                             dispatch(setCurrentTemplateBackground({
                                 ...backgroundConfig,
-                                image: path
+                                image: path,
+                                type: 'image'
                             }));
                         }}/>
                     </Grid.Col>
@@ -103,7 +105,8 @@ const BackgroundConfig = (): React.JSX.Element => {
                                 onChange={(value: string): void => {
                                     dispatch(setCurrentTemplateBackground({
                                         ...backgroundConfig,
-                                        color: value
+                                        color: value,
+                                        type: 'color'
                                     }));
                                 }}
                                 style={{

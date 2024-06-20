@@ -5,10 +5,10 @@ export const fpsConfigs: Array<RadioDataItem> = [
 ];
 
 export const durationConfigs: RadioDataItem[] = [
-    {id: 5, title: '5'},
-    {id: 10, title: '10'},
-    {id: 20, title: '20'},
-    {id: 30, title: '30'}
+    {id: 5000, title: '5'},
+    {id: 10000, title: '10'},
+    {id: 20000, title: '20'},
+    {id: 30000, title: '30'}
 ];
 
 export const clarityConfigs: RadioDataItem[] = [

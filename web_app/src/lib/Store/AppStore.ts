@@ -28,7 +28,7 @@ const AppStore = createSlice({
                     arrangement: ''
                 },
                 video: {
-                    duration: 5,
+                    duration: 5000,
                     fps: 30,
                     clarity: '1080P'
                 },

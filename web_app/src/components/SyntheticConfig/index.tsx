@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {Grid, GridResponsiveSize, Radio, Slider, Switch} from "@hi-ui/hiui";
 import {clarityConfigs, durationConfigs, fpsConfigs} from './config';
 import {useTranslation} from "react-i18next";
@@ -7,6 +7,7 @@ import {RootState} from "../../lib/Store";
 import {setCurrentTemplateAudioConfig, setCurrentTemplateVideoConfig} from "../../lib/Store/AppStore";
 import {Dispatch} from "@reduxjs/toolkit";
 import SelectBackgroundImage from "../ColorConfig/SelectBackgroundImage";
+import PostMessage from "../../lib/PostMessage";
 
 const SyntheticConfig = (): React.JSX.Element => {
     const colspan: GridResponsiveSize<number> = {lg: 12, xl: 12, md: 12, sm: 12, xs: 12};
@@ -14,14 +15,6 @@ const SyntheticConfig = (): React.JSX.Element => {
     const currentTemplateAudioConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.audio);
     const dispatch: Dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect((): void => {
-        if (currentTemplateVideoConfig.duration > 1000)
-            dispatch(setCurrentTemplateVideoConfig({
-                ...currentTemplateVideoConfig,
-                duration: currentTemplateVideoConfig.duration / 1000
-            }));
-    }, []);
 
     return (
         <div className={'text-config app_none_user_select'}>
@@ -160,6 +153,12 @@ const SyntheticConfig = (): React.JSX.Element => {
                                     defaultValue={currentTemplateVideoConfig.duration}
                                     value={currentTemplateVideoConfig.duration}
                                     onChange={(e: React.ReactText): void => {
+                                        PostMessage.send({
+                                            type: 'SET_DURATION',
+                                            message: {
+                                                duration: e
+                                            }
+                                        });
                                         dispatch(setCurrentTemplateVideoConfig({
                                             ...currentTemplateVideoConfig,
                                             duration: e as number
