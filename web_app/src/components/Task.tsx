@@ -7,6 +7,8 @@ import YExtendTemplate from "./YExtendTemplate";
 import Hooks from "../bin/Hooks";
 import PostMessage from "../lib/PostMessage";
 import Request from "../lib/Request";
+import {useTranslation} from "react-i18next";
+import Notification from "../lib/Notification";
 import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 
 export interface ICreateTaskRef {
@@ -28,6 +30,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
         currentTemplateConfig,
         saveAsCustomTemplate: false
     });
+    const {t} = useTranslation();
 
     const open = (): void => setVisible(!visible);
 
@@ -77,6 +80,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
             Request.createTask({
                 ...requestData
             }).then((): void => {
+                Notification.message(t('createTaskSuccess'), 'success');
                 setVisible(false);
             });
         });
@@ -134,8 +138,10 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
     return (
         <React.Fragment>
             <Modal
-                title={'创建合成'}
+                title={t('createTask')}
                 visible={visible}
+                confirmText={t('confirm')}
+                cancelText={t('cancel')}
                 onCancel={(): void => setVisible(false)}
                 onConfirm={(): void => {
                     createTask();
@@ -147,11 +153,12 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                     labelPlacement="top"
                 >
                     <FormItem
-                        label={'任务名称'}
+                        label={t('taskName')}
                         valueType={'string'}
                     >
                         <Input
                             value={fromValue.taskName}
+                            placeholder={t('pleaseInput')}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 const {target: {value}} = e;
 
@@ -166,10 +173,11 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                         <FormItem
                             required
                             valueType={'string'}
-                            label={'自定义模板名称'}
+                            label={t('customTemplateName')}
                         >
                             <Input
                                 value={fromValue.customTemplateName}
+                                placeholder={t('pleaseInput')}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                     const {target: {value}} = e;
 
@@ -183,10 +191,11 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                         <FormItem
                             required
                             valueType={'string'}
-                            label={'自定义模板介绍'}
+                            label={t('customTemplateDesc')}
                         >
                             <Input
                                 value={fromValue.customTemplateDesc}
+                                placeholder={t('pleaseInput')}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                     const {target: {value}} = e;
 
@@ -199,7 +208,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                         </FormItem>
                     </YExtendTemplate>
                     <YExtendTemplate show={false}>
-                        <FormItem label={'是否保存为自定义模板'}>
+                        <FormItem label={t('saveAsCustomTemplate')}>
                             <Switch
                                 checked={fromValue.saveAsCustomTemplate}
                                 onChange={(e: boolean): void => {

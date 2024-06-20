@@ -97,5 +97,13 @@
   "serviceConnectClose": "合成服务连接丢失，正在尝试重连...",
   "unknown": "未知",
   "synthesisSuccess": "合成完毕",
-  "synthesisRead": "合成就绪"
+  "synthesisRead": "合成就绪",
+  "taskPending": "正在合成中...",
+  "synthesisError": "合成失败",
+  "createTaskSuccess": "创建合成任务成功",
+  "createTask": "创建合成任务",
+  "taskName": "任务名称",
+  "saveAsCustomTemplate": "是否保存为自定义模板",
+  "customTemplateName": "自定义模板名称",
+  "customTemplateDesc": "自定义模板介绍"
 }

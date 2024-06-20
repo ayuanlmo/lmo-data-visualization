@@ -97,5 +97,13 @@
   "serviceConnectClose": "合成サービスの接続が失われました、再接続を試みています...",
   "unknown": "不明",
   "synthesisSuccess": "合成完了",
-  "synthesisRead": "合成準備完了"
+  "synthesisRead": "合成準備完了",
+  "taskPending": "合成中...",
+  "synthesisError": "合成失敗",
+  "createTaskSuccess": "合成タスクの作成に成功しました",
+  "createTask": "Create synthesis task",
+  "taskName": "Task name",
+  "saveAsCustomTemplate": "Save as custom template",
+  "customTemplateName": "Custom template name",
+  "customTemplateDesc": "Custom template description"
 }

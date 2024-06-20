@@ -97,5 +97,13 @@
   "serviceConnectClose": "합성 서비스 연결이 끊어졌으며, 재연결을 시도 중입니다...",
   "unknown": "알 수 없음",
   "synthesisSuccess": "합성 완료",
-  "synthesisRead": "합성 준비 완료"
+  "synthesisRead": "합성 준비 완료",
+  "taskPending": "합성 중...",
+  "synthesisError": "합성 실패",
+  "createTaskSuccess": "합성 작업 생성 성공",
+  "createTask": "합성 작업 생성",
+  "taskName": "작업 이름",
+  "saveAsCustomTemplate": "사용자 정의 템플릿으로 저장하시겠습니까?",
+  "customTemplateName": "사용자 정의 템플릿 이름",
+  "customTemplateDesc": "사용자 정의 템플릿 설명"
 }

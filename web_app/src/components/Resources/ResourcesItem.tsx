@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {Dropdown, EllipsisTooltip, Loading} from "@hi-ui/hiui";
+import {Dropdown, EllipsisTooltip, Loading, Tag} from "@hi-ui/hiui";
 import {DeleteOutlined, DownloadOutlined} from "@hi-ui/icons";
 import {useTranslation} from "react-i18next";
 import YExtendTemplate from "../YExtendTemplate";
 import {ReactState} from "../../types/ReactTypes";
 import Utils from "../../utils";
+import "./style.scss";
+import errorImage from "../../svg/error";
+import THTMLTemplate from "../GlobalComponent/components/THTMLTemplate";
 
 export interface IResourcesItem {
     id: string;
@@ -13,6 +16,8 @@ export interface IResourcesItem {
     createTime: string;
     gifPath: string;
     videoCover: string;
+    clarity: string;
+    status: string;
 }
 
 export interface IResourcesItemProps {
@@ -27,6 +32,8 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
     const {t} = useTranslation();
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
     const [isLoading, setIsLoading]: ReactState<boolean> = useState<boolean>(true);
+    const isPending: boolean = data.status === 'pending';
+    const isError: boolean = data.status === 'error';
     const downloadTypes = [
         {
             id: 0,
@@ -44,7 +51,12 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
     }, [isHover]);
 
     return (
-        <div className={'c-resources-item app_position_relative'}>
+        <div
+            className={'c-resources-item app_position_relative'}
+            onMouseLeave={(): void => {
+                setIsHover(false);
+            }}
+        >
             <YExtendTemplate show={isHover}>
                 <div
                     className={'c-resources-item-cover-box c-resources-item-mask app_position_absolute app_none_user_select app_cursor_pointer'}
@@ -97,29 +109,73 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
                     </div>
                 </div>
             </YExtendTemplate>
-            <div
-                className={'c-resources-item-cover-box app_cursor_pointer'}
-                onMouseEnter={(): void => {
-                    setIsHover(true);
-                }}
+            <Loading
+                visible={isPending}
+                content={t('taskPending')}
             >
-                <Loading visible={isLoading}>
-                    <img
-                        src={isHover ? `/api${data.gifPath}` : `/api${data.videoCover}`}
-                        alt={data.name ?? ''}
-                        onLoad={
-                            (): void => {
-                                setIsLoading(false);
-                            }
-                        }
-                    />
-                </Loading>
-            </div>
+                <div
+                    className={'c-resources-item-cover-box app_cursor_pointer'}
+                    onMouseEnter={(): void => {
+                        if (isPending || isError) return;
+
+                        setIsHover(true);
+                    }}
+                >
+                    <YExtendTemplate show={data.status === 'error'}>
+                        <div style={{
+                            padding: '1rem'
+                        }}>
+                            <Tag
+                                size={"sm"}
+                                shape="round"
+                                type="danger"
+                                appearance="line"
+                            >
+                                {t('synthesisError')}
+                            </Tag>
+                            <div style={{
+                                width: '100px',
+                                margin: 'auto'
+                            }}>
+                                <THTMLTemplate content={errorImage}/>
+                            </div>
+                        </div>
+                    </YExtendTemplate>
+                    <YExtendTemplate show={data.status === 'end'}>
+                        <Loading visible={isLoading}>
+                            <img
+                                src={isHover ? `/api${data.gifPath}` : `/api${data.videoCover}`}
+                                alt={data.name ?? ''}
+                                onLoad={
+                                    (): void => {
+                                        setIsLoading(false);
+                                    }
+                                }
+                            />
+                        </Loading>
+                    </YExtendTemplate>
+                </div>
+            </Loading>
             <div className={'c-resources-item-info'}>
                 <div className={'c-resources-item-info-content'}>
-                    <EllipsisTooltip className={'c-resources-item-info-title'}>
-                        {data.name}
-                    </EllipsisTooltip>
+                    <div className={'app_flex_box'}>
+                        <Tag
+                            size={"sm"}
+                            shape="round"
+                            type="default"
+                            appearance="solid"
+                        >
+                            {data.clarity === '1080P' ? 'FHD' : data.clarity.toUpperCase()}
+                        </Tag>
+                        <div style={{
+                            marginLeft: '.5rem',
+                            width: '180px'
+                        }}>
+                            <EllipsisTooltip className={'c-resources-item-info-title'}>
+                                {data.name}
+                            </EllipsisTooltip>
+                        </div>
+                    </div>
                     <div className={'c-resources-item-info-time'}>
                         {Utils.formatDate(Number(data.createTime))}
                     </div>

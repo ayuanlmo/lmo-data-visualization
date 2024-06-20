@@ -65,7 +65,7 @@ const Resources: React.ForwardRefExoticComponent<React.RefAttributes<IResourcesR
             title={t('resLib')}
             visible={visible}
             width={'1200px'}
-            height={'642px'}
+            height={'750px'}
             footer={false}
             onClose={(): void => {
                 setVisible(false);
@@ -105,7 +105,7 @@ const Resources: React.ForwardRefExoticComponent<React.RefAttributes<IResourcesR
                     width: '100%',
                     marginTop: '1.88rem',
                     marginBottom: '1.88rem',
-                    height: '400px',
+                    height: '510px',
                     overflowY: 'scroll',
                     overflowX: 'hidden'
                 }}
@@ -152,18 +152,21 @@ const Resources: React.ForwardRefExoticComponent<React.RefAttributes<IResourcesR
                         </Grid.Row>
                 }
             </div>
-            <div className={'c-select-file-pagination'}>
-                <Pagination
-                    pageSize={query.pageSize}
-                    total={pageTotal}
-                    onChange={(...args) => {
-                        setQuery({
-                            ...query,
-                            pageIndex: args[0]
-                        });
-                    }}
-                />
-            </div>
+            <Grid.Row justify={'flex-end'}>
+                <Grid.Col>
+                    <Pagination
+                        pageSize={query.pageSize}
+                        total={pageTotal}
+                        onChange={(...args) => {
+                            setQuery({
+                                ...query,
+                                pageIndex: args[0]
+                            });
+                            getList();
+                        }}
+                    />
+                </Grid.Col>
+            </Grid.Row>
         </Modal>
     );
 });

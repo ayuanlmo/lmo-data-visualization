@@ -97,5 +97,13 @@
   "serviceConnectClose": "Synthesis service connection lost, attempting to reconnect...",
   "unknown": "Unknown",
   "synthesisSuccess": "Synthesis completed",
-  "synthesisRead": "Synthesis ready"
+  "synthesisRead": "Synthesis ready",
+  "taskPending": "Synthesizing...",
+  "synthesisError": "Synthesis failed",
+  "createTaskSuccess": "Create synthesis task successfully",
+  "createTask": "合成タスクの作成",
+  "taskName": "タスク名",
+  "saveAsCustomTemplate": "カスタムテンプレートとして保存しますか？",
+  "customTemplateName": "カスタムテンプレート名",
+  "customTemplateDesc": "カスタムテンプレートの説明"
 }
