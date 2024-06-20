@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {copyFileSync, existsSync, mkdirSync, readdirSync, writeFileSync} from "node:fs";
+import {copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync} from "node:fs";
 import path from "path";
 import Utils from "../../utils";
 import {ResourcesModel, TemplateModel} from "../dataBase";
@@ -34,6 +34,7 @@ export default class Task {
             const dirPath: string = path.resolve(`./_data/static/public/templates/${templatePathName}`);
             const templateStaticPath: string = `/static/templates/${templatePathName}`;
             const dbId: string = require('uuid').v4();
+            const serverHttpUrl: string = `http://localhost:${AppConfig.__SERVER_PORT}`;
 
             if (existsSync(originalTemplate)) {
                 if (!existsSync(dirPath))
@@ -54,10 +55,27 @@ export default class Task {
                 writeFileSync(path.resolve(dirPath, 'data.json'), JSON.stringify(currentTemplateConfig?.data));
 
                 try {
+                    if (currentTemplateConfig.config.audio.full) return;
+                    if (currentTemplateConfig.config.audio.src !== '') {
+                        const originHtmlContent: string = readFileSync(path.resolve(dirPath, 'index.html')).toString();
+                        const audioElement: string = `<audio src="${serverHttpUrl}${currentTemplateConfig.config.audio.src}" volume="${Number(currentTemplateConfig.config.audio.volume) / 100}"></audio>`;
+                        const audioTag: string = `<!--__LMO_SERVER_AUDIO_RENDER_TAG-->`;
+                        let afterHtmlContent: string = '';
+                        if (originHtmlContent.includes(audioTag))
+                            originHtmlContent.replace(audioTag, audioElement);
+                        else
+                            afterHtmlContent = originHtmlContent + '\n' + audioElement;
+
+                        writeFileSync(path.resolve(dirPath, 'index.html'), afterHtmlContent);
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+                try {
                     (async (): Promise<void> => {
                         const taskConfig = {
                             id: dbId,
-                            path: `http://localhost:${AppConfig.__SERVER_PORT}${templateStaticPath}?__type=h`,
+                            path: `${serverHttpUrl}${templateStaticPath}?__type=h`,
                             duration: currentTemplateConfig.config.video.duration ?? 5000 as number,
                             ...Task.getVideoClarity(currentTemplateConfig.config.video.clarity ?? ''),
                             fps: currentTemplateConfig.config.video.fps ?? 30 as number,
