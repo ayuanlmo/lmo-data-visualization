@@ -100,6 +100,13 @@ UpLoadFilesModel.belongsTo(UpLoadFilesCategoryModel, {
             DB.sync().then(async (): Promise<void> => {
                 Cli.debug('Models synced successfully.');
                 await initDefaultData();
+                await ResourcesModel.update({
+                    status: 'error'
+                }, {
+                    where: {
+                        status: 'pending'
+                    }
+                });
             });
         })();
     } catch (error) {

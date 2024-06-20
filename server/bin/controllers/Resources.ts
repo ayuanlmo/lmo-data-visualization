@@ -20,7 +20,7 @@ export default class Resources {
                 name: {[Op.like]: `%${name}%`},
             },
             attributes: {
-                exclude: ['templatePath', 'url', 'template']
+                exclude: ['templatePath', 'url', 'template', 'taskConfig']
             },
             offset: (Number(pageIndex) - 1) * Number(pageIndex),
             limit: Number(pageSize)
