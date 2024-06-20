@@ -55,8 +55,8 @@ body {
 }
 
 #template {
-    width: 1920px;
-    height: 1080px;
+    width: 100vw;
+    height: 100vh;
 }
 
 #main-title {
@@ -64,6 +64,7 @@ body {
     position: absolute;
     left: 160px;
     top: 1.2rem;
+    z-index: 5;
 }
 
 #sub-title {
@@ -71,6 +72,7 @@ body {
     position: absolute;
     left: 368px;
     top: 35px;
+    z-index: 5;
 }
 
 #from-source {
@@ -78,6 +80,7 @@ body {
     left: 160px;
     top: 85px;
     position: absolute;
+    z-index: 5;
 }
 
 .text-value {

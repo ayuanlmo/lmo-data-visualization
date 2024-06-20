@@ -1,40 +1,79 @@
 import {useDebounce, useObserver} from "./utils.js";
 
-export default class TempLate {
-    constructor(conf) {
+const defaultEvent = {
+    // 其他配置更改
+    otherConfigChange: () => {
+    },
+    // 主题颜色更改
+    themeColorChange: () => {
+    }
+};
+
+class LmoTempLate {
+    constructor(conf, render, event = defaultEvent) {
         this.conf = conf;
+        this.renderFunc = render;
+        this.event = event;
+        this.isSynthesisMode = location.href.includes('__type=h');
         this.initDrag();
-        this.initDefaultTextStyle();
-        addEventListener('message', (e) => {
-            this.onMessage(e);
-        });
+        this.initViewStyle();
+        this.sendMessage('TEMPLATE_FULL_CONFIG', conf);
         this.initText();
+        this.initBackground();
+        this.fetchData();
+        if (!this.isSynthesisMode) {
+            addEventListener('message', (e) => {
+                this.onMessage(e);
+            }, conf);
+            document.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+            });
+        }
     }
 
+    tryRender() {
+        if (this.renderFunc) {
+            this.sendMessage('TEMPLATE_RENDER', 'RENDER');
+            (async () => {
+                try {
+                    await this.renderFunc?.();
+                } catch (e) {
+                    console.log(e);
+                    this.sendMessage('TEMPLATE_RENDER_ERROR', e.message);
+                    if (!this.isSynthesisMode)
+                        throw e;
+                }
+            })();
+        }
+    }
 
     fetchData() {
-        fetch('data.json').then(res => {
-            return res.json();
-        }).then(json => {
-
-        });
+        if (this.isSynthesisMode)
+            this.tryRender();
+        else
+            fetch('data.json')
+                .then(res => res.json())
+                .then(json => {
+                    this.sendMessage('TEMPLATE_DATA', json);
+                    this.conf.data = json;
+                    this.tryRender();
+                });
     }
 
     initText(data) {
-        if (!data) {
-            Object.values(this.conf.config.text).forEach(text => {
-                this.initText(text);
-            });
-        } else {
+        if (!data)
+            Object.values(this.conf.config.text).forEach(text => this.initText(text));
+        else
             this.conf.config.text[data.key] = data;
-        }
 
         const elements = {
             'main-title': {
                 value: this.conf.config.text.mainTitle, style: this.conf.config.text.mainTitle
-            }, 'sub-title': {
+            },
+            'sub-title': {
                 value: this.conf.config.text.subTitle, style: this.conf.config.text.subTitle
-            }, 'from-source': {
+            },
+            'from-source': {
                 value: this.conf.config.text.fromSource, style: this.conf.config.text.fromSource
             }
         };
@@ -42,6 +81,7 @@ export default class TempLate {
         Object.entries(elements).forEach(([id, {value, style}]) => {
             const element = document.getElementById(id);
             const textValue = element.querySelector('.text-value');
+
             setValueStyle(textValue, value);
             setStyle(element, style);
         });
@@ -59,6 +99,7 @@ export default class TempLate {
             el.style.width = config.width + 'px';
             el.style.height = config.height + 'px';
             el.style.display = config.display ? 'block' : 'none';
+            el.setAttribute('contenteditable', true);
         }
     }
 
@@ -77,9 +118,8 @@ export default class TempLate {
             y: parseInt(y.substring(0, y.length - 2)),
         }
 
-        if (subTextValueEl) {
+        if (subTextValueEl)
             conf.value = subTextValueEl.textContent
-        }
 
         this.conf.config.text[key] = {
             ...this.conf.config.text[key], ...conf, key: key,
@@ -90,6 +130,8 @@ export default class TempLate {
     }
 
     sendMessage(type = '', message = '') {
+        if (this.isSynthesisMode) return;
+
         parent.postMessage({
             type, message
         }, location.origin);
@@ -98,20 +140,67 @@ export default class TempLate {
     onMessage(e) {
         if (e.origin !== origin) return;
         const {data} = e;
-        if ('message' in data && 'message' in data) {
-            const {
-                type, message
-            } = data;
 
-            if (type === 'SET_TEXT_CONFIG') this.initText(message);
+        if ((!'message' in data) && (!'type' in data)) return;
+
+        const {
+            type,
+            message
+        } = data;
+
+        switch (type) {
+            // 设置文字配置
+            case 'SET_TEXT_CONFIG':
+                this.initText(message);
+                break;
+            case 'SET_DURATION':
+                this.conf.config.video.duration = message.duration;
+                this.tryRender();
+                break;
+            // 设置数据
+            case 'SET_DATA':
+                this.conf.data = message;
+                this.tryRender();
+                break;
+            // 设置背景图片
+            case 'SET_BACKGROUND_IMAGE':
+                this.conf.config.background = message;
+                this.initBackground();
+                break;
+            // 设置其他配置
+            case 'SET_OTHER_CONFIG':
+                this.event?.otherConfigChange?.(message);
+                break;
+            // 主题颜色
+            case 'SET_THEME_COLOR':
+                this.conf.config.theme.value = message;
+                this.event?.themeColorChange?.(message);
+                break;
+            // 渲染
+            case 'RENDER':
+                this.tryRender();
+                break;
+            // 获取数据
+            case 'GET_TEMPLATE_DATA':
+                this.sendMessage('GET_TEMPLATE_DATA', this.conf.data);
+                break;
+            // 获取配置
+            case 'GET_CONFIG':
+                this.sendMessage('GET_CONFIG', this.conf);
+                break;
+            default:
+                break;
         }
     }
 
     initDrag() {
-        const elements = ['main-title', 'sub-title', 'from-source'];
+        if (this.isSynthesisMode) return;
+
         document.getElementById('main-title').setAttribute('data-name', 'mainTitle');
         document.getElementById('sub-title').setAttribute('data-name', 'subTitle');
         document.getElementById('from-source').setAttribute('data-name', 'fromSource');
+
+        const elements = ['main-title', 'sub-title', 'from-source'];
         const classListObServerConfig = {attributes: true, attributeFilter: ['class']};
         const initInteract = (element) => {
             initSquare(element);
@@ -125,9 +214,10 @@ export default class TempLate {
                 __this.conf.config.text[elData].y = y;
 
                 __this.sendTemplateSelectTextConfig(el);
-            }, 100)
+            }, 100);
 
             let x = 0, y = 0, angle = 0, scale = 1;
+
             interact(element)
                 .draggable({
                     inertia: false, modifiers: [interact.modifiers.restrictRect({
@@ -180,8 +270,7 @@ export default class TempLate {
             const handleEvent = (e) => {
 
                 const inputHandleEvent = () => {
-                    if (e.type === 'click')
-                        this.sendTemplateSelectTextConfig(e.target.classList.contains('text-value') ? e.target.parentElement : e.target);
+                    if (e.type === 'click') this.sendTemplateSelectTextConfig(e.target.classList.contains('text-value') ? e.target.parentElement : e.target);
                 }
 
                 if (e.type === 'compositionstart') {
@@ -189,8 +278,7 @@ export default class TempLate {
                     return;
                 }
                 if (e.type === 'input') {
-                    if (!isInputChinese)
-                        return inputHandleEvent();
+                    if (!isInputChinese) return inputHandleEvent();
                 }
                 if (e.type === 'compositionend') {
                     isInputChinese = false;
@@ -224,6 +312,7 @@ export default class TempLate {
 
         elements.map(i => {
             const el = document.getElementById(i);
+
             initInteract(el);
             initEvent(el);
             useObserver((e) => {
@@ -234,8 +323,10 @@ export default class TempLate {
         function initSquare(element) {
             function createSquare(className) {
                 const square = document.createElement('div');
+
                 square.classList.add('square');
                 square.classList.add(className);
+
                 return square;
             }
 
@@ -278,9 +369,61 @@ export default class TempLate {
         }
     }
 
-    initDefaultTextStyle() {
-        const template = document.getElementById('template');
+    initBackground() {
+        const {
+            type = '',
+            color = '',
+            image = '',
+            arrangement = ''
+        } = this.conf.config.background;
+        const templateDom = document.getElementById('template');
 
-        template.style = 'width: 1920px;height: 1080px;';
+        if (type === '')
+            templateDom.style.background = '#fff';
+
+        if (type === 'color' || type === 'theme')
+            templateDom.style.background = color === '' ? '#fff' : color;
+
+        if (type === 'image') {
+            if (image.includes('data:image') && image.includes('base64'))
+                templateDom.style.backgroundImage = "url(" + image + ")";
+            else
+                templateDom.style.backgroundImage = "url(" + "/api/" + image + ")";
+
+            templateDom.style.backgroundRepeat = 'no-repeat';
+
+            if (arrangement === 'cover')
+                templateDom.style.backgroundSize = 'cover';
+
+            if (arrangement === 'left')
+                templateDom.style.backgroundPositionX = 'left';
+
+            if (arrangement === 'right')
+                templateDom.style.backgroundPositionX = 'right';
+        }
+    }
+
+    initViewStyle() {
+        const body = document.body;
+        const {clarity} = this.conf.config.video;
+
+        if (typeof clarity !== 'string')
+            body.style = 'width: 1920px;height: 1080px;';
+
+        switch (clarity) {
+            case '1080P':
+                body.style = 'width: 1920px;height: 1080px;';
+                break;
+            case '2K':
+                body.style = 'width: 2560px;height: 1440px;';
+                break;
+            case '4K':
+                body.style = 'width: 4096px;height: 2160px;';
+                break;
+            default:
+                body.style = 'width: 1920px;height: 1080px;';
+        }
     }
 }
+
+export default LmoTempLate;
