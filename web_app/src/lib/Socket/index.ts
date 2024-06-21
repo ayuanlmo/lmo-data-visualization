@@ -12,19 +12,37 @@ class Socket {
         this.ws && this.ws.send(message);
     }
 
+    public addMessageEventListener(listener: (e: MessageEvent) => void): void {
+        this.ws && this.ws.addEventListener('message', listener);
+    }
+
+    public removeMessageEventListener(listener: (e: MessageEvent) => void): void {
+        this.ws && this.ws.removeEventListener('message', listener);
+    }
+
     private init(): void {
         this.ws && this.ws.close();
         this.ws = new WebSocket(`${location.href.includes('https') ? 'wss' : 'ws'}://${location.host}/connect`);
 
         this.ws.onopen = (): void => {
             this.sendMessage('ping');
+
+            setInterval((): void => {
+                this.heartbeat();
+            }, 10000);
         };
         this.ws.onclose = (): void => {
-            this.init();
+            setTimeout((): void => {
+                this.init();
+            }, 5000);
         };
         this.ws.onmessage = (e: MessageEvent): void => {
             this.onMessage(e.data);
         };
+    }
+
+    private heartbeat(): void {
+        this.ws && this.ws.send('ping');
     }
 
     private onMessage(message: string): void {

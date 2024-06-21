@@ -131,6 +131,10 @@ const Resources: React.ForwardRefExoticComponent<React.RefAttributes<IResourcesR
                                                 onPlay={(): void => {
                                                     playerRef.current?.play(`${i.filePath}`);
                                                 }}
+                                                onRefresh={(): void => {
+                                                    setList([]);
+                                                    getList();
+                                                }}
                                                 onDelete={(id: string): void => {
                                                     Modal.confirm({
                                                         title: t('deleteConfirm'),

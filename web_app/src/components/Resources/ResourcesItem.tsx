@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Dropdown, EllipsisTooltip, Loading, Tag} from "@hi-ui/hiui";
+import {Dropdown, EllipsisTooltip, Loading, Progress, Tag} from "@hi-ui/hiui";
 import {DeleteOutlined, DownloadOutlined} from "@hi-ui/icons";
 import {useTranslation} from "react-i18next";
 import YExtendTemplate from "../YExtendTemplate";
@@ -8,6 +8,8 @@ import Utils from "../../utils";
 import "./style.scss";
 import errorImage from "../../svg/error";
 import THTMLTemplate from "../GlobalComponent/components/THTMLTemplate";
+import Hooks from "../../bin/Hooks";
+import useWebSocketMessageListener = Hooks.useWebSocketMessageListener;
 
 export interface IResourcesItem {
     id: string;
@@ -25,15 +27,19 @@ export interface IResourcesItemProps {
     onPlay?: (item: IResourcesItem) => void;
     onDownload?: (item: IResourcesItem, type: 'video' | 'gif') => void;
     onDelete?: (id: string) => void;
+    onRefresh?: () => void;
 }
 
 const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
-    const {data, onDownload, onPlay, onDelete} = props;
+    const {data, onDownload, onPlay, onDelete, onRefresh} = props;
     const {t} = useTranslation();
     const [isHover, setIsHover]: ReactState<boolean> = useState<boolean>(false);
     const [isLoading, setIsLoading]: ReactState<boolean> = useState<boolean>(true);
+    const [isIndeterminate, setIsIndeterminate]: ReactState<boolean> = useState<boolean>(true);
+    const [progress, setProgress]: ReactState<number> = useState<number>(0);
     const isPending: boolean = data.status === 'pending';
     const isError: boolean = data.status === 'error';
+    const isEnd: boolean = data.status === 'end';
     const downloadTypes = [
         {
             id: 0,
@@ -44,6 +50,27 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
             title: "GIF"
         }
     ];
+
+    useWebSocketMessageListener('TASK_PROGRESS_CHANGE', (_data: {
+        id: string;
+        progress: number;
+    }): void => {
+        if (_data.id === data.id) {
+            setProgress(_data.progress);
+            setIsIndeterminate(false);
+            if (_data.progress === 100)
+                setTimeout((): void => {
+                    onRefresh && onRefresh();
+                }, 2000);
+        }
+    });
+
+    useEffect((): void => {
+        if (isEnd) {
+            setProgress(100);
+            setIsIndeterminate(false);
+        }
+    }, []);
 
     useEffect((): void => {
         if (isHover && !isLoading)
@@ -157,6 +184,21 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
                 </div>
             </Loading>
             <div className={'c-resources-item-info'}>
+                <div
+                    className={'app_position_relative'}
+                    style={{
+                        height: '4px',
+                        top: '-15px',
+                        zIndex: '5'
+                    }}>
+                    <YExtendTemplate show={isPending}>
+                        <Progress
+                            indeterminate={isIndeterminate}
+                            showInfo={false}
+                            percent={progress}
+                        />
+                    </YExtendTemplate>
+                </div>
                 <div className={'c-resources-item-info-content'}>
                     <div className={'app_flex_box'}>
                         <Tag

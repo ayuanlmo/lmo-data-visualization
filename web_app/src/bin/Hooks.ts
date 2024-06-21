@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import MyStorage from "../lib/Storage";
 import Utils from "../utils";
 import {TTemplateMessageType} from "../types/TemplateMessage";
+import Socket from "../lib/Socket";
 
 export namespace Hooks {
     const __UNDEF: undefined = void false;
@@ -77,6 +78,25 @@ export namespace Hooks {
             addEventListener('message', handler);
 
             return (): void => removeEventListener('message', handler);
+        }, [cb]);
+    };
+
+    export const useWebSocketMessageListener = <T extends object, M extends string>(type: M, cb: (msg: T) => void): void => {
+        useEffect((): () => void => {
+            const handler = (e: MessageEvent): void => {
+                if (e.data.includes('pong')) return;
+
+                const data = JSON.parse(e.data);
+
+                data.type === type && cb(data.message);
+            };
+
+            Socket.addMessageEventListener(handler);
+
+            return (): void => {
+                Socket.removeMessageEventListener(handler);
+            };
+
         }, [cb]);
     };
 }
