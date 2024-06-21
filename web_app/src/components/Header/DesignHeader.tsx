@@ -3,6 +3,8 @@ import {Button, PopConfirm} from "@hi-ui/hiui";
 import {useTranslation} from "react-i18next";
 import GlobalComponent from "../GlobalComponent";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import {initCurrentTemplateConfigData} from "../../lib/Store/AppStore";
+import {useDispatch} from "react-redux";
 
 export interface IDesignHeaderProps {
     readonly onSave?: () => void;
@@ -17,6 +19,7 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
         onSynthesis
     }: IDesignHeaderProps = props;
     const navigate: NavigateFunction = useNavigate();
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     return (
@@ -26,7 +29,10 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
                 confirmText={t('continue')}
                 cancelText={t('cancel')}
                 onConfirm={
-                    (): void => navigate('/')
+                    (): void => {
+                        dispatch(initCurrentTemplateConfigData());
+                        navigate('/');
+                    }
                 }
             >
                 <div className={'data-visualization-design-header-black app_flex_box app_cursor_pointer'}>

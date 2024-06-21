@@ -1,5 +1,38 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+const defaultCurrentTemplateConfigData = {
+    data: [],
+    config: {
+        text: {},
+        theme: {
+            type: '',
+            configs: [],
+            value: []
+        },
+        background: {
+            type: '',
+            color: '',
+            image: '',
+            arrangement: ''
+        },
+        video: {
+            duration: 5000,
+            fps: 30,
+            clarity: '1080P'
+        },
+        audio: {
+            path: '',
+            full: false,
+            volume: 100
+        }
+    },
+    otherConfig: {
+        label: '',
+        configs: [],
+        values: {}
+    }
+};
+
 const AppStore = createSlice({
     name: 'app',
     initialState: {
@@ -13,39 +46,16 @@ const AppStore = createSlice({
             type: 0
         },
         currentTemplateConfig: {
-            data: [],
-            config: {
-                text: {},
-                theme: {
-                    type: '',
-                    configs: [],
-                    value: []
-                },
-                background: {
-                    type: '',
-                    color: '',
-                    image: '',
-                    arrangement: ''
-                },
-                video: {
-                    duration: 5000,
-                    fps: 30,
-                    clarity: '1080P'
-                },
-                audio: {
-                    path: '',
-                    full: false,
-                    volume: 100
-                }
-            },
-            otherConfig: {
-                label: '',
-                configs: [],
-                values: {}
-            }
+            ...defaultCurrentTemplateConfigData
         }
     },
     reducers: {
+        // 初始化模板配置文件
+        initCurrentTemplateConfigData(state): void {
+            state.currentTemplateConfig = {
+                ...defaultCurrentTemplateConfigData
+            };
+        },
         // 设置当前模板
         setCurrentTemplate(state, {payload}): void {
             state.currentTemplate = payload;
@@ -84,7 +94,8 @@ export const {
     setCurrentTemplateOtherConfigValues,
     setCurrentTemplateThemeConfig,
     setCurrentTemplateAudioConfig,
-    setCurrentTemplateVideoConfig
+    setCurrentTemplateVideoConfig,
+    initCurrentTemplateConfigData
 } = AppStore.actions;
 
 export default AppStore.reducer;

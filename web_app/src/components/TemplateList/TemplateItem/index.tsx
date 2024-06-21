@@ -14,7 +14,7 @@ import {
 } from "@hi-ui/hiui";
 import Request from "../../../lib/Request";
 import Notification from "../../../lib/Notification";
-import {setCurrentTemplate} from "../../../lib/Store/AppStore";
+import {initCurrentTemplateConfigData, setCurrentTemplate} from "../../../lib/Store/AppStore";
 import {useDispatch} from "react-redux";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 import {Dispatch} from "@reduxjs/toolkit";
@@ -192,6 +192,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                     (): void => {
                         Storage.set('current_template', data);
                         dispatch(setCurrentTemplate(data));
+                        dispatch(initCurrentTemplateConfigData());
                         navigate('/design');
                     }
                 }
