@@ -56,7 +56,7 @@ export default class Task {
 
                 try {
                     if (currentTemplateConfig.config.audio.full) return;
-                    if (currentTemplateConfig.config.audio.src !== '') {
+                    if (currentTemplateConfig.config.audio.path !== '') {
                         const originHtmlContent: string = readFileSync(path.resolve(dirPath, 'index.html')).toString();
                         const audioElement: string = `<audio src="${serverHttpUrl}${currentTemplateConfig.config.audio.src}" volume="${Number(currentTemplateConfig.config.audio.volume) / 100}"></audio>`;
                         const audioTag: string = `<!--__LMO_SERVER_AUDIO_RENDER_TAG-->`;
