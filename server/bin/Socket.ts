@@ -84,10 +84,17 @@ class SocketClient {
     }
 
     private onData = (msg: Buffer): void => {
-        if (msg.toString() !== 'pong' || (!msg.includes('pong'))) {
+        if (!msg.toString().includes('pong')) {
             try {
                 const {data, type} = JSON.parse(msg.toString());
 
+                // 进度监控
+                if (type === 'TASK_PROGRESS_CHANGE') {
+                    WebSocketServer.sendMessage(JSON.stringify({
+                        type: type,
+                        message: data
+                    }))
+                }
                 // 合成结束
                 if (type === 'TASK_END') {
                     ResourcesModel.update({

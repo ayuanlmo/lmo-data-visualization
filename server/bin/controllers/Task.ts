@@ -62,7 +62,7 @@ export default class Task {
                         const audioTag: string = `<!--__LMO_SERVER_AUDIO_RENDER_TAG-->`;
                         let afterHtmlContent: string = '';
                         if (originHtmlContent.includes(audioTag))
-                            originHtmlContent.replace(audioTag, audioElement);
+                            afterHtmlContent = originHtmlContent.replace(audioTag, audioElement);
                         else
                             afterHtmlContent = originHtmlContent + '\n' + audioElement;
 

@@ -28,14 +28,16 @@ export default class HttpServer {
         this.WsApp = require('express-ws')(this.App) as WithWebsocketMethod;
         this.WsPool = this.WsApp?.getWss?.(AppConfig.__SOCKET_CONNECT) as Array<IWsApp>;
         const _: any = global;
-        
+
         _.WebSocketPool = this.WsApp;
         this.onLineUsers = 0;
         this.init();
     }
 
     private init(): void {
-        this.App.use(Express.json());
+        this.App.use(Express.json({
+            limit: "5mb"
+        }));
         this.App.use((require('cors')()));
         this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
             this.onLineUsers++;

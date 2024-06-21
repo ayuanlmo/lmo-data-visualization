@@ -91,6 +91,9 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                 src={src}
                 alt={alt}
                 className={isHover ? 'img-active' : ''}
+                style={{
+                    width: "420px"
+                }}
                 onLoad={
                     (): void => {
                         setGifLoading(false);
