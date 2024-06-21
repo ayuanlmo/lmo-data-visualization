@@ -95,6 +95,13 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                 config: {
                     ...currentTemplateConfig.config,
                     text: data.config.text
+                },
+                otherConfig: {
+                    ...currentTemplateConfig.otherConfig,
+                    values: {
+                        ...currentTemplateConfig.otherConfig.values,
+                        ...data.otherConfig.values
+                    }
                 }
             }
         });
