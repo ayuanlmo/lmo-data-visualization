@@ -36,7 +36,6 @@ function ColorConfig(): React.JSX.Element {
             ...currentTemplateConfig,
             ...data
         }));
-        sendMessage();
     };
     const getDefaultColor = (): Array<string> => {
         const {type, value} = currentTemplateConfig;
@@ -61,7 +60,7 @@ function ColorConfig(): React.JSX.Element {
 
     useEffect((): void => {
         sendMessage();
-    }, [themeType]);
+    }, [currentTemplateConfig]);
 
     useEffect((): void => {
         setThemeConfigs([
