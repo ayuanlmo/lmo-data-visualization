@@ -10,10 +10,11 @@ const defaultEvent = {
 };
 
 class LmoTempLate {
-    constructor(conf, render, event = defaultEvent) {
+    constructor(conf, render, event = defaultEvent, templateContext) {
         this.conf = conf;
         this.renderFunc = render;
         this.event = event;
+        this.templateContext = templateContext;
         this.isSynthesisMode = location.href.includes('__type=h');
         this.initDrag();
         this.initViewStyle();
@@ -34,11 +35,11 @@ class LmoTempLate {
     tryRender() {
         if (this.renderFunc) {
             this.sendMessage('TEMPLATE_RENDER', 'RENDER');
+            this.event?.themeColorChange?.(this.conf.config.theme, this.templateContext, this);
             (async () => {
                 try {
-                    await this.renderFunc?.();
+                    await this.renderFunc?.(this.templateContext);
                 } catch (e) {
-                    console.log(e);
                     this.sendMessage('TEMPLATE_RENDER_ERROR', e.message);
                     if (!this.isSynthesisMode)
                         throw e;
@@ -48,16 +49,13 @@ class LmoTempLate {
     }
 
     fetchData() {
-        if (this.isSynthesisMode)
-            this.tryRender();
-        else
-            fetch('data.json')
-                .then(res => res.json())
-                .then(json => {
-                    this.sendMessage('TEMPLATE_DATA', json);
-                    this.conf.data = json;
-                    this.tryRender();
-                });
+        fetch('data.json')
+            .then(res => res.json())
+            .then(json => {
+                this.sendMessage('TEMPLATE_DATA', json);
+                this.conf.data = json;
+                this.tryRender();
+            });
     }
 
     initText(data) {
@@ -169,12 +167,18 @@ class LmoTempLate {
                 break;
             // 设置其他配置
             case 'SET_OTHER_CONFIG':
-                this.event?.otherConfigChange?.(message);
+                this.conf.otherConfig.values = {
+                    ...this.conf.otherConfig.values, ...message
+                }
+                this.event?.otherConfigChange?.(message, this.templateContext);
                 break;
             // 主题颜色
             case 'SET_THEME_COLOR':
-                this.conf.config.theme.value = message;
-                this.event?.themeColorChange?.(message);
+                this.conf.config.theme = {
+                    ...this.conf.config.theme,
+                    ...message
+                };
+                this.event?.themeColorChange?.(message, this.templateContext, this);
                 break;
             // 渲染
             case 'RENDER':
