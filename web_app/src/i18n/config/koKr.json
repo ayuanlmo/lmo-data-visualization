@@ -105,5 +105,7 @@
   "taskName": "작업 이름",
   "saveAsCustomTemplate": "사용자 정의 템플릿으로 저장하시겠습니까?",
   "customTemplateName": "사용자 정의 템플릿 이름",
-  "customTemplateDesc": "사용자 정의 템플릿 설명"
+  "customTemplateDesc": "사용자 정의 템플릿 설명",
+  "about": "관하여",
+  "openSourceComponentLicense": "오픈 소스 구성 요소 라이선스"
 }

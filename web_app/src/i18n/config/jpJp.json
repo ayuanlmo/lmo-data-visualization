@@ -101,9 +101,11 @@
   "taskPending": "合成中...",
   "synthesisError": "合成失敗",
   "createTaskSuccess": "合成タスクの作成に成功しました",
-  "createTask": "Create synthesis task",
-  "taskName": "Task name",
-  "saveAsCustomTemplate": "Save as custom template",
-  "customTemplateName": "Custom template name",
-  "customTemplateDesc": "Custom template description"
+  "createTask": "合成タスクの作成",
+  "taskName": "タスク名",
+  "saveAsCustomTemplate": "カスタムテンプレートとして保存しますか？",
+  "customTemplateName": "カスタムテンプレート名",
+  "customTemplateDesc": "カスタムテンプレートの説明",
+  "about": "について",
+  "openSourceComponentLicense": "オープンソースコンポーネントのライセンス"
 }

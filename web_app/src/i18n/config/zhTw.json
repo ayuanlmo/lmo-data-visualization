@@ -105,5 +105,7 @@
   "taskName": "任務名稱",
   "saveAsCustomTemplate": "是否保存為自定義模板",
   "customTemplateName": "自定義模板名稱",
-  "customTemplateDesc": "自定義模板介紹"
+  "customTemplateDesc": "自定義模板介紹",
+  "about": "關於",
+  "openSourceComponentLicense": "開源元件許可"
 }

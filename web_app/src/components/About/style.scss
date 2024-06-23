@@ -1,0 +1,36 @@
+@import "../../style/theme.scss";
+
+.lmo-app-about {
+  margin-top: 3rem;
+  text-align: center;
+
+  .app-logo {
+    img {
+      width: 6.25rem;;
+    }
+  }
+
+  .text {
+    color: #A5A5A5;
+  }
+
+  .app-name {
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .github-icon {
+    width: 2rem;
+  }
+
+}
+
+.dark-mode {
+  .lmo-app-about {
+    .app-name {
+      color: $__primary-high-bg-color-light;
+    }
+  }
+}
