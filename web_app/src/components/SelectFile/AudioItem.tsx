@@ -23,8 +23,6 @@ export interface IAudioItem extends IImageItem {
     cover: string | null;
 }
 
-let timer: any = null;
-
 const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
     const {
         onPlay,
@@ -52,9 +50,12 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
         const mx: number = elRef.current?.getBoundingClientRect().left ?? 0;
         const rw: number = elRef.current?.offsetWidth ?? 0;
         const bodyMousemove = (evt: MouseEvent): void => {
+            const value: number = Number((Math.min(1, Math.max(0, (evt.clientX - mx) / rw)) * 100).toFixed(0));
+            
             evt.preventDefault();
             evt.stopPropagation();
-            setCurrentProgress(Number((Math.min(1, Math.max(0, (evt.clientX - mx) / rw)) * 100).toFixed(0)));
+            setCurrentProgress(value);
+            progressChange && progressChange(value);
         };
         const bodyMouseup = (e: MouseEvent): void => {
             e.preventDefault();
@@ -73,14 +74,6 @@ const AudioItem = (props: IAudioItemProps): React.JSX.Element => {
         if (playing && id === item.id)
             setCurrentProgress(currentSchedule);
     }, [currentSchedule]);
-
-    useEffect((): void => {
-        if (timer !== null)
-            clearTimeout(timer);
-        timer = setTimeout((): void => {
-            progressChange && progressChange(currentProgress);
-        }, 1000);
-    }, [currentProgress]);
 
     useEffect((): () => void => {
         if (playing && id === item.id)
