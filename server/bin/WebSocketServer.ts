@@ -42,10 +42,10 @@ export class WebSocketServer {
                 __isLinux: platform === 'linux',
                 __isIntelMac: platform === 'darwin' && arch === 'x64',
                 __isAppleSiliconMac: platform === 'darwin' && arch === 'arm64' && cpuName.includes('Apple'),
-                __encoding: 'CPU.H64',
-                __cpuEnCod: {
+                __enCoding: 'CPU.H264',
+                __cpuEnCode: {
                     __AMD: cpuName.includes('AMD'),
-                    __intel: cpuName.includes('Intel'),
+                    __Intel: cpuName.includes('Intel'),
                     __AppleSilicon: cpuName.includes('Apple')
                 }
             }
