@@ -6,8 +6,6 @@ export type TAppModeType = 'development' | 'live-server' | 'prod';
 
 export interface IArgsParams {
     p: string;
-    proc: string;
-    af: boolean;
     mode: TAppModeType;
 }
 
