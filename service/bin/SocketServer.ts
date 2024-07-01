@@ -1,10 +1,12 @@
 import {createServer, Server, Socket} from 'node:net';
 import AppConfig from "../config/AppConfig";
 import Cli from "cli-color";
+import wvc, {ICreateTaskConfig} from "./wvc";
+import ffmpeg from "./ffmpeg";
 
 class SocketServer {
     private readonly server: Server;
-    private socket: Socket | null;
+    private socket: Socket | undefined;
 
     constructor() {
         this.server = createServer((socket: Socket): void => {
@@ -16,7 +18,6 @@ class SocketServer {
         this.server.listen(AppConfig.__SOCKET_SERVER_PORT, '0.0.0.0', (): void => {
             console.log(Cli.bgBlue('Synthetic-Service-Socket-Server'), Cli.yellow('started on port'), Cli.red(AppConfig.__SOCKET_SERVER_PORT));
         });
-        this.socket = null;
     }
 
     public sendMessage(message: string): void {
@@ -37,10 +38,36 @@ class SocketServer {
                 } = JSON.parse(_data);
 
                 if (message.type === 'GENERATING-AUDIO-VISUALIZATIONS') {
+                    const _ = JSON.parse(message.data);
 
+                    ffmpeg.getAudioVisualizationDiagram(_?.audioPath ?? '', _?.optPath ?? '').then((r: string): void => {
+                        this.sendMessage(JSON.stringify({
+                            type: "GENERATING_AUDIO_VISUALIZATIONS",
+                            data: {
+                                path: r
+                            }
+                        }));
+                    });
                 }
                 if (message.type === 'COMPOSITE-VIDEO') {
-
+                    wvc.init({
+                        ...JSON.parse(message.data) as unknown as ICreateTaskConfig
+                    }, ({progress, id}): void => {
+                        this.sendMessage(JSON.stringify({
+                            type: "TASK_PROGRESS_CHANGE",
+                            data: {
+                                id, progress
+                            }
+                        }));
+                    }).then((res): void => {
+                        this.sendMessage(JSON.stringify({
+                            type: "TASK_END",
+                            data: {
+                                id: res.id,
+                                ...res
+                            }
+                        }));
+                    });
                 }
 
                 this.sendMessage(AppConfig.__SOCKET_PONG_KEY);
