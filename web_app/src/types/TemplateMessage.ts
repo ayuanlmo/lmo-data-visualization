@@ -27,6 +27,7 @@ export type TDesignAppMessageType =
     | 'RENDER' // 执行渲染
     | 'GET_TEMPLATE_DATA' // 获取模板数据
     | 'GET_CONFIG' // 获取模版配置
+    | 'VIDEO_CONFIG_CHANGE' // 视频配置变化
     ;
 
 export interface ITemplateSelectTextElement {

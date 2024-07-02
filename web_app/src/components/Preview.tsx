@@ -6,6 +6,7 @@ import {RootState} from "../lib/Store";
 import Notification from "../lib/Notification";
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 import {ReactState} from "../types/ReactTypes";
+import postMessage from "../lib/PostMessage";
 
 interface ICurrentTemplate {
     cover: string;
@@ -23,6 +24,7 @@ const TemplatePreview = (): React.JSX.Element => {
     const [iframeStyle, setIframeStyle]: ReactState<object> = useState<object>({});
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
     const currentTemplate: ICurrentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
+    const currentTemplateVideoConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.config.video);
     const navigate: NavigateFunction = useNavigate();
 
     const calculateAspectRatio = (width: number): [number, number] => {
@@ -34,23 +36,51 @@ const TemplatePreview = (): React.JSX.Element => {
         templatePreviewRef.current && (templatePreviewRef.current.style.height = `${height}px`);
     };
     const initPlayerSize = (): void => {
-        if (!iframeRef.current) return;
-        if (!templatePreviewRef.current) return;
+        if (!iframeRef.current || !templatePreviewRef.current) return;
 
-        const width: number = templatePreviewRef.current?.offsetWidth;
-        const height: number = templatePreviewRef.current?.offsetHeight;
         let scale: number = 0;
+        const width: number = templatePreviewRef.current.offsetWidth;
+        const height: number = templatePreviewRef.current.offsetHeight;
+        const clarity = getClarity(currentTemplateVideoConfig.clarity);
+        const baseWidth: number = clarity.width;
+        const baseHeight: number = clarity.height;
+        const widthRatio: number = width / baseWidth;
+        const heightRatio: number = height / baseHeight;
 
-        if (width / 1920 > width / 1080)
-            scale = height / 1080;
-        else
-            scale = width / 1920;
+        scale = Math.min(widthRatio, heightRatio);
+
+        iframeRef.current.contentWindow?.document?.body?.setAttribute('style', ` width: ${baseWidth}px; height:${baseHeight}px;`);
 
         setIframeStyle({
-            transform: `scale( ${scale} )`,
-            width: `1920px`,
-            height: `1080px`
+            transform: `scale(${scale})`,
+            width: `${baseWidth}px`,
+            height: `${baseHeight}px`
         });
+    };
+
+    const getClarity = (clarity: string) => {
+        switch (clarity) {
+            case '1080P':
+                return {
+                    width: 1920,
+                    height: 1080
+                };
+            case '2K':
+                return {
+                    width: 2560,
+                    height: 1440
+                };
+            case '4K':
+                return {
+                    width: 4096,
+                    height: 2160
+                };
+            default:
+                return {
+                    width: 1920,
+                    height: 1080
+                };
+        }
     };
 
     const toTemplateList = (): void => {
@@ -65,7 +95,11 @@ const TemplatePreview = (): React.JSX.Element => {
     useEffect((): void => {
         initHeight();
         initPlayerSize();
-    }, [templatePreviewRef]);
+        postMessage.send({
+            type: 'VIDEO_CONFIG_CHANGE',
+            message: {...currentTemplateVideoConfig}
+        });
+    }, [templatePreviewRef, currentTemplateVideoConfig]);
 
     useEventListener('resize', (): void => {
         initHeight();

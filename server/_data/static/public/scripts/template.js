@@ -192,6 +192,15 @@ class LmoTempLate {
             case 'GET_CONFIG':
                 this.sendMessage('GET_CONFIG', this.conf);
                 break;
+            // 清晰度变化
+            case 'VIDEO_CONFIG_CHANGE':
+                this.conf.config.video = {
+                    ...this.conf.config.video,
+                    ...message
+                };
+                document.getElementById('app').style = `width: ${document.body.offsetWidth}px;height: calc(${document.body.offsetHeight}px - 120px);user-select: none;margin-top: 120px;`
+                this.initViewStyle();
+                break;
             default:
                 break;
         }
