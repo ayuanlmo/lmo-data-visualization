@@ -39,11 +39,11 @@ const AppDesign = (): React.JSX.Element => {
                     <Grid.Row style={{
                         height: '98%'
                     }} justify={'space-between'}>
-                        <Grid.Col span={{lg: 12, xl: 18, md: 24, sm: 24, xs: 24}}>
+                        <Grid.Col span={{lg: 12, xl: 16, md: 24, sm: 24, xs: 24}}>
                             <TemplatePreview/>
                             <ProgressBar/>
                         </Grid.Col>
-                        <Grid.Col span={{lg: 10, xl: 5, md: 24, sm: 24, xs: 24}}>
+                        <Grid.Col span={{lg: 10, xl: 6, md: 24, sm: 24, xs: 24}}>
                             <DesignConfigs/>
                         </Grid.Col>
                     </Grid.Row>
