@@ -1,21 +1,18 @@
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-import TemplateDefaultConfig, { TemplateTextDefaultConfig } from "../../scripts/templateDefaultConfig.js";
-var config = {
-    config: __assign({ text: __assign({}, TemplateTextDefaultConfig), theme: {
+import {ITemplateConfig} from "../../scripts/@types/template.js";
+import TemplateDefaultConfig, {TemplateTextDefaultConfig} from "../../scripts/templateDefaultConfig.js";
+
+const config: ITemplateConfig = {
+    config: {
+        text: {
+            ...TemplateTextDefaultConfig
+        },
+        theme: {
             type: 'Theme',
             configs: ['Gradient', 'Theme'],
             value: ['#28C8D5', '#1CA8E3', '#1CA8E3', '#5169CA', '#5837A6', '#BF39A7', '#E54574', '#F47F22']
-        } }, TemplateDefaultConfig),
+        },
+        ...TemplateDefaultConfig
+    },
     otherConfig: {
         label: '图表其他配置',
         configs: [
@@ -63,4 +60,5 @@ var config = {
         }
     }
 };
+
 export default config;

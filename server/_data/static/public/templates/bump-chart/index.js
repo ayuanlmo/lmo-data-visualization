@@ -1,209 +1,222 @@
-import TempLate from "../../scripts/template.js";
-import Conf from "./conf.js";
-import {getDiffColor} from "../../scripts/utils.js";
-
-void function () {
-    let option = {};
-    const myChart = echarts.init(document.getElementById('app'), {
-        renderer: 'svg'
-    });
-    const template = new TempLate(Conf, render, {
-        otherConfigChange: (res) => {
-            Object.keys(res).forEach(i => {
-                proxy[i] = res[i];
-            });
-        }
-    });
-    const propertyHandlers = {
-        // 平滑线条
-        smooth: (value) => {
-            option.series = option.series.map(i => ({...i, smooth: value}));
-            myChart.clear();
-            template.sendMessage('TEMPLATE_RENDER', 'RENDER');
-            myChart.setOption(option);
-        },
-        // 格子线条
-        showLine: (value) => {
-            option.xAxis.splitLine.show = value;
-            option.yAxis.splitLine.show = value;
-            myChart.clear();
-            template.sendMessage('TEMPLATE_RENDER', 'RENDER');
-            myChart.setOption(option);
-        },
-        // 显示X轴
-        showXAxis: (value) => {
-            option.xAxis.show = value;
-        },
-        // 显示Y轴
-        showYAxis: (value) => {
-            option.yAxis.show = value;
-        },
-        // 节点大小
-        nodeSize: (value) => {
-            option.series = option.series.map(i => ({...i, symbolSize: value}));
-        },
-        // 线条宽度
-        lineWidth: (value) => {
-            option.series = option.series.map(i => ({...i, lineStyle: {width: value}}));
-        },
-        // X轴字体大小
-        xAxisFontSize: (value) => {
-            option.xAxis.axisLabel.fontSize = value;
-        },
-        // Y轴字体大小
-        yAxisFontSize: (value) => {
-            option.yAxis.axisLabel.fontSize = value;
-        },
-        // X轴字体颜色
-        yAxisFontColor: (value) => {
-            option.yAxis.axisLabel.color = value;
-        },
-        // Y轴字体颜色
-        xAxisFontColor: (value) => {
-            option.xAxis.axisLabel.color = value;
-        }
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
     };
-    const proxy = new Proxy(template.conf.otherConfig.values, {
-        set(target, key, value) {
-            if (target[key] !== value && propertyHandlers[key]) {
-                if (Object.keys(option).length === 0) return;
-                propertyHandlers[key](value);
-                myChart.setOption(option, true, true);
-            }
-            return Reflect.set(target, key, value);
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
         }
-    });
-
-    function render() {
-        const names = [];
-        const years = [];
-        const {otherConfig} = this.conf;
-        const data = this.conf.data;
-
-        if (!Array.isArray(data)) return;
-
-        function initTheme(res) {
-            if (res.type === 'Gradient') {
-                option.color = getDiffColor(res.value[0], res.value[1], names.length, 1);
-            } else if (res.type === 'Theme') {
-                option.color = res.value;
-            } else {
-                option.color = res.value;
-            }
-            myChart.clear();
-            myChart.setOption(option);
-            template.sendMessage('TEMPLATE_RENDER', 'RENDER');
-        }
-
-        this.event.themeColorChange = res => {
-            initTheme(res);
-        }
-        data.forEach((row, index) => {
-            if (Array.isArray(row) && row.length > 0) {
-                // 名称跳过第一行
-                if (index === 0) names.push(...row.slice(1)); else years.push(row[0]);
-            }
-        });
-
-        const generateRankingData = () => {
-            const map = new Map();
-
-            names.forEach((name, k) => {
-                const itemData = data.slice(1) // 跳过第一行
-                    // 过滤非数组项
-                    .filter(item => Array.isArray(item))
-                    // 提取第 k 列的数据
-                    .map(item => item[k]);
-                map.set(name, itemData);
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+import LmoTemplate from "../../scripts/template.js";
+import Conf from './conf.js';
+import { getDiffColor } from "../../scripts/utils.js";
+void function () {
+    var BumpChart = /** @class */ (function (_super) {
+        __extends(BumpChart, _super);
+        function BumpChart() {
+            var _this = _super.call(this, Conf) || this;
+            _this.chart = echarts.init(document.getElementById('app'), {
+                renderer: 'svg'
             });
-            return map;
-        };
-
-        const generateSeriesList = () => {
-            const seriesList = [];
-            const rankingMap = generateRankingData();
-            const {otherConfig, config} = this.conf;
-
-            rankingMap.forEach((data, name) => {
-                const transformedData = transformData(data);
-                const series = {
-                    name,
-                    symbolSize: otherConfig.values.nodeSize,
-                    animationDuration: config.video.duration,
-                    type: 'line',
-                    smooth: otherConfig.values.smooth ?? true,
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    endLabel: {
-                        show: true,
-                        formatter: '{a}',
-                        distance: 20
-                    },
-                    lineStyle: {
-                        width: otherConfig.values.lineWidth
-                    },
-                    data: transformedData
-                };
-                seriesList.push(series);
-            });
-            return seriesList;
-        };
-
-        const transformData = (data) => {
-            return data.map(item => {
-                const num = Number(item);
-
-                if (isNaN(num)) return 0;
-                if (num >= 10) return Math.floor(num / 10); // 取整
-                return num;
+            _this.otherConfigProxyHandlers = null;
+            _this.otherConfigProxy = null;
+            _this.names = [];
+            _this.years = [];
+            _this.init();
+            return _this;
+        }
+        BumpChart.prototype.otherConfigChange = function (config) {
+            var _this = this;
+            Object.keys(config.values).forEach(function (key) {
+                if (_this.otherConfigProxy)
+                    _this.otherConfigProxy[key] = config.values[key];
             });
         };
-
-        option = {
-            silent: true,
-            color: this.conf.config.theme.value,
-            grid: {
-                left: 30,
-                right: 110,
-                bottom: 30,
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                show: otherConfig.values.showXAxis,
-                splitLine: {
-                    show: otherConfig.values.showLine,
+        BumpChart.prototype.render = function () {
+            var _this = this;
+            var _a, _b;
+            var data = this.conf.data;
+            var otherConfig = this.conf.otherConfig;
+            this.names = [];
+            this.years = [];
+            if (!Array.isArray(data))
+                return;
+            data.forEach(function (row, index) {
+                var _a;
+                if (Array.isArray(row) && row.length > 0) {
+                    // 名称跳过第一行
+                    if (index === 0)
+                        (_a = _this.names).push.apply(_a, row.slice(1));
+                    else
+                        _this.years.push(row[0]);
+                }
+            });
+            var generateRankingData = function () {
+                var map = new Map();
+                _this.names.forEach(function (name, k) {
+                    var itemData = data.slice(1) // 跳过第一行
+                        // 过滤非数组项
+                        .filter(function (item) { return Array.isArray(item); })
+                        // 提取第 k 列的数据
+                        .map(function (item) { return item[k]; });
+                    map.set(name, itemData);
+                });
+                return map;
+            };
+            var generateSeriesList = function () {
+                var seriesList = [];
+                var rankingMap = generateRankingData();
+                var _a = _this.conf, otherConfig = _a.otherConfig, config = _a.config;
+                rankingMap.forEach(function (data, name) {
+                    var _a;
+                    var transformedData = transformData(data);
+                    var series = {
+                        name: name,
+                        symbolSize: otherConfig.values.nodeSize,
+                        animationDuration: config.video.duration,
+                        type: 'line',
+                        smooth: (_a = otherConfig.values.smooth) !== null && _a !== void 0 ? _a : true,
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        endLabel: {
+                            show: true,
+                            formatter: '{a}',
+                            distance: 20
+                        },
+                        lineStyle: {
+                            width: otherConfig.values.lineWidth
+                        },
+                        data: transformedData
+                    };
+                    seriesList.push(series);
+                });
+                return seriesList;
+            };
+            var transformData = function (data) {
+                return data.map(function (item) {
+                    var num = Number(item);
+                    if (isNaN(num))
+                        return 0;
+                    if (num >= 10)
+                        return Math.floor(num / 10); // 取整
+                    return num;
+                });
+            };
+            this.option = {
+                silent: true,
+                color: this.option ? this.option.color : this.conf.config.theme.value,
+                grid: {
+                    left: 30,
+                    right: 110,
+                    bottom: 30,
+                    containLabel: true
                 },
-                axisLabel: {
-                    margin: 30,
-                    fontSize: otherConfig.values.xAxisFontSize,
-                    color: otherConfig.values.xAxisFontColor,
+                xAxis: {
+                    type: 'category',
+                    show: otherConfig.values.showXAxis,
+                    splitLine: {
+                        show: otherConfig.values.showLine,
+                    },
+                    axisLabel: {
+                        margin: 30,
+                        fontSize: otherConfig.values.xAxisFontSize,
+                        color: otherConfig.values.xAxisFontColor,
+                    },
+                    boundaryGap: false,
+                    data: this.years
                 },
-                boundaryGap: false,
-                data: years
-            },
-            yAxis: {
-                type: 'value',
-                show: otherConfig.values.showYAxis,
-                splitLine: {
-                    show: otherConfig.values.showLine,
-                },
-                axisLabel: {
-                    margin: 30,
-                    color: otherConfig.values.yAxisFontColor,
-                    fontSize: otherConfig.values.yAxisFontSize,
-                    formatter: '#{value}'
-                },
-                inverse: true,
-                interval: 1,
-                min: 1,
-                max: names.length
-            },
-            series: generateSeriesList()
+                yAxis: {
+                    type: 'value',
+                    show: otherConfig.values.showYAxis,
+                    splitLine: {
+                        show: otherConfig.values.showLine,
+                    },
+                    axisLabel: {
+                        margin: 30,
+                        color: otherConfig.values.yAxisFontColor,
+                        fontSize: otherConfig.values.yAxisFontSize,
+                        formatter: '#{value}'
+                    },
+                    inverse: true,
+                    interval: 1,
+                    min: 1,
+                    max: this.names.length
+                }
+            };
+            this.option.xAxis.data = this.years;
+            this.option.series = generateSeriesList();
+            this.chart.clear();
+            (_b = (_a = this.chart) === null || _a === void 0 ? void 0 : _a.setOption) === null || _b === void 0 ? void 0 : _b.call(_a, this.option);
         };
-        initTheme(this.conf.config.theme);
-        template.sendMessage('TEMPLATE_RENDER', 'RENDER');
-        myChart.setOption(option);
-    }
+        BumpChart.prototype.themeColorChange = function (config) {
+            if (config.type === 'Gradient')
+                this.option.color = getDiffColor(config.value[0], config.value[1], this.names.length, 1);
+            else if (config.type === 'Theme')
+                this.option.color = config.value;
+            else
+                this.option.color = config.value;
+            this.chart.clear();
+            this.tryRender();
+        };
+        BumpChart.prototype.init = function () {
+            var _this = this;
+            this.otherConfigProxyHandlers = {
+                smooth: function (value) {
+                    var _a, _b;
+                    _this.option.series = _this.option.series.map(function (i) { return (__assign(__assign({}, i), { smooth: value })); });
+                    (_b = (_a = _this.chart) === null || _a === void 0 ? void 0 : _a.clear) === null || _b === void 0 ? void 0 : _b.call(_a);
+                    _this.tryRender();
+                },
+                showLine: function (value) {
+                    _this.option.xAxis.splitLine.show = value;
+                    _this.option.yAxis.splitLine.show = value;
+                    _this.chart.clear();
+                    _this.tryRender();
+                },
+                showXAxis: function (value) { return void (_this.option.xAxis.show = value); },
+                showYAxis: function (value) { return void (_this.option.yAxis.show = value); },
+                nodeSize: function (value) { return void (_this.option.series = _this.option.series.map(function (i) { return (__assign(__assign({}, i), { symbolSize: value })); })); },
+                lineWidth: function (value) { return void (_this.option.series = _this.option.series.map(function (i) { return (__assign(__assign({}, i), { lineStyle: { width: value } })); })); },
+                xAxisFontSize: function (value) { return void (_this.option.xAxis.axisLabel.fontSize = value); },
+                yAxisFontSize: function (value) { return void (_this.option.yAxis.axisLabel.fontSize = value); },
+                yAxisFontColor: function (value) { return void (_this.option.yAxis.axisLabel.color = value); },
+                xAxisFontColor: function (value) { return void (_this.option.xAxis.axisLabel.color = value); }
+            };
+            this.otherConfigProxy = new Proxy(this.conf.otherConfig.values, {
+                set: function (target, key, value) {
+                    if (_this.otherConfigProxyHandlers) {
+                        if (target[key] !== value && _this.otherConfigProxyHandlers[key]) {
+                            _this.otherConfigProxyHandlers[key](value);
+                            _this.tryRender();
+                        }
+                    }
+                    return Reflect.set(target, key, value);
+                }
+            });
+            addEventListener('resize', function () {
+                var _a, _b;
+                (_b = (_a = _this.chart) === null || _a === void 0 ? void 0 : _a.resize) === null || _b === void 0 ? void 0 : _b.call(_a);
+            });
+        };
+        return BumpChart;
+    }(LmoTemplate));
+    return void new BumpChart();
 }();
