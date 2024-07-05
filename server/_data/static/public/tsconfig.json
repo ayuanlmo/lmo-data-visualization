@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true
+  },
+  "include": [
+    "templates",
+    "scripts",
+    "global.d.ts"
+  ],
+  "exclude": [
+    "*.js"
+  ]
+}
