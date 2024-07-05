@@ -46,12 +46,18 @@ export default class HttpServer {
                 this.onLineUsers--;
             });
         });
-        this.App.use((_req: Request, res: Response, next: NextFunction): void => {
+        this.App.use((req: Request, res: Response, next: NextFunction): void => {
             const methods: Array<string> = ['GET', 'PUT', 'DELETE'];
-            const routers: Array<string> = ['uploadFile', 'template/copy'];
+
+            if (req.url.includes('/static')) {
+                const paths: Array<string> = req.url.split('/');
+
+                if (AppConfig.__PROTECTED_STATIC_FILES.some((i: string): boolean => paths[paths.length - 1].includes(i)))
+                    return void res.status(200).json(CreateErrorMessage('ext00n', 404));
+            }
 
             if (AppConfig.__LIVE_SERVER) {
-                if (methods.some((i: string): boolean => _req.method === i) || routers.some((i: string): boolean => _req.url.includes(i)))
+                if (methods.some((i: string): boolean => req.method === i) || AppConfig.__PROTECTED_ROUTERS.some((i: string): boolean => req.url.includes(i)))
                     return void res.json(CreateErrorMessage('ext00el'));
                 else
                     next();
