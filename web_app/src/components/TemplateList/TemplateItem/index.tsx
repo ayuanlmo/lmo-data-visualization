@@ -176,7 +176,10 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                 className={'template-item app_cursor_pointer app_position_relative'}
                 style={{
                     backgroundImage: `url("${'/api' + data.cover}")`,
-                    backgroundRepeat: 'no-repeat'
+                    backgroundRepeat: 'no-repeat',
+                    height: '100%',
+                    backgroundPosition: 'center',
+                    backgroundSize: 'cover'
                 }}
                 onMouseEnter={(e: React.MouseEvent<HTMLDivElement>): void => {
                     e.preventDefault();
@@ -200,7 +203,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                 <img className={isHover ? 'img-active' : ''} src={'/api' + data.cover} alt={data.name}/>
                 <YExtendTemplate show={!isHover}>
                     <div className={'template-item-name '}>
-                        <span className={'animated fadeInDown'}>{data.name}</span>
+                        <span>{data.name}</span>
                     </div>
                 </YExtendTemplate>
                 <YExtendTemplate show={isHover}>
