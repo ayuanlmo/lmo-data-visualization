@@ -7,6 +7,7 @@ import AppConfig from "../../conf/AppConfig";
 import TaskScheduler from "../TaskScheduler";
 import {WebSocketServer} from "../WebSocketServer";
 import createErrorMessage = Utils.createErrorMessage;
+import createSuccessMessage = Utils.createSuccessMessage;
 
 export default class Task {
     public static createTask(req: Request, res: Response): void {
@@ -15,7 +16,8 @@ export default class Task {
             customTemplateDesc = '',
             customTemplateName = require('uuid').v4(),
             id = '',
-            taskName = ''
+            taskName = '',
+            preview = false
         } = req.body;
 
         if (id === '')
@@ -29,10 +31,11 @@ export default class Task {
             if (!template)
                 return void res.json(createErrorMessage('ext004'));
 
+            const pathName: string = preview ? 'previewTemplate' : 'templates';
             const originalTemplate: string = path.resolve(`./_data/static/public/${template?.dataValues.path.replace('/static', '').replace('/index.html', '')}`);
             const templatePathName: string = require('uuid').v4();
-            const dirPath: string = path.resolve(`./_data/static/public/templates/${templatePathName}`);
-            const templateStaticPath: string = `/static/templates/${templatePathName}`;
+            const dirPath: string = path.resolve(`./_data/static/public/${pathName}/${templatePathName}`);
+            const templateStaticPath: string = `/static/${pathName}/${templatePathName}`;
             const dbId: string = require('uuid').v4();
             const serverHttpUrl: string = `http://localhost:${AppConfig.__SERVER_PORT}`;
 
@@ -71,53 +74,61 @@ export default class Task {
                 } catch (e) {
                     console.log(e);
                 }
-                try {
-                    (async (): Promise<void> => {
-                        const taskConfig = {
-                            id: dbId,
-                            path: `${serverHttpUrl}${templateStaticPath}?__type=h`,
-                            duration: currentTemplateConfig.config.video.duration ?? 5000 as number,
-                            ...Task.getVideoClarity(currentTemplateConfig.config.video.clarity ?? ''),
-                            fps: currentTemplateConfig.config.video.fps ?? 30 as number,
-                            optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`),
-                            fileName: `${dbId}`,
-                            folder: path.resolve(`./_data/static/public/output/`)
-                        };
-                        const dbData = {
-                            id: dbId,
-                            template: id,
-                            filePath: '',
-                            name: taskName === '' ? require('uuid').v4() : taskName,
-                            templatePath: dirPath,
-                            createTime: new Date().getTime(),
-                            url: `${templateStaticPath}/index.html?__type=h`,
-                            clarity: currentTemplateConfig.config.video.clarity ?? '1080P',
-                            status: 'pending',
-                            taskConfig: JSON.stringify(taskConfig)
-                        };
-
-                        await ResourcesModel.create(dbData);
-
-                        res.status(204).send();
-
-                        // @ts-ignore
-                        TaskScheduler.push({
-                            ...taskConfig,
-                            name: dbData.name
-                        });
-
-                        // 通知页面
-                        WebSocketServer.sendMessage(JSON.stringify({
-                            type: 'TASK_PENDING',
-                            message: {
+                if (preview) {
+                    return void res.json(createSuccessMessage({
+                        path: `${templateStaticPath}/index.html?__type=h`,
+                        id: templatePathName
+                    }));
+                } else {
+                    try {
+                        (async (): Promise<void> => {
+                            const taskConfig = {
                                 id: dbId,
+                                path: `${serverHttpUrl}${templateStaticPath}?__type=h`,
+                                duration: currentTemplateConfig.config.video.duration ?? 5000 as number,
+                                ...Task.getVideoClarity(currentTemplateConfig.config.video.clarity ?? ''),
+                                fps: currentTemplateConfig.config.video.fps ?? 30 as number,
+                                optPath: path.resolve(`./_data/static/public/output/${dbId}.mp4`),
+                                fileName: `${dbId}`,
+                                folder: path.resolve(`./_data/static/public/output/`)
+                            };
+                            const dbData = {
+                                id: dbId,
+                                template: id,
+                                filePath: '',
+                                name: taskName === '' ? require('uuid').v4() : taskName,
+                                templatePath: dirPath,
+                                createTime: new Date().getTime(),
+                                url: `${templateStaticPath}/index.html?__type=h`,
+                                clarity: currentTemplateConfig.config.video.clarity ?? '1080P',
+                                status: 'pending',
+                                taskConfig: JSON.stringify(taskConfig)
+                            };
+
+                            await ResourcesModel.create(dbData);
+
+                            res.status(204).send();
+
+                            // @ts-ignore
+                            TaskScheduler.push({
+                                ...taskConfig,
                                 name: dbData.name
-                            }
-                        }));
-                    })();
-                } catch (e) {
-                    res.json(createErrorMessage('ext00d'));
+                            });
+
+                            // 通知页面
+                            WebSocketServer.sendMessage(JSON.stringify({
+                                type: 'TASK_PENDING',
+                                message: {
+                                    id: dbId,
+                                    name: dbData.name
+                                }
+                            }));
+                        })();
+                    } catch (e) {
+                        res.json(createErrorMessage('ext00d'));
+                    }
                 }
+
             } else
                 res.json(createErrorMessage('ext00e'));
         });
