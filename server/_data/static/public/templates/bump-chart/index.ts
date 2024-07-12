@@ -23,7 +23,7 @@ void function (): void {
         private otherConfigProxy: {
             [p: string]: TConfigOtherConfigItemValueType;
         } | null;
-        private chart = echarts.init(document.getElementById('app'), {
+        private chart = window.echarts.init(document.getElementById('app'), {
             renderer: 'svg'
         });
         private names: Array<string>;

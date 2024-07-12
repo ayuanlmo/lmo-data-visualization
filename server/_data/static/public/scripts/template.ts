@@ -30,6 +30,8 @@ export default abstract class LmoTemplate implements ILMOTemplate {
         if (!this.isSynthesisMode) {
             addEventListener('message', (e: MessageEvent): void => this.onMessage(e));
             document.addEventListener('contextmenu', (e: MouseEvent): void => e.preventDefault());
+        } else {
+            this.initSocket();
         }
     }
 
@@ -50,6 +52,34 @@ export default abstract class LmoTemplate implements ILMOTemplate {
             }
         })();
         this.render();
+    }
+
+    private initSocket(): void {
+        const ws: WebSocket = new WebSocket(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.host}/connect`);
+
+        const messageHandel = (msg: MessageEvent): void => {
+            const {data} = msg;
+
+            if (typeof data === 'string' || data.includes('pong')) return;
+
+            try {
+                const _data = JSON.parse(data);
+
+                if (_data.type === '__ABORT_RENDER') {
+                    if (_data.id === this.conf.id)
+                        window?.captureCtx?.throwError?.(-1, "Abort");
+                }
+            } catch (e) {
+                throw e;
+            }
+        };
+
+        ws.addEventListener('message', messageHandel);
+        ws.addEventListener('open', (): void => {
+            setInterval((): void => {
+                ws.send('ping');
+            }, 100 * 10 * 10);
+        });
     }
 
     private sendMessage(type: string, message: any): void {

@@ -115,7 +115,7 @@ void function () {
                     return Reflect.set(target, key, value);
                 }
             });
-            this.chart = echarts.init(document.getElementById('app'), {
+            this.chart = window.echarts.init(document.getElementById('app'), {
                 renderer: 'svg'
             });
             this.option = {

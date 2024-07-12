@@ -61,6 +61,9 @@ var LmoTemplate = /** @class */ (function () {
             addEventListener('message', function (e) { return _this_1.onMessage(e); });
             document.addEventListener('contextmenu', function (e) { return e.preventDefault(); });
         }
+        else {
+            this.initSocket();
+        }
     }
     LmoTemplate.prototype.tryRender = function () {
         var _this_1 = this;
@@ -85,6 +88,32 @@ var LmoTemplate = /** @class */ (function () {
             });
         }); })();
         this.render();
+    };
+    LmoTemplate.prototype.initSocket = function () {
+        var _this_1 = this;
+        var ws = new WebSocket("".concat(location.protocol.includes('https') ? 'wss' : 'ws', "://").concat(location.host, "/connect"));
+        var messageHandel = function (msg) {
+            var _a, _b;
+            var data = msg.data;
+            if (typeof data === 'string' || data.includes('pong'))
+                return;
+            try {
+                var _data = JSON.parse(data);
+                if (_data.type === '__ABORT_RENDER') {
+                    if (_data.id === _this_1.conf.id)
+                        (_b = (_a = window === null || window === void 0 ? void 0 : window.captureCtx) === null || _a === void 0 ? void 0 : _a.throwError) === null || _b === void 0 ? void 0 : _b.call(_a, -1, "Abort");
+                }
+            }
+            catch (e) {
+                throw e;
+            }
+        };
+        ws.addEventListener('message', messageHandel);
+        ws.addEventListener('open', function () {
+            setInterval(function () {
+                ws.send('ping');
+            }, 100 * 10 * 10);
+        });
     };
     LmoTemplate.prototype.sendMessage = function (type, message) {
         if (this.isSynthesisMode)

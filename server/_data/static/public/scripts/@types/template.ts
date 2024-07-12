@@ -67,4 +67,5 @@ export interface ITemplateConfig {
     data?: Array<any>;
     config: IConfig;
     otherConfig: TOtherConfig;
+    id?: string;
 }

@@ -138,7 +138,7 @@ void function (): void {
                 }
             });
 
-            this.chart = echarts.init(document.getElementById('app'), {
+            this.chart = window.echarts.init(document.getElementById('app'), {
                 renderer: 'svg'
             });
             this.option = {

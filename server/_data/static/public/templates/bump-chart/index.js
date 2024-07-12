@@ -32,7 +32,7 @@ void function () {
         __extends(BumpChart, _super);
         function BumpChart() {
             var _this = _super.call(this, Conf) || this;
-            _this.chart = echarts.init(document.getElementById('app'), {
+            _this.chart = window.echarts.init(document.getElementById('app'), {
                 renderer: 'svg'
             });
             _this.otherConfigProxyHandlers = null;
