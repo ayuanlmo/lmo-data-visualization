@@ -1,10 +1,22 @@
 import path from "path";
 import * as fs from "fs";
+import Cli from "./Cli";
 
 ((): void => {
     function mkdir(dir: string): void {
         if (!fs.existsSync(dir))
             fs.mkdirSync(dir);
+        else {
+            try {
+                fs.accessSync(dir, fs.constants.R_OK | fs.constants.W_OK | fs.constants.X_OK);
+            } catch (e) {
+                try {
+                    fs.chmodSync(dir, 0o777);
+                } catch (csErr) {
+                    Cli.warn(`Failed to add permissions to ${dir}: ${csErr}`);
+                }
+            }
+        }
     }
 
     setInterval((): void => {
