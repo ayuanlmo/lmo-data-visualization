@@ -67,6 +67,7 @@ void function () {
             this.option.series[0].data = getSeriesData();
             this.chart.clear();
             this.chart.setOption(this.option);
+            this.initTheme(this.conf.config.theme);
         };
         PieChart.prototype.otherConfigChange = function (config) {
             var _this = this;
@@ -76,6 +77,10 @@ void function () {
             });
         };
         PieChart.prototype.themeColorChange = function (config) {
+            this.initTheme(config);
+            this.tryRender();
+        };
+        PieChart.prototype.initTheme = function (config) {
             var _a, _b;
             if (config.type === 'Gradient') {
                 var length_1 = (_b = (_a = this.conf.data) === null || _a === void 0 ? void 0 : _a.length) !== null && _b !== void 0 ? _b : 0;
@@ -85,7 +90,6 @@ void function () {
                 this.option.series[0].color = config.value;
             else
                 this.option.series[0].color = config.value;
-            this.tryRender();
         };
         PieChart.prototype.init = function () {
             var _this = this;

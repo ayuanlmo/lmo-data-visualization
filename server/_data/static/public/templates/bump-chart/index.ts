@@ -36,16 +36,17 @@ void function (): void {
             this.names = [];
             this.years = [];
             this.init();
+            this.initTheme(this.conf.config.theme);
         }
 
-        otherConfigChange(config: TOtherConfig): void {
+        public otherConfigChange(config: TOtherConfig): void {
             Object.keys(config.values).forEach((key: string): void => {
                 if (this.otherConfigProxy)
                     this.otherConfigProxy[key] = config.values[key];
             });
         }
 
-        render(): void | Promise<void> {
+        public render(): void | Promise<void> {
             const data = this.conf.data;
             const {otherConfig} = this.conf;
 
@@ -170,15 +171,19 @@ void function (): void {
             this.chart?.setOption?.(this.option);
         }
 
-        themeColorChange(config: TThemeConfig): void {
+        public themeColorChange(config: TThemeConfig): void {
+            this.initTheme(config);
+            this.chart.clear();
+            this.tryRender();
+        }
+
+        private initTheme(config: TThemeConfig): void {
             if (config.type === 'Gradient')
                 this.option.color = getDiffColor(config.value[0], config.value[1], this.names.length, 1);
             else if (config.type === 'Theme')
                 this.option.color = config.value;
             else
                 this.option.color = config.value;
-            this.chart.clear();
-            this.tryRender();
         }
 
         private init(): void {

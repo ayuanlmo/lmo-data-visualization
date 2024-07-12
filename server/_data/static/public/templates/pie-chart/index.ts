@@ -80,6 +80,7 @@ void function (): void {
             this.option.series[0].data = getSeriesData();
             this.chart.clear();
             this.chart.setOption(this.option);
+            this.initTheme(this.conf.config.theme);
         }
 
         public otherConfigChange(config: TOtherConfig): void {
@@ -90,6 +91,11 @@ void function (): void {
         }
 
         public themeColorChange(config: TThemeConfig): void {
+            this.initTheme(config);
+            this.tryRender();
+        }
+
+        private initTheme(config: TThemeConfig): void {
             if (config.type === 'Gradient') {
                 const length: number = this.conf.data?.length ?? 0;
                 this.option.series[0].color = getDiffColor(config.value[0], config.value[1], length, 1);
@@ -97,8 +103,6 @@ void function (): void {
                 this.option.series[0].color = config.value;
             else
                 this.option.series[0].color = config.value;
-
-            this.tryRender();
         }
 
         private init(): void {

@@ -40,6 +40,7 @@ void function () {
             _this.names = [];
             _this.years = [];
             _this.init();
+            _this.initTheme(_this.conf.config.theme);
             return _this;
         }
         BumpChart.prototype.otherConfigChange = function (config) {
@@ -167,14 +168,17 @@ void function () {
             (_b = (_a = this.chart) === null || _a === void 0 ? void 0 : _a.setOption) === null || _b === void 0 ? void 0 : _b.call(_a, this.option);
         };
         BumpChart.prototype.themeColorChange = function (config) {
+            this.initTheme(config);
+            this.chart.clear();
+            this.tryRender();
+        };
+        BumpChart.prototype.initTheme = function (config) {
             if (config.type === 'Gradient')
                 this.option.color = getDiffColor(config.value[0], config.value[1], this.names.length, 1);
             else if (config.type === 'Theme')
                 this.option.color = config.value;
             else
                 this.option.color = config.value;
-            this.chart.clear();
-            this.tryRender();
         };
         BumpChart.prototype.init = function () {
             var _this = this;
