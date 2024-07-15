@@ -51,7 +51,8 @@ const SyntheticConfig = (): React.JSX.Element => {
                                 onSelect={(e: string, src: string | undefined): void => {
                                     dispatch(setCurrentTemplateAudioConfig({
                                         ...currentTemplateAudioConfig,
-                                        src: src ?? ''
+                                        src: src ?? '',
+                                        path: src ?? ''
                                     }));
                                 }}
                             />

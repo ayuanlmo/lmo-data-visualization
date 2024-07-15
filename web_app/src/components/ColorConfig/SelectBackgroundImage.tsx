@@ -115,6 +115,9 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                                 type="danger"
                                 shape="round"
                                 onClick={(): void => {
+                                    if (type === 'audio')
+                                        setAudioPath('');
+
                                     setPath('');
                                 }}
                             >{t('delete')}</Button>
