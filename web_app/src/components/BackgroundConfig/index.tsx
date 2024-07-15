@@ -87,13 +87,15 @@ const BackgroundConfig = (): React.JSX.Element => {
                     display: backgroundConfig.type === 'image' ? 'block' : 'none'
                 }}>
                     <Grid.Col span={24}>
-                        <SelectBackgroundImage onSelect={(path: string): void => {
-                            dispatch(setCurrentTemplateBackground({
-                                ...backgroundConfig,
-                                image: path,
-                                type: 'image'
-                            }));
-                        }}/>
+                        <SelectBackgroundImage
+                            type={'image'}
+                            onSelect={(path: string): void => {
+                                dispatch(setCurrentTemplateBackground({
+                                    ...backgroundConfig,
+                                    image: path,
+                                    type: 'image'
+                                }));
+                            }}/>
                     </Grid.Col>
                 </Grid.Row>
                 <YExtendTemplate show={backgroundConfig.type === 'color'}>

@@ -133,6 +133,9 @@ const SelectBackgroundImage = (props: ISelectBackgroundImageProps): React.JSX.El
                     </div>
                 </YExtendTemplate>
                 <SelectFile
+                    type={type}
+                    image={type === 'image'}
+                    audio={type === 'audio'}
                     onSelect={
                         ({path, cover}): void => {
                             if (typeof type === 'string' && type === 'audio' && cover) {

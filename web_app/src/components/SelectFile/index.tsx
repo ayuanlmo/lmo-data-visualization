@@ -171,10 +171,8 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
                     </Grid.Row>
                 </div>
                 <div style={{
-                    marginTop: '1.88rem',
-                    marginBottom: '1.88rem',
-                    overflowX: 'hidden',
-                    overflowY: 'scroll'
+                    marginTop: '1rem',
+                    overflowX: 'hidden'
                 }}>
                     <Grid.Row
                         justify={'space-between'}
