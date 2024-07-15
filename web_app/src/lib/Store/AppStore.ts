@@ -23,6 +23,7 @@ const defaultCurrentTemplateConfigData = {
         audio: {
             path: '',
             full: false,
+            src: '',
             volume: 100
         }
     },

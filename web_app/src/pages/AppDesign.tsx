@@ -10,6 +10,7 @@ import {RootState} from "../lib/Store";
 import Storage from "../lib/Storage";
 import {setCurrentTemplate} from "../lib/Store/AppStore";
 import Task, {ICreateTaskRef} from "../components/Task";
+import AudioPreview from "../components/AudioPreview";
 
 const AppDesign = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
@@ -42,6 +43,7 @@ const AppDesign = (): React.JSX.Element => {
                         <Grid.Col span={{lg: 12, xl: 16, md: 24, sm: 24, xs: 24}}>
                             <TemplatePreview/>
                             <ProgressBar/>
+                            <AudioPreview/>
                         </Grid.Col>
                         <Grid.Col span={{lg: 10, xl: 6, md: 24, sm: 24, xs: 24}}>
                             <DesignConfigs/>

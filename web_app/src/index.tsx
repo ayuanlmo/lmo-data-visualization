@@ -53,4 +53,11 @@ reportWebVitals();
 
     Object.freeze(_GLOBAL.__LMO_APP_CONFIG);
 
+    ((): void => {
+        const audio: HTMLAudioElement = 'Audio' in _GLOBAL ? new Audio() : document.createElement('audio');
+
+        audio.id = _GLOBAL.__LMO_APP_CONFIG.__PLAYER_EL_ID;
+        document.body.append(audio);
+    })();
+
 })(this ?? window);
