@@ -17,6 +17,9 @@ export interface ITask {
     readonly fileName: string;
     readonly folder: string;
     readonly name: string;
+    readonly audioPath: string;
+    readonly pAudio: boolean;
+    readonly audioVolume: number;
 }
 
 class TaskScheduler {

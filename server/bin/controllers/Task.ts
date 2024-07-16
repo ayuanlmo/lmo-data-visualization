@@ -4,8 +4,8 @@ import path from "path";
 import Utils from "../../utils";
 import {ResourcesModel, TemplateModel} from "../dataBase";
 import AppConfig from "../../conf/AppConfig";
-import TaskScheduler from "../TaskScheduler";
 import {WebSocketServer} from "../WebSocketServer";
+import TaskScheduler from "../TaskScheduler";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 
@@ -44,7 +44,8 @@ export default class Task {
                     mkdirSync(dirPath);
 
                 readdirSync(originalTemplate).forEach((file: string): void => {
-                    if (file !== '.initialized.t.bin')
+                    const ignoreFiles: Array<string> = ['.initialized.t.bin', 'index.ts', 'conf.ts'];
+                    if (!ignoreFiles.includes(file))
                         copyFileSync(path.resolve(`${originalTemplate}/${file}`), path.resolve(`${dirPath}/${file}`));
                 });
                 writeFileSync(path.resolve(`${dirPath}/.initialized.t.bin`), Buffer.from(JSON.stringify({
@@ -58,19 +59,30 @@ export default class Task {
                 })}\n export default config;`);
                 writeFileSync(path.resolve(dirPath, 'data.json'), JSON.stringify(currentTemplateConfig?.data));
 
-                try {
-                    if (currentTemplateConfig.config.audio.full) return;
-                    if (currentTemplateConfig.config.audio.path !== '') {
-                        const originHtmlContent: string = readFileSync(path.resolve(dirPath, 'index.html')).toString();
-                        const audioElement: string = `<audio src="${serverHttpUrl}${currentTemplateConfig.config.audio.src}" volume="${Number(currentTemplateConfig.config.audio.volume) / 100}"></audio>`;
-                        const audioTag: string = `<!--__LMO_SERVER_AUDIO_RENDER_TAG-->`;
-                        let afterHtmlContent: string = '';
-                        if (originHtmlContent.includes(audioTag))
-                            afterHtmlContent = originHtmlContent.replace(audioTag, audioElement);
-                        else
-                            afterHtmlContent = originHtmlContent + '\n' + audioElement;
+                const taskAudioConfig = {
+                    audioPath: '',
+                    audioVolume: 100,
+                    pAudio: false
+                };
 
-                        writeFileSync(path.resolve(dirPath, 'index.html'), afterHtmlContent);
+                try {
+                    if (currentTemplateConfig.config.audio.path !== '') {
+                        if (currentTemplateConfig.config.audio.full) {
+                            taskAudioConfig.pAudio = true;
+                            taskAudioConfig.audioVolume = Number(currentTemplateConfig.config.audio.volume);
+                            taskAudioConfig.audioPath = path.resolve(`./_data/static/public${currentTemplateConfig.config.audio.path.replace('/static', '')}`)
+                        } else {
+                            const originHtmlContent: string = readFileSync(path.resolve(dirPath, 'index.html')).toString();
+                            const audioElement: string = `<audio src="${serverHttpUrl}${currentTemplateConfig.config.audio.src}" volume="${Number(currentTemplateConfig.config.audio.volume) / 100}"></audio>`;
+                            const audioTag: string = `<!--__LMO_SERVER_AUDIO_RENDER_TAG-->`;
+                            let afterHtmlContent: string = '';
+                            if (originHtmlContent.includes(audioTag))
+                                afterHtmlContent = originHtmlContent.replace(audioTag, audioElement);
+                            else
+                                afterHtmlContent = originHtmlContent + '\n' + audioElement;
+
+                            writeFileSync(path.resolve(dirPath, 'index.html'), afterHtmlContent);
+                        }
                     }
                 } catch (e) {
                     console.log(e);
@@ -113,7 +125,8 @@ export default class Task {
                             // @ts-ignore
                             TaskScheduler.push({
                                 ...taskConfig,
-                                name: dbData.name
+                                name: dbData.name,
+                                ...taskAudioConfig
                             });
 
                             // 通知页面
