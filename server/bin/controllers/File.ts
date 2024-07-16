@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import path from "path";
+import crypto from "node:crypto";
 import {Request, Response} from "express";
 import Utils from "../../utils";
 import AppConfig from "../../conf/AppConfig";
@@ -18,23 +19,24 @@ interface IQueryCriteria {
 
 export default class File {
     public static upload(req: Request, res: Response): void {
-        const File: Express.Multer.File | undefined = req.file;
+        const file: Express.Multer.File | undefined = req.file;
 
-        if (!File)
+        if (!file)
             return void res.json(createErrorMessage('ext001'));
 
-        if (!UpLoadFileTypes.includes(File.mimetype))
+        if (!UpLoadFileTypes.includes(file.mimetype))
             return void res.json(createErrorMessage('ext002'));
 
         const {
-            name = File.filename,
+            name = file.filename,
             categoryId = null
         } = req.body ?? {};
 
-        const fileExtension: string = path.extname(File.originalname);
-        const fr: ReadStream = fs.createReadStream(File.path);
-        const fileName: string = '/' + File.filename + `${fileExtension}`;
-        const fw: WriteStream = fs.createWriteStream(File.destination + fileName);
+        const fileExtension: string = path.extname(file.originalname);
+        const fr: ReadStream = fs.createReadStream(file.path);
+        const fileName: string = '/' + file.filename + `${fileExtension}`;
+        const fileFolderPath: string = file.destination + fileName;
+        const fw: WriteStream = fs.createWriteStream(file.destination + fileName);
         const filePath: string = `${AppConfig.__STATIC_PATH}/uploads` + fileName;
         const fileId: string = require('uuid').v4();
         const data = {
@@ -42,44 +44,76 @@ export default class File {
             name: name,
             path: filePath,
             cover: '',
-            type: File.mimetype,
+            type: file.mimetype,
             createTime: new Date().getTime().toString(),
-            categoryId: categoryId
+            categoryId: categoryId,
+            hash: ''
         }
 
         fr.pipe(fw);
         fw.on('finish', (): void => {
-            fs.unlink(File.path, (err: NodeJS.ErrnoException | null): void => {
+            fs.unlink(file.path, (err: NodeJS.ErrnoException | null): void => {
                 if (err)
                     return void res.json(createErrorMessage('ext00e'));
                 else {
-                    if (File.mimetype.includes('audio')) {
-                        const audioCoverName: string = fileId + '-v.t.png';
-                        const audioCoverStaticPath: string = `${AppConfig.__STATIC_PATH}/uploads/` + audioCoverName;
-                        const audioCoverPath: string = path.resolve(__dirname, '../../_data/static/public/uploads/' + audioCoverName);
+                    File.getFilesHash(fileFolderPath).then((hash: string): void => {
+                        data.hash = hash;
+                        UpLoadFilesModel.findOne({
+                            where: {
+                                hash: hash
+                            }
+                        }).then((f): void => {
+                            if (f?.dataValues) {
+                                fs.unlinkSync(fileFolderPath);
+                                res.json(createSuccessMessage(f.dataValues ?? {}));
+                            } else
+                                UpLoadFilesModel.create(data).then((): void => {
+                                    res.json(createSuccessMessage(data));
+                                }).catch((): void => {
+                                    res.json(createErrorMessage('ext00d'));
+                                });
+                        });
 
-                        try {
-                            socketClient.sendMessage({
-                                type: 'GENERATING-AUDIO-VISUALIZATIONS',
-                                data: JSON.stringify({
-                                    audioPath: path.resolve(File.destination + fileName),
-                                    optPath: audioCoverPath
-                                })
-                            });
+                        if (file.mimetype.includes('audio')) {
+                            const audioCoverName: string = fileId + '-v.t.png';
+                            const audioCoverStaticPath: string = `${AppConfig.__STATIC_PATH}/uploads/` + audioCoverName;
+                            const audioCoverPath: string = path.resolve(__dirname, '../../_data/static/public/uploads/' + audioCoverName);
 
-                            data.cover = audioCoverStaticPath;
-                        } catch (e) {
-                            Cli.debug(e);
+                            try {
+                                socketClient.sendMessage({
+                                    type: 'GENERATING-AUDIO-VISUALIZATIONS',
+                                    data: JSON.stringify({
+                                        audioPath: path.resolve(file.destination + fileName),
+                                        optPath: audioCoverPath
+                                    })
+                                });
+
+                                data.cover = audioCoverStaticPath;
+                            } catch (e) {
+                                Cli.debug(e);
+                            }
                         }
-                    }
-                    UpLoadFilesModel.create(data).then((): void => {
-                        res.json(createSuccessMessage(data));
-                    }).catch((): void => {
-                        res.json(createErrorMessage('ext00d'));
                     });
                 }
             });
         });
+    }
+
+    public static getFilesHash(filePath: string): Promise<string> {
+        return new Promise((resolve): void => {
+            const hash: crypto.Hash = crypto.createHash('md5');
+            const input: fs.ReadStream = fs.createReadStream(filePath);
+
+            input.on('readable', (): void => {
+                const data = input.read();
+
+                if (data)
+                    hash.update(data);
+                else
+                    resolve(hash.digest('hex').toUpperCase());
+            });
+        });
+
     }
 
     public static delete(req: Request, res: Response): void {
