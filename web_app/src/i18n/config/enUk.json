@@ -107,5 +107,15 @@
   "customTemplateName": "Custom template name",
   "customTemplateDesc": "Custom template description",
   "about": "About",
-  "openSourceComponentLicense": "Open Source Component License"
+  "openSourceComponentLicense": "Open Source Component License",
+  "insertRowAbove": "Insert Row Above",
+  "insertRowBelow": "Insert Row Below",
+  "insertRowToLeft": "Insert Row to the Left",
+  "insertRowToRight": "Insert Row to the Right",
+  "deleteAnEntireLine": "Delete Entire Line",
+  "deleteAnEntireColumn": "Delete Entire Column",
+  "copy": "Copy",
+  "cut": "Cut",
+  "paste": "Paste",
+  "undo": "Undo"
 }

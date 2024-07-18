@@ -107,5 +107,15 @@
   "customTemplateName": "사용자 정의 템플릿 이름",
   "customTemplateDesc": "사용자 정의 템플릿 설명",
   "about": "관하여",
-  "openSourceComponentLicense": "오픈 소스 구성 요소 라이선스"
+  "openSourceComponentLicense": "오픈 소스 구성 요소 라이선스",
+  "insertRowAbove": "위에 행 삽입",
+  "insertRowBelow": "아래에 행 삽입",
+  "insertRowToLeft": "왼쪽에 행 삽입",
+  "insertRowToRight": "오른쪽에 행 삽입",
+  "deleteAnEntireLine": "전체 줄 삭제",
+  "deleteAnEntireColumn": "전체 열 삭제",
+  "copy": "복사",
+  "cut": "잘라내기",
+  "paste": "붙여넣기",
+  "undo": "실행 취소"
 }

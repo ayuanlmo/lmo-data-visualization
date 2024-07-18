@@ -137,19 +137,19 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                         licenseKey="non-commercial-and-evaluation"
                         contextMenu={{
                             items: {
-                                'row_above': {name: '在上方插入行'},
-                                'row_below': {name: '在下方插入行'},
-                                'col_left': {name: '在左侧插入行'},
-                                'col_right': {name: '在右侧插入行'},
+                                'row_above': {name: t('insertRowAbove')},
+                                'row_below': {name: t('insertRowBelow')},
+                                'col_left': {name: t('insertRowToLeft')},
+                                'col_right': {name: t('insertRowToRight')},
                                 '----------': {name: '---------'},
-                                'remove_row': {name: '删除整行'},
-                                'remove_col': {name: '删除整列'},
+                                'remove_row': {name: t('deleteAnEntireLine')},
+                                'remove_col': {name: t('deleteAnEntireColumn')},
                                 '---------': {name: '---------'},
-                                'copy': {name: '复制 (C)'},
-                                'cut': {name: '剪切 (X)'},
-                                'paste': {name: '粘贴 (V)'},
+                                'copy': {name: `${t('copy')} (C)`},
+                                'cut': {name: `${t('cut')} (X)`},
+                                'paste': {name: `${t('paste')} (V)`},
                                 '-----------': {name: '---------'},
-                                'undo': {name: '撤销 (Z)'}
+                                'undo': {name: `${t('undo')} (Z)`}
                             }
                         }}
                     />

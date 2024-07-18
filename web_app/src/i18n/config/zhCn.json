@@ -107,5 +107,15 @@
   "customTemplateName": "自定义模板名称",
   "customTemplateDesc": "自定义模板介绍",
   "about": "关于",
-  "openSourceComponentLicense": "开源组件许可"
+  "openSourceComponentLicense": "开源组件许可",
+  "insertRowAbove": "在上方插入行",
+  "insertRowBelow": "在下方插入行",
+  "insertRowToLeft": "在左侧插入行",
+  "insertRowToRight": "在右侧插入行",
+  "deleteAnEntireLine": "删除整行",
+  "deleteAnEntireColumn": "删除整列",
+  "copy": "复制",
+  "cut": "剪切",
+  "paste": "粘贴",
+  "undo": "撤销"
 }
