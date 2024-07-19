@@ -20,6 +20,7 @@ export default abstract class LmoTemplate implements ILMOTemplate {
     protected constructor(conf: ITemplateConfig) {
         this.conf = conf;
         this.isSynthesisMode = location.href.includes('__type=h');
+        this.initHTMLTemplate();
         this.initDrag();
         this.initViewStyle();
         this.sendMessage('TEMPLATE_FULL_CONFIG', conf);
@@ -471,6 +472,52 @@ export default abstract class LmoTemplate implements ILMOTemplate {
             if (arrangement === 'right')
                 templateEl.style.backgroundPositionX = 'right';
         }
+    }
+
+    private initHTMLTemplate(): void {
+        if (document.getElementById('template')) return;
+
+        const fragment: DocumentFragment = document.createDocumentFragment();
+        const templateElement: HTMLDivElement = document.createElement('div');
+        const mainTitleElement: HTMLDivElement = document.createElement('div');
+        const subTitleElement: HTMLDivElement = document.createElement('div');
+        const fromSourceElement: HTMLDivElement = document.createElement('div');
+        const logoElement: HTMLDivElement = document.createElement('div');
+        const chartAppElement: HTMLDivElement = document.createElement('div');
+        const createTextElement = (): HTMLDivElement => {
+            const textValueElement: HTMLDivElement = document.createElement('div');
+            textValueElement.classList.add('text-value');
+            textValueElement.contentEditable = String(!this.isSynthesisMode);
+
+            return textValueElement;
+        }
+        const addDefaultAnimatedClass = (el: HTMLDivElement): void => el.classList.add('animated', 'fadeInDown');
+
+        templateElement.id = 'template';
+
+        mainTitleElement.id = 'main-title';
+        addDefaultAnimatedClass(mainTitleElement);
+        mainTitleElement.append(createTextElement());
+
+        subTitleElement.id = 'sub-title';
+        addDefaultAnimatedClass(subTitleElement);
+        subTitleElement.append(createTextElement());
+
+        fromSourceElement.id = 'from-source';
+        addDefaultAnimatedClass(fromSourceElement);
+        fromSourceElement.append(createTextElement());
+
+        logoElement.id = 'logo';
+
+        chartAppElement.id = 'app';
+        chartAppElement.style.width = '100vw';
+        chartAppElement.style.height = 'calc(100vh - 120px)';
+        chartAppElement.style.userSelect = 'none';
+        chartAppElement.style.marginTop = '120px';
+
+        templateElement.append(mainTitleElement, subTitleElement, fromSourceElement, logoElement, chartAppElement);
+        fragment.appendChild(templateElement);
+        document.body.appendChild(fragment);
     }
 
     private initViewStyle(): void {

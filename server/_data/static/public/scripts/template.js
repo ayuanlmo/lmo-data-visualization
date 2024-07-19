@@ -51,6 +51,7 @@ var LmoTemplate = /** @class */ (function () {
         var _this_1 = this;
         this.conf = conf;
         this.isSynthesisMode = location.href.includes('__type=h');
+        this.initHTMLTemplate();
         this.initDrag();
         this.initViewStyle();
         this.sendMessage('TEMPLATE_FULL_CONFIG', conf);
@@ -440,6 +441,44 @@ var LmoTemplate = /** @class */ (function () {
             if (arrangement === 'right')
                 templateEl.style.backgroundPositionX = 'right';
         }
+    };
+    LmoTemplate.prototype.initHTMLTemplate = function () {
+        var _this_1 = this;
+        if (document.getElementById('template'))
+            return;
+        var fragment = document.createDocumentFragment();
+        var templateElement = document.createElement('div');
+        var mainTitleElement = document.createElement('div');
+        var subTitleElement = document.createElement('div');
+        var fromSourceElement = document.createElement('div');
+        var logoElement = document.createElement('div');
+        var chartAppElement = document.createElement('div');
+        var createTextElement = function () {
+            var textValueElement = document.createElement('div');
+            textValueElement.classList.add('text-value');
+            textValueElement.contentEditable = String(!_this_1.isSynthesisMode);
+            return textValueElement;
+        };
+        var addDefaultAnimatedClass = function (el) { return el.classList.add('animated', 'fadeInDown'); };
+        templateElement.id = 'template';
+        mainTitleElement.id = 'main-title';
+        addDefaultAnimatedClass(mainTitleElement);
+        mainTitleElement.append(createTextElement());
+        subTitleElement.id = 'sub-title';
+        addDefaultAnimatedClass(subTitleElement);
+        subTitleElement.append(createTextElement());
+        fromSourceElement.id = 'from-source';
+        addDefaultAnimatedClass(fromSourceElement);
+        fromSourceElement.append(createTextElement());
+        logoElement.id = 'logo';
+        chartAppElement.id = 'app';
+        chartAppElement.style.width = '100vw';
+        chartAppElement.style.height = 'calc(100vh - 120px)';
+        chartAppElement.style.userSelect = 'none';
+        chartAppElement.style.marginTop = '120px';
+        templateElement.append(mainTitleElement, subTitleElement, fromSourceElement, logoElement, chartAppElement);
+        fragment.appendChild(templateElement);
+        document.body.appendChild(fragment);
     };
     LmoTemplate.prototype.initViewStyle = function () {
         var body = document.body;
