@@ -52,7 +52,7 @@ function ColorConfig(): React.JSX.Element {
         PostMessage.send({
             type: 'SET_THEME_COLOR',
             message: {
-                type: themeType,
+                type: themeType === '' ? 'Theme' : themeType,
                 value: currentTemplateConfig.value
             }
         });
