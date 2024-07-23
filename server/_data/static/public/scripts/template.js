@@ -351,7 +351,7 @@ var LmoTemplate = /** @class */ (function () {
                 elements.forEach(function (i) {
                     var targetId = e.target.classList.contains('text-value') ? e.target.parentElement.id : e.target.id;
                     var _ = document.getElementById(i);
-                    if (i !== targetId && _.classList.length > 0) {
+                    if (i !== targetId && Array.from(_.classList).includes('active')) {
                         _.classList.remove('active');
                         _.classList.remove('square-container');
                     }
@@ -375,7 +375,7 @@ var LmoTemplate = /** @class */ (function () {
             initInteract(el);
             initEvent(el);
             useObserver(function (e) {
-                if (e[0].target.classList.length === 0)
+                if (!(Array.from(e[0].target.classList).includes('active')))
                     _this_1.sendMessage('TEMPLATE_SELECT_TEXT_CLOSE', {});
             }).observe(el, classListObServerConfig);
         });
@@ -408,11 +408,12 @@ var LmoTemplate = /** @class */ (function () {
                 elements.forEach(function (i) {
                     // @ts-ignore
                     var idName = e.target.parentElement.id;
+                    var el = getElementById(i);
                     if (i !== idName && elements.includes(idName) || idName === '') {
-                        var classList = getElementById(i).classList;
-                        if (classList.length !== 0) {
-                            getElementById(i).classList.remove('active');
-                            getElementById(i).classList.remove('square-container');
+                        var classList = el.classList;
+                        if (Array.from(classList).includes('active')) {
+                            el.classList.remove('active');
+                            el.classList.remove('square-container');
                         }
                     }
                 });

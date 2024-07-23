@@ -359,7 +359,7 @@ export default abstract class LmoTemplate implements ILMOTemplate {
                     const targetId = e.target.classList.contains('text-value') ? e.target.parentElement.id : e.target.id;
                     const _: HTMLElement = document.getElementById(i) as HTMLElement;
 
-                    if (i !== targetId && _.classList.length > 0) {
+                    if (i !== targetId && Array.from(_.classList).includes('active')) {
                         _.classList.remove('active');
                         _.classList.remove('square-container');
                     }
@@ -386,7 +386,8 @@ export default abstract class LmoTemplate implements ILMOTemplate {
             initInteract(el);
             initEvent(el);
             useObserver((e: any): void => {
-                if (e[0].target.classList.length === 0) this.sendMessage('TEMPLATE_SELECT_TEXT_CLOSE', {});
+                if (!(Array.from(e[0].target.classList).includes('active')))
+                    this.sendMessage('TEMPLATE_SELECT_TEXT_CLOSE', {});
             }).observe(el, classListObServerConfig);
         });
 
@@ -425,13 +426,14 @@ export default abstract class LmoTemplate implements ILMOTemplate {
                 elements.forEach((i: string): void => {
                     // @ts-ignore
                     const idName = e.target.parentElement.id;
+                    const el: HTMLElement = getElementById(i) as HTMLElement;
 
                     if (i !== idName && elements.includes(idName) || idName === '') {
-                        const classList: DOMTokenList = getElementById(i).classList;
+                        const classList: DOMTokenList = el.classList;
 
-                        if (classList.length !== 0) {
-                            getElementById(i).classList.remove('active');
-                            getElementById(i).classList.remove('square-container');
+                        if (Array.from(classList).includes('active')) {
+                            el.classList.remove('active');
+                            el.classList.remove('square-container');
                         }
                     }
                 });
