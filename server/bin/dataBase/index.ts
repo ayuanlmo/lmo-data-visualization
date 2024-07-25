@@ -3,6 +3,7 @@ import {DataTypes, Sequelize} from 'sequelize';
 import Cli from "../../lib/Cli";
 import AppConfig from "../../conf/AppConfig";
 import initDefaultData from "./init";
+import {Process} from "../Process";
 
 const DB: Sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -94,12 +95,17 @@ UpLoadFilesModel.belongsTo(UpLoadFilesCategoryModel, {
     foreignKey: 'categoryId'
 });
 
+export const close = async (): Promise<void> => {
+    await DB?.close?.();
+};
+
 ((): void => {
     try {
         (async (): Promise<void> => {
             await DB.authenticate();
             DB.sync().then(async (): Promise<void> => {
                 Cli.debug('Models synced successfully.');
+                Process.ready();
                 await initDefaultData();
                 await ResourcesModel.update({
                     status: 'error'
