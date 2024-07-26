@@ -29,13 +29,22 @@ export type TThemeConfig = {
     configs: Array<TThemeTypes>;
     value: Array<string>;
 };
-export type TOtherConfig = {
+export type TOtherConfigGroup = Array<{
     label: string;
     configs: Array<TConfigOtherConfigItemType>;
+}>
+export type TOtherConfig = {
+    label?: string;
+    configs?: Array<TConfigOtherConfigItemType>;
+    group?: TOtherConfigGroup;
     values: {
         [key: string]: TConfigOtherConfigItemValueType;
     };
-}
+} & ({ configs: Array<TConfigOtherConfigItemType>; group?: never; } | {
+    group: TOtherConfigGroup;
+    configs?: never;
+    label?: never;
+});
 
 export interface IConfig {
     text: {

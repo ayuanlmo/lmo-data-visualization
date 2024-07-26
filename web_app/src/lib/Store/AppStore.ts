@@ -30,6 +30,7 @@ const defaultCurrentTemplateConfigData = {
     otherConfig: {
         label: '',
         configs: [],
+        group: [],
         values: {}
     }
 };

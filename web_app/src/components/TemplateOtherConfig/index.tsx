@@ -1,5 +1,5 @@
 import {Grid, GridResponsiveSize, Input, NumberInput, Radio, Select, SelectOption, Switch} from "@hi-ui/hiui";
-import React, {useEffect, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../lib/Store";
 import YExtendTemplate from "../YExtendTemplate";
@@ -20,8 +20,14 @@ interface IConfigTypes {
     }[];
 }
 
-interface ITemplateOtherConfig {
+type TTemplateOtherConfigGroupItem = {
+    label: string;
     configs: IConfigTypes[];
+}
+
+interface ITemplateOtherConfig {
+    configs?: IConfigTypes[];
+    group?: Array<TTemplateOtherConfigGroupItem>
     label?: string;
     values: {
         [key: string]: number | string | boolean;
@@ -30,7 +36,7 @@ interface ITemplateOtherConfig {
 
 const TemplateOtherConfig = (): React.JSX.Element => {
     const colspan: GridResponsiveSize<number> = {lg: 12, xl: 12, md: 12, sm: 12, xs: 12};
-    const currentTemplateOtherConfig: ITemplateOtherConfig | null = useSelector((state: RootState) => state.app.currentTemplateConfig.otherConfig) as ITemplateOtherConfig | null;
+    const currentTemplateOtherConfig: ITemplateOtherConfig = useSelector((state: RootState) => state.app.currentTemplateConfig.otherConfig) as ITemplateOtherConfig;
     const [values, setValues]: ReactState<object> = useState({});
     const dispatch: Dispatch = useDispatch();
 
@@ -42,7 +48,8 @@ const TemplateOtherConfig = (): React.JSX.Element => {
     };
 
     useEffect((): void => {
-        if (currentTemplateOtherConfig && Array.isArray(currentTemplateOtherConfig.configs))
+        if (!currentTemplateOtherConfig) return;
+        if (Array.isArray(currentTemplateOtherConfig.configs) || Array.isArray(currentTemplateOtherConfig?.group))
             setValues(currentTemplateOtherConfig.values);
     }, []);
 
@@ -58,7 +65,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
 
     const getTemplate = (item: IConfigTypes, key: number) => {
         return (
-            <React.Fragment key={key}>
+            <Fragment key={key}>
                 <Grid.Col span={colspan}>
                     <div className={'text-config-item-label'}>{item.label}</div>
                 </Grid.Col>
@@ -130,24 +137,53 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                         />
                     </YExtendTemplate>
                 </Grid.Col>
-            </React.Fragment>
+            </Fragment>
         );
     };
 
     if (currentTemplateOtherConfig)
         return (
-            <div className={'text-config app_none_user_select'}>
-                <div className={'text-config-title app_flex_box'}>{currentTemplateOtherConfig.label || '其他配置'}</div>
-                <div className={'text-config-item app_flex_box'}>
-                    <Grid.Row gutter={true} justify={"space-between"}>
-                        {
-                            Array.isArray(currentTemplateOtherConfig.configs) ?
-                                currentTemplateOtherConfig.configs.map((i: IConfigTypes, k: number) => {
-                                    return getTemplate(i, k);
-                                }) : <></>
-                        }
-                    </Grid.Row>
-                </div>
+            <div className="text-config app_none_user_select">
+                {currentTemplateOtherConfig.configs && currentTemplateOtherConfig.configs.length > 0 ?
+                    <>
+                        <div className="text-config-title app_flex_box">
+                            {currentTemplateOtherConfig.label || '其他配置'}
+                        </div>
+                        <div className="text-config-item app_flex_box">
+                            <Grid.Row gutter={true} justify="space-between" style={{width: '100%'}}>
+                                {
+                                    currentTemplateOtherConfig.configs.map((config: IConfigTypes, index: number) => {
+                                        return <Fragment key={index}>
+                                            {
+                                                getTemplate(config, index)
+                                            }
+                                        </Fragment>;
+                                    })
+                                }
+                            </Grid.Row>
+                        </div>
+                    </>
+                    :
+                    currentTemplateOtherConfig.group?.map((groupItem: TTemplateOtherConfigGroupItem, groupIndex: number) => {
+                        return <Fragment key={groupIndex}>
+                            <div className="text-config-title app_flex_box">{groupItem.label}</div>
+                            <div className="text-config-item app_flex_box">
+                                <Grid.Row gutter={true} justify="space-between" style={{width: '100%'}}>
+                                    {
+                                        groupItem.configs.map((config: IConfigTypes, configIndex: number) => {
+                                                return <Fragment key={configIndex}>
+                                                    {
+                                                        getTemplate(config, configIndex)
+                                                    }
+                                                </Fragment>;
+                                            }
+                                        )
+                                    }
+                                </Grid.Row>
+                            </div>
+                        </Fragment>;
+                    })
+                }
             </div>
         );
     return <></>;
