@@ -1,3 +1,8 @@
+export type TThemeTypes = Readonly<'Gradient' | 'Single' | 'Theme'>;
+export type TClarityTypes = Readonly<'1080P' | '2K' | '4K'>;
+export type TConfigOtherConfigItemValueType = boolean | number | string;
+export type TOtherConfigItemComponentType = "switch" | "input" | "input-number" | "color" | "select";
+
 export type TConfigTextType = {
     color: string;
     value: string;
@@ -8,43 +13,57 @@ export type TConfigTextType = {
     height: number;
     x: number;
     y: number;
-    key?: string;
+    readonly key?: string;
 };
-export type TConfigOtherConfigItemValueType = boolean | number | string;
-export type TConfigOtherConfigItemType = {
-    label: string;
-    key: string;
-    type: "switch" | "input" | "input-number" | "color" | "select";
-    value: TConfigOtherConfigItemValueType;
-} & ({
-    type: "select";
-    options: Array<{ label: string; value: string; }>
-} | {
-    type: Exclude<"switch" | "input" | "input-number" | "color", "select">; options?: undefined
-});
-export type TThemeTypes = 'Gradient' | 'Single' | 'Theme';
-export type TClarityTypes = '1080P' | '2K' | '4K';
-export type TThemeConfig = {
+
+export type TConfigOtherConfigItemType = Readonly<{
+        label: string;
+        key: string;
+        type: TOtherConfigItemComponentType;
+        value: TConfigOtherConfigItemValueType;
+    }>
+    & (Readonly<{
+        type: "select";
+        options: Array<{
+            label: string;
+            value: string;
+        }>;
+    }>
+    |
+    Readonly<{
+        type: Exclude<Exclude<TOtherConfigItemComponentType, "select">, "select">;
+        options?: never;
+    }>);
+
+export type TThemeConfig = Readonly<{
     type: TThemeTypes;
     configs: Array<TThemeTypes>;
     value: Array<string>;
-};
-export type TOtherConfigGroup = Array<{
+}>;
+
+export type TOtherConfigGroup = Readonly<Array<{
     label: string;
     configs: Array<TConfigOtherConfigItemType>;
-}>
+}>>;
+
 export type TOtherConfig = {
-    label?: string;
-    configs?: Array<TConfigOtherConfigItemType>;
-    group?: TOtherConfigGroup;
+    readonly label?: string;
+    readonly configs?: Array<TConfigOtherConfigItemType>;
+    readonly group?: TOtherConfigGroup;
     values: {
         [key: string]: TConfigOtherConfigItemValueType;
     };
-} & ({ configs: Array<TConfigOtherConfigItemType>; group?: never; } | {
-    group: TOtherConfigGroup;
-    configs?: never;
-    label?: never;
-});
+} & (
+    Readonly<{
+        configs: Array<TConfigOtherConfigItemType>;
+        group?: never;
+    }>
+    |
+    Readonly<{
+        group: TOtherConfigGroup;
+        configs?: never;
+        label?: never;
+    }>);
 
 export interface IConfig {
     text: {
@@ -76,5 +95,5 @@ export interface ITemplateConfig {
     data?: Array<any>;
     config: IConfig;
     otherConfig: TOtherConfig;
-    id?: string;
+    readonly id?: string;
 }
