@@ -39,7 +39,7 @@ const AppConfig = {
     __DEV_SERVER: argv.mode === 'development',
     __LIVE_SERVER: argv.mode === 'live-server',
     __ARGV: argv as IArgsParams,
-    __PROTECTED_STATIC_FILES: ['.ts', '.bin', 'config.json', 'package.json', 'tsconfig.json'],
+    __PROTECTED_STATIC_FILES: ['.ts', '.bin', 'config.json', 'package.json', 'tsconfig.json', '.pug'],
     __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory']
 } as const;
 

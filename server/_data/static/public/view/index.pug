@@ -1,0 +1,29 @@
+-const TEMPLATE_DEFAULT_STYLES = ["../../styles/animate.min.css", "../../styles/default.css"];
+-const TEMPLATE_DEFAULT_SCRIPTS = ['../../scripts/echarts.min.js', '../../scripts/d3.js', '../../scripts/interact.min.js']
+-const TEMPLATE_DEFAULT_TEXT_IDS = ["main-title", "sub-title", "from-source"];
+
+doctype html
+html(lang=lang)
+    head
+        meta(charset="UTF-8")
+        meta(content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0", name="viewport")
+        meta(content="ie=edge", http-equiv="X-UA-Compatible")
+        title #{title}
+        each _STYLE_ITEM in TEMPLATE_DEFAULT_STYLES
+            link(rel="stylesheet", href=_STYLE_ITEM)
+        each _SCRIPT_ITEM in TEMPLATE_DEFAULT_SCRIPTS
+            script(src = _SCRIPT_ITEM)
+        script.
+            void function (_) {
+                _.TEMPLATE_ENGINE = "SR";
+                _.queryParams = JSON.parse("#{queryParams}".replace(/&quot;/g, '"'));
+            }(window ?? Object.create(globalThis ?? this));
+    body
+        div(id="template")
+            each _TEXT_ID in TEMPLATE_DEFAULT_TEXT_IDS
+                div(class="animated fadeInDown", id=_TEXT_ID)
+                    div(class="text-value", contenteditable)
+            div(id="logo")
+            div(id="app", style="width: 100vw;height: calc(100vh - 120px);user-select: none;margin-top: 120px;")
+        //__LMO_SERVER_AUDIO_RENDER_TAG
+    script(src="./index.js", type="module")

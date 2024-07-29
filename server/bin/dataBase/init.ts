@@ -47,7 +47,6 @@ const initTemplate = () => {
             'data.json',
             'cover.png',
             'cover.gif',
-            'index.html',
             'config.json',
             'index.js'
         ])) {
@@ -58,13 +57,13 @@ const initTemplate = () => {
                     description: string;
                     type: number;
                 } = JSON.parse(fs.readFileSync(path.resolve(templatePath + `/${i}/config.json`), 'utf-8'));
-
+                const isHTMLTemplate: boolean = fs.existsSync(templateRoot + 'index.html') || fs.existsSync(templateRoot + 'index.htm');
                 const item = {
                     id: require('uuid').v4(),
                     ...templateConfig,
                     cover: `${templateRoot.replace('/public', '')}/cover.png`,
                     gifCover: `${templateRoot.replace('/public', '')}/cover.gif`,
-                    path: `${templateRoot.replace('/public', '')}/index.html`,
+                    path: `${templateRoot.replace('/public', '')}${isHTMLTemplate ? '/index.html' : ''}`,
                     createTime: new Date().getTime()
                 };
 

@@ -38,6 +38,8 @@ export default class HttpServer {
         this.App.use(Express.json({
             limit: "5mb"
         }));
+        this.App.set('view engine', 'pug');
+        this.App.set('views', path.resolve('./', '_data/static/public/view'));
         this.App.use((require('cors')()));
         this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
             this.onLineUsers++;
@@ -54,6 +56,13 @@ export default class HttpServer {
 
                 if (AppConfig.__PROTECTED_STATIC_FILES.some((i: string): boolean => paths[paths.length - 1].includes(i)))
                     return void res.status(200).json(CreateErrorMessage('ext00n', 404));
+
+                if (req.url.includes('/static/templates') && !req.url.includes('index.html') && !req.url.includes('.js'))
+                    return void res.render('index.pug', {
+                        title: 'lmo-DV template',
+                        lang: req.headers['accept-language'] ?? 'en',
+                        queryParams: JSON.stringify(req.query)
+                    });
             }
 
             if (AppConfig.__LIVE_SERVER) {
