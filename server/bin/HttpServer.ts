@@ -57,7 +57,7 @@ export default class HttpServer {
                 if (AppConfig.__PROTECTED_STATIC_FILES.some((i: string): boolean => paths[paths.length - 1].includes(i)))
                     return void res.status(200).json(CreateErrorMessage('ext00n', 404));
 
-                if (req.url.includes('/static/templates') && !req.url.includes('index.html') && !req.url.includes('.js'))
+                if (req.url.includes('/static/templates') && !req.url.includes('index.html') && !req.url.includes('.'))
                     return void res.render('index.pug', {
                         title: 'lmo-DV template',
                         lang: req.headers['accept-language'] ?? 'en',
