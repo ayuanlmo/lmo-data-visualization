@@ -8,6 +8,7 @@ import {setCurrentTemplateAudioConfig, setCurrentTemplateVideoConfig} from "../.
 import {Dispatch} from "@reduxjs/toolkit";
 import SelectBackgroundImage from "../ColorConfig/SelectBackgroundImage";
 import PostMessage from "../../lib/PostMessage";
+import postMessage from "../../lib/PostMessage";
 
 const SyntheticConfig = (): React.JSX.Element => {
     const colspan: GridResponsiveSize<number> = {lg: 12, xl: 12, md: 12, sm: 12, xs: 12};
@@ -49,6 +50,10 @@ const SyntheticConfig = (): React.JSX.Element => {
                             <SelectBackgroundImage
                                 type={'audio'}
                                 onSelect={(e: string, src: string | undefined): void => {
+                                    postMessage.send({
+                                        type: "RENDER",
+                                        message: {}
+                                    });
                                     dispatch(setCurrentTemplateAudioConfig({
                                         ...currentTemplateAudioConfig,
                                         src: src ?? '',
