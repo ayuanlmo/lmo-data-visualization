@@ -6,6 +6,7 @@ import {ResourcesModel, TemplateModel} from "../dataBase";
 import AppConfig from "../../conf/AppConfig";
 import {WebSocketServer} from "../WebSocketServer";
 import TaskScheduler from "../TaskScheduler";
+import {get as httpGet, IncomingMessage} from "http";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 
@@ -27,7 +28,7 @@ export default class Task {
             where: {
                 id
             }
-        }).then((template) => {
+        }).then(async (template) => {
             if (!template)
                 return void res.json(createErrorMessage('ext004'));
 
@@ -44,15 +45,11 @@ export default class Task {
                     mkdirSync(dirPath);
 
                 readdirSync(originalTemplate).forEach((file: string): void => {
-                    const ignoreFiles: Array<string> = ['.initialized.t.bin', 'index.ts', 'conf.ts'];
-                    if (!ignoreFiles.includes(file))
+                    const ignoreFiles: Array<string> = ['index.js', 'index.html', 'index.htm'];
+
+                    if (ignoreFiles.includes(file))
                         copyFileSync(path.resolve(`${originalTemplate}/${file}`), path.resolve(`${dirPath}/${file}`));
                 });
-                writeFileSync(path.resolve(`${dirPath}/.initialized.t.bin`), Buffer.from(JSON.stringify({
-                    name: customTemplateName,
-                    description: customTemplateDesc,
-                    type: 0
-                })));
                 writeFileSync(path.resolve(dirPath, 'conf.js'), `const config = ${JSON.stringify({
                     ...currentTemplateConfig,
                     id: dbId
@@ -64,6 +61,8 @@ export default class Task {
                     audioVolume: 100,
                     pAudio: false
                 };
+                const htmlPath: string = path.resolve(dirPath, 'index.html');
+                const htmPath: string = path.resolve(dirPath, 'index.htm');
 
                 try {
                     if (currentTemplateConfig.config.audio.path !== '') {
@@ -72,10 +71,18 @@ export default class Task {
                             taskAudioConfig.audioVolume = Number(currentTemplateConfig.config.audio.volume);
                             taskAudioConfig.audioPath = path.resolve(`./_data/static/public${currentTemplateConfig.config.audio.path.replace('/static', '')}`)
                         } else {
-                            const originHtmlContent: string = readFileSync(path.resolve(dirPath, 'index.html')).toString();
                             const audioElement: string = `<audio src="${serverHttpUrl}${currentTemplateConfig.config.audio.src}" volume="${Number(currentTemplateConfig.config.audio.volume) / 100}"></audio>`;
                             const audioTag: string = `<!--__LMO_SERVER_AUDIO_RENDER_TAG-->`;
+                            let originHtmlContent: string = '';
                             let afterHtmlContent: string = '';
+
+                            if (existsSync(htmlPath))
+                                originHtmlContent = readFileSync(path.resolve(dirPath, 'index.html')).toString();
+                            else if (existsSync(htmPath))
+                                originHtmlContent = readFileSync(path.resolve(dirPath, 'index.htm')).toString();
+                            else
+                                originHtmlContent = await Task.getTemplateHTMLString();
+
                             if (originHtmlContent.includes(audioTag))
                                 afterHtmlContent = originHtmlContent.replace(audioTag, audioElement);
                             else
@@ -89,15 +96,17 @@ export default class Task {
                 }
                 if (preview) {
                     return void res.json(createSuccessMessage({
-                        path: `${templateStaticPath}/index.html?__type=h`,
+                        path: `${templateStaticPath}/${existsSync(htmlPath) ? 'index.html' : existsSync(htmPath) ? 'index.htm' : '/'}?__type=h`,
                         id: templatePathName
                     }));
                 } else {
                     try {
-                        (async (): Promise<void> => {
+                        const templateServerUrl: string = `${templateStaticPath}/${existsSync(htmlPath) ? 'index.html' : existsSync(htmPath) ? 'index.htm' : ''}?__type=h`;
+
+                        await (async (): Promise<void> => {
                             const taskConfig = {
                                 id: dbId,
-                                path: `${serverHttpUrl}${templateStaticPath}?__type=h`,
+                                path: `${serverHttpUrl}${templateServerUrl}`,
                                 duration: currentTemplateConfig.config.video.duration ?? 5000 as number,
                                 ...Task.getVideoClarity(currentTemplateConfig.config.video.clarity ?? ''),
                                 fps: currentTemplateConfig.config.video.fps ?? 30 as number,
@@ -112,7 +121,7 @@ export default class Task {
                                 name: taskName === '' ? require('uuid').v4() : taskName,
                                 templatePath: dirPath,
                                 createTime: new Date().getTime(),
-                                url: `${templateStaticPath}/index.html?__type=h`,
+                                url: templateServerUrl,
                                 clarity: currentTemplateConfig.config.video.clarity ?? '1080P',
                                 status: 'pending',
                                 taskConfig: JSON.stringify(taskConfig)
@@ -145,6 +154,15 @@ export default class Task {
 
             } else
                 res.json(createErrorMessage('ext00e'));
+        });
+    }
+
+    private static getTemplateHTMLString(): Promise<string> {
+        return new Promise((resolve: (data: string) => void, reject: (data: string) => void): void => {
+            httpGet(`http://localhost:3000/static/templates`, (res: IncomingMessage): void => {
+                res.on('data', (htmlData: Buffer): void => resolve(htmlData.toString()));
+                res.on('error', (): void => reject(''));
+            });
         });
     }
 
