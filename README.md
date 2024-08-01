@@ -1,10 +1,10 @@
-<center>
+<div align="center">
     <img width="200px" src="web_app/public/logo.svg">
-</center>
+</div>
 
-<center>
+<div align="center">
 <h1>lmo-DataVisualization</h1>
-</center>
+</div>
 
 ## 介绍
 
