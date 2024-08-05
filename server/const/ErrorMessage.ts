@@ -12,7 +12,8 @@ const ErrorMessage = {
     ext005: {message: 'Not a valid id or id is empty.'},
     ext006: {message: 'This template does not exist.'},
     ext007: {message: 'This template is not editable.'},
-    ext008: {message: 'This template cannot be deleted.'}
+    ext008: {message: 'This template cannot be deleted.'},
+    ext009: {message: 'Unable to connect to the synthesis server.'}
 };
 
 export default ErrorMessage;

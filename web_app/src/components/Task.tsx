@@ -82,6 +82,8 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
             }).then((): void => {
                 Notification.message(t('createTaskSuccess'), 'success');
                 setVisible(false);
+            }).catch((): void => {
+                setVisible(false);
             });
         });
     };
