@@ -4,6 +4,7 @@ import {Op} from "sequelize";
 import {WebSocketServer} from "./WebSocketServer";
 import Cli from "../lib/Cli";
 import TaskScheduler from "./TaskScheduler";
+import MemoryCache from "../lib/MemoryCache";
 
 export interface ISocketSendMessage {
     type: string;
@@ -20,6 +21,7 @@ class SocketClient {
         this.init();
         this.reConnectNumber = 0;
         this.isFirstConnect = true;
+        MemoryCache.set<boolean>('SYNTHESIS_SERVICES_CONNECT_STATUS', false);
     }
 
     public sendMessage(message: ISocketSendMessage): void {
@@ -32,6 +34,7 @@ class SocketClient {
         this.client.on('connect', (): void => {
             Cli.warn('Connected to server');
             this.startPing();
+            MemoryCache.set<boolean>('SYNTHESIS_SERVICES_CONNECT_STATUS', true);
             this.reConnectNumber = 0;
             if (!this.isFirstConnect) {
                 WebSocketServer.sendMessage(JSON.stringify({
@@ -48,10 +51,10 @@ class SocketClient {
                 type: 'SERVICE_CONNECT_CLOSE',
                 message: {}
             }));
-
         });
         this.client.on('error', (e: Error): void => {
             Cli.debug('Connection error:', e);
+            MemoryCache.set<boolean>('SYNTHESIS_SERVICES_CONNECT_STATUS', false);
             this.isFirstConnect = false;
             this.reconnect();
             WebSocketServer.sendMessage(JSON.stringify({

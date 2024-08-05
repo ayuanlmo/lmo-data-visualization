@@ -7,6 +7,7 @@ import AppConfig from "../../conf/AppConfig";
 import {WebSocketServer} from "../WebSocketServer";
 import TaskScheduler from "../TaskScheduler";
 import {get as httpGet, IncomingMessage} from "http";
+import MemoryCache from "../../lib/MemoryCache";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 
@@ -23,6 +24,15 @@ export default class Task {
 
         if (id === '')
             return void res.json(createErrorMessage('ext003'));
+
+        if (!MemoryCache.get('SYNTHESIS_SERVICES_CONNECT_STATUS')) {
+            WebSocketServer.sendMessage(JSON.stringify({
+                type: 'SERVICE_RE_CONNECT_ERROR',
+                message: {}
+            }));
+
+            return void res.json(createErrorMessage('ext009'));
+        }
 
         TemplateModel.findOne({
             where: {
