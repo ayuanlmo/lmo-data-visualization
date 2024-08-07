@@ -11,6 +11,7 @@ node_modules
 /dist
 /service/dist
 /server/dist
+/server/_data/static/public/templates/*/*.js
 ffmpeg.exe
 \temp
 \output*
