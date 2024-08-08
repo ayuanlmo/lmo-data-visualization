@@ -1,10 +1,25 @@
-import {TemplateModel} from "./index";
+import {ColorModel, TemplateModel} from "./index";
 import fs from 'fs';
 import path from "path";
 import Cli from "../../lib/Cli";
+import {DB_COLOR_TABLE_DEFAULT_DATA} from './defaultData';
 
 const initDefaultData = async (): Promise<void> => {
     const templateOneData = await TemplateModel.findOne();
+    const colorOneData = await ColorModel.findOne();
+
+    if (colorOneData === null) {
+        const colorData = DB_COLOR_TABLE_DEFAULT_DATA.map(i => {
+            return {
+                ...i,
+                cssCode: '',
+                id: require('uuid').v4(),
+                value: JSON.stringify(i.value)
+            }
+        });
+
+        await ColorModel.bulkCreate(colorData);
+    }
 
     if (templateOneData === null) {
         const data = initTemplate();
