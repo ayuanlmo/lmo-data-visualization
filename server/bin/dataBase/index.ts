@@ -99,23 +99,20 @@ export const close = async (): Promise<void> => {
     await DB?.close?.();
 };
 
-((): void => {
+(async (): Promise<void> => {
     try {
-        (async (): Promise<void> => {
-            await DB.authenticate();
-            DB.sync().then(async (): Promise<void> => {
-                Cli.debug('Models synced successfully.');
-                Process.ready();
-                await initDefaultData();
-                await ResourcesModel.update({
-                    status: 'error'
-                }, {
-                    where: {
-                        status: 'pending'
-                    }
-                });
-            });
-        })();
+        await DB.authenticate();
+        await DB.sync();
+        await initDefaultData();
+        await ResourcesModel.update({
+            status: 'error'
+        }, {
+            where: {
+                status: 'pending'
+            }
+        });
+        Process.ready();
+        Cli.debug('Models synced successfully.');
     } catch (error) {
         Cli.warn('Unable to connect to the database:', error);
         process.exit(0);

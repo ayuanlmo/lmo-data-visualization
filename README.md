@@ -6,12 +6,39 @@
 <h1>lmo-DataVisualization</h1>
 </div>
 
+<p align="center">
+    <img src="https://img.shields.io/badge/Node.js -blue.svg?logo=node.js" alt="TypeScript">
+    <img src="https://img.shields.io/badge/TypeScript-4.9.5 -blue.svg?logo=typescript" alt="TypeScript">
+    <img src="https://img.shields.io/badge/craco-7.1.0 -blue.svg?" alt="craco">
+    <img src="https://img.shields.io/badge/React-18.2.0 -blue.svg?logo=react" alt="React">
+    <img src="https://img.shields.io/badge/React_Redux-18.2.0 -blue.svg?logo=redux" alt="React-Redux">
+    <img src="https://img.shields.io/badge/SASS-1.71.0 -blue.svg?logo=sass" alt="sass">
+    <img src="https://img.shields.io/badge/axios-1.6.7 -blue.svg?logo=axios" alt="axios">
+    <img src="https://img.shields.io/badge/Hi_UI-4.3.3 -blue.svg?logo=xiaomi" alt="Hi-UI">
+    <img src="https://img.shields.io/badge/nodemon-3.1.0 -blue.svg?logo=nodemon" alt="nodemon">
+    <img src="https://img.shields.io/badge/ts_node-10.9.2 -blue.svg?logo=ts-node" alt="ts-node">
+    <img src="https://img.shields.io/badge/Express-4.3.3 -blue.svg?logo=express" alt="Express">
+    <img src="https://img.shields.io/badge/Gulp-4.0.2 -blue.svg?logo=gulp" alt="gulp">
+    <img src="https://img.shields.io/badge/Pug-3.0.3 -blue.svg?logo=pug" alt="Express">
+    <img src="https://img.shields.io/badge/uuid-9.0.1 -blue.svg?" alt="uuid">
+    <img src="https://img.shields.io/badge/sqlite3-5.1.7 -blue.svg?logo=sqlite" alt="sqlite3">
+    <img src="https://img.shields.io/badge/sequelize-6.37.1 -blue.svg?logo=sequelize" alt="sequelize">
+    <img src="https://img.shields.io/badge/ffmpeg_static-5.2.0 -blue.svg?logo=ffmpeg" alt="ffmpeg-static">
+    <img src="https://img.shields.io/badge/fluent_ffmpeg-2.1.3 -blue.svg?logo=ffmpeg" alt="fluent-ffmpeg">
+    <img src="https://img.shields.io/badge/web_video_creator-0.0.34 -blue.svg" alt="web-video-creator">
+
+</p>
+
 ## 介绍
 
 `lmo-DataVisualization`（以下简称`“lmo-dv”` 或 `“dv”`），一款开源可视化数据制作工具。 使用内置模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
 同时提供了sdk，可以根据需求编写不同的模板以满足业务需求。
 
 这是lmo-dv的第3个大版本，该版本完全重新设计、重做。因此与旧版本不兼容。
+
+## 运行示意图
+
+![](https://cdn.ayuanlmo.cn/img/uploads/public/1f948867-05eb-454b-ae0c-1cea5b2979f9.png!/fw/520)
 
 ### 相比之前的版本，有什么区别？
 
