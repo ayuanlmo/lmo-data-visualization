@@ -1,5 +1,6 @@
 import {useDebounce, useObserver} from "./utils.js";
 import {ITemplateConfig, TConfigTextType, TOtherConfig, TThemeConfig} from "./@types/template.js";
+import BaseEventEmitter from "./lib/BaseEventEmitter";
 
 export interface ILMOTemplateImplementsMethods {
     readonly otherConfigChange: (config: TOtherConfig) => void;
@@ -13,13 +14,17 @@ export interface ILMOTemplate extends ILMOTemplateImplementsMethods {
     readonly tryRender: () => void;
 }
 
+export type TAnimationState = 'start-animation' | 'pause-animation';
+
 export default abstract class LmoTemplate implements ILMOTemplate {
     public conf: ITemplateConfig;
     public readonly isSynthesisMode: boolean;
+    private readonly animationEventEmitter: BaseEventEmitter;
 
     protected constructor(conf: ITemplateConfig) {
         this.conf = conf;
         this.isSynthesisMode = location.href.includes('__type=h');
+        this.animationEventEmitter = new BaseEventEmitter();
         this.initHTMLTemplate();
         this.initDrag();
         this.initViewStyle();
@@ -41,6 +46,15 @@ export default abstract class LmoTemplate implements ILMOTemplate {
     public abstract themeColorChange(config: TThemeConfig): void;
 
     public abstract render(): void | Promise<void>;
+
+    public addAnimationEventListener(type: TAnimationState, listener: Function) {
+        const {config} = this.conf;
+        const chatAnimationIsControllable: boolean =
+            (config.animation && config.animation.chatAnimationIsControllable) ?? false;
+
+        if (!this.isSynthesisMode && chatAnimationIsControllable)
+            this.animationEventEmitter.on(type, listener);
+    }
 
     public tryRender(): void {
         (async (): Promise<void> => {
@@ -234,6 +248,12 @@ export default abstract class LmoTemplate implements ILMOTemplate {
                 break;
             case 'GET_CONFIG':
                 this.sendMessage('GET_CONFIG', this.conf);
+                break;
+            case 'START_ANIMATION':
+                this.animationEventEmitter.emitEvent('start-animation');
+                break;
+            case 'PAUSE_ANIMATION':
+                this.animationEventEmitter.emitEvent('pause-animation');
                 break;
             case 'VIDEO_CONFIG_CHANGE':
                 this.conf.config.video = {

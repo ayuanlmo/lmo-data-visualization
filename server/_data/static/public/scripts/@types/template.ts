@@ -79,6 +79,9 @@ export interface IConfig {
         image: string;
         arrangement: string;
     };
+    animation?: {
+        chatAnimationIsControllable: boolean;
+    };
     video: {
         duration: number;
         fps: number;

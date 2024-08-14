@@ -46,9 +46,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { useDebounce, useObserver } from "./utils.js";
+import BaseEventEmitter from "./lib/BaseEventEmitter";
 var LmoTemplate = /** @class */ (function () {
     function LmoTemplate(conf) {
         var _this_1 = this;
+        this.animationEventEmitter = new BaseEventEmitter();
         this.conf = conf;
         this.isSynthesisMode = location.href.includes('__type=h');
         this.initHTMLTemplate();
@@ -66,6 +68,10 @@ var LmoTemplate = /** @class */ (function () {
             this.initSocket();
         }
     }
+    LmoTemplate.prototype.addAnimationEventListener = function (type, listener) {
+        if (!this.isSynthesisMode)
+            this.animationEventEmitter.on(type, listener);
+    };
     LmoTemplate.prototype.tryRender = function () {
         var _this_1 = this;
         (function () { return __awaiter(_this_1, void 0, void 0, function () {
@@ -248,6 +254,12 @@ var LmoTemplate = /** @class */ (function () {
                 break;
             case 'GET_CONFIG':
                 this.sendMessage('GET_CONFIG', this.conf);
+                break;
+            case 'START_ANIMATION':
+                this.animationEventEmitter.emitEvent('start-animation');
+                break;
+            case 'PAUSE_ANIMATION':
+                this.animationEventEmitter.emitEvent('pause-animation');
                 break;
             case 'VIDEO_CONFIG_CHANGE':
                 this.conf.config.video = __assign(__assign({}, this.conf.config.video), message);
