@@ -1,6 +1,6 @@
 import {useDebounce, useObserver} from "./utils.js";
 import {ITemplateConfig, TConfigTextType, TOtherConfig, TThemeConfig} from "./@types/template.js";
-import BaseEventEmitter from "./lib/BaseEventEmitter";
+import BaseEventEmitter from "./lib/BaseEventEmitter.js";
 
 export interface ILMOTemplateImplementsMethods {
     readonly otherConfigChange: (config: TOtherConfig) => void;

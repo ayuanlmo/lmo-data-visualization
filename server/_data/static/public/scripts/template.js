@@ -46,13 +46,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { useDebounce, useObserver } from "./utils.js";
-import BaseEventEmitter from "./lib/BaseEventEmitter";
+import BaseEventEmitter from "./lib/BaseEventEmitter.js";
 var LmoTemplate = /** @class */ (function () {
     function LmoTemplate(conf) {
         var _this_1 = this;
-        this.animationEventEmitter = new BaseEventEmitter();
         this.conf = conf;
         this.isSynthesisMode = location.href.includes('__type=h');
+        this.animationEventEmitter = new BaseEventEmitter();
         this.initHTMLTemplate();
         this.initDrag();
         this.initViewStyle();
@@ -69,7 +69,10 @@ var LmoTemplate = /** @class */ (function () {
         }
     }
     LmoTemplate.prototype.addAnimationEventListener = function (type, listener) {
-        if (!this.isSynthesisMode)
+        var _a;
+        var config = this.conf.config;
+        var chatAnimationIsControllable = (_a = (config.animation && config.animation.chatAnimationIsControllable)) !== null && _a !== void 0 ? _a : false;
+        if (!this.isSynthesisMode && chatAnimationIsControllable)
             this.animationEventEmitter.on(type, listener);
     };
     LmoTemplate.prototype.tryRender = function () {
