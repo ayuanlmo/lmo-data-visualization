@@ -99,4 +99,5 @@ export interface ITemplateConfig {
     config: IConfig;
     otherConfig: TOtherConfig;
     readonly id?: string;
+    readonly template?: string;
 }

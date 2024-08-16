@@ -70,17 +70,21 @@ export default abstract class LmoTemplate implements ILMOTemplate {
     }
 
     private initSocket(): void {
-        const ws: WebSocket = new WebSocket(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.host}/connect`);
+        const ws: WebSocket = new WebSocket(`${location.protocol.includes('https') ? 'wss' : 'ws'}://${location.host}/template`);
 
         const messageHandel = (msg: MessageEvent): void => {
             const {data} = msg;
 
-            if (typeof data === 'string' || data.includes('pong')) return;
+            if (typeof data !== 'string') return;
+            if (data === 'pong' || data === 'open') return;
 
             try {
-                const _data = JSON.parse(data);
+                const _data: {
+                    _signal: string;
+                    id: string;
+                } = JSON.parse(data);
 
-                if (_data.type === '__ABORT_RENDER') {
+                if (_data._signal === '__ABORT_RENDER') {
                     if (_data.id === this.conf.id)
                         window?.captureCtx?.throwError?.(-1, "Abort");
                 }
@@ -91,8 +95,13 @@ export default abstract class LmoTemplate implements ILMOTemplate {
 
         ws.addEventListener('message', messageHandel);
         ws.addEventListener('open', (): void => {
+            ws.send(JSON.stringify({
+                id: this.conf.id,
+                template: this.conf.template
+            }));
             setInterval((): void => {
-                ws.send('ping');
+                if (ws.readyState.toString() === '1')
+                    ws.send('ping')
             }, 100 * 10 * 10);
         });
     }

@@ -101,15 +101,17 @@ var LmoTemplate = /** @class */ (function () {
     };
     LmoTemplate.prototype.initSocket = function () {
         var _this_1 = this;
-        var ws = new WebSocket("".concat(location.protocol.includes('https') ? 'wss' : 'ws', "://").concat(location.host, "/connect"));
+        var ws = new WebSocket("".concat(location.protocol.includes('https') ? 'wss' : 'ws', "://").concat(location.host, "/template"));
         var messageHandel = function (msg) {
             var _a, _b;
             var data = msg.data;
-            if (typeof data === 'string' || data.includes('pong'))
+            if (typeof data !== 'string')
+                return;
+            if (data === 'pong' || data === 'open')
                 return;
             try {
                 var _data = JSON.parse(data);
-                if (_data.type === '__ABORT_RENDER') {
+                if (_data._signal === '__ABORT_RENDER') {
                     if (_data.id === _this_1.conf.id)
                         (_b = (_a = window === null || window === void 0 ? void 0 : window.captureCtx) === null || _a === void 0 ? void 0 : _a.throwError) === null || _b === void 0 ? void 0 : _b.call(_a, -1, "Abort");
                 }
@@ -120,8 +122,13 @@ var LmoTemplate = /** @class */ (function () {
         };
         ws.addEventListener('message', messageHandel);
         ws.addEventListener('open', function () {
+            ws.send(JSON.stringify({
+                id: _this_1.conf.id,
+                template: _this_1.conf.template
+            }));
             setInterval(function () {
-                ws.send('ping');
+                if (ws.readyState.toString() === '1')
+                    ws.send('ping');
             }, 100 * 10 * 10);
         });
     };
