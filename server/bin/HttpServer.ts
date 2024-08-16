@@ -6,6 +6,7 @@ import Utils from "../utils";
 import router from "../router";
 import Cli from "../lib/Cli";
 import {IWsApp, WebSocketServer} from "./WebSocketServer";
+import TemplateSocket from "./TemplateSocket";
 import Express = require("express");
 import CreateErrorMessage = Utils.createErrorMessage;
 
@@ -22,14 +23,17 @@ export default class HttpServer {
     private readonly App: IExpressApp;
     private onLineUsers: number;
     private readonly WsPool: Array<IWsApp>;
+    private readonly TemplateWsPool: Array<IWsApp>;
 
     constructor() {
         this.App = Express();
         this.WsApp = require('express-ws')(this.App) as WithWebsocketMethod;
         this.WsPool = this.WsApp?.getWss?.(AppConfig.__SOCKET_CONNECT) as Array<IWsApp>;
+        this.TemplateWsPool = this.WsApp?.getWss?.('/template') as Array<IWsApp>;
         const _: any = global;
 
         _.WebSocketPool = this.WsApp;
+        _.TemplateWsPool = this.TemplateWsPool;
         this.onLineUsers = 0;
         this.init();
     }
@@ -47,6 +51,9 @@ export default class HttpServer {
             ws?.on('close', (): void => {
                 this.onLineUsers--;
             });
+        });
+        this.App.ws?.('/template', (ws: IWsApp): void => {
+            new TemplateSocket(ws);
         });
         this.App.use((req: Request, res: Response, next: NextFunction): void => {
             const methods: Array<string> = ['GET', 'PUT', 'DELETE'];

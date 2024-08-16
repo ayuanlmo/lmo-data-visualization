@@ -50,6 +50,7 @@ export class WebSocketServer {
                 }
             }
         }));
+        const _: any = global;
 
         this.WsApp.on('message', (msg: string): void => {
             if (msg === AppConfig.__SOCKET_PONG_KEY)
@@ -60,10 +61,16 @@ export class WebSocketServer {
                 const keys: Array<string> = Object.keys(data);
 
                 if ('cmd' in keys && 'data' in keys) {
-                    console.log(data);
-                } else {
+                    if (data.cmd === '__ABORT_RENDER') {
+                        _.TemplateWsPool?.clients?.forEach((ws: IWsApp): void => {
+                            ws.send?.(JSON.stringify({
+                                id: data.id,
+                                _signal: "__ABORT_RENDER"
+                            }));
+                        });
+                    }
+                } else
                     this.WsApp.send(msg);
-                }
             } catch (e) {
                 this.WsApp.send(msg);
             }

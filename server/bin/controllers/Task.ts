@@ -62,7 +62,8 @@ export default class Task {
                 });
                 writeFileSync(path.resolve(dirPath, 'conf.js'), `const config = ${JSON.stringify({
                     ...currentTemplateConfig,
-                    id: dbId
+                    id: dbId,
+                    template: id
                 })}\n export default config;`);
                 writeFileSync(path.resolve(dirPath, 'data.json'), JSON.stringify(currentTemplateConfig?.data));
 
