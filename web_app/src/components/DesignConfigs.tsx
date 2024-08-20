@@ -109,9 +109,9 @@ const DesignConfigs = (): React.JSX.Element => {
                     <GlobalComponent.TDisplayTemplate show={optionType === 'style'}>
                         <TemplateOtherConfig/>
                     </GlobalComponent.TDisplayTemplate>
-                    <YExtendTemplate show={optionType === 'config'}>
+                    <GlobalComponent.TDisplayTemplate show={optionType === 'config'}>
                         <SyntheticConfig/>
-                    </YExtendTemplate>
+                    </GlobalComponent.TDisplayTemplate>
                     <EditDataTable ref={editDataTableRef}/>
                 </div>
             </div>
