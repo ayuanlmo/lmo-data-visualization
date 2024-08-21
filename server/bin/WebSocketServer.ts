@@ -58,9 +58,8 @@ export class WebSocketServer {
 
             try {
                 const data = JSON.parse(msg);
-                const keys: Array<string> = Object.keys(data);
 
-                if ('cmd' in keys && 'data' in keys) {
+                if ('cmd' in data) {
                     if (data.cmd === '__ABORT_RENDER') {
                         _.TemplateWsPool?.clients?.forEach((ws: IWsApp): void => {
                             ws.send?.(JSON.stringify({
