@@ -25,6 +25,9 @@ const defaultCurrentTemplateConfigData = {
             full: false,
             src: '',
             volume: 100
+        },
+        animation: {
+            chatAnimationIsControllable: false
         }
     },
     otherConfig: {
