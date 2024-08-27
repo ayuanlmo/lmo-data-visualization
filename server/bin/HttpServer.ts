@@ -56,7 +56,7 @@ export default class HttpServer {
             new TemplateSocket(ws);
         });
         this.App.use((req: Request, res: Response, next: NextFunction): void => {
-            const methods: Array<string> = ['GET', 'PUT', 'DELETE'];
+            const methods: Array<string> = ['PUT', 'DELETE'];
 
             if (req.url.includes('/static')) {
                 const paths: Array<string> = req.url.split('/');
@@ -73,7 +73,7 @@ export default class HttpServer {
             }
 
             if (AppConfig.__LIVE_SERVER) {
-                if (methods.some((i: string): boolean => req.method === i) || AppConfig.__PROTECTED_ROUTERS.some((i: string): boolean => req.url.includes(i)))
+                if (methods.some((i: string): boolean => req.method === i) || AppConfig.__PROTECTED_ROUTERS.some((i: string): boolean => req.url.includes(i) && req.method !== 'GET'))
                     return void res.json(CreateErrorMessage('ext00el'));
                 else
                     next();
