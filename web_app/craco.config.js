@@ -1,41 +1,57 @@
 const path = require('path');
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
     style: {
         postcss: {
             plugins: [
                 require('tailwindcss'),
-                require('autoprefixer'),
-            ],
-        },
+                require('autoprefixer')
+            ]
+        }
     },
     devServer: {
         proxy: {
             '/api': {
                 target: 'http://localhost:3000',
                 changeOrigin: true,
-                pathRewrite: {'^/api': ''},
+                pathRewrite: {'^/api': ''}
             },
             '/connect': {
                 target: 'http://localhost:3000/connect',
                 changeOrigin: true,
                 ws: true,
-                pathRewrite: {'^/connect': ''},
-            },
-        },
+                pathRewrite: {'^/connect': ''}
+            }
+        }
     },
     webpack: {
         alias: {
-            '@': path.resolve(__dirname, 'src/'),
+            '@': path.resolve(__dirname, 'src/')
         },
-        configure: (webpackConfig, {paths}) => {
-
+        configure: (webpackConfig) => {
+            webpackConfig.devtool = isProduction ? false : 'source-map';
             webpackConfig.optimization = {
                 splitChunks: {
                     chunks: 'all',
+                    minSize: 20000,
+                    maxSize: 0,
+                    minChunks: 1,
+                    maxAsyncRequests: 30,
+                    maxInitialRequests: 30,
+                    automaticNameDelimiter: '~',
+                    name: '*',
+                    cacheGroups: {
+                        default: {
+                            minChunks: 2,
+                            priority: -20,
+                            reuseExistingChunk: true
+                        }
+                    }
                 }
-            }
+            };
             const oneOfRule = webpackConfig.module.rules.find((rule) => rule.oneOf);
+
             if (oneOfRule) {
                 oneOfRule.oneOf.unshift({
                     test: /\.(scss|sass)$/,
@@ -45,39 +61,39 @@ module.exports = {
                         {
                             loader: 'sass-loader',
                             options: {
-                                implementation: require('sass'),
-                            },
-                        },
-                    ],
+                                implementation: require('sass')
+                            }
+                        }
+                    ]
                 });
             }
-            webpackConfig.output.path = path.join(path.resolve(), 'build'); // build to
+            webpackConfig.output.path = path.join(path.resolve(), 'build');
             webpackConfig.plugins.forEach((plugin) => {
                 if (plugin.constructor.name === 'MiniCssExtractPlugin')
-                    plugin.options.filename = 'css/_t_script_[contenthash].ting.css';
+                    plugin.options.filename = 'css/_t_style_[contenthash].t.css';
             });
-            webpackConfig.output.filename = 'script/_t_script_[contenthash].ting.js';
-            webpackConfig.output.chunkFilename = 'script/_t_script_[contenthash].chunk.ting.js';
+            webpackConfig.output.filename = 'script/_t_script_[contenthash].t.js';
+            webpackConfig.output.chunkFilename = 'script/_t_script_[contenthash].chunk.r.js';
             webpackConfig.module.rules.push({
                 test: /\.(png|svg|jpg|gif)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'static/_t_static_[contenthash].ting.[ext]'
-                        },
-                    },
-                ],
+                            name: 'static/_t_static_[contenthash].t.[ext]'
+                        }
+                    }
+                ]
             });
 
             return webpackConfig;
-        },
+        }
     },
     jest: {
         configure: {
             moduleNameMapper: {
                 '^@/(.*)$': '<rootDir>/src/$1'
-            },
-        },
+            }
+        }
     }
 };
