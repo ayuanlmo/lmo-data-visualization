@@ -1,7 +1,32 @@
 const path = require('path');
 const isProduction = process.env.NODE_ENV === 'production';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+    plugins: [
+        {
+            plugin: {
+                overrideWebpackConfig: ({webpackConfig}) => {
+                    // 配置 HtmlWebpackPlugin 插件
+                    const htmlPlugin = webpackConfig.plugins.find(
+                        (plugin) => plugin instanceof HtmlWebpackPlugin
+                    );
+
+                    if (htmlPlugin) {
+                        htmlPlugin.options.templateParameters = {
+                            ...htmlPlugin.options.templateParameters,
+                            __LMO_BUILD_CONFIG: {
+                                __LMO_APP_BUILD_TIME: Date.now(),
+                                __LMO_APP_NAME: 'lmo-Data-Visualization'
+                            }
+                        };
+                    }
+
+                    return webpackConfig;
+                }
+            }
+        }
+    ],
     style: {
         postcss: {
             plugins: [
