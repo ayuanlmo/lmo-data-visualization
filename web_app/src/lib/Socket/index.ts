@@ -3,8 +3,11 @@ import i18n from "../../i18n";
 
 class Socket {
     private ws: WebSocket | undefined;
+    private connectNum: number;
+    private maxConnectNum: number = 5;
 
     constructor() {
+        this.connectNum = -1;
         this.init();
     }
 
@@ -21,10 +24,15 @@ class Socket {
     }
 
     private init(): void {
+        this.connectNum = this.connectNum + 1;
+        if (this.connectNum === this.maxConnectNum)
+            return Notification.openNotification(i18n.t('sysNotify'), i18n.t('netError'), 'error');
         this.ws && this.ws.close();
         this.ws = new WebSocket(`${location.href.includes('https') ? 'wss' : 'ws'}://${location.host}/connect`);
 
         this.ws.onopen = (): void => {
+            if (this.connectNum > 0)
+                Notification.openNotification(i18n.t('sysNotify'), i18n.t('socketReConnect'), 'success');
             this.sendMessage('ping');
 
             setInterval((): void => {
@@ -32,6 +40,7 @@ class Socket {
             }, 10000);
         };
         this.ws.onclose = (): void => {
+            Notification.openNotification(i18n.t('sysNotify'), i18n.t('socketError'), 'error');
             setTimeout((): void => {
                 this.init();
             }, 5000);

@@ -117,5 +117,11 @@
   "copy": "Copy",
   "cut": "Cut",
   "paste": "Paste",
-  "undo": "Undo"
+  "undo": "Undo",
+  "liveServerNotSupported": "Demo server does not support this operation",
+  "serverError": "Server error",
+  "sysNotify": "System Notification",
+  "netError": "Network error, unable to connect to the server. Please try again later.",
+  "socketError": "Disconnected from the server, retrying...",
+  "socketReConnect": "Reconnected to the server"
 }

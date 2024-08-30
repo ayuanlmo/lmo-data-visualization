@@ -117,5 +117,11 @@
   "copy": "コピー",
   "cut": "切り取り",
   "paste": "貼り付け",
-  "undo": "元に戻す"
+  "undo": "元に戻す",
+  "liveServerNotSupported": "デモサーバーはこの操作をサポートしていません",
+  "serverError": "サーバーエラー",
+  "sysNotify": "システム通知",
+  "netError": "ネットワークエラーでサーバーに接続できません。後ほど再試行してください。",
+  "socketError": "サーバーとの接続が切断されました。再試行中...",
+  "socketReConnect": "サーバーに再接続しました"
 }

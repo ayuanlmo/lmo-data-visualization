@@ -117,5 +117,11 @@
   "copy": "复制",
   "cut": "剪切",
   "paste": "粘贴",
-  "undo": "撤销"
+  "undo": "撤销",
+  "liveServerNotSupported": "演示服务器不支持此操作",
+  "serverError": "服务器错误",
+  "sysNotify": "系統通知",
+  "netError": "网络异常，无法与服务器取得联系，请稍后再试。",
+  "socketError": "与服务器断开连接，正在重试...",
+  "socketReConnect": "已重新与服务器连接"
 }
