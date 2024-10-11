@@ -5,7 +5,7 @@
 
 -- 插入模板项
 CREATE PROCEDURE [dbo].[usp_InsertTemplateItem]
-	@Id VARCHAR ( 255 ),
+	@Id VARCHAR ( 36 ),
 	@Name VARCHAR ( 255 ),
 	@Description VARCHAR ( 255 ),
 	@Path VARCHAR ( 255 ),
@@ -22,7 +22,7 @@ GO
 
 -- 查询模板由id
 CREATE PROCEDURE [dbo].[usp_QueryTemplateById]
-	@Id VARCHAR ( 255 )
+	@Id VARCHAR ( 36 )
 	AS BEGIN
 		SELECT * FROM [Templates]  WHERE [id] = @Id;
 END;
@@ -30,7 +30,7 @@ GO
 
 -- 更新模板由id
 CREATE PROCEDURE [dbo].[usp_UpdateTemplateById]
-	@Id VARCHAR ( 255 ),
+	@Id VARCHAR ( 36 ),
 	@Name VARCHAR ( 255 ),
 	@Description VARCHAR ( 255 ),
 	@Path VARCHAR ( 255 ),
@@ -55,7 +55,7 @@ GO
 
 -- 删除模板由id
 CREATE PROCEDURE [dbo].[usp_DeleteTemplateById]
-	@Id VARCHAR ( 255 )
+	@Id VARCHAR ( 36 )
 	AS BEGIN
 		DELETE FROM [Templates]  WHERE [id] = @Id;
 END;
@@ -63,7 +63,7 @@ GO
 
 -- 插入颜色项目
 CREATE PROCEDURE [dbo].[usp_InsertColorItem]
-	@id NVARCHAR ( 255 ),
+	@Id VARCHAR ( 36 )
 	@value NVARCHAR ( 255 ),
 	@cssCode NVARCHAR ( 255 ),
 	@type CHAR ( 1 )
@@ -76,7 +76,7 @@ GO
 
 -- 查询颜色项由id
 CREATE PROCEDURE [dbo].[usp_QueryColorItemById]
-	@id NVARCHAR ( 255 )
+	@id NVARCHAR ( 36 )
 	AS BEGIN
 		SELECT * FROM [Colors] WHERE[id] = @id;
 END;
@@ -84,7 +84,7 @@ GO
 
 -- 更新颜色项由id
 CREATE PROCEDURE [dbo].[usp_UpdateColorItemById]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @value NVARCHAR(255),
     @cssCode NVARCHAR(255),
     @type CHAR(1)
@@ -100,7 +100,7 @@ GO
 
 -- 删除颜色项由id
 CREATE PROCEDURE [dbo].[usp_DeleteColorById]
-	@id NVARCHAR ( 255 )
+	@id NVARCHAR ( 36 )
 	AS BEGIN
 		DELETE FROM [Colors] WHERE [id] = @id;
 END;
@@ -120,7 +120,7 @@ GO
 
 -- 插入合成资源项
 CREATE PROCEDURE [dbo].[usp_InsertResourceItem]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @name NVARCHAR(255),
     @template NVARCHAR(255),
     @filePath NVARCHAR(255),
@@ -141,7 +141,7 @@ GO
 
 -- 删除合成资源项由id
 CREATE PROCEDURE [dbo].[usp_DeleteResourceItemByID]
-    @id NVARCHAR(255)
+    @id NVARCHAR(36)
 	AS BEGIN
 		DELETE FROM [Resources] WHERE [id] = @id;
 END;
@@ -149,7 +149,7 @@ GO
 
 -- 更新合成资源项由id
 CREATE PROCEDURE [dbo].[usp_UpdateResourceItemById]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @name NVARCHAR(255),
     @template NVARCHAR(255),
     @filePath NVARCHAR(255),
@@ -181,7 +181,7 @@ GO
 
 -- 查询合成资源项由id
 CREATE PROCEDURE [dbo].[usp_QueryResourceItemById]
-    @id NVARCHAR(255)
+    @id NVARCHAR(36)
 	AS BEGIN
 		SELECT * FROM [Resources] WHERE [id] = @id;
 END;
@@ -201,7 +201,7 @@ GO
 
 -- 插入上传文件项
 CREATE PROCEDURE [dbo].[usp_InsertUpLoadFileItem]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @name NVARCHAR(255),
     @path NVARCHAR(255),
     @cover NVARCHAR(255),
@@ -216,7 +216,7 @@ GO
 
 -- 删除上传文件项由id
 CREATE PROCEDURE [dbo].[usp_DeleteUpLoadFileById]
-    @id NVARCHAR(255)
+    @id NVARCHAR(36)
 	AS BEGIN
 		DELETE FROM [UpLoadFiles] WHERE [id] = @id;
 END;
@@ -224,7 +224,7 @@ GO
 
 -- 更新上传文件项由id
 CREATE PROCEDURE [dbo].[usp_UpdateUpLoadFileById]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @name NVARCHAR(255),
     @path NVARCHAR(255),
     @cover NVARCHAR(255),
@@ -246,7 +246,7 @@ GO
 
 -- 查询上传文件项由id
 CREATE PROCEDURE [dbo].[usp_QueryUpLoadFileItemById]
-    @id NVARCHAR(255)
+    @id NVARCHAR(36)
 	AS BEGIN
 		SELECT * FROM [UpLoadFiles] WHERE [id] = @id;
 END;
@@ -267,7 +267,7 @@ GO
 
 --- 插入文件分类项
 CREATE PROCEDURE [dbo].[usp_InsertFileCategory]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @name NVARCHAR(255),
     @parentId NVARCHAR(255) = NULL
 	AS BEGIN
@@ -278,7 +278,7 @@ GO
 
 -- 更新文件分类项由id
 CREATE PROCEDURE [dbo].[usp_UpdateFileCategoryById]
-    @id NVARCHAR(255),
+    @id NVARCHAR(36),
     @name NVARCHAR(255),
     @parentId NVARCHAR(255) = NULL
 	AS BEGIN
@@ -292,7 +292,7 @@ GO
 
 -- 删除文件分类项由id
 CREATE PROCEDURE [dbo].[usp_DeleteFileCategoryById]
-    @id NVARCHAR(255)
+    @id NVARCHAR(36)
 	AS BEGIN
 		DELETE FROM [UpLoadFilesCategories]
 		WHERE [id] = @id;

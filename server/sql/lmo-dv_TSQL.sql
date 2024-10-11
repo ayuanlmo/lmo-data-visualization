@@ -43,7 +43,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Resources]')AND type in (N'U'))
 	BEGIN
 		CREATE TABLE[dbo].[Resources](
-			[id][nvarchar](255)NOT NULL,
+			[id][nvarchar](36)NOT NULL,
 			[name][nvarchar](255)NULL,
 			[template][nvarchar](255)NULL,
 			[filePath][nvarchar](255)NULL,
@@ -70,7 +70,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Templates]')AND type in (N'U'))
 	BEGIN
 		CREATE TABLE[dbo].[Templates](
-			[id][nvarchar](255)NOT NULL,
+			[id][nvarchar](36)NOT NULL,
 			[name][nvarchar](255)NULL,
 			[description][nvarchar](255)NULL,
 			[path][nvarchar](255)NULL,
@@ -92,7 +92,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UpLoadFiles]')AND type in (N'U'))
 	BEGIN
 		CREATE TABLE[dbo].[UpLoadFiles](
-			[id][nvarchar](255)NOT NULL,
+			[id][nvarchar](36)NOT NULL,
 			[name][nvarchar](255)NULL,
 			[path][nvarchar](255)NULL,
 			[cover][nvarchar](255)NULL,
@@ -115,7 +115,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UpLoadFilesCategories]')AND type in (N'U'))
 	BEGIN
 		CREATE TABLE[dbo].[UpLoadFilesCategories](
-			[id][nvarchar](255)NOT NULL,
+			[id][nvarchar](36)NOT NULL,
 			[name][nvarchar](255)NULL,
 			[parentId][nvarchar](255)NULL,
 			PRIMARY KEY CLUSTERED ([id]ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF)ON[PRIMARY]
