@@ -22,6 +22,7 @@
     <img src="https://img.shields.io/badge/Pug-3.0.3 -blue.svg?logo=pug" alt="Express">
     <img src="https://img.shields.io/badge/uuid-9.0.1 -blue.svg?" alt="uuid">
     <img src="https://img.shields.io/badge/sqlite3-5.1.7 -blue.svg?logo=sqlite" alt="sqlite3">
+    <img src="https://shields.io/badge/Microsoft_SQL_Server-inactive?logo=sqlserver" alt="Microsoft SQL Server"/>
     <img src="https://img.shields.io/badge/sequelize-6.37.1 -blue.svg?logo=sequelize" alt="sequelize">
     <img src="https://img.shields.io/badge/ffmpeg_static-5.2.0 -blue.svg?logo=ffmpeg" alt="ffmpeg-static">
     <img src="https://img.shields.io/badge/fluent_ffmpeg-2.1.3 -blue.svg?logo=ffmpeg" alt="fluent-ffmpeg">
@@ -145,6 +146,22 @@ location /connect{
 1. 不建议对外暴露合成服务器端口
 2. 主服务和合成服务器必须运行在同一台服务器上
 3. 使用期间产生的文件，请不要手动删除
+
+## 数据库配置
+
+服务器程序支持两种数据库，分别是：`sqlite` 、`Microsoft SQL Server®` (以下简称`mssql`)
+
+默认使用`sqlite`,作为程序默认数据库，如果您想使用mssql，请配置如下启动参数：
+
+- -dbType mssql
+- -dbHost {your host}
+- -dbPort {your port}
+- -dbName lmo-dv
+- -dbUserName {your userName}
+- -dbPassWord {your userName}
+
+使用mssql，您需要先初始化数据库，请将数据库名称设置为：`lmo-dv`，或者使用`/server/sql`目录下的sql文件进行初始化，建议您使用
+`SQL Server Management Studio®` (`SSMS`)运行sql文件。
 
 ## 开源相关
 
