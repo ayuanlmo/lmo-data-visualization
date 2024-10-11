@@ -29,7 +29,7 @@ const DB: Sequelize = dbType === 'mssql' ?
 const TemplateModel = DB.define('Templates', {
     id: {
         primaryKey: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING(36)
     },
     name: DataTypes.STRING,
     description: DataTypes.STRING,
@@ -45,7 +45,7 @@ const TemplateModel = DB.define('Templates', {
 const ColorModel = DB.define('Colors', {
     id: {
         primaryKey: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING(36)
     },
     value: DataTypes.STRING,
     cssCode: DataTypes.STRING,
@@ -57,7 +57,7 @@ const ColorModel = DB.define('Colors', {
 const ResourcesModel = DB.define('Resources', {
     id: {
         primaryKey: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING(36)
     },
     name: DataTypes.STRING,
     template: DataTypes.STRING,
@@ -77,7 +77,7 @@ const ResourcesModel = DB.define('Resources', {
 const UpLoadFilesModel = DB.define('UpLoadFiles', {
     id: {
         primaryKey: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING(36)
     },
     name: DataTypes.STRING,
     path: DataTypes.STRING,
@@ -92,7 +92,7 @@ const UpLoadFilesModel = DB.define('UpLoadFiles', {
 export const UpLoadFilesCategoryModel = DB.define('UpLoadFilesCategory', {
     id: {
         primaryKey: true,
-        type: DataTypes.STRING
+        type: DataTypes.STRING(36)
     },
     name: DataTypes.STRING
 }, {
