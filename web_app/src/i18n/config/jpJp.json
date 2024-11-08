@@ -123,5 +123,6 @@
   "sysNotify": "システム通知",
   "netError": "ネットワークエラーでサーバーに接続できません。後ほど再試行してください。",
   "socketError": "サーバーとの接続が切断されました。再試行中...",
-  "socketReConnect": "サーバーに再接続しました"
+  "socketReConnect": "サーバーに再接続しました",
+  "createSuccess": "作成成功"
 }

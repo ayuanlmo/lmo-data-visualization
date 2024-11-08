@@ -148,6 +148,15 @@ namespace Request {
         });
     };
 
+    export const createCustomTemplate = (data: object = {}) => {
+        return axios({
+            url: '/createCustomTemplate',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
     export const resourcesList = (data: object = {}) => {
         return axios({
             url: '/resources',

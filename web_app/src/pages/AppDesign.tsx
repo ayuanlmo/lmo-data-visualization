@@ -29,7 +29,10 @@ const AppDesign = (): React.JSX.Element => {
         <div className={'data-visualization-design'}>
             <Header.Design
                 onSynthesis={(): void => {
-                    taskRef.current?.open();
+                    taskRef.current?.open('synthesis');
+                }}
+                onSave={(): void => {
+                    taskRef.current?.open('savaAsTemplate');
                 }}
             />
             <Task ref={taskRef}/>

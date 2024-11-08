@@ -9,10 +9,11 @@ import PostMessage from "../lib/PostMessage";
 import Request from "../lib/Request";
 import {useTranslation} from "react-i18next";
 import Notification from "../lib/Notification";
+import html2canvas from "html2canvas";
 import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 
 export interface ICreateTaskRef {
-    open: () => void;
+    open: (type: 'synthesis' | 'savaAsTemplate') => void;
 }
 
 type TTask = React.ForwardRefExoticComponent<React.RefAttributes<ICreateTaskRef>>;
@@ -28,15 +29,30 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
         customTemplateName: '',
         customTemplateDesc: '',
         currentTemplateConfig,
-        saveAsCustomTemplate: false
+        saveAsCustomTemplate: false,
+        cover: ''
     });
     const {t} = useTranslation();
 
-    const open = (): void => setVisible(!visible);
+    const open = (type: string): void => {
+        setFromValue({
+            ...fromValue,
+            saveAsCustomTemplate: type !== 'synthesis'
+        });
+        setVisible(!visible);
+    };
 
     const createTask = (): void => {
         formRef.current?.validate().then(async (): Promise<void> => {
             let image: string = '';
+
+            const iframe: HTMLIFrameElement | null = document.querySelector('iframe');
+
+            if (iframe) {
+                const canvas = await html2canvas(iframe?.contentWindow?.document?.getElementById('template') as HTMLElement);
+
+                fromValue.cover = canvas.toDataURL('image/png');
+            }
 
             if (fromValue.currentTemplateConfig.config.background.image !== '') {
                 try {
@@ -76,13 +92,16 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                     }
                 }
             };
+            const {saveAsCustomTemplate} = fromValue;
 
-            Request.createTask({
+            const handleRequest = saveAsCustomTemplate ? Request.createCustomTemplate : Request.createTask;
+
+            handleRequest({
                 ...requestData
-            }).then((): void => {
-                Notification.message(t('createTaskSuccess'), 'success');
+            }).then(() => {
+                Notification.message(t(saveAsCustomTemplate ? 'createSuccess' : 'createTaskSuccess'), 'success');
                 setVisible(false);
-            }).catch((): void => {
+            }).catch(() => {
                 setVisible(false);
             });
         });
@@ -147,7 +166,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
     return (
         <React.Fragment>
             <Modal
-                title={t('createTask')}
+                title={fromValue.saveAsCustomTemplate ? t('saveAsCustomizeTemplate') : t('createTask')}
                 visible={visible}
                 confirmText={t('confirm')}
                 cancelText={t('cancel')}
@@ -161,23 +180,25 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                     initialValues={fromValue}
                     labelPlacement="top"
                 >
-                    <FormItem
-                        label={t('taskName')}
-                        valueType={'string'}
-                    >
-                        <Input
-                            value={fromValue.taskName}
-                            placeholder={t('pleaseInput')}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
-                                const {target: {value}} = e;
+                    <YExtendTemplate show={!fromValue.saveAsCustomTemplate}>
+                        <FormItem
+                            label={t('taskName')}
+                            valueType={'string'}
+                        >
+                            <Input
+                                value={fromValue.taskName}
+                                placeholder={t('pleaseInput')}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+                                    const {target: {value}} = e;
 
-                                setFromValue({
-                                    ...fromValue,
-                                    taskName: value
-                                });
-                            }}
-                        />
-                    </FormItem>
+                                    setFromValue({
+                                        ...fromValue,
+                                        taskName: value
+                                    });
+                                }}
+                            />
+                        </FormItem>
+                    </YExtendTemplate>
                     <YExtendTemplate show={fromValue.saveAsCustomTemplate}>
                         <FormItem
                             required

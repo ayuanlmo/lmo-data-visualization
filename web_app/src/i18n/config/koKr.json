@@ -123,5 +123,6 @@
   "sysNotify": "시스템 알림",
   "netError": "네트워크 오류로 인해 서버와 연결할 수 없습니다. 나중에 다시 시도해 주세요.",
   "socketError": "서버와 연결이 끊어졌습니다. 재시도 중...",
-  "socketReConnect": "서버와 다시 연결되었습니다"
+  "socketReConnect": "서버와 다시 연결되었습니다",
+  "createSuccess": "생성 성공"
 }

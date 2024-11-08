@@ -123,5 +123,6 @@
   "sysNotify": "系統通知",
   "netError": "網路異常，無法與伺服器取得聯繫，請稍後再試。",
   "socketError": "與伺服器斷開連接，正在重試...",
-  "socketReConnect": "已重新與伺服器連接"
+  "socketReConnect": "已重新與伺服器連接",
+  "createSuccess": "創建成功"
 }
