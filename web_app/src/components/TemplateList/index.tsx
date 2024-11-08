@@ -27,8 +27,8 @@ const TemplateList = (): React.JSX.Element => {
     });
     const templateType: SelectMergedItem[] = [
         {title: t('all'), id: "", disabled: false},
-        {title: t('defaultTemplate'), id: "0", disabled: false},
-        {title: t('customizeTemplate'), id: "1", disabled: false}
+        {title: t('defaultTemplate'), id: "1", disabled: false},
+        {title: t('customizeTemplate'), id: "0", disabled: false}
     ];
 
     const getTemplate = (): void => {
