@@ -46,7 +46,7 @@ const AppConfig = {
     __LIVE_SERVER: argv.mode === 'live-server',
     __ARGV: argv as IArgsParams,
     __PROTECTED_STATIC_FILES: ['.ts', '.bin', 'config.json', 'package.json', 'tsconfig.json', '.pug'],
-    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory']
+    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory', 'createCustomTemplate']
 } as const;
 
 export default AppConfig;

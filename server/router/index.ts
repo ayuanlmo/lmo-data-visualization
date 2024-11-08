@@ -20,6 +20,7 @@ _Router
     .delete('/template', (req: Request, res: Response): void => TemplateController.deleteTemplate(req, res))
     .post('/template/copy', (req: Request, res: Response): void => TemplateController.copyTemplate(req, res))
     .post('/template/refresh', (req: Request, res: Response): void => TemplateController.refreshTemplate(req, res))
+    .post('/createCustomTemplate', (req: Request, res: Response): void => Task.createTask(req, res))
     .post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => File.upload(req, res))
     .put('/editFileInfo/:id', (req: Request, res: Response): void => File.edit(req, res))
     .delete('/deleteFile', (req: Request, res: Response): void => File.delete(req, res))
