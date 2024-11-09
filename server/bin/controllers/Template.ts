@@ -7,6 +7,7 @@ import path from "path";
 import {copyFileSync, existsSync, mkdirSync, readdirSync} from "node:fs";
 import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
+import deleteFolderRecursive = Utils.deleteFolderRecursive;
 
 export default class TemplateController {
     public static getTemplates(req: Request, res: Response): void {
@@ -139,7 +140,7 @@ export default class TemplateController {
     }
 
     public static deleteTemplate(req: Request, res: Response): void {
-        const {id = ''} = req.body ?? {};
+        const {id = ''} = req.params ?? {};
 
         if (id === '')
             return void res.json(createErrorMessage('ext005'));
@@ -157,10 +158,15 @@ export default class TemplateController {
             if (dataValues.type === 1)
                 return void res.json(createErrorMessage('ext008'));
 
+            const originalTemplate: string = path.resolve(`./_data/static/public/${dataValues.path.replace('/static', '').replace('/index.html', '')}`);
+
             TemplateModel.destroy({
                 where: {id: id}
             }).then((): void => {
+                deleteFolderRecursive(originalTemplate);
                 res.status(204).send();
+            }).catch(() => {
+                res.json(createErrorMessage('ext00d'));
             });
         });
     }
