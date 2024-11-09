@@ -59,6 +59,14 @@ namespace Request {
         });
     };
 
+    export const deleteTemplate = (id: string = '') => {
+        return axios({
+            url: `/template/${id}`,
+            method: 'delete',
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
     export const copyTemplate = (data: object = {}) => {
         return axios({
             url: '/template/copy',

@@ -258,6 +258,17 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                                     </div>
                                     <div onClick={(e: React.MouseEvent<HTMLDivElement>): void => {
                                         e.stopPropagation();
+                                        Modal.confirm({
+                                            title: t('deleteConfirm'),
+                                            cancelText: t('cancel'),
+                                            confirmText: t('confirm'),
+                                            onConfirm: (): void => {
+                                                Request.deleteTemplate(data.id).then((): void => {
+                                                    Notification.message(t('deleteSuccess'), 'success');
+                                                    onRefresh();
+                                                });
+                                            }
+                                        });
                                     }}
                                          className={'template-item-mask-option-item template-item-mask-option-item-danger'}>
                                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
