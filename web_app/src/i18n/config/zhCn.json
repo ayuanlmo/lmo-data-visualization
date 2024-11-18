@@ -124,5 +124,6 @@
   "netError": "网络异常，无法与服务器取得联系，请稍后再试。",
   "socketError": "与服务器断开连接，正在重试...",
   "socketReConnect": "已重新与服务器连接",
-  "createSuccess": "创建成功"
+  "createSuccess": "创建成功",
+  "getStarted": "立即开始"
 }

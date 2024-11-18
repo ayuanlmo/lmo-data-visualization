@@ -124,5 +124,6 @@
   "netError": "Network error, unable to connect to the server. Please try again later.",
   "socketError": "Disconnected from the server, retrying...",
   "socketReConnect": "Reconnected to the server",
-  "createSuccess": "Create success"
+  "createSuccess": "Create success",
+  "getStarted": "Get Started"
 }
