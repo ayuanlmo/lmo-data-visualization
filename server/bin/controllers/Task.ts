@@ -52,7 +52,7 @@ export default class Task {
         if (id === '')
             return void res.json(createErrorMessage('ext003'));
 
-        if (!MemoryCache.get('SYNTHESIS_SERVICES_CONNECT_STATUS') && !saveAsCustomTemplate) {
+        if (!MemoryCache.get('SYNTHESIS_SERVICES_CONNECT_STATUS') && !saveAsCustomTemplate && !preview) {
             WebSocketServer.sendMessage(JSON.stringify({
                 type: 'SERVICE_RE_CONNECT_ERROR',
                 message: {}
