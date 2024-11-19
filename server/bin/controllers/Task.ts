@@ -102,8 +102,12 @@ export default class Task {
                     id: dbId,
                     template: id
                 })}\n export default config;`);
-                // 写出模板数据文件
-                writeFileSync(path.resolve(dirPath, 'data.json'), JSON.stringify(currentTemplateConfig?.data));
+
+                if (currentTemplateConfig?.data && Array.isArray(currentTemplateConfig.data))
+                    // 写出模板数据文件
+                    writeFileSync(path.resolve(dirPath, 'data.json'), JSON.stringify(currentTemplateConfig?.data));
+                else
+                    return void res.json(createErrorMessage('ext00e'));
 
                 // 保存为自定义模板时为模板增加封面图
                 if (saveAsCustomTemplate) {
