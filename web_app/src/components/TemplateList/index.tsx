@@ -104,7 +104,7 @@ const TemplateList = (): React.JSX.Element => {
                 </Grid.Row>
             </YExtendTemplate>
             <YExtendTemplate show={templates.length === 0}>
-                <EmptyState/>
+                <EmptyState title={t('noData')}/>
             </YExtendTemplate>
         </div>
     );
