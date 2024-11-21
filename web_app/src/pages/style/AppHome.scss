@@ -9,8 +9,7 @@
     width: 100vw;
     height: 4.125rem;
     box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    display: flex;
-    justify-content: space-between;
+    overflow: hidden;
 
     .data-visualization-header-app-name {
       font-size: 20px;
@@ -23,12 +22,6 @@
       &:hover {
         color: #0688E5;
       }
-    }
-
-    .header-item {
-      width: 50%;
-      display: flex;
-      overflow: hidden;
     }
 
     .data-visualization-header-option {
