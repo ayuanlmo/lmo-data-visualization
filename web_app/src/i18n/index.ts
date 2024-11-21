@@ -20,7 +20,7 @@ const resources = {
     'jp': {
         translation: jpJp
     },
-    'en-GB': {
+    'en': {
         translation: ekUk
     }
 };
