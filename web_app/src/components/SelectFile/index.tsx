@@ -1,4 +1,4 @@
-import React, {useImperativeHandle, useRef, useState} from "react";
+import React, {useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Form, FormItem, Grid, Input, Modal, Pagination, Search, TabPane, Tabs} from "@hi-ui/hiui";
 import {SearchOutlined} from "@hi-ui/icons";
 import ImageList, {IImageItem, IImageListRef} from "./ImageList";
@@ -101,6 +101,11 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
         });
     };
 
+    useEffect(() => {
+        if (visible)
+            getList();
+    }, [visible]);
+
     useImperativeHandle(ref, (): ISelectFileRef => ({
         open
     }));
@@ -166,7 +171,7 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
                             />
                         </Grid.Col>
                         <Grid.Col span={4}>
-                            <UploadFile/>
+                            <UploadFile onRefresh={getList}/>
                         </Grid.Col>
                     </Grid.Row>
                 </div>

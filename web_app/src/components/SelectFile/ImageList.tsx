@@ -5,6 +5,7 @@ import LoadingImage from "./LoadingImage";
 import {ReactState} from "../../types/ReactTypes";
 import {TFileType} from "./index";
 import Request from "../../lib/Request";
+import {useTranslation} from "react-i18next";
 
 export interface IImageItem {
     id: string;
@@ -50,6 +51,7 @@ const ImageList: React.ForwardRefExoticComponent<IImageListProps & React.RefAttr
     });
 
     const [fileList, setFileList]: ReactState<Array<IImageItem>> = useState<Array<IImageItem>>([]);
+    const {t} = useTranslation();
 
     const getFileList = (): void => {
         if (fileType === 'image')
@@ -112,7 +114,7 @@ const ImageList: React.ForwardRefExoticComponent<IImageListProps & React.RefAttr
                 </div>
             </YExtendTemplate>
             <YExtendTemplate show={fileList.length === 0}>
-                <EmptyState/>
+                <EmptyState title={t('noData')}/>
             </YExtendTemplate>
         </>
     );
