@@ -5,6 +5,7 @@
  * **/
 import socketClient from "./Socket";
 import {WebSocketServer} from "./WebSocketServer";
+import MemoryCache from "../lib/MemoryCache";
 
 export interface ITask {
     readonly id: string;
@@ -66,9 +67,11 @@ class TaskScheduler {
     }
 
     private runTask(task: ITask): void {
-        this.runningTask++;
+        const serviceOnLineStatus: boolean = MemoryCache.get<boolean>('SYNTHESIS_SERVICES_CONNECT_STATUS') ?? false;
 
-        setTimeout((): void => {
+        if (serviceOnLineStatus) {
+            this.runningTask++;
+
             socketClient.sendMessage({
                 type: "COMPOSITE-VIDEO",
                 data: JSON.stringify({
@@ -82,7 +85,11 @@ class TaskScheduler {
                     name: task.name
                 }
             }));
-        }, 1000);
+        } else {
+            setTimeout((): void => {
+                this.runTask(task);
+            }, 5000);
+        }
     }
 }
 
