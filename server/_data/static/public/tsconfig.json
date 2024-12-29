@@ -12,7 +12,8 @@
     "strict": true,
     "resolveJsonModule": true,
     "moduleResolution": "Bundler",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "newLine": "crlf"
   },
   "include": [
     "templates",
