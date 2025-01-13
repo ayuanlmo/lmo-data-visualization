@@ -19,9 +19,11 @@ const ProgressBar = (): React.JSX.Element => {
     const chatAnimationIsControllable: boolean = useSelector((state: RootState) => state.app.currentTemplateConfig.config?.animation?.chatAnimationIsControllable ?? false);
     const [width, setWidth]: ReactState<number> = useState<number>(0);
     const [showPause, setShowPause]: ReactState<boolean> = useState<boolean>(true);
+    const [templateRender, setTemplateRender]: ReactState<boolean> = useState<boolean>(false);
 
     const initProgress = (): void => {
         clearInterval(timer);
+        if (!templateRender) return;
 
         timer = setInterval((): void => {
             requestAnimationFrame((): void => {
@@ -90,6 +92,7 @@ const ProgressBar = (): React.JSX.Element => {
 
     useTemplateMessageListener('TEMPLATE_RENDER', (): void => {
         initProgress();
+        setTemplateRender(true);
     });
 
     return (
