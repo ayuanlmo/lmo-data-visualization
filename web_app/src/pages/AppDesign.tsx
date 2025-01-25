@@ -21,7 +21,6 @@ const AppDesign = (): React.JSX.Element => {
 
     useEffect((): void => {
         if (currentTemplate.id === '') {
-            const currentTemplate = JSON.parse(Storage.get('current_template') ?? '');
             try {
                 const currentTemplate = JSON.parse(Storage.get('current_template') ?? '');
 
