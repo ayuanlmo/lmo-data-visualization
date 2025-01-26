@@ -133,7 +133,20 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                         colWidths={50}
                         rowHeights={20}
                         afterChange={(changes: CellChange[] | null, source: ChangeSource): void => {
-                            if (source === 'edit') {
+                            if (Array.isArray(changes) && source === 'edit') {
+                                let dataChanged: boolean = false;
+
+                                for (let i: number = 0; i < changes.length; i += 1) {
+                                    const oldValue: string | number = changes[i][2];
+                                    const newValue: string | number = changes[i][3];
+
+                                    if (`${oldValue}` === `${newValue}`) return;
+
+                                    dataChanged = true;
+                                }
+
+                                if (!dataChanged) return;
+
                                 const hotInstance: any = hotTableRef.current;
                                 const _data: (string | number)[][] = hotInstance.__hotInstance.getData();
                                 const nd: (string | number)[][] = processData(_data);
@@ -142,6 +155,7 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                                 if (isLiveUpdate)
                                     sendData(nd);
                                 setIsChangeData(true);
+                                setData(data);
                             }
                         }}
                         licenseKey="non-commercial-and-evaluation"
