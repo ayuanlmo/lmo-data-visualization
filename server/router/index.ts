@@ -6,6 +6,7 @@ import Catch from "../bin/controllers/Catch";
 import Player from "../bin/Player";
 import Task from "../bin/controllers/Task";
 import Resources from "../bin/controllers/Resources";
+import ServerBase from "../bin/controllers/ServerBase";
 import Multer = require("multer");
 
 export const multer: Multer.Multer = Multer({
@@ -34,6 +35,7 @@ _Router
     .post('/createTask', (req: Request, res: Response): void => Task.createTask(req, res))
     .get('/resources', (req: Request, res: Response): void => Resources.getResources(req, res))
     .delete('/resources/:id', (req: Request, res: Response): void => Resources.deleteResources(req, res))
+    .get('/serverInfo', (req: Request, res: Response): void => ServerBase.GetServerBaseInfo(req, res))
 ;
 
 export default _Router;
