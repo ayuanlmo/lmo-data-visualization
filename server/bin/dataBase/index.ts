@@ -1,9 +1,58 @@
-import {DataTypes, Sequelize} from 'sequelize';
+import {DataTypes, Model as BaseModel, ModelCtor, Sequelize} from 'sequelize';
 import Cli from "../../lib/Cli";
 import initDefaultData from "./init";
 import {Process} from "../Process";
 import AppConfig from "../../conf/AppConfig";
 import path from "path";
+
+export interface ITemplateModel extends BaseModel {
+    id: string;
+    name: string;
+    description: string;
+    path: string;
+    cover: string;
+    gifCover: string;
+    createTime: string;
+    type: number;
+}
+
+export interface IColorModel extends BaseModel {
+    id: string;
+    value: string;
+    cssCode: string;
+    type: string;
+}
+
+export interface IResourcesModel extends BaseModel {
+    id: string;
+    name: string;
+    template: string;
+    filePath: string;
+    createTime: string;
+    templatePath: string;
+    url: string;
+    gifPath: string;
+    videoCover: string;
+    clarity: string;
+    status: string;
+    taskConfig: string;
+}
+
+export interface IUpLoadFilesModel extends BaseModel {
+    id: string;
+    name: string;
+    path: string;
+    cover: string;
+    createTime: string;
+    type: string;
+    hash: string;
+}
+
+interface IUpLoadFilesCategoryModel extends BaseModel {
+    id: string;
+    name: string;
+    parentId: string;
+}
 
 const {
     dbType,
@@ -26,7 +75,7 @@ const DB: Sequelize = dbType === 'mssql' ?
         logging: AppConfig.__DEV_SERVER
     });
 
-const TemplateModel = DB.define('Templates', {
+const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('Templates', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -42,7 +91,7 @@ const TemplateModel = DB.define('Templates', {
     timestamps: false
 });
 
-const ColorModel = DB.define('Colors', {
+const ColorModel: ModelCtor<IColorModel> = DB.define<IColorModel>('Colors', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -54,7 +103,7 @@ const ColorModel = DB.define('Colors', {
     timestamps: false
 });
 
-const ResourcesModel = DB.define('Resources', {
+const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('Resources', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -74,7 +123,7 @@ const ResourcesModel = DB.define('Resources', {
     timestamps: false
 });
 
-const UpLoadFilesModel = DB.define('UpLoadFiles', {
+const UpLoadFilesModel: ModelCtor<IUpLoadFilesModel> = DB.define<IUpLoadFilesModel>('UpLoadFiles', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -89,7 +138,7 @@ const UpLoadFilesModel = DB.define('UpLoadFiles', {
     timestamps: false
 });
 
-export const UpLoadFilesCategoryModel = DB.define('UpLoadFilesCategory', {
+export const UpLoadFilesCategoryModel: ModelCtor<IUpLoadFilesCategoryModel> = DB.define<IUpLoadFilesCategoryModel>('UpLoadFilesCategory', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
