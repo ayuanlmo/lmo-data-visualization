@@ -62,7 +62,7 @@ const TemplateList = (): React.JSX.Element => {
                                         type: `${e}`
                                     });
                                 }}
-                                style={{width: "6rem"}}
+                                style={{minWidth: "6rem"}}
                                 data={templateType}
                                 clearable={false}
                             />
