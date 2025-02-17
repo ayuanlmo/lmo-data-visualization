@@ -5,6 +5,7 @@ import zhTw from './config/zhTw.json';
 import koKr from './config/koKr.json';
 import jpJp from './config/jpJp.json';
 import ekUk from './config/enUk.json';
+import ruRU from './config/ruRU.json';
 import MyStorage from "../lib/Storage";
 
 const resources = {
@@ -22,6 +23,9 @@ const resources = {
     },
     'en': {
         translation: ekUk
+    },
+    'ru-RU': {
+        translation: ruRU
     }
 };
 
