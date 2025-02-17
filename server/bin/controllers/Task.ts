@@ -9,6 +9,7 @@ import TaskScheduler from "../TaskScheduler";
 import {get as httpGet, IncomingMessage} from "http";
 import MemoryCache from "../../lib/MemoryCache";
 import sharp from 'sharp';
+import fs from "fs";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 
@@ -182,6 +183,7 @@ export default class Task {
                         gifCover: templateStaticPath + '/cover.gif',
                         type: 0
                     };
+                    fs.writeFileSync(path.resolve(`${dirPath}/.initialized.t.bin`), Buffer.from(JSON.stringify(dbData)));
 
                     TemplateModel.create(dbData).then(() => {
                         res.status(204).send();
