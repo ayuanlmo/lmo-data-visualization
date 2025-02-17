@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import YExtendTemplate from "../../YExtendTemplate";
 import {
     Button,
@@ -58,7 +58,6 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(false);
     const [gifLoading, setGifLoading]: ReactState<boolean> = useState<boolean>(true);
     const [isCopyTemplate, setIsCopyTemplate]: ReactState<boolean> = useState<boolean>(false);
-    const [gifElement, setGifElement]: ReactState<React.JSX.Element | null> = useState<React.JSX.Element | null>(null);
     const popoverRef: React.Ref<{
         open: () => void;
         close: () => void;
@@ -75,38 +74,29 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
         });
     };
 
-    const getModalTitle = (): string => {
+    const getModalTitle: string = useMemo((): string => {
         if (isCopyTemplate)
             return t('copyTemplate');
 
         return t('editTemplate');
-    };
+    }, [isCopyTemplate]);
 
-    const getGifImage = (src: string, alt: string = ''): React.JSX.Element => {
-        if (gifElement)
-            return gifElement;
-
-        setGifElement(
-            <img
-                src={src}
-                alt={alt}
-                className={isHover ? 'img-active' : ''}
-                style={{
-                    width: "420px"
-                }}
-                onLoad={
-                    (): void => {
-                        setGifLoading(false);
-                    }
-                }
-                onMouseEnter={(): void => {
-                    setIsHover(false);
-                }}
-            />
-        );
-
-        return gifElement as unknown as React.JSX.Element;
-    };
+    const getGifImage = useCallback((src: string, alt: string = ''): React.JSX.Element => {
+        return <img
+            src={src}
+            alt={alt}
+            className={isHover ? 'img-active' : ''}
+            style={{
+                width: "420px"
+            }}
+            onLoad={
+                (): void => setGifLoading(false)
+            }
+            onMouseEnter={
+                (): void => setIsHover(false)
+            }
+        />;
+    }, []);
 
     useEffect((): void => {
         popoverRef.current?.[isHover ? 'open' : 'close']?.();
@@ -127,7 +117,7 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
                         onClose={closeModal}
                         onCancel={closeModal}
                         visible={editModalVisible}
-                        title={getModalTitle()}
+                        title={getModalTitle}
                         footer={[
                             <FormItem field="description" key={1} valueType="string">
                                 <div style={{marginTop: '1rem'}}>
