@@ -181,6 +181,14 @@ namespace Request {
             headers: {'Content-Type': 'application/json'}
         });
     };
+
+    export const getServerInfo = () => {
+        return axios({
+            url: `/serverInfo/`,
+            method: 'get',
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
 }
 
 export default Request;

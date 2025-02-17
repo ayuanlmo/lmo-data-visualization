@@ -125,5 +125,16 @@
   "socketError": "서버와 연결이 끊어졌습니다. 재시도 중...",
   "socketReConnect": "서버와 다시 연결되었습니다",
   "createSuccess": "생성 성공",
-  "getStarted": "즉시 시작"
+  "getStarted": "즉시 시작",
+  "serverInfo": "서버 정보",
+  "memory": "메모리",
+  "appUseMemory": "응용 프로그램 메모리 사용량",
+  "version": "버전",
+  "heapTotal": "힙 총합",
+  "heapUsed": "힙 사용량",
+  "arrayBuffers": "배열 버퍼 크기",
+  "status": "상태",
+  "synthesisServicesConnectStatus": "합성 서버 연결 상태",
+  "connected": "연결됨",
+  "notConnected": "연결되지 않음"
 }

@@ -125,5 +125,16 @@
   "socketError": "Disconnected from the server, retrying...",
   "socketReConnect": "Reconnected to the server",
   "createSuccess": "Create success",
-  "getStarted": "Get Started"
+  "getStarted": "Get Started",
+  "serverInfo": "Server Information",
+  "memory": "Memory",
+  "appUseMemory": "Application Memory Usage",
+  "version": "Version",
+  "heapTotal": "Heap Total",
+  "heapUsed": "Heap Used",
+  "arrayBuffers": "Array Buffers",
+  "status": "Status",
+  "synthesisServicesConnectStatus": "Synthesis Services Connection Status",
+  "connected": "Connected",
+  "notConnected": "Not Connected"
 }

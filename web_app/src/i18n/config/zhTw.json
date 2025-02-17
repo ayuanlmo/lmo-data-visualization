@@ -125,5 +125,16 @@
   "socketError": "與伺服器斷開連接，正在重試...",
   "socketReConnect": "已重新與伺服器連接",
   "createSuccess": "創建成功",
-  "getStarted": "立即開始"
+  "getStarted": "立即開始",
+  "serverInfo": "伺服器資訊",
+  "memory": "記憶體",
+  "appUseMemory": "程序記憶體用量",
+  "version": "版本",
+  "heapTotal": "堆總計",
+  "heapUsed": "堆已使用",
+  "arrayBuffers": "緩衝區大小",
+  "status": "狀態",
+  "synthesisServicesConnectStatus": "合成伺服器連接狀態",
+  "connected": "已連接",
+  "notConnected": "未連接"
 }

@@ -3,6 +3,7 @@ import TemplateList from "../components/TemplateList";
 import Header from "../components/Header";
 import Storage from "../lib/Storage";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import ServerInfo from "../components/ServerInfo";
 
 const AppHome = (): React.JSX.Element => {
     const navigate: NavigateFunction = useNavigate();
@@ -18,6 +19,7 @@ const AppHome = (): React.JSX.Element => {
             <div className={'data-visualization-templates'}>
                 <TemplateList/>
             </div>
+            <ServerInfo/>
         </div>
     );
 };
