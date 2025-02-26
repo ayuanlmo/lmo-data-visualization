@@ -72,8 +72,11 @@ class SocketServer {
 
                 this.sendMessage(AppConfig.__SOCKET_PONG_KEY);
             } catch (e) {
-                console.log(e);
+                this.sendMessage('ERROR');
             }
+        });
+        socket.on('error', () => {
+            this.socket?.pause();
         });
     }
 }
