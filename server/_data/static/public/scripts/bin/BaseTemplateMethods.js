@@ -450,7 +450,7 @@ var BaseTemplateMethods = /** @class */ (function () {
         else if (type === 'color' || type === 'theme')
             templateEl.style.background = color || '#fff';
         else if (type === 'image') {
-            templateEl.style.backgroundImage = "url(".concat(image.includes('data:image;base64') ? image : "/api/".concat(image), ")");
+            templateEl.style.backgroundImage = "url(".concat(image.includes('data:image') && image.includes('base64,') ? image : "/api/".concat(image), ")");
             templateEl.style.backgroundRepeat = 'no-repeat';
             switch (arrangement) {
                 case 'cover':

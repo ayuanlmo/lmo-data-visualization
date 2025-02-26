@@ -479,7 +479,7 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
         else if (type === 'color' || type === 'theme')
             templateEl.style.background = color || '#fff';
         else if (type === 'image') {
-            templateEl.style.backgroundImage = `url(${image.includes('data:image;base64') ? image : `/api/${image}`})`;
+            templateEl.style.backgroundImage = `url(${image.includes('data:image') && image.includes('base64,') ? image : `/api/${image}`})`;
             templateEl.style.backgroundRepeat = 'no-repeat';
 
             switch (arrangement) {
