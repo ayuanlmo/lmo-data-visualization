@@ -7,6 +7,7 @@ import {TFileType} from "./index";
 import {EmptyState, Loading, Scrollbar, Space} from "@hi-ui/hiui";
 import YExtendTemplate from "../YExtendTemplate";
 import {IImageItem} from "./ImageList";
+import {useTranslation} from "react-i18next";
 
 export interface IAudioListProps {
     query: object;
@@ -42,6 +43,7 @@ const AudioList = React.forwardRef((props: IAudioListProps, ref: React.Forwarded
     const [playerId, setPlayerId]: ReactState<string> = useState<string>('');
     const [currentSchedule, setCurrentSchedule]: ReactState<number> = useState<number>(0);
     const [loading, setLoading]: ReactState<boolean> = useState<boolean>(true);
+    const {t} = useTranslation();
 
     const getFileList = (): void => {
         if (fileType === 'audio') {
@@ -149,7 +151,7 @@ const AudioList = React.forwardRef((props: IAudioListProps, ref: React.Forwarded
                 </Loading>
             </Scrollbar>
             <YExtendTemplate show={fileList.length === 0}>
-                <EmptyState/>
+                <EmptyState title={t('noData')}/>
             </YExtendTemplate>
         </div>
     );

@@ -11,25 +11,36 @@ import Storage from "../lib/Storage";
 import {setCurrentTemplate} from "../lib/Store/AppStore";
 import Task, {ICreateTaskRef} from "../components/Task";
 import AudioPreview from "../components/AudioPreview";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 
 const AppDesign = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
     const taskRef: React.RefObject<ICreateTaskRef> = useRef<ICreateTaskRef>(null);
+    const navigate: NavigateFunction = useNavigate();
 
     useEffect((): void => {
         if (currentTemplate.id === '') {
-            const currentTemplate = JSON.parse(Storage.get('current_template') ?? '');
+            try {
+                const currentTemplate = JSON.parse(Storage.get('current_template') ?? '');
 
-            if (Object.keys(currentTemplate).length > 0)
-                dispatch(setCurrentTemplate(currentTemplate));
+                if (Object.keys(currentTemplate).length > 0)
+                    dispatch(setCurrentTemplate(currentTemplate));
+                else
+                    navigate('/');
+            } catch (e) {
+                navigate('/');
+            }
         }
     }, []);
     return (
         <div className={'data-visualization-design'}>
             <Header.Design
                 onSynthesis={(): void => {
-                    taskRef.current?.open();
+                    taskRef.current?.open('synthesis');
+                }}
+                onSave={(): void => {
+                    taskRef.current?.open('savaAsTemplate');
                 }}
             />
             <Task ref={taskRef}/>

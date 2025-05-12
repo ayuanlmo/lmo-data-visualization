@@ -14,6 +14,7 @@ import {ReactState} from "../types/ReactTypes";
 import GlobalComponent from "./GlobalComponent";
 import TemplateOtherConfig from "./TemplateOtherConfig";
 import {useTranslation} from "react-i18next";
+import {ITemplateConfig} from "../bin/@types/TemplateTypes";
 import useEventListener = Hooks.useEventListener;
 
 export type TOptionType = 'style' | 'config' | 'data';
@@ -30,8 +31,13 @@ const DesignConfigs = (): React.JSX.Element => {
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
         setCurrentTextConfig(e);
     });
-    useTemplateMessageListener('TEMPLATE_FULL_CONFIG', (e: ITemplateSelectTextElement): void => {
-        dispatch(setCurrentTemplateConfig(e));
+    useTemplateMessageListener('TEMPLATE_FULL_CONFIG', (e: ITemplateConfig): void => {
+        const data = {
+            ...e,
+            data: e?.data ?? []
+        };
+
+        dispatch(setCurrentTemplateConfig(data));
     });
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_CLOSE', (): void => {
         setCurrentTextConfig(null);
@@ -109,9 +115,9 @@ const DesignConfigs = (): React.JSX.Element => {
                     <GlobalComponent.TDisplayTemplate show={optionType === 'style'}>
                         <TemplateOtherConfig/>
                     </GlobalComponent.TDisplayTemplate>
-                    <YExtendTemplate show={optionType === 'config'}>
+                    <GlobalComponent.TDisplayTemplate show={optionType === 'config'}>
                         <SyntheticConfig/>
-                    </YExtendTemplate>
+                    </GlobalComponent.TDisplayTemplate>
                     <EditDataTable ref={editDataTableRef}/>
                 </div>
             </div>

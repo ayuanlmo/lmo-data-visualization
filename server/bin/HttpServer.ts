@@ -6,6 +6,7 @@ import Utils from "../utils";
 import router from "../router";
 import Cli from "../lib/Cli";
 import {IWsApp, WebSocketServer} from "./WebSocketServer";
+import TemplateSocket from "./TemplateSocket";
 import Express = require("express");
 import CreateErrorMessage = Utils.createErrorMessage;
 
@@ -22,14 +23,17 @@ export default class HttpServer {
     private readonly App: IExpressApp;
     private onLineUsers: number;
     private readonly WsPool: Array<IWsApp>;
+    private readonly TemplateWsPool: Array<IWsApp>;
 
     constructor() {
         this.App = Express();
         this.WsApp = require('express-ws')(this.App) as WithWebsocketMethod;
         this.WsPool = this.WsApp?.getWss?.(AppConfig.__SOCKET_CONNECT) as Array<IWsApp>;
+        this.TemplateWsPool = this.WsApp?.getWss?.('/template') as Array<IWsApp>;
         const _: any = global;
 
         _.WebSocketPool = this.WsApp;
+        _.TemplateWsPool = this.TemplateWsPool;
         this.onLineUsers = 0;
         this.init();
     }
@@ -48,8 +52,11 @@ export default class HttpServer {
                 this.onLineUsers--;
             });
         });
+        this.App.ws?.('/template', (ws: IWsApp): void => {
+            new TemplateSocket(ws);
+        });
         this.App.use((req: Request, res: Response, next: NextFunction): void => {
-            const methods: Array<string> = ['GET', 'PUT', 'DELETE'];
+            const methods: Array<string> = ['PUT', 'DELETE'];
 
             if (req.url.includes('/static')) {
                 const paths: Array<string> = req.url.split('/');
@@ -66,7 +73,7 @@ export default class HttpServer {
             }
 
             if (AppConfig.__LIVE_SERVER) {
-                if (methods.some((i: string): boolean => req.method === i) || AppConfig.__PROTECTED_ROUTERS.some((i: string): boolean => req.url.includes(i)))
+                if (methods.some((i: string): boolean => req.method === i) || AppConfig.__PROTECTED_ROUTERS.some((i: string): boolean => req.url.includes(i) && req.method !== 'GET'))
                     return void res.json(CreateErrorMessage('ext00el'));
                 else
                     next();

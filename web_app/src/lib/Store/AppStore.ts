@@ -25,6 +25,9 @@ const defaultCurrentTemplateConfigData = {
             full: false,
             src: '',
             volume: 100
+        },
+        animation: {
+            chatAnimationIsControllable: false
         }
     },
     otherConfig: {
@@ -85,6 +88,9 @@ const AppStore = createSlice({
         // 设置模板视频配置
         setCurrentTemplateVideoConfig(state, {payload}): void {
             state.currentTemplateConfig.config.video = payload;
+        },
+        setCurrentTemplateData(state, {payload}): void {
+            state.currentTemplateConfig.data = payload;
         }
     }
 });
@@ -97,7 +103,8 @@ export const {
     setCurrentTemplateThemeConfig,
     setCurrentTemplateAudioConfig,
     setCurrentTemplateVideoConfig,
-    initCurrentTemplateConfigData
+    initCurrentTemplateConfigData,
+    setCurrentTemplateData
 } = AppStore.actions;
 
 export default AppStore.reducer;

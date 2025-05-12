@@ -14,12 +14,14 @@ import "./pages/style/AppHome-Light.scss";
 import "./pages/style/AppDesign.scss";
 import "./pages/style/AppDesign-Dack.scss";
 import "./pages/style/AppDesign-Light.scss";
+import "./pages/style/Welcome.scss";
 import "./i18n";
 import "./lib/Socket";
 
 ((): void => {
     const AppHome: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppHome"));
     const AppDesign: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/AppDesign"));
+    const Welcome: React.LazyExoticComponent<() => React.JSX.Element> = lazy(() => import("./pages/Welcome"));
     const RootDom: HTMLDivElement = document.getElementById('__lmo_app') as HTMLDivElement;
     const __RootApp: Root = createRoot(RootDom);
 
@@ -32,6 +34,7 @@ import "./lib/Socket";
                     <Routes>
                         <Route index path="/" element={<Suspense><AppHome/></Suspense>}/>
                         <Route index path="/design" element={<Suspense><AppDesign/></Suspense>}/>
+                        <Route index path="/welcome" element={<Suspense><Welcome/></Suspense>}/>
                     </Routes>
                 </BrowserRouter>
             </StrictMode>

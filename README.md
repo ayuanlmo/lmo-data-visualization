@@ -22,12 +22,15 @@
     <img src="https://img.shields.io/badge/Pug-3.0.3 -blue.svg?logo=pug" alt="Express">
     <img src="https://img.shields.io/badge/uuid-9.0.1 -blue.svg?" alt="uuid">
     <img src="https://img.shields.io/badge/sqlite3-5.1.7 -blue.svg?logo=sqlite" alt="sqlite3">
+    <img src="https://shields.io/badge/Microsoft_SQL_Server-inactive?logo=sqlserver" alt="Microsoft SQL Server"/>
     <img src="https://img.shields.io/badge/sequelize-6.37.1 -blue.svg?logo=sequelize" alt="sequelize">
     <img src="https://img.shields.io/badge/ffmpeg_static-5.2.0 -blue.svg?logo=ffmpeg" alt="ffmpeg-static">
     <img src="https://img.shields.io/badge/fluent_ffmpeg-2.1.3 -blue.svg?logo=ffmpeg" alt="fluent-ffmpeg">
     <img src="https://img.shields.io/badge/web_video_creator-0.0.34 -blue.svg" alt="web-video-creator">
 
 </p>
+
+[[English](./README_EN.md)] [[繁體中文](./README_TW.md)]
 
 ## 介绍
 
@@ -145,6 +148,47 @@ location /connect{
 1. 不建议对外暴露合成服务器端口
 2. 主服务和合成服务器必须运行在同一台服务器上
 3. 使用期间产生的文件，请不要手动删除
+
+## 数据库配置
+
+服务器程序支持两种数据库，分别是：`sqlite` 、`Microsoft SQL Server®` (以下简称`mssql`)
+
+默认使用`sqlite`,作为程序默认数据库，如果您想使用mssql，请配置如下启动参数：
+
+- -dbType mssql
+- -dbHost {your host}
+- -dbPort {your port}
+- -dbName lmo-dv
+- -dbUserName {your userName}
+- -dbPassWord {your userName}
+
+使用mssql，您需要先初始化数据库，请将数据库名称设置为：`lmo-dv`，或者使用`/server/sql`目录下的sql文件进行初始化，建议您使用
+`SQL Server Management Studio®` (`SSMS`)运行sql文件。
+
+## 版本管理
+
+### 概述
+
+lmo-dv的版本号由`主版本号.小版本号.修订号`组成，例如：`3.0.0`。项目为了保持历史记录，而在同一个仓库创建新的分支，并在此分支基础上进行新版本的开发。
+其中`1.*`、`2.*`已经停止维护。目前最新迭代版本为`3.*`。
+
+### 分支结构
+
+- main
+
+`main`分支为最新迭代版本，由`newVer` 或者 `dev-v*`分支合并而来。
+
+- v2
+
+`v2`分支为`2.0`版本相关代码“备份”。
+
+- v1
+
+`v1`分支为`1.0`版本相关代码“备份”。
+
+### tags
+
+每一个tag代表一个版本，例如：`v3.0.0`。并切该tag在发布时会有对应的说明。
 
 ## 开源相关
 

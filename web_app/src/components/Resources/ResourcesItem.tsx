@@ -92,20 +92,22 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
                     }}
                 >
                     <div className={'c-resources-item-option app_flex_box app_position_relative'}>
-                        <Dropdown
-                            data={downloadTypes}
-                            onClick={(e: React.ReactText): void => {
-                                onDownload && onDownload(data, e === 0 ? 'video' : 'gif');
-                            }}
-                        >
-                            <div
-                                style={{
-                                    background: '#237FFA'
+                        <YExtendTemplate show={!isError}>
+                            <Dropdown
+                                data={downloadTypes}
+                                onClick={(e: React.ReactText): void => {
+                                    onDownload && onDownload(data, e === 0 ? 'video' : 'gif');
                                 }}
-                                className={'c-resources-item-option-item template-item-mask-option-item-danger app_cursor_pointer'}>
-                                <DownloadOutlined className={'app_position_relative'}/>
-                            </div>
-                        </Dropdown>
+                            >
+                                <div
+                                    style={{
+                                        background: '#237FFA'
+                                    }}
+                                    className={'c-resources-item-option-item template-item-mask-option-item-danger app_cursor_pointer'}>
+                                    <DownloadOutlined className={'app_position_relative'}/>
+                                </div>
+                            </Dropdown>
+                        </YExtendTemplate>
                         <div
                             style={{
                                 background: '#BE1919'
@@ -119,21 +121,23 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
                             />
                         </div>
                     </div>
-                    <div
-                        className={'c-resources-item-play-box app_position_absolute app_cursor_pointer'}
-                        onClick={(): void => {
-                            onPlay && onPlay(data);
-                        }}
-                    >
-                        <div className={'c-resources-item-play-box-content app_position_relative'}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16"
-                                 fill="none">
-                                <path
-                                    d="M9.82036 7.60885L0.786997 0.106C0.479041 -0.14291 -6.96303e-07 0.0704403 -6.77651e-07 0.497143L-2.17308e-08 15.5029C-3.07907e-09 15.9296 0.479042 16.1429 0.786997 15.894L9.82036 8.39114C10.0599 8.17779 10.0599 7.82221 9.82036 7.60885Z"
-                                    fill="white"/>
-                            </svg>
+                    <YExtendTemplate show={!isError}>
+                        <div
+                            className={'c-resources-item-play-box app_position_absolute app_cursor_pointer'}
+                            onClick={(): void => {
+                                onPlay && onPlay(data);
+                            }}
+                        >
+                            <div className={'c-resources-item-play-box-content app_position_relative'}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16"
+                                     fill="none">
+                                    <path
+                                        d="M9.82036 7.60885L0.786997 0.106C0.479041 -0.14291 -6.96303e-07 0.0704403 -6.77651e-07 0.497143L-2.17308e-08 15.5029C-3.07907e-09 15.9296 0.479042 16.1429 0.786997 15.894L9.82036 8.39114C10.0599 8.17779 10.0599 7.82221 9.82036 7.60885Z"
+                                        fill="white"/>
+                                </svg>
+                            </div>
                         </div>
-                    </div>
+                    </YExtendTemplate>
                 </div>
             </YExtendTemplate>
             <Loading
@@ -143,7 +147,7 @@ const ResourcesItem = (props: IResourcesItemProps): React.JSX.Element => {
                 <div
                     className={'c-resources-item-cover-box app_cursor_pointer'}
                     onMouseEnter={(): void => {
-                        if (isPending || isError) return;
+                        if (isPending) return;
 
                         setIsHover(true);
                     }}

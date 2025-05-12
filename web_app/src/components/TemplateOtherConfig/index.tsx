@@ -80,6 +80,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     </YExtendTemplate>
                     <YExtendTemplate show={item.type === 'select'}>
                         <Select
+                            clearable={false}
                             defaultValue={item.value as string}
                             onChange={(e: React.ReactText | string): void => {
                                 setValue(item.key, e);

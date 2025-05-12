@@ -1,4 +1,6 @@
 import errorMessage from "../const/ErrorMessage";
+import {existsSync, readdirSync, rmdirSync, statSync, unlinkSync} from "node:fs";
+import path from "path";
 
 export interface IResponseMessage {
     code: number;
@@ -36,6 +38,24 @@ namespace Utils {
             _t: new Date().getTime(),
             _app: 'lmo_dv_sa_t'
         }
+    }
+
+    export const deleteFolderRecursive = (dir: string): boolean => {
+        if (!existsSync(dir)) return false;
+        const files = readdirSync(dir);
+
+        for (let file of files) {
+            const filePath = path.join(dir, file);
+            const stats = statSync(filePath);
+
+            if (stats.isDirectory())
+                deleteFolderRecursive(file);
+            else
+                unlinkSync(filePath);
+        }
+
+        rmdirSync(dir);
+        return true;
     }
 }
 

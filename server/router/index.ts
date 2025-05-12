@@ -6,6 +6,7 @@ import Catch from "../bin/controllers/Catch";
 import Player from "../bin/Player";
 import Task from "../bin/controllers/Task";
 import Resources from "../bin/controllers/Resources";
+import ServerBase from "../bin/controllers/ServerBase";
 import Multer = require("multer");
 
 export const multer: Multer.Multer = Multer({
@@ -17,9 +18,10 @@ _Router
     .get('/template', (req: Request, res: Response): void => TemplateController.getTemplates(req, res))
     .get('/template/:id', (req: Request, res: Response): void => TemplateController.getTemplate(req, res))
     .put('/template', (req: Request, res: Response): void => TemplateController.editTemplate(req, res))
-    .delete('/template', (req: Request, res: Response): void => TemplateController.deleteTemplate(req, res))
+    .delete('/template/:id', (req: Request, res: Response): void => TemplateController.deleteTemplate(req, res))
     .post('/template/copy', (req: Request, res: Response): void => TemplateController.copyTemplate(req, res))
     .post('/template/refresh', (req: Request, res: Response): void => TemplateController.refreshTemplate(req, res))
+    .post('/createCustomTemplate', (req: Request, res: Response): void => Task.createTask(req, res))
     .post('/uploadFile', multer.single('media'), (req: Request, res: Response): void => File.upload(req, res))
     .put('/editFileInfo/:id', (req: Request, res: Response): void => File.edit(req, res))
     .delete('/deleteFile', (req: Request, res: Response): void => File.delete(req, res))
@@ -33,6 +35,7 @@ _Router
     .post('/createTask', (req: Request, res: Response): void => Task.createTask(req, res))
     .get('/resources', (req: Request, res: Response): void => Resources.getResources(req, res))
     .delete('/resources/:id', (req: Request, res: Response): void => Resources.deleteResources(req, res))
+    .get('/serverInfo', (req: Request, res: Response): void => ServerBase.GetServerBaseInfo(req, res))
 ;
 
 export default _Router;

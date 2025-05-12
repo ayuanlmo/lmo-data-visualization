@@ -5,6 +5,7 @@ import GlobalComponent from "../GlobalComponent";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {initCurrentTemplateConfigData} from "../../lib/Store/AppStore";
 import {useDispatch} from "react-redux";
+import YExtendTemplate from "../YExtendTemplate";
 
 export interface IDesignHeaderProps {
     readonly onSave?: () => void;
@@ -62,11 +63,13 @@ const DesignHeader = (props: IDesignHeaderProps): React.JSX.Element => {
                         onSave && onSave();
                     }
                 } size={'sm'} type="secondary">{t('saveAsCustomizeTemplate')}</Button>
-                <Button onClick={
-                    (): void => {
-                        onPreview && onPreview();
-                    }
-                } size={'sm'} type="secondary">{t('preview')}</Button>
+                <YExtendTemplate show={false}>
+                    <Button onClick={
+                        (): void => {
+                            onPreview && onPreview();
+                        }
+                    } size={'sm'} type="secondary">{t('preview')}</Button>
+                </YExtendTemplate>
                 <Button onClick={(): void => {
                     onSynthesis && onSynthesis();
                 }} size={'sm'} type="primary">{t('synthesis')}</Button>

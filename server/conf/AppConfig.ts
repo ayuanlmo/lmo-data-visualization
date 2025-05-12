@@ -1,5 +1,5 @@
 export interface ParsedArgs {
-    [key: string]: string | boolean;
+    [key: string]: string | any;
 }
 
 export type TAppModeType = 'development' | 'live-server' | 'prod';
@@ -7,6 +7,12 @@ export type TAppModeType = 'development' | 'live-server' | 'prod';
 export interface IArgsParams {
     p: string;
     mode: TAppModeType;
+    dbType: 'sqlite' | 'mssql';
+    dbHost: string;
+    dbPort: number;
+    dbName: string;
+    dbUserName: string;
+    dbPassWord: string;
 }
 
 function getArgvParams(): IArgsParams {
@@ -40,7 +46,7 @@ const AppConfig = {
     __LIVE_SERVER: argv.mode === 'live-server',
     __ARGV: argv as IArgsParams,
     __PROTECTED_STATIC_FILES: ['.ts', '.bin', 'config.json', 'package.json', 'tsconfig.json', '.pug'],
-    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory']
+    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory', 'createCustomTemplate']
 } as const;
 
 export default AppConfig;

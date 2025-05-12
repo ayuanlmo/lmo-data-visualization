@@ -28,6 +28,8 @@ export type TDesignAppMessageType =
     | 'GET_TEMPLATE_DATA' // 获取模板数据
     | 'GET_CONFIG' // 获取模版配置
     | 'VIDEO_CONFIG_CHANGE' // 视频配置变化
+    | 'START_ANIMATION' // 暂停&打断图表动画
+    | 'PAUSE_ANIMATION' // 开始&继续图表动画
     ;
 
 export interface ITemplateSelectTextElement {

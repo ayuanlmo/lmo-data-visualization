@@ -1,4 +1,4 @@
-import React, {useImperativeHandle, useRef, useState} from "react";
+import React, {useEffect, useImperativeHandle, useRef, useState} from "react";
 import {Form, FormItem, Grid, Input, Modal, Pagination, Search, TabPane, Tabs} from "@hi-ui/hiui";
 import {SearchOutlined} from "@hi-ui/icons";
 import ImageList, {IImageItem, IImageListRef} from "./ImageList";
@@ -101,6 +101,11 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
         });
     };
 
+    useEffect(() => {
+        if (visible)
+            getList();
+    }, [visible]);
+
     useImperativeHandle(ref, (): ISelectFileRef => ({
         open
     }));
@@ -120,7 +125,7 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
             <div className={'c-select-file app_position_relative'}>
                 <div className={'c-select-file-search'}>
                     <Grid.Row gutter={true} justify={"space-between"}>
-                        <Grid.Col span={4}>
+                        <Grid.Col span={8}>
                             <YExtendTemplate show={visible}>
                                 <Tabs
                                     activeId={fileType}
@@ -148,7 +153,7 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
                                 </Tabs>
                             </YExtendTemplate>
                         </Grid.Col>
-                        <Grid.Col span={{lg: 12, xl: 12, md: 16, sm: 16, xs: 16}}>
+                        <Grid.Col span={{lg: 12, xl: 12, md: 12, sm: 10, xs: 16}}>
                             <Search
                                 placeholder={t('enterNameToStartQuery')}
                                 prepend={
@@ -166,7 +171,7 @@ const SelectFile: React.ForwardRefExoticComponent<ISelectFileProps & React.RefAt
                             />
                         </Grid.Col>
                         <Grid.Col span={4}>
-                            <UploadFile/>
+                            <UploadFile onRefresh={getList}/>
                         </Grid.Col>
                     </Grid.Row>
                 </div>

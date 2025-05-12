@@ -27,8 +27,8 @@ const TemplateList = (): React.JSX.Element => {
     });
     const templateType: SelectMergedItem[] = [
         {title: t('all'), id: "", disabled: false},
-        {title: t('defaultTemplate'), id: "0", disabled: false},
-        {title: t('customizeTemplate'), id: "1", disabled: false}
+        {title: t('defaultTemplate'), id: "1", disabled: false},
+        {title: t('customizeTemplate'), id: "0", disabled: false}
     ];
 
     const getTemplate = (): void => {
@@ -62,7 +62,7 @@ const TemplateList = (): React.JSX.Element => {
                                         type: `${e}`
                                     });
                                 }}
-                                style={{width: "6rem"}}
+                                style={{minWidth: "6rem"}}
                                 data={templateType}
                                 clearable={false}
                             />
@@ -104,7 +104,7 @@ const TemplateList = (): React.JSX.Element => {
                 </Grid.Row>
             </YExtendTemplate>
             <YExtendTemplate show={templates.length === 0}>
-                <EmptyState/>
+                <EmptyState title={t('noData')}/>
             </YExtendTemplate>
         </div>
     );

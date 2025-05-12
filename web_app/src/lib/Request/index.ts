@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Nprogress from "../Nprogress";
 import Notification from "../Notification";
-
+import i18n from "../../i18n";
 
 axios.defaults.baseURL = '/api/api';
 
@@ -21,15 +21,19 @@ axios.interceptors.response.use((response): Promise<any> => {
         }
 
         if ('data' in response) {
+            if (response?.data?.errorCode === 'ext00el') {
+                Notification.openNotification(i18n.t('sysNotify'), i18n.t('liveServerNotSupported'), 'error');
+                return Promise.reject();
+            }
             if (response.data.code === 500) {
-                Notification.openNotification('系统通知', '服务器错误', 'error');
+                Notification.openNotification(i18n.t('sysNotify'), i18n.t('serverError'), 'error');
                 return Promise.reject({});
             }
             if (response.data.code === 200)
                 return Promise.resolve(response.data);
         }
         if (status === 504) {
-            Notification.openNotification('系统通知', '网络异常，无法与服务器取得联系，请稍后再试。', 'error');
+            Notification.openNotification(i18n.t('sysNotify'), i18n.t('netError'), 'error');
             return Promise.reject({});
         }
         return Promise.reject(response);
@@ -51,6 +55,14 @@ namespace Request {
             url: '/template',
             method: 'put',
             data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const deleteTemplate = (id: string = '') => {
+        return axios({
+            url: `/template/${id}`,
+            method: 'delete',
             headers: {'Content-Type': 'application/json'}
         });
     };
@@ -144,6 +156,15 @@ namespace Request {
         });
     };
 
+    export const createCustomTemplate = (data: object = {}) => {
+        return axios({
+            url: '/createCustomTemplate',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
     export const resourcesList = (data: object = {}) => {
         return axios({
             url: '/resources',
@@ -157,6 +178,14 @@ namespace Request {
         return axios({
             url: `/resources/${id}`,
             method: 'delete',
+            headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const getServerInfo = () => {
+        return axios({
+            url: `/serverInfo/`,
+            method: 'get',
             headers: {'Content-Type': 'application/json'}
         });
     };

@@ -32,12 +32,14 @@ const SwitchLang = (): React.JSX.Element => {
                 setLang(e as string);
                 MyStorage.set('lang', e);
             }}
+            clearable={false}
         >
             <SelectOption value={'zh-CN'}>简体中文</SelectOption>
             <SelectOption value={'zh-TW'}>繁體中文</SelectOption>
-            <SelectOption value={'en-GB'}>English</SelectOption>
+            <SelectOption value={'en'}>English</SelectOption>
             <SelectOption value={'jp'}>日本語</SelectOption>
             <SelectOption value={'ko'}>한국어</SelectOption>
+            <SelectOption value={'ru-RU'}>Россия</SelectOption>
         </Select>
     );
 };

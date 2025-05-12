@@ -34,14 +34,16 @@ class Wvc {
         this.wvc = new WebVideoCreator();
         this.wvc.config({
             mp4Encoder: DECODES.CPU.H264,
-            compatibleRenderingMode: OS.platform() === 'darwin',
+            compatibleRenderingMode: OS.platform() !== 'darwin',
+            browserUseGPU: true,
             browserUseAngle: true,
             numBrowserMin: 1,
             numBrowserMax: 3,
             numPageMin: 1,
             numPageMax: 3,
-            browserHeadless: AppConfig.__OPEN_BROWSER,
-            browserDebug: AppConfig.__OPEN_BROWSER
+            browserHeadless: true,
+            browserDebug: AppConfig.__OPEN_BROWSER,
+            ffmpegDebug: true
         });
     }
 
@@ -61,7 +63,9 @@ class Wvc {
                 outputPath: this.config?.optPath,
                 showProgress: false,
                 videoQuality: 100,
-                pixelFormat: 'yuv420p'
+                pixelFormat: 'yuv420p',
+                frameFormat: 'jpeg',
+                frameQuality: 100
             });
 
             video.once('completed', (data: {

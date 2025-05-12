@@ -10,6 +10,9 @@ import PostMessage from "../lib/PostMessage";
 import {registerAllModules} from 'handsontable/registry';
 import {ReactState} from "../types/ReactTypes";
 import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
+import {Dispatch} from "@reduxjs/toolkit";
+import {setCurrentTemplateData} from "../lib/Store/AppStore";
 import useTemplateMessageListener = Hooks.useTemplateMessageListener;
 
 registerAllModules();
@@ -25,6 +28,7 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
     const [isLiveUpdate, setIsLiveUpdate]: ReactState<boolean> = useState<boolean>(true);
     const [isChangeData, setIsChangeData]: ReactState<boolean> = useState<boolean>(false);
     const {t} = useTranslation();
+    const dispatch: Dispatch = useDispatch();
 
     useImperativeHandle(ref, (): IEditDataTable => ({
         open
@@ -42,6 +46,10 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
         }
     }, [visible]);
 
+    useEffect((): void => {
+        dispatch(setCurrentTemplateData(processData(data)));
+    }, [data]);
+
     const open = (): void => {
         setVisible(!visible);
     };
@@ -58,6 +66,7 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
 
                         setData(_data);
                         sendData(_data);
+                        dispatch(setCurrentTemplateData(_data));
                     } catch (e) {
                         console.log(e);
                     }
@@ -124,14 +133,29 @@ const EditDataTable: React.ForwardRefExoticComponent<React.RefAttributes<IEditDa
                         colWidths={50}
                         rowHeights={20}
                         afterChange={(changes: CellChange[] | null, source: ChangeSource): void => {
-                            if (source === 'edit') {
+                            if (Array.isArray(changes) && source === 'edit') {
+                                let dataChanged: boolean = false;
+
+                                for (let i: number = 0; i < changes.length; i += 1) {
+                                    const oldValue: string | number = changes[i][2];
+                                    const newValue: string | number = changes[i][3];
+
+                                    if (`${oldValue}` === `${newValue}`) return;
+
+                                    dataChanged = true;
+                                }
+
+                                if (!dataChanged) return;
+
                                 const hotInstance: any = hotTableRef.current;
                                 const _data: (string | number)[][] = hotInstance.__hotInstance.getData();
                                 const nd: (string | number)[][] = processData(_data);
 
+                                dispatch(setCurrentTemplateData(nd));
                                 if (isLiveUpdate)
                                     sendData(nd);
                                 setIsChangeData(true);
+                                setData(data);
                             }
                         }}
                         licenseKey="non-commercial-and-evaluation"

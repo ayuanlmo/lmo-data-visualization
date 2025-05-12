@@ -1,85 +1,149 @@
-import path = require('path');
-import {DataTypes, Sequelize} from 'sequelize';
+import {DataTypes, Model as BaseModel, ModelCtor, Sequelize} from 'sequelize';
 import Cli from "../../lib/Cli";
-import AppConfig from "../../conf/AppConfig";
 import initDefaultData from "./init";
 import {Process} from "../Process";
+import AppConfig from "../../conf/AppConfig";
+import path from "path";
 
-const DB: Sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: path.resolve('./_data/db/dv_data.ting'),
-    logging: AppConfig.__DEV_SERVER
-});
+export interface ITemplateModel extends BaseModel {
+    id: string;
+    name: string;
+    description: string;
+    path: string;
+    cover: string;
+    gifCover: string;
+    createTime: string;
+    type: number;
+}
 
-const TemplateModel = DB.define('Templates', {
+export interface IColorModel extends BaseModel {
+    id: string;
+    value: string;
+    cssCode: string;
+    type: string;
+}
+
+export interface IResourcesModel extends BaseModel {
+    id: string;
+    name: string;
+    template: string;
+    filePath: string;
+    createTime: string;
+    templatePath: string;
+    url: string;
+    gifPath: string;
+    videoCover: string;
+    clarity: string;
+    status: string;
+    taskConfig: string;
+}
+
+export interface IUpLoadFilesModel extends BaseModel {
+    id: string;
+    name: string;
+    path: string;
+    cover: string;
+    createTime: string;
+    type: string;
+    hash: string;
+}
+
+interface IUpLoadFilesCategoryModel extends BaseModel {
+    id: string;
+    name: string;
+    parentId: string;
+}
+
+const {
+    dbType,
+    dbName,
+    dbUserName,
+    dbPassWord,
+    dbHost
+} = AppConfig.__ARGV;
+
+const DB: Sequelize = dbType === 'mssql' ?
+    new Sequelize(dbName, dbUserName, dbPassWord, {
+        host: dbHost,
+        dialect: 'mssql',
+        dialectModule: require('tedious'),
+        logging: AppConfig.__DEV_SERVER
+    }) :
+    new Sequelize({
+        dialect: 'sqlite',
+        storage: path.resolve('./_data/db/dv_data.ting'),
+        logging: AppConfig.__DEV_SERVER
+    });
+
+const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('Templates', {
     id: {
         primaryKey: true,
-        type: DataTypes.TEXT
+        type: DataTypes.STRING(36)
     },
-    name: DataTypes.TEXT,
-    description: DataTypes.TEXT,
-    path: DataTypes.TEXT,
-    cover: DataTypes.TEXT,
-    gifCover: DataTypes.TEXT,
-    createTime: DataTypes.TEXT,
+    name: DataTypes.STRING,
+    description: DataTypes.STRING,
+    path: DataTypes.STRING,
+    cover: DataTypes.STRING,
+    gifCover: DataTypes.STRING,
+    createTime: DataTypes.STRING,
     type: DataTypes.INTEGER
 }, {
     timestamps: false
 });
 
-const ColorModel = DB.define('Colors', {
+const ColorModel: ModelCtor<IColorModel> = DB.define<IColorModel>('Colors', {
     id: {
         primaryKey: true,
-        type: DataTypes.TEXT
+        type: DataTypes.STRING(36)
     },
-    value: DataTypes.TEXT,
-    cssCode: DataTypes.TEXT,
-    type: DataTypes.INTEGER
+    value: DataTypes.STRING,
+    cssCode: DataTypes.STRING,
+    type: DataTypes.CHAR
 }, {
     timestamps: false
 });
 
-const ResourcesModel = DB.define('Resources', {
+const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('Resources', {
     id: {
         primaryKey: true,
-        type: DataTypes.TEXT
+        type: DataTypes.STRING(36)
     },
-    name: DataTypes.TEXT,
-    template: DataTypes.TEXT,
-    filePath: DataTypes.TEXT,
-    createTime: DataTypes.TEXT,
-    templatePath: DataTypes.TEXT,
-    url: DataTypes.TEXT,
-    gifPath: DataTypes.TEXT,
-    videoCover: DataTypes.TEXT,
-    clarity: DataTypes.TEXT,
-    status: DataTypes.TEXT,
-    taskConfig: DataTypes.TEXT
+    name: DataTypes.STRING,
+    template: DataTypes.STRING,
+    filePath: DataTypes.STRING,
+    createTime: DataTypes.STRING,
+    templatePath: DataTypes.STRING,
+    url: DataTypes.STRING,
+    gifPath: DataTypes.STRING,
+    videoCover: DataTypes.STRING,
+    clarity: DataTypes.STRING,
+    status: DataTypes.STRING,
+    taskConfig: DataTypes.STRING
 }, {
     timestamps: false
 });
 
-const UpLoadFilesModel = DB.define('UpLoadFiles', {
+const UpLoadFilesModel: ModelCtor<IUpLoadFilesModel> = DB.define<IUpLoadFilesModel>('UpLoadFiles', {
     id: {
         primaryKey: true,
-        type: DataTypes.TEXT
+        type: DataTypes.STRING(36)
     },
-    name: DataTypes.TEXT,
-    path: DataTypes.TEXT,
-    cover: DataTypes.TEXT,
-    createTime: DataTypes.TEXT,
-    type: DataTypes.TEXT,
-    hash: DataTypes.TEXT
+    name: DataTypes.STRING,
+    path: DataTypes.STRING,
+    cover: DataTypes.STRING,
+    createTime: DataTypes.STRING,
+    type: DataTypes.STRING,
+    hash: DataTypes.STRING
 }, {
     timestamps: false
 });
 
-export const UpLoadFilesCategoryModel = DB.define('UpLoadFilesCategory', {
+export const UpLoadFilesCategoryModel: ModelCtor<IUpLoadFilesCategoryModel> = DB.define<IUpLoadFilesCategoryModel>('UpLoadFilesCategory', {
     id: {
         primaryKey: true,
-        type: DataTypes.TEXT
+        type: DataTypes.STRING(36)
     },
-    name: DataTypes.TEXT
+    name: DataTypes.STRING
 }, {
     timestamps: false
 });
