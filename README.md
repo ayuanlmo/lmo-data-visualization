@@ -4,6 +4,9 @@
 
 <div align="center">
 <h1>lmo-DataVisualization</h1>
+
+# 🫡
+
 </div>
 
 <p align="center">
@@ -30,20 +33,18 @@
 
 </p>
 
-[[English](./README_EN.md)] [[繁體中文](./README_TW.md)]
+## 👋 介绍
 
-## 介绍
-
-`lmo-DataVisualization`（以下简称`“lmo-dv”` 或 `“dv”`），一款开源可视化数据制作工具。 使用内置模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
+✨`lmo-DataVisualization`（以下简称`“lmo-dv”` 或 `“dv”`），一款开源可视化数据制作工具。 使用内置模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
 同时提供了sdk，可以根据需求编写不同的模板以满足业务需求。
 
 这是lmo-dv的第3个大版本，该版本完全重新设计、重做。因此与旧版本不兼容。
 
-## 运行示意图
+## 😎 运行示意图
 
 ![](https://cdn.ayuanlmo.cn/img/uploads/public/1f948867-05eb-454b-ae0c-1cea5b2979f9.png!/fw/520)
 
-### 相比之前的版本，有什么区别？
+### 👍 相比之前的版本，有什么区别？
 
 - 基于`React.js` + `TypeScript`
 - 内置`ffmpeg`
@@ -54,7 +55,7 @@
 - gif录制支持
 - 新的模板sdk
 
-## 内置功能
+## 🤩 内置功能
 
 - 数据相关
     - 数据编编辑：提供类似Excel的表格功能，支持导入数据
@@ -71,7 +72,298 @@
     - 模板“sdk”：提供模板开发接口，可以根据业务自定义模板
     - 创建自定义模板
 
-## 部署方式
+## 🤩 在线体验一下？
+
+演示服务器仅提供基础功能演示，由于服务器性能原因，一些功能受到限制，无法使用。
+[点击打开](https://dv.ayuanlmo.cn/)
+
+## 🤤 部署方式
+
+### 😮 在WSL或容器环境的Linux可能存在的运行环境缺失
+
+#### 由于项目合成服务依赖`Puppeteer`、`Chrome`等组件，如果遇到错误，请按照以下方式进行配置。
+
+<details>
+<summary>libnss3.so</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libnss3.so: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libnss3 # Ubuntu / Debian
+```
+
+</details>
+
+---
+
+<details>
+<summary>libgobject-2.0.so.0</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libgobject-2.0.so.0: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libglib2.0-0 # Ubuntu / Debian
+sudo yum install nss # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libatk-1.0.so.0</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libatk-1.0.so.0: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libatk1.0-0 # Ubuntu / Debian
+
+sudo yum install atk # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libatk-bridge-2.0.so.0</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libatk-bridge-2.0.so.0: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libatk-bridge2.0-0 # Ubuntu / Debian
+
+sudo yum install at-spi2-atk # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libcups.so.2</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libcups.so.2: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libcups2 # Ubuntu / Debian
+
+sudo yum install cups-libs # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libdrm.so.2</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libdrm.so.2: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libdrm2 # Ubuntu / Debian
+
+sudo yum install libdrm # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libxkbcommon.so.0</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libxkbcommon.so.0: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libxkbcommon0 # Ubuntu / Debian
+
+sudo yum install libxkbcommonm # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libXcomposite.so.1</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libXcomposite.so.1: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libxcomposite1 # Ubuntu / Debian
+
+sudo yum install libXcomposite # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libXdamage.so.1</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libXdamage.so.1: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libxdamage1 # Ubuntu / Debian
+
+sudo yum install libXdamage # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libXfixes.so.3</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libXfixes.so.3: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libxfixes3 # Ubuntu / Debian
+
+sudo yum install libXfixes # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libXrandr.so.2</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libXrandr.so.2: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libxrandr2 # Ubuntu / Debian
+
+sudo yum install libXrandr # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libgbm.so.1</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libgbm.so.1: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libgbm1 # Ubuntu / Debian
+
+sudo yum install mesa-libgbm # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libpango-1.0.so.0</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libpango-1.0.so.0: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libpango-1.0-0 # Ubuntu / Debian
+
+sudo yum install pango # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libcairo.so.2</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libcairo.so.2: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libcairo2 # Ubuntu / Debian
+
+sudo yum install cairo # CentOS / Red Hat
+```
+
+</details>
+
+---
+
+<details>
+<summary>libasound.so.2</summary>
+
+###### 核心问题：
+
+`error while loading shared libraries: libasound.so.2: cannot open shared object file: No such file or directory`
+
+###### 解决方式
+
+```bash
+sudo apt install libasound2 # Ubuntu / Debian
+
+sudo yum install alsa-lib # CentOS / Red Hat
+```
+
+</details>
+
+---
 
 ### 源码部署
 
@@ -149,7 +441,7 @@ location /connect{
 2. 主服务和合成服务器必须运行在同一台服务器上
 3. 使用期间产生的文件，请不要手动删除
 
-## 数据库配置
+## ✌️ 数据库配置
 
 服务器程序支持两种数据库，分别是：`sqlite` 、`Microsoft SQL Server®` (以下简称`mssql`)
 
@@ -165,7 +457,7 @@ location /connect{
 使用mssql，您需要先初始化数据库，请将数据库名称设置为：`lmo-dv`，或者使用`/server/sql`目录下的sql文件进行初始化，建议您使用
 `SQL Server Management Studio®` (`SSMS`)运行sql文件。
 
-## 版本管理
+## 🤣 版本管理
 
 ### 概述
 
@@ -190,7 +482,7 @@ lmo-dv的版本号由`主版本号.小版本号.修订号`组成，例如：`3.0
 
 每一个tag代表一个版本，例如：`v3.0.0`。并切该tag在发布时会有对应的说明。
 
-## 开源相关
+## 😉 开源相关
 
 本项目所有源代码基于 [Apache-2.0](https://github.com/ayuanlmo/lmo-data-visualization/blob/master/LICENSE)协议开源。
 
@@ -200,7 +492,7 @@ lmo-dv的版本号由`主版本号.小版本号.修订号`组成，例如：`3.0
 ![Github Star](https://img.shields.io/github/stars/ayuanlmo/lmo-data-visualization?logo=github)
 ![Github Star](https://img.shields.io/github/forks/ayuanlmo/lmo-data-visualization?logo=github)
 
-## 特别感谢
+## 🫡 特别感谢
 
 由衷的感谢 [JetBrains](https://www.jetbrains.com/)
 团队为此项目提供了免费的 [开发许可证](https://www.jetbrains.com/community/opensource/)。
