@@ -9,6 +9,7 @@ import Resources from "../bin/controllers/Resources";
 import ServerBase from "../bin/controllers/ServerBase";
 import Multer = require("multer");
 
+// @ts-ignore
 export const multer: Multer.Multer = Multer({
     dest: require('path').resolve('./_data/static/public/uploads'),
 });
