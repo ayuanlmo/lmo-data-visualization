@@ -30,7 +30,7 @@ class SocketClient {
 
     private init(): void {
         if (this.reConnectNumber === 5) return
-        this.client = createConnection(3002, '0.0.0.0');
+        this.client = createConnection(Number(process.env.SERVICE_PORT ?? 3002), process.env.SERVICE_HOST ?? '0.0.0.0');
         this.client.on('connect', (): void => {
             Cli.warn('Connected to server');
             this.startPing();
