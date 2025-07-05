@@ -22,6 +22,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
     const currentTemplateConfig = useSelector((state: RootState) => state.app.currentTemplateConfig);
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
     const [visible, setVisible]: ReactState<boolean> = useState<boolean>(false);
+    const [loading, setLoading]: ReactState<boolean> = useState<boolean>(false);
     const formRef: React.RefObject<FormHelpers> = useRef<FormHelpers>(null);
     const [fromValue, setFromValue] = useState({
         id: '',
@@ -43,6 +44,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
     };
 
     const createTask = (): void => {
+        setLoading(true);
         formRef.current?.validate().then(async (): Promise<void> => {
             let image: string = '';
 
@@ -69,6 +71,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                         });
                 } catch (e) {
                     console.error(e);
+                    setLoading(false);
                     throw e;
                 }
             }
@@ -103,6 +106,8 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                 setVisible(false);
             }).catch(() => {
                 setVisible(false);
+            }).finally((): void => {
+                setLoading(false);
             });
         });
     };
@@ -171,6 +176,7 @@ const Task: TTask = React.forwardRef((_props: React.RefAttributes<ICreateTaskRef
                 confirmText={t('confirm')}
                 cancelText={t('cancel')}
                 onCancel={(): void => setVisible(false)}
+                confirmLoading={loading}
                 onConfirm={(): void => {
                     createTask();
                 }}
