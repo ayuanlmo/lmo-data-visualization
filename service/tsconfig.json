@@ -28,8 +28,14 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["**/*.ts"],
+  "include": [
+    "config",
+    "bin",
+    "main.ts",
+    "global.d.ts"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "server"
   ]
 }
