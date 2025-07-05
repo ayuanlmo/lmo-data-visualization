@@ -22,5 +22,9 @@
     "isolatedModules": true,
     "noEmit": false
   },
-  "exclude": ["gulpfile.js"]
+  "exclude": [
+    "gulpfile.js",
+    "node_modules",
+    "_data/static/static"
+  ]
 }
