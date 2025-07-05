@@ -1,0 +1,16 @@
+.DS_Store
+.dockerignore
+*.log
+*.lock
+*.md
+.idea
+
+
+node_modules
+sql
+dist
+_data/db
+_data/static/public/output
+_data/static/public/previewTemplate
+_data/static/public/uploads
+Dockerfile
