@@ -1,0 +1,4 @@
+.bin
+tmp
+dist
+node_modules

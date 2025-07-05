@@ -15,7 +15,7 @@ class SocketServer {
         this.server.on('connection', (socket: Socket): void => {
             this.onConnection(socket);
         });
-        this.server.listen(AppConfig.__SOCKET_SERVER_PORT, '0.0.0.0', (): void => {
+        this.server.listen(AppConfig.__SOCKET_SERVER_PORT ?? '0.0.0.0', (): void => {
             console.log(Cli.bgBlue('Synthetic-Service-Socket-Server'), Cli.yellow('started on port'), Cli.red(AppConfig.__SOCKET_SERVER_PORT));
         });
     }

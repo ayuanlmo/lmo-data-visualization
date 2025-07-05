@@ -8,6 +8,7 @@ import ffmpegPath from "ffmpeg-static";
 import fs from "node:fs";
 import ffmpeg from "fluent-ffmpeg";
 import AppConfig from "../../config/AppConfig";
+import process from "process";
 
 ffmpeg.setFfmpegPath(ffmpegPath as string);
 
@@ -43,7 +44,8 @@ class Wvc {
             numPageMax: 3,
             browserHeadless: true,
             browserDebug: AppConfig.__OPEN_BROWSER,
-            ffmpegDebug: true
+            ffmpegDebug: true,
+            allowUnsafeContext: process.env.ALLOW_UNSAFE_CONTEXT === '1'
         });
     }
 

@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  web_app:
+    image: nginx:alpine
+    build: ./web_app
+    ports:
+      - "${LMO_APP_MAIN_PORT:-80}:80"
+    depends_on:
+      - server_app
+    networks:
+      - lmo_app_network
+
+  service_app:
+    image: node:18
+    build: ./service
+    environment:
+      - SERVICE_HOST=service_app
+      - SERVICE_PORT=3002
+      - ALLOW_UNSAFE_CONTEXT=1
+    ports:
+      - "${LMO_APP_SERVICE_PORT:-30003}:3002"
+    volumes:
+      - lmo-server-data:/lmo-app/server/_data
+    networks:
+      - lmo_app_network
+
+  server_app:
+    image: node:20-alpine
+    build: ./server
+    environment:
+      - NODE_ENV=prod
+      - SERVER_HOST=server_app
+      - SERVICE_HOST=service_app
+      - SERVICE_PORT=3002
+      - PORT=3000
+      - DATA_BASE_TYPE=${LMO_APP_DATA_BASE_TYPE:-sqlite}
+      - DATA_BASE_NAME=${LMO_APP_DATA_BASE_NAME:-lmo-dv}
+      - DATA_BASE_USER_NAME=${LMO_APP_DATA_BASE_USER_NAME:-your_username}
+      - DATA_BASE_PASSWORD=${LMO_APP_DATA_BASE_PASSWORD:-your_password}
+      - DATA_BASE_HOST=${LMO_APP_DATA_BASE_HOST:-localhost}
+    ports:
+      - "${LMO_APP_SERVER_PORT:-30000}:3000"
+    volumes:
+      - lmo-server-data:/lmo-app/server/_data
+    networks:
+      - lmo_app_network
+    depends_on:
+      - service_app
+
+networks:
+  lmo_app_network:
+    driver: bridge
+
+volumes:
+  lmo-server-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${LMO_APP_DATA:-/lmo-data}
+      o: bind

@@ -1,7 +1,7 @@
 import {TOtherConfig, TThemeConfig} from "./@types/template";
 import BaseTemplateMethods, {ILMOTemplateImplementsMethods} from "./bin/BaseTemplateMethods.js";
 
-export {ILMOTemplateImplementsMethods};
+export type {ILMOTemplateImplementsMethods};
 
 abstract class LmoTemplate extends BaseTemplateMethods implements ILMOTemplateImplementsMethods {
 

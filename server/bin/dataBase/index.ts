@@ -54,13 +54,11 @@ interface IUpLoadFilesCategoryModel extends BaseModel {
     parentId: string;
 }
 
-const {
-    dbType,
-    dbName,
-    dbUserName,
-    dbPassWord,
-    dbHost
-} = AppConfig.__ARGV;
+const dbType: string = process.env.DATA_BASE_TYPE ?? 'sqlite';
+const dbName: string = process.env.DATA_BASE_NAME ?? '';
+const dbUserName: string = process.env.DATA_BASE_USER_NAME ?? '';
+const dbPassWord: string = process.env.DATA_BASE_PASSWORD ?? '';
+const dbHost: string = process.env.DATA_BASE_HOST ?? '';
 
 const DB: Sequelize = dbType === 'mssql' ?
     new Sequelize(dbName, dbUserName, dbPassWord, {
