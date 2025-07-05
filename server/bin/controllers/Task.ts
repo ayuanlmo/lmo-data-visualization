@@ -76,7 +76,7 @@ export default class Task {
             const dirPath: string = path.resolve(`./_data/static/public/${pathName}/${templatePathName}`);
             const templateStaticPath: string = `/static/${pathName}/${templatePathName}`;
             const dbId: string = require('uuid').v4();
-            const serverHttpUrl: string = `http://localhost:${AppConfig.__SERVER_PORT}`;
+            const serverHttpUrl: string = `http://${process.env.SERVER_HOST ?? 'localhost'}:${AppConfig.__SERVER_PORT}`;
             const htmlPath: string = path.resolve(dirPath, 'index.html');
             const htmPath: string = path.resolve(dirPath, 'index.htm');
             const taskAudioConfig = {
