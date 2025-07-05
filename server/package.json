@@ -43,5 +43,8 @@
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "resolutions": {
+    "**/@types/express": "^4.17.21"
   }
 }
