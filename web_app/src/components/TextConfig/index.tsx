@@ -26,7 +26,7 @@ const TextConfig: React.FC<ITextConfigProps> = ({config}) => {
     }, [localConfig]);
 
     return (
-        <div className='text-config app_none_user_select'>
+        <div className='text-config app_none_user_select animated fadeIn'>
             <div className='text-config-title app_flex_box'>{t('textConfig')}</div>
             {
                 Object.entries({
@@ -146,6 +146,7 @@ const TextConfig: React.FC<ITextConfigProps> = ({config}) => {
                     </div>
                 )
             }
+            <div className={'config-line '}></div>
         </div>
     );
 };
