@@ -53,8 +53,9 @@ class SocketServer {
                 if (message.type === 'COMPOSITE-VIDEO') {
                     const data: ICreateTaskConfig = JSON.parse(message.data);
                     const testUrl: URL = new URL(data.path);
+                    const SERVER_HOST: string = process.env.SERVER_HOST ?? 'localhost';
 
-                    if (testUrl.hostname !== process.env.SERVER_HOST) {
+                    if (testUrl.hostname !== SERVER_HOST) {
                         return this.sendMessage(JSON.stringify({
                             type: "TASK_ERROR",
                             data: {
