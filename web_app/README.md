@@ -1,46 +1,104 @@
-# Getting Started with Create React App
+<div align="center">
+    <img width="200px" src="./public/logo.svg">
+</div>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+    <h1>lmo-DataVisualization</h1>
+</div>
 
-## Available Scripts
+## 👋 介绍
 
-In the project directory, you can run:
+这是 `🌐lmo-DataVisualization`的前端实现，它使用 React + TypeScript 构建，采用hi-ui作为界面组件库。
 
-### `npm start`
+本项目开发环境运行在 **Node.js v18.20.4+** 版本之上，使用 **WSL (Windows Subsystem for Linux)** 开发。
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> 💡 Hi-UI 是一个由小米公司(mi.com)开发的现代化的 React 组件库，提供丰富的 UI
+> 组件与设计系统支持。如您需要了解更多关于它的使用方法，请访问其官方文档。 https://xiaomi.github.io/hiui/
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## 🚀 快速开始
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+在开始开发或部署之前，请确保您的开发环境已正确配置。
 
-### `npm run build`
+### 环境要求
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| 工具                | 版本要求      | 备注                      |
+|-------------------|-----------|-------------------------|
+| Node.js           | `>= 18.x` | 推荐使用 `nvm` 或 `n` 进行版本管理 |
+| npm / yarn / pnpm | -         | 推荐使用 `yarn` 包管理器        |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 安装步骤
 
-### `npm run eject`
+#### 1. 克隆仓库
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+git clone https://github.com/ayuanlmo/lmo-data-visualization.git
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+cd lmo-data-visualization/web_app
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 2. 安装依赖
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+推荐使用 `yarn` 作为包管理器
 
-## Learn More
+```bash
+yarn install
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> ✅ 如果你首次使用 `yarn`，可以通过 `npm install -g yarn` 安装。
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### 3. 启动开发服务器
+
+```bash
+yarn start
+```
+
+启动后，默认会打开浏览器
+
+> 🔧 如需自定义开发服务器行为（如代理设置、端口号等），请修改 `craco.config.js` 中的 `devServer` 配置项。
+
+---
+
+## 🛠️ 构建与部署
+
+### 构建生产版本
+
+使用以下命令构建用于部署的生产环境代码：
+
+```bash
+yarn build
+```
+
+构建完成后，静态资源将输出至 `build/` 目录中。
+
+---
+
+## 📦 项目结构概览
+
+```
+lmo-data-visualization/web_app
+├── public/                  # 静态资源目录
+├── src/                     # 源码目录
+│   ├── bin/                 # 主要实现了一些hooks
+│   ├── components/          # 组件
+│   ├── config/              # 配置文件
+│   ├── const/               # 常量文件
+│   ├── i8n/                 # 国际化相关配置
+│   ├── lib/                 # 一些库
+│   ├── pages/               # 页面级组件
+│   ├── styles/              # 公共样式文件
+│   ├── svg/                 # svg图标
+│   ├── types/               # typescript类型
+│   ├── utils/               # 工具函数、公共方法
+│   ├── global.d.ts          # 全局类型声明文件
+│   └── index.tsx            # 入口文件
+│   Dockerfile               # 容器配置文件
+│   nginx.conf               # nginx配置文件
+├── craco.config.js
+├── tsconfig.json
+├── package.json
+└── README.md
+```
