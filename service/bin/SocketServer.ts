@@ -3,6 +3,7 @@ import AppConfig from "../config/AppConfig";
 import Cli from "cli-color";
 import wvc, {ICreateTaskConfig} from "./wvc";
 import ffmpeg from "./ffmpeg";
+import process from "process";
 
 class SocketServer {
     private readonly server: Server;
@@ -50,8 +51,21 @@ class SocketServer {
                     });
                 }
                 if (message.type === 'COMPOSITE-VIDEO') {
+                    const data: ICreateTaskConfig = JSON.parse(message.data);
+                    const testUrl: URL = new URL(data.path);
+
+                    if (testUrl.hostname !== process.env.SERVER_HOST) {
+                        return this.sendMessage(JSON.stringify({
+                            type: "TASK_ERROR",
+                            data: {
+                                id: data.id,
+                                message: "Invalid url"
+                            }
+                        }));
+                    }
+
                     wvc.init({
-                        ...JSON.parse(message.data) as unknown as ICreateTaskConfig
+                        ...data
                     }, ({progress, id}): void => {
                         this.sendMessage(JSON.stringify({
                             type: "TASK_PROGRESS_CHANGE",
