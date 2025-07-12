@@ -2,6 +2,8 @@ const path = require('path');
 const isProduction = process.env.NODE_ENV === 'production';
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const serverPort = process.env.LMO_SERRVER_APP_DEV_PORT || 49237;
+
 module.exports = {
     plugins: [
         {
@@ -36,14 +38,15 @@ module.exports = {
         }
     },
     devServer: {
+        port: process.env.LMO_WEB_APP_DEV_PORT || 8081,
         proxy: {
             '/api': {
-                target: 'http://localhost:3000',
+                target: `http://localhost:${serverPort}`,
                 changeOrigin: true,
                 pathRewrite: {'^/api': ''}
             },
             '/connect': {
-                target: 'http://localhost:3000/connect',
+                target: `http://localhost:${serverPort}/connect`,
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {'^/connect': ''}

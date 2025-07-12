@@ -6,7 +6,10 @@
       <script value="start" />
     </scripts>
     <node-interpreter value="project" />
-    <envs />
+    <envs>
+      <env name="LMO_WEB_APP_DEV_PORT" value="8081" />
+      <env name="LMO_SERRVER_APP_DEV_PORT" value="49237" />
+    </envs>
     <method v="2" />
   </configuration>
 </component>
