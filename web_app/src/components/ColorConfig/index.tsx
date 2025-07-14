@@ -67,7 +67,7 @@ function ColorConfig(): React.JSX.Element {
             {title: t('themeColor'), id: 'Theme', disabled: !configTheme.configs.includes('Theme')},
             {title: t('gradientColor'), id: 'Gradient', disabled: !configTheme.configs.includes('Gradient')},
             {title: t('singleColor'), id: 'Single', disabled: !configTheme.configs.includes('Single')}
-        ]);
+        ].filter((i) => !i.disabled));
 
         setThemeType(configTheme.type);
     }, [configTheme]);
