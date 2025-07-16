@@ -21,6 +21,10 @@
     .template-layers {
       background: $color-white;
 
+      .template-layers-title {
+        border-bottom: 0.0625rem solid #EAEAEA;
+      }
+
       .template-layers-item {
         &:hover {
           background: $__primary-input-bg-color-light;
