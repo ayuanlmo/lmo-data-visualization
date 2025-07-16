@@ -68,16 +68,80 @@
     }
   }
 
-  .template-preview {
+  .template-layers {
+    background: #FFFFFF;
     width: 100%;
-    height: 51.875rem;
-    border-radius: 0.625rem;
-    box-shadow: 0 6px 4rem 0 rgba(0, 0, 0, 0.25);
 
-    iframe {
-      transform: scale(0.48);
-      transform-origin: 0 0;
+    .template-layers-title {
+      height: 50px;
+      //font-size: 14px;
+      font-size: 1rem;
+      color: #9EA5AF;
+      line-height: 49px;
+      border-bottom: 1px solid #eeeff1;
+      text-align: center;
+    }
+
+    .template-layers-item {
+      height: 3rem;
+      width: 100%;
+      border-bottom: 1px solid #eeeff1;
+
+      .template-layers-item-content {
+        height: 100%;
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .template-layers-item-icon {
+        margin-top: .9rem;
+        padding-left: .5rem;
+
+        img {
+          width: 1.2rem;
+        }
+      }
+
+      .template-layers-item-text {
+        margin-left: .5rem;
+        font-size: 1rem;
+        line-height: 2.75rem;
+      }
+
+      .template-layers-item-display-icon {
+        padding-right: .5rem;
+
+        img {
+          width: 1.2rem;
+          margin-top: .9rem;
+        }
+      }
+    }
+  }
+
+  .preview-container {
+    width: 100%;
+    height: calc(100vh - 13rem);
+    justify-content: center;
+    align-items: center;
+
+    .template-preview {
+      aspect-ratio: 16 / 9;
+      max-width: 78%;
+      flex: 1;
       border-radius: 0.625rem;
+      overflow: hidden;
+
+      .hi-v4-loading__wrapper {
+        height: 100%;
+      }
+
+      iframe {
+        //display: none;
+        transform: scale(0.48);
+        transform-origin: 0 0;
+        border-radius: 0.625rem;
+      }
     }
   }
 
@@ -121,7 +185,7 @@
 
   .design-configs {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 6rem) !important;
     border-radius: 0.625rem;
 
     .select-bg-image {
@@ -170,11 +234,18 @@
 
     .design-configs-container {
       padding: 1.25rem;
+      overflow-y: auto;
+      height: calc(96% - 3rem);
 
       .text-config {
+        .text-config-item-label {
+          font-size: 0.875rem;
+        }
+
         .text-config-title {
           font-size: 0.875rem;
           font-weight: 500;
+          padding-top: 1rem;
 
           &:before {
             content: "";

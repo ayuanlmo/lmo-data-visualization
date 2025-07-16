@@ -12,11 +12,16 @@
       }
     }
 
-    .template-preview {
+    .preview-container {
       background: $__primary-bg-color-dark;
 
-      iframe {
+      .template-preview {
         background: $__primary-bg-color-dark;
+        box-shadow: none;
+
+        iframe {
+          background: $__primary-bg-color-dark;
+        }
       }
     }
 

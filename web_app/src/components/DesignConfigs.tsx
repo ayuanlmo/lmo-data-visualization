@@ -1,6 +1,6 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import TextConfig from "./TextConfig";
-import {Hooks, useTemplateMessageListener} from "../bin/Hooks";
+import {useTemplateMessageListener} from "../bin/Hooks";
 import {ITemplateSelectTextElement} from "../types/TemplateMessage";
 import YExtendTemplate from "./YExtendTemplate";
 import ColorConfig from "./ColorConfig";
@@ -15,7 +15,6 @@ import GlobalComponent from "./GlobalComponent";
 import TemplateOtherConfig from "./TemplateOtherConfig";
 import {useTranslation} from "react-i18next";
 import {ITemplateConfig} from "../bin/@types/TemplateTypes";
-import useEventListener = Hooks.useEventListener;
 
 export type TOptionType = 'style' | 'config' | 'data';
 
@@ -25,7 +24,6 @@ const DesignConfigs = (): React.JSX.Element => {
     const [currentTextConfig, setCurrentTextConfig]: ReactState<null | ITemplateSelectTextElement> = useState<null | ITemplateSelectTextElement>(null);
     const editDataTableRef: React.RefObject<IEditDataTable> = useRef<IEditDataTable>(null);
     const designConfigsElRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-    const [designConfigsElStyle, setDesignConfigsElStyle]: ReactState<React.CSSProperties> = useState<React.CSSProperties>({});
     const {t} = useTranslation();
 
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_ELEMENT', (e: ITemplateSelectTextElement): void => {
@@ -42,28 +40,6 @@ const DesignConfigs = (): React.JSX.Element => {
     useTemplateMessageListener('TEMPLATE_SELECT_TEXT_CLOSE', (): void => {
         setCurrentTextConfig(null);
     });
-    useEventListener('resize', (): void => {
-        setDesignConfigsElStyle({});
-    });
-    useEffect((): void => {
-        if (!('width' in designConfigsElStyle))
-            changeElSize();
-    }, [designConfigsElStyle]);
-    useEffect((): void => {
-        changeElSize();
-    }, []);
-
-    const changeElSize = (): void => {
-        if (designConfigsElRef.current) {
-            const {offsetWidth, offsetHeight} = designConfigsElRef.current;
-
-            setDesignConfigsElStyle({
-                width: `${offsetWidth}px`,
-                height: `${offsetHeight}px`,
-                overflowY: 'scroll'
-            });
-        }
-    };
 
     const getClassName = (type: TOptionType): string => {
         if (type === optionType)
@@ -73,7 +49,7 @@ const DesignConfigs = (): React.JSX.Element => {
     };
 
     return (
-        <div className={'design-configs'} ref={designConfigsElRef} style={designConfigsElStyle}>
+        <div className={'design-configs'} ref={designConfigsElRef}>
             <div className={'design-configs-top-options app_flex_box app_none_user_select'}>
                 <Grid.Row
                     gutter={12}

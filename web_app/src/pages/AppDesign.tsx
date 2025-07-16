@@ -44,24 +44,24 @@ const AppDesign = (): React.JSX.Element => {
                 }}
             />
             <Task ref={taskRef}/>
-            <div className={'app_position_relative'}>
-                <div style={{
-                    padding: "1.5rem"
-                }}>
-                    <Grid.Row style={{
-                        height: '98%'
-                    }} justify={'space-between'}>
-                        <Grid.Col span={{lg: 12, xl: 16, md: 24, sm: 24, xs: 24}}>
-                            <TemplatePreview/>
-                            <ProgressBar/>
-                            <AudioPreview/>
-                        </Grid.Col>
-                        <Grid.Col span={{lg: 10, xl: 6, md: 24, sm: 24, xs: 24}}>
-                            <DesignConfigs/>
-                        </Grid.Col>
-                    </Grid.Row>
-                </div>
+            <div className={'app_position_relative'} style={{
+                height: 'calc(100vh - 13.24rem);',
+                padding: '1.25rem'
+            }}>
 
+                <Grid.Row style={{
+                    height: '98%'
+                }} justify={'space-between'}>
+                    <Grid.Col
+                    <Grid.Col span={{lg: 12, xl: 16, md: 12, sm: 24, xs: 24}}>
+                        <TemplatePreview/>
+                        <ProgressBar/>
+                        <AudioPreview/>
+                    </Grid.Col>
+                    <Grid.Col span={{lg: 8, xl: 4, md: 8, sm: 24, xs: 24}}>
+                        <DesignConfigs/>
+                    </Grid.Col>
+                </Grid.Row>
             </div>
         </div>
     );
