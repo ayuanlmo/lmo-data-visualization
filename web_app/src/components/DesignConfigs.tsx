@@ -8,7 +8,7 @@ import {Dispatch} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 import {setCurrentTemplateConfig} from "../lib/Store/AppStore";
 import EditDataTable, {IEditDataTable} from "./EditDataTable";
-import {Grid} from "@hi-ui/hiui";
+import {EllipsisTooltip, Grid} from "@hi-ui/hiui";
 import SyntheticConfig from "./SyntheticConfig";
 import {ReactState} from "../types/ReactTypes";
 import GlobalComponent from "./GlobalComponent";
@@ -61,21 +61,27 @@ const DesignConfigs = (): React.JSX.Element => {
                         <div className={getClassName('style')} onClick={(): void => {
                             setOptionType('style');
                         }}>
-                            {t('chartStyle')}
+                            <EllipsisTooltip>
+                                {t('chartStyle')}
+                            </EllipsisTooltip>
                         </div>
                     </Grid.Col>
                     <Grid.Col span={8}>
                         <div className={getClassName('config')} onClick={(): void => {
                             setOptionType('config');
                         }}>
-                            {t('synthesisConfig')}
+                            <EllipsisTooltip>
+                                {t('synthesisConfig')}
+                            </EllipsisTooltip>
                         </div>
                     </Grid.Col>
                     <Grid.Col span={8}>
                         <div className={getClassName('data')} onClick={(): void => {
                             editDataTableRef.current?.open();
                         }}>
-                            {t('editData')}
+                            <EllipsisTooltip>
+                                {t('editData')}
+                            </EllipsisTooltip>
                         </div>
                     </Grid.Col>
                 </Grid.Row>
