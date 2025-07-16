@@ -7,6 +7,7 @@ import Github from "./icon/github";
 import "./style.scss";
 import THTMLTemplate from "../GlobalComponent/components/THTMLTemplate";
 import OpenSourceComponentLicense, {IOpenSourceComponentLicenseRef} from "./OpenSourceComponentLicense";
+import AppName from "../AppName";
 
 export interface IAboutRef {
     open: () => void;
@@ -55,7 +56,7 @@ const Index: React.ForwardRefExoticComponent<React.RefAttributes<IAboutRef>> = R
                         />
                     </center>
                     <div className={'app-name'}>
-                        {AppConfig.appName}
+                        <AppName/>
                     </div>
                     <div style={{
                         margin: '1rem'

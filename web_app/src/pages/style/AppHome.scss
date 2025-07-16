@@ -11,16 +11,9 @@
     overflow: hidden;
 
     .data-visualization-header-app-name {
-      font-size: 20px;
-      color: #ffffff;
-      font-weight: bold;
-      line-height: 66px;
       margin-left: 2.875rem;
+      margin-top: 1.5rem;
       transition: all .2s;
-
-      &:hover {
-        color: #0688E5;
-      }
     }
 
     .data-visualization-header-option {
