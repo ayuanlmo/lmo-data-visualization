@@ -89,8 +89,16 @@ const AppStore = createSlice({
         setCurrentTemplateVideoConfig(state, {payload}): void {
             state.currentTemplateConfig.config.video = payload;
         },
+        // 设置当前模板数据
         setCurrentTemplateData(state, {payload}): void {
             state.currentTemplateConfig.data = payload;
+        },
+        // 设置模板文字配置项
+        setCurrentTemplateTextConfigItem(state, {payload}): void {
+            state.currentTemplateConfig.config.text = {
+                ...state.currentTemplateConfig.config.text,
+                ...payload
+            };
         }
     }
 });
@@ -104,7 +112,8 @@ export const {
     setCurrentTemplateAudioConfig,
     setCurrentTemplateVideoConfig,
     initCurrentTemplateConfigData,
-    setCurrentTemplateData
+    setCurrentTemplateData,
+    setCurrentTemplateTextConfigItem
 } = AppStore.actions;
 
 export default AppStore.reducer;

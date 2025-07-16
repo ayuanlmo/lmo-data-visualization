@@ -12,6 +12,30 @@
       }
     }
 
+    .template-layers {
+      background: $__primary-bg-color-dark;
+
+      .template-layers-title {
+        color: $color-white;
+      }
+
+      .template-layers-item-name {
+        color: $color-white;
+      }
+
+      svg {
+        path {
+          fill: #9CAEC7 !important;
+        }
+      }
+
+      .template-layers-item {
+        &:hover {
+          background: $__form-component-bg-color-dark;
+        }
+      }
+    }
+
     .preview-container {
       background: $__primary-bg-color-dark;
 

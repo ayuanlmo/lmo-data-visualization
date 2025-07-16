@@ -136,5 +136,13 @@
   "status": "Статус",
   "synthesisServicesConnectStatus": "Статус подключения к сервису синтеза",
   "connected": "Подключено",
-  "notConnected": "Не подключено"
+  "notConnected": "Не подключено",
+  "layers": {
+    "label": "Слой",
+    "text": {
+      "mainTitle": "Заголовок",
+      "subTitle": "Подзаголовок",
+      "fromSource": "Источник данных"
+    }
+  }
 }

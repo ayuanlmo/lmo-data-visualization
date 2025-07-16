@@ -136,5 +136,13 @@
   "status": "状态",
   "synthesisServicesConnectStatus": "合成服务器连接状态",
   "connected": "已连接",
-  "notConnected": "未连接"
+  "notConnected": "未连接",
+  "layers": {
+    "label": "图层",
+    "text": {
+      "mainTitle": "标题",
+      "subTitle": "副标题",
+      "fromSource": "数据来源"
+    }
+  }
 }

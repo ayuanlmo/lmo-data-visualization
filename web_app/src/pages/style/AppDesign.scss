@@ -67,51 +67,54 @@
   }
 
   .template-layers {
-    background: #FFFFFF;
     width: 100%;
+    height: 100%;
+    border-radius: 0.625rem;
 
     .template-layers-title {
-      height: 50px;
-      //font-size: 14px;
-      font-size: 1rem;
-      color: #9EA5AF;
+      height: 2.94rem;
+      font-size: 0.875rem;
+      color: #3D3D3D;
       line-height: 49px;
-      border-bottom: 1px solid #eeeff1;
-      text-align: center;
+      font-weight: 400;
+      border-bottom: 0.0625rem solid #EAEAEA;
+      text-align: left;
+      padding-left: 1.25rem;
     }
 
     .template-layers-item {
-      height: 3rem;
       width: 100%;
-      border-bottom: 1px solid #eeeff1;
+      height: 3rem;
+      border-bottom: 1px solid #EAEAEA;
+      position: relative;
 
-      .template-layers-item-content {
-        height: 100%;
-        width: 100%;
-        justify-content: space-between;
-      }
+      .template-layers-item-container {
+        position: absolute;
+        top: .75rem;
+        left: 1.25rem;
+        width: (calc(100% - (1.25rem * 2)));
 
-      .template-layers-item-icon {
-        margin-top: .9rem;
-        padding-left: .5rem;
+        .template-layers-item-content {
+          height: 100%;
+          width: 100%;
+          justify-content: space-between;
 
-        img {
-          width: 1.2rem;
-        }
-      }
+          .template-layers-item-icon {
+            svg {
+              width: 0.875rem;
+              height: 0.875rem;
+            }
+          }
 
-      .template-layers-item-text {
-        margin-left: .5rem;
-        font-size: 1rem;
-        line-height: 2.75rem;
-      }
+          .template-layers-item-name {
+            margin-left: .38rem;
+          }
 
-      .template-layers-item-display-icon {
-        padding-right: .5rem;
-
-        img {
-          width: 1.2rem;
-          margin-top: .9rem;
+          .template-layers-item-options {
+            svg {
+              cursor: pointer;
+            }
+          }
         }
       }
     }

@@ -12,6 +12,7 @@ import {setCurrentTemplate} from "../lib/Store/AppStore";
 import Task, {ICreateTaskRef} from "../components/Task";
 import AudioPreview from "../components/AudioPreview";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import TemplateLayers from "../components/TemplateLayers";
 
 const AppDesign = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
@@ -53,6 +54,13 @@ const AppDesign = (): React.JSX.Element => {
                     height: '98%'
                 }} justify={'space-between'}>
                     <Grid.Col
+                        style={{
+                            width: '100%'
+                        }}
+                        span={{lg: 4, xl: 3, md: 4, sm: 24, xs: 24}}
+                    >
+                        <TemplateLayers/>
+                    </Grid.Col>
                     <Grid.Col span={{lg: 12, xl: 16, md: 12, sm: 24, xs: 24}}>
                         <TemplatePreview/>
                         <ProgressBar/>
