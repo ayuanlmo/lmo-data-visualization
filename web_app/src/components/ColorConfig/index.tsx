@@ -88,6 +88,7 @@ function ColorConfig(): React.JSX.Element {
                                     data={themeConfigs}
                                     defaultValue={themeType}
                                     value={themeType}
+                                    clearable={false}
                                     onChange={(e: React.ReactText | string): void => {
                                         setStore({
                                             type: e as string,
