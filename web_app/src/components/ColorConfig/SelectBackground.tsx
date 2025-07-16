@@ -52,7 +52,7 @@ const SelectBackground = (props: ISelectBackgroundProps): React.JSX.Element => {
                     <Grid.Row style={{
                         width: '100%',
                         maxHeight: '13rem',
-                        overflow: 'scroll'
+                        overflowY: 'auto'
                     }} gutter={true}>
                         {
                             colors.map((i: IColorType): React.JSX.Element => {
