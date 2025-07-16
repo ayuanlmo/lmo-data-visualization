@@ -35,7 +35,7 @@
     .data-visualization-design-header-black {
       font-size: 1rem;
       margin-top: 1.625rem;
-      margin-left: 4rem;
+      margin-left: 1.5rem;
       height: 1.25rem;
       line-height: 1.25rem;
       justify-content: space-between;
@@ -48,7 +48,9 @@
       &:hover {
         div {
           svg {
-            background-color: $theme-color;
+            path {
+              fill: $theme-color;
+            }
           }
         }
 
@@ -59,7 +61,7 @@
     }
 
     .data-visualization-design-header-option {
-      margin-right: 2.875rem;
+      margin-right: 1.25rem;
       margin-top: 1.3rem;
       display: flex;
       justify-content: end;
