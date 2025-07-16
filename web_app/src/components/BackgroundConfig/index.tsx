@@ -56,7 +56,10 @@ const BackgroundConfig = (): React.JSX.Element => {
                                 }}
                             >
                                 <Select
+                                    defaultValue={backgroundConfig.type}
+                                    value={backgroundConfig.type}
                                     placeholder={t('pleaseSelect')}
+                                    clearable={false}
                                     onSelect={(e: ReactText): void => {
                                         dispatch(setCurrentTemplateBackground({
                                             ...backgroundConfig,
