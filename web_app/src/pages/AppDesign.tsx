@@ -61,12 +61,12 @@ const AppDesign = (): React.JSX.Element => {
                     >
                         <TemplateLayers/>
                     </Grid.Col>
-                    <Grid.Col span={{lg: 12, xl: 16, md: 12, sm: 24, xs: 24}}>
+                    <Grid.Col span={{lg: 10, xl: 14, md: 10, sm: 24, xs: 24}}>
                         <TemplatePreview/>
                         <ProgressBar/>
                         <AudioPreview/>
                     </Grid.Col>
-                    <Grid.Col span={{lg: 8, xl: 4, md: 8, sm: 24, xs: 24}}>
+                    <Grid.Col span={{lg: 8, xl: 6, md: 8, sm: 24, xs: 24}}>
                         <DesignConfigs/>
                     </Grid.Col>
                 </Grid.Row>
