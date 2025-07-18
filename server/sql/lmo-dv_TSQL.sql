@@ -78,6 +78,7 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Te
 			[gifCover][nvarchar](255)NULL,
 			[createTime][nvarchar](255)NULL,
 			[type][int]NULL,
+            [index] [int] NOT NULL DEFAULT 0,
 			PRIMARY KEY CLUSTERED ([id]ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF)ON[PRIMARY]
 		) ON [PRIMARY];
 	END;

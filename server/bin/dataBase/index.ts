@@ -84,7 +84,12 @@ const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('Temp
     cover: DataTypes.STRING,
     gifCover: DataTypes.STRING,
     createTime: DataTypes.STRING,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    index: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+    }
 }, {
     timestamps: false
 });
