@@ -130,7 +130,7 @@ export default class File {
             if (Object.keys(data ?? {}).length === 0)
                 return void res.json(createErrorMessage('ext004'));
 
-            const filePath: string = path.resolve(`./${data?.dataValues.path}`);
+            const filePath: string = path.resolve(__dirname, `../../_data/static/public/${data?.dataValues.path.replace('/static', '')}`);
 
             UpLoadFilesModel.destroy({
                 where: {id: id}
