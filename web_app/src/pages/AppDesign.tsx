@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
@@ -13,12 +13,35 @@ import Task, {ICreateTaskRef} from "../components/Task";
 import AudioPreview from "../components/AudioPreview";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import TemplateLayers from "../components/TemplateLayers";
+import {useEventListener} from "../bin/Hooks";
 
 const AppDesign = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
     const taskRef: React.RefObject<ICreateTaskRef> = useRef<ICreateTaskRef>(null);
     const navigate: NavigateFunction = useNavigate();
+    const [templatePreviewXL, setTemplatePreviewXL] = useState(16);
+    const [designConfigsXL, setDesignConfigsXL] = useState(4);
+
+    useEventListener('resize', (): void => {
+        initGridLayout();
+    });
+
+    const initGridLayout = (): void => {
+        if (devicePixelRatio > 1.5) {
+            setTemplatePreviewXL(14);
+            setDesignConfigsXL(6);
+        }
+
+        if (devicePixelRatio === 1) {
+            setTemplatePreviewXL(16);
+            setDesignConfigsXL(4);
+        }
+    };
+
+    useEffect((): void => {
+        initGridLayout();
+    }, []);
 
     useEffect((): void => {
         if (currentTemplate.id === '') {
@@ -61,12 +84,12 @@ const AppDesign = (): React.JSX.Element => {
                     >
                         <TemplateLayers/>
                     </Grid.Col>
-                    <Grid.Col span={{lg: 10, xl: 14, md: 10, sm: 24, xs: 24}}>
+                    <Grid.Col span={{lg: 10, xl: templatePreviewXL, md: 10, sm: 24, xs: 24}}>
                         <TemplatePreview/>
                         <ProgressBar/>
                         <AudioPreview/>
                     </Grid.Col>
-                    <Grid.Col span={{lg: 8, xl: 6, md: 8, sm: 24, xs: 24}}>
+                    <Grid.Col span={{lg: 8, xl: designConfigsXL, md: 8, sm: 24, xs: 24}}>
                         <DesignConfigs/>
                     </Grid.Col>
                 </Grid.Row>
