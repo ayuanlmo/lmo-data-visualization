@@ -121,10 +121,10 @@
 
 .light-mode {
   .c-g-switch-theme {
-    background-color: #334358;
+    background-color: $__primary-bg-color-dark;
 
     .c-g-switch-theme-content {
-      background-color: #091628;
+      background-color: $__primary-sub-bg-color-dark;
     }
   }
 }

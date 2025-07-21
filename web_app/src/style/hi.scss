@@ -91,7 +91,7 @@
   }
 
   .hi-v4-modal__wrapper {
-    background: #232F3F !important;
+    background: $__primary-bg-color-dark !important;
   }
 
   .hi-v4-modal__title {
@@ -224,7 +224,7 @@
   }
 
   .hi-v4-dropdown-menu-item:not(.hi-v4-dropdown-menu-item--disabled) > .hi-v4-dropdown-menu-item__trigger:hover {
-    background-color: #232F3F !important;
+    background-color: $__primary-bg-color-dark !important;
   }
 
   .hi-v4-tree__popper .hi-v4-tree-action__item:hover {
@@ -254,7 +254,7 @@
 
   .hi-v4-tree__popper .hi-v4-tree-action {
     background-color: #22303F !important;
-    box-shadow: 0 2px 8px 0 #575757 !important;
+    box-shadow: none;
 
     .hi-v4-tree-action__item {
       color: $color-white !important;
@@ -262,12 +262,17 @@
   }
 
   .hi-v4-upload--drag {
-    background: #334559;
+    background: $__primary-sub-bg-color-dark;
+
+    span {
+      color: $__primary-bg-color-light !important;
+    }
+
     border: 2px dashed $__primary-bg-color-dark !important;
   }
 
   .hi-v4-pop-confirm {
-    background: #141A22 !important;
+    background: $__form-component-bg-color-dark !important;
 
     .hi-v4-pop-confirm__content-title {
       color: $color-white;

@@ -16,7 +16,7 @@
       background: $__primary-bg-color-dark;
 
       .template-layers-title {
-        border-bottom: 0.0625rem solid #2F3E51;
+        border-bottom: 0.0625rem solid $__form-component-bg-color-dark;
       }
 
       .template-layers-title {
@@ -61,11 +61,11 @@
       background: $__primary-bg-color-dark;
 
       .select-bg-image {
-        background-color: #354459;
+        background-color: $__form-component-bg-color-dark;
       }
 
       .design-configs-top-options {
-        background: #2F3C4E;
+        background: $__form-component-bg-color-dark;
       }
 
       .design-configs-container {
@@ -92,7 +92,7 @@
     }
 
     .config-line {
-      background: #2F3E51;
+      background: $__form-component-bg-color-dark;
     }
   }
 
@@ -105,7 +105,7 @@
   }
 
   .hi-v4-card {
-    background: #334358;
+    background: #2C2C2C;
   }
 
   .hi-v4-card--bordered {
@@ -113,7 +113,7 @@
   }
 
   .category-tree-box {
-    background: #2F3C4E !important;
+    background: #2C2C2C !important;
   }
 
   .c-audio-item-name {
@@ -121,7 +121,7 @@
   }
 
   .c-resources-item {
-    background: #334358;
+    background: $__primary-sub-bg-color-dark;
     border: 1px solid #eeeff100;
 
     .c-resources-item-info-title {
