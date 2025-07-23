@@ -89,6 +89,11 @@ const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('lmo_
         type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0
+    },
+    dsp: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
     }
 }, {
     timestamps: false
