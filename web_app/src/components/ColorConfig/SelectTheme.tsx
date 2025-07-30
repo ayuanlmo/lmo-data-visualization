@@ -40,7 +40,7 @@ function SelectTheme(props: ISelectThemeProps): React.JSX.Element {
                     style={{
                         width: '100%',
                         maxHeight: '13rem',
-                        overflow: 'scroll'
+                        overflowY: 'auto'
                     }}
                     gutter
                     justify={"space-between"}

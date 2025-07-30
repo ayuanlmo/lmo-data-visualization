@@ -106,21 +106,23 @@ const TemplatePreview = (): React.JSX.Element => {
         initPlayerSize();
     });
     return (
-        <Loading content={'初始化模板...'} visible={loading}>
+        <div className={'preview-container app_flex_box'}>
             <div ref={templatePreviewRef} className={'template-preview'}>
-                <iframe
-                    onError={(): void => {
-                        toTemplateList();
-                    }}
-                    onLoad={(): void => {
-                        const iframeHtml: string = iframeRef.current?.contentWindow?.document?.body.innerHTML || '';
-
-                        if (iframeHtml === '' || iframeHtml.includes('Not found.'))
+                <Loading content={'初始化模板...'} visible={loading}>
+                    <iframe
+                        onError={(): void => {
                             toTemplateList();
-                        setLoading(false);
-                    }} style={iframeStyle} ref={iframeRef} src={`/api${currentTemplate.path}`}/>
+                        }}
+                        onLoad={(): void => {
+                            const iframeHtml: string = iframeRef.current?.contentWindow?.document?.body.innerHTML || '';
+
+                            if (iframeHtml === '' || iframeHtml.includes('Not found.'))
+                                toTemplateList();
+                            setLoading(false);
+                        }} style={iframeStyle} ref={iframeRef} src={`/api${currentTemplate.path}`}/>
+                </Loading>
             </div>
-        </Loading>
+        </div>
     );
 };
 

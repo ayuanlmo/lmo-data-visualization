@@ -99,12 +99,14 @@ class SocketClient {
                     }))
                 }
                 // 合成结束
-                if (type === 'TASK_END') {
+                if (type === 'TASK_END' || type === 'TASK_ERROR') {
+                    const isError: boolean = type === 'TASK_ERROR';
+
                     ResourcesModel.update({
                         filePath: `/static/output/${data?.id}.mp4`,
                         videoCover: `/static/output/${data?.videoCover}.png`,
                         gifPath: `/static/output/${data?.gifPath}.gif`,
-                        status: 'end'
+                        status: isError ? 'error' : 'end'
                     }, {
                         where: {
                             id: {[Op.like]: `${data?.id}`}

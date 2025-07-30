@@ -136,5 +136,13 @@
   "status": "ステータス",
   "synthesisServicesConnectStatus": "合成サーバー接続状態",
   "connected": "接続済み",
-  "notConnected": "未接続"
+  "notConnected": "未接続",
+  "layers": {
+    "label": "レイヤー",
+    "text": {
+      "mainTitle": "タイトル",
+      "subTitle": "サブタイトル",
+      "fromSource": "データソース"
+    }
+  }
 }

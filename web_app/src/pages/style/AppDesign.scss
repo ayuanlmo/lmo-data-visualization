@@ -29,15 +29,13 @@
   .data-visualization-design-header {
     width: 100vw;
     height: 4.125rem;
-
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     display: flex;
     justify-content: space-between;
 
     .data-visualization-design-header-black {
       font-size: 1rem;
       margin-top: 1.625rem;
-      margin-left: 4rem;
+      margin-left: 1.5rem;
       height: 1.25rem;
       line-height: 1.25rem;
       justify-content: space-between;
@@ -50,7 +48,9 @@
       &:hover {
         div {
           svg {
-            background-color: $theme-color;
+            path {
+              fill: $theme-color;
+            }
           }
         }
 
@@ -61,23 +61,89 @@
     }
 
     .data-visualization-design-header-option {
-      margin-right: 2.875rem;
+      margin-right: 1.25rem;
       margin-top: 1.3rem;
       display: flex;
       justify-content: end;
     }
   }
 
-  .template-preview {
+  .template-layers {
     width: 100%;
-    height: 51.875rem;
+    height: 100%;
     border-radius: 0.625rem;
-    box-shadow: 0 6px 4rem 0 rgba(0, 0, 0, 0.25);
 
-    iframe {
-      transform: scale(0.48);
-      transform-origin: 0 0;
+    .template-layers-title {
+      height: 2.94rem;
+      font-size: 0.875rem;
+      color: #3D3D3D;
+      line-height: 49px;
+      font-weight: 400;
+      text-align: left;
+      padding-left: 1.25rem;
+    }
+
+    .template-layers-item {
+      width: 100%;
+      height: 3rem;
+      position: relative;
+
+      .template-layers-item-container {
+        position: absolute;
+        top: .75rem;
+        left: 1.25rem;
+        width: (calc(100% - (1.25rem * 2)));
+
+        .template-layers-item-content {
+          height: 100%;
+          width: 100%;
+          justify-content: space-between;
+
+          .template-layers-item-icon {
+            svg {
+              width: 0.875rem;
+              height: 0.875rem;
+            }
+          }
+
+          .template-layers-item-name {
+            font-size: 0.875rem;
+            margin-left: .38rem;
+          }
+
+          .template-layers-item-options {
+            svg {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .preview-container {
+    width: 100%;
+    height: calc(100vh - 13rem);
+    justify-content: center;
+    align-items: center;
+
+    .template-preview {
+      aspect-ratio: 16 / 9;
+      max-width: 78%;
+      flex: 1;
       border-radius: 0.625rem;
+      overflow: hidden;
+
+      .hi-v4-loading__wrapper {
+        height: 100%;
+      }
+
+      iframe {
+        //display: none;
+        transform: scale(0.48);
+        transform-origin: 0 0;
+        border-radius: 0.625rem;
+      }
     }
   }
 
@@ -121,7 +187,7 @@
 
   .design-configs {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 6rem) !important;
     border-radius: 0.625rem;
 
     .select-bg-image {
@@ -150,12 +216,10 @@
     .design-configs-top-options {
       height: 3rem;
       border-radius: 0.625rem 0.625rem 0 0;
-      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
       justify-content: left;
       padding-left: 1.87rem;
 
       .design-configs-top-options-item {
-        //padding: 0 1.87rem;
         color: #9EA5AF;
         font-size: 1rem;
         font-weight: 500;
@@ -170,11 +234,18 @@
 
     .design-configs-container {
       padding: 1.25rem;
+      overflow-y: auto;
+      height: calc(96% - 3rem);
 
       .text-config {
+        .text-config-item-label {
+          font-size: 0.875rem;
+        }
+
         .text-config-title {
           font-size: 0.875rem;
           font-weight: 500;
+          padding-top: 1rem;
 
           &:before {
             content: "";

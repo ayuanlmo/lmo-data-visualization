@@ -3,13 +3,14 @@ import ffmpegPath from "ffmpeg-static";
 
 namespace FFMPEG {
     export const getAudioVisualizationDiagram = (audioPath: string, optPath: string): Promise<string> => {
+        const _optPath: string = optPath.replace('/dist', '');
         const args: string[] = [
             '-i',
             audioPath,
             '-filter_complex',
             'showwavespic=s=640x120:colors=#407DF2',
             '-frames:v', '1',
-            optPath,
+            _optPath,
             '-y'
         ];
 
@@ -20,7 +21,7 @@ namespace FFMPEG {
                 if (code !== 0)
                     reject(`FFMPEG exited with code ${code}`);
                 else
-                    resolve(optPath);
+                    resolve(_optPath);
             });
         });
     }

@@ -13,8 +13,8 @@ let currentProgress: number = 0;
 let timer: any = 0;
 
 const ProgressBar = (): React.JSX.Element => {
-    const colspanTime: GridResponsiveSize<number> = {lg: 4, xl: 3, md: 4, sm: 5, xs: 6};
-    const colspanSlider: GridResponsiveSize<number> = {lg: 16, xl: 20, md: 18, sm: 16, xs: 14};
+    const colspanTime: GridResponsiveSize<number> = {lg: 6, xl: 4, md: 8, sm: 5, xs: 6};
+    const colspanSlider: GridResponsiveSize<number> = {lg: 14, xl: 18, md: 12, sm: 16, xs: 14};
     const duration: number = useSelector((state: RootState) => state.app.currentTemplateConfig.config.video.duration);
     const chatAnimationIsControllable: boolean = useSelector((state: RootState) => state.app.currentTemplateConfig.config?.animation?.chatAnimationIsControllable ?? false);
     const [width, setWidth]: ReactState<number> = useState<number>(0);

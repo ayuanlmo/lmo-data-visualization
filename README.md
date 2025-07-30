@@ -195,8 +195,6 @@ docker-compose up -d --build
 <details>
 <summary>以源代码方式部署</summary>
 
-</summary>
-
 ### 以源代码方式部署
 
 #### 克隆代码
@@ -254,6 +252,19 @@ yarn c
 # 启动合成服务
 pm2 start ./dist/main.js
 ```
+
+#### 合成服务器环境变量
+
+```env
+SERVER_HOST=localhost  # 服务器地址(可选，默认值localhost)
+ALLOW_UNSAFE_CONTEXT=1 # 允许非安全上下文访问(可选 默认值0)
+SERVICE_PORT=3002      # 合成服务端口(可选 默认值3002)
+```
+
+> `ALLOW_UNSAFE_CONTEXT` 默认值为 0，表示不允许在非安全上下文中访问。但在容器等特定运行环境中，建议将其设置为
+> 1，以让合成服务器能访问到模板资源。
+>
+> 即便启用了非安全上下文访问，合成服务器也会在每个任务初始化前对 `SERVER_HOST` 的合法性进行校验。
 
 #### web_app
 

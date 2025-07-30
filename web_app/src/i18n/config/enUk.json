@@ -136,5 +136,13 @@
   "status": "Status",
   "synthesisServicesConnectStatus": "Synthesis Services Connection Status",
   "connected": "Connected",
-  "notConnected": "Not Connected"
+  "notConnected": "Not Connected",
+  "layers": {
+    "label": "Layer",
+    "text": {
+      "mainTitle": "Title",
+      "subTitle": "Subtitle",
+      "fromSource": "Data Source"
+    }
+  }
 }

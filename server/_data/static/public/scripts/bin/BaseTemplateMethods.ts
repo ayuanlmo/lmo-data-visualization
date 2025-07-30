@@ -278,9 +278,33 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
                 }
                 this.initViewStyle();
                 break;
+            case 'SELECT_TEXT':
+                this.selectText(message);
+                break;
             default:
                 break;
         }
+    }
+
+    private selectText({key}: { key: string }): void {
+        const elementIds: string[] = ['main-title', 'sub-title', 'from-source'];
+        if (!key) return;
+
+        const targetEl: HTMLElement | null = document.querySelector(`[data-name="${key}"]`);
+        const activeElements: (HTMLElement | null)[] = elementIds.map(id => document.getElementById(id)).filter(el => el !== null);
+
+        if (!targetEl) return;
+        
+        activeElements.forEach(el => {
+            if (el)
+                el.classList.remove('active', 'square-container');
+        });
+
+        targetEl.classList.add('active', 'square-container');
+
+        setTimeout(() => {
+            this.sendTemplateSelectTextConfig(targetEl);
+        });
     }
 
     private initDrag(): void {

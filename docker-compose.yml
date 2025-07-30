@@ -16,6 +16,7 @@ services:
     build: ./service
     environment:
       - SERVICE_HOST=service_app
+      - SERVER_HOST=server_app
       - SERVICE_PORT=3002
       - ALLOW_UNSAFE_CONTEXT=1
     ports:

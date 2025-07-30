@@ -281,9 +281,31 @@ var BaseTemplateMethods = /** @class */ (function () {
                 }
                 this.initViewStyle();
                 break;
+            case 'SELECT_TEXT':
+                this.selectText(message);
+                break;
             default:
                 break;
         }
+    };
+    BaseTemplateMethods.prototype.selectText = function (_a) {
+        var _this_1 = this;
+        var key = _a.key;
+        var elementIds = ['main-title', 'sub-title', 'from-source'];
+        if (!key)
+            return;
+        var targetEl = document.querySelector("[data-name=\"".concat(key, "\"]"));
+        var activeElements = elementIds.map(function (id) { return document.getElementById(id); }).filter(function (el) { return el !== null; });
+        if (!targetEl)
+            return;
+        activeElements.forEach(function (el) {
+            if (el)
+                el.classList.remove('active', 'square-container');
+        });
+        targetEl.classList.add('active', 'square-container');
+        setTimeout(function () {
+            _this_1.sendTemplateSelectTextConfig(targetEl);
+        });
     };
     BaseTemplateMethods.prototype.initDrag = function () {
         var _this_1 = this;

@@ -1,6 +1,5 @@
 import React, {useRef} from "react";
 import {useTranslation} from "react-i18next";
-import AppConfig from "../../config/AppConfig";
 import GlobalComponent from "../GlobalComponent";
 import {Button, Grid} from "@hi-ui/hiui";
 import SelectFile, {ISelectFileRef} from "../SelectFile";
@@ -8,6 +7,7 @@ import SwitchLang from "../GlobalComponent/components/SwitchLang";
 import YExtendTemplate from "../YExtendTemplate";
 import Resources, {IResourcesRef} from "../Resources";
 import About, {IAboutRef} from "../About";
+import AppName from "../AppName";
 
 const HomeHeader = (): React.JSX.Element => {
     const selectFileRef: React.MutableRefObject<null | ISelectFileRef> = useRef<null | ISelectFileRef>(null);
@@ -29,9 +29,8 @@ const HomeHeader = (): React.JSX.Element => {
                                 className={'app_cursor_pointer'}
                                 onClick={(): void => {
                                     aboutRef.current?.open?.();
-                                }}
-                            >
-                                {AppConfig.appName}
+                                }}>
+                                <AppName/>
                             </span>
                         </div>
                         <About ref={aboutRef}/>

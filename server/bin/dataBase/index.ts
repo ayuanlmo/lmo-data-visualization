@@ -60,6 +60,11 @@ const dbUserName: string = process.env.DATA_BASE_USER_NAME ?? '';
 const dbPassWord: string = process.env.DATA_BASE_PASSWORD ?? '';
 const dbHost: string = process.env.DATA_BASE_HOST ?? '';
 
+const DANGEROUS_SQL_SERVER_ACCOUNT: string = 'sa' as const;
+
+if (dbType === 'mssql' && dbUserName?.trim().toLowerCase() === DANGEROUS_SQL_SERVER_ACCOUNT && !AppConfig.__DEV_SERVER)
+    throw new Error('Please do not use "sa" as your database username');
+
 const DB: Sequelize = dbType === 'mssql' ?
     new Sequelize(dbName, dbUserName, dbPassWord, {
         host: dbHost,
@@ -73,7 +78,7 @@ const DB: Sequelize = dbType === 'mssql' ?
         logging: AppConfig.__DEV_SERVER
     });
 
-const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('Templates', {
+const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('lmo_Templates', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -84,12 +89,22 @@ const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('Temp
     cover: DataTypes.STRING,
     gifCover: DataTypes.STRING,
     createTime: DataTypes.STRING,
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    index: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+    },
+    dsp: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
+    }
 }, {
     timestamps: false
 });
 
-const ColorModel: ModelCtor<IColorModel> = DB.define<IColorModel>('Colors', {
+const ColorModel: ModelCtor<IColorModel> = DB.define<IColorModel>('lmo_Colors', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -101,7 +116,7 @@ const ColorModel: ModelCtor<IColorModel> = DB.define<IColorModel>('Colors', {
     timestamps: false
 });
 
-const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('Resources', {
+const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('lmo_Resources', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -121,7 +136,7 @@ const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('R
     timestamps: false
 });
 
-const UpLoadFilesModel: ModelCtor<IUpLoadFilesModel> = DB.define<IUpLoadFilesModel>('UpLoadFiles', {
+const UpLoadFilesModel: ModelCtor<IUpLoadFilesModel> = DB.define<IUpLoadFilesModel>('lmo_UpLoadFiles', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)
@@ -136,7 +151,7 @@ const UpLoadFilesModel: ModelCtor<IUpLoadFilesModel> = DB.define<IUpLoadFilesMod
     timestamps: false
 });
 
-export const UpLoadFilesCategoryModel: ModelCtor<IUpLoadFilesCategoryModel> = DB.define<IUpLoadFilesCategoryModel>('UpLoadFilesCategory', {
+export const UpLoadFilesCategoryModel: ModelCtor<IUpLoadFilesCategoryModel> = DB.define<IUpLoadFilesCategoryModel>('lmo_UpLoadFilesCategory', {
     id: {
         primaryKey: true,
         type: DataTypes.STRING(36)

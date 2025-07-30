@@ -136,5 +136,13 @@
   "status": "상태",
   "synthesisServicesConnectStatus": "합성 서버 연결 상태",
   "connected": "연결됨",
-  "notConnected": "연결되지 않음"
+  "notConnected": "연결되지 않음",
+  "layers": {
+    "label": "레이어",
+    "text": {
+      "mainTitle": "제목",
+      "subTitle": "부제",
+      "fromSource": "데이터 출처"
+    }
+  }
 }

@@ -72,6 +72,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                 <Grid.Col justify={'flex-end'} span={colspan}>
                     <YExtendTemplate show={item.type === 'switch'}>
                         <Switch
+                            size={'lg'}
                             defaultChecked={item.value as boolean}
                             onChange={(e: boolean): void => {
                                 setValue(item.key, e);

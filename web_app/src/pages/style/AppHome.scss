@@ -8,20 +8,12 @@
   .data-visualization-header {
     width: 100vw;
     height: 4.125rem;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     overflow: hidden;
 
     .data-visualization-header-app-name {
-      font-size: 20px;
-      color: #ffffff;
-      font-weight: bold;
-      line-height: 66px;
       margin-left: 2.875rem;
+      margin-top: 1.5rem;
       transition: all .2s;
-
-      &:hover {
-        color: #0688E5;
-      }
     }
 
     .data-visualization-header-option {

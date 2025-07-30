@@ -1,9 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Grid, Input, NumberInput, Select, SelectOption, Switch} from "@hi-ui/hiui";
+import {Grid, Input, NumberInput, Select, SelectOption} from "@hi-ui/hiui";
 import {ITemplateSelectTextElement, TTemplateTextConfigAlignType} from "../../types/TemplateMessage";
 import PostMessage from "../../lib/PostMessage";
 import ColorPicker from "../ColorPicker";
 import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
+import {Dispatch} from "@reduxjs/toolkit";
+import {setCurrentTemplateTextConfigItem} from "../../lib/Store/AppStore";
 
 export interface ITextConfigProps {
     config: ITemplateSelectTextElement | null;
@@ -16,6 +19,7 @@ const updateConfig = (setConfigFunc: React.Dispatch<React.SetStateAction<ITempla
 const TextConfig: React.FC<ITextConfigProps> = ({config}) => {
     const [localConfig, setLocalConfig] = useState<ITemplateSelectTextElement>(config as ITemplateSelectTextElement);
     const {t} = useTranslation();
+    const dispatch: Dispatch = useDispatch();
 
     useEffect(() => {
         if (config !== localConfig) setLocalConfig(config as ITemplateSelectTextElement);
@@ -23,22 +27,16 @@ const TextConfig: React.FC<ITextConfigProps> = ({config}) => {
 
     useEffect(() => {
         PostMessage.send({type: "SET_TEXT_CONFIG", message: {...localConfig}});
+        const data = {[localConfig['key']]: localConfig};
+
+        dispatch(setCurrentTemplateTextConfigItem(data));
     }, [localConfig]);
 
     return (
-        <div className='text-config app_none_user_select'>
+        <div className='text-config app_none_user_select animated fadeIn'>
             <div className='text-config-title app_flex_box'>{t('textConfig')}</div>
             {
                 Object.entries({
-                    display: {
-                        label: t('display'),
-                        component: () => <Switch
-                            checked={localConfig.display}
-                            onChange={
-                                (e) => updateConfig(setLocalConfig, {display: e})
-                            }
-                        />
-                    },
                     value: {
                         label: t('textContent'),
                         component: () => <Input
@@ -146,6 +144,7 @@ const TextConfig: React.FC<ITextConfigProps> = ({config}) => {
                     </div>
                 )
             }
+            <div className={'config-line '}></div>
         </div>
     );
 };

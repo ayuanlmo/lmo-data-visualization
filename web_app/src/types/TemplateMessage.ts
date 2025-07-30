@@ -30,6 +30,7 @@ export type TDesignAppMessageType =
     | 'VIDEO_CONFIG_CHANGE' // 视频配置变化
     | 'START_ANIMATION' // 暂停&打断图表动画
     | 'PAUSE_ANIMATION' // 开始&继续图表动画
+    | 'SELECT_TEXT' // 选择文字
     ;
 
 export interface ITemplateSelectTextElement {

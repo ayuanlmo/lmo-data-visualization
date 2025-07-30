@@ -79,8 +79,9 @@ const initTemplate = () => {
                         description: string;
                         type: number;
                     } = JSON.parse(fs.readFileSync(path.resolve(templatePath + `/${i}/config.json`), 'utf-8'));
-                    const isHTMLTemplate: boolean = fs.existsSync(templateRoot + 'index.html');
-                    const isHTMTemplate: boolean = fs.existsSync(templateRoot + 'index.htm')
+                    const templateOrigin = path.resolve(templatePath + `/${i}`);
+                    const isHTMLTemplate: boolean = fs.existsSync(path.resolve(templateOrigin, 'index.html'));
+                    const isHTMTemplate: boolean = fs.existsSync(path.resolve(templateOrigin, 'index.htm'));
                     const item = {
                         id: require('uuid').v4(),
                         ...templateConfig,

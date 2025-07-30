@@ -22,9 +22,18 @@
     "isolatedModules": true,
     "noEmit": false
   },
+  "include": [
+    "bin",
+    "conf",
+    "const",
+    "router",
+    "utils",
+    "global.d.ts",
+    "main.ts"
+  ],
   "exclude": [
     "gulpfile.js",
     "node_modules",
-    "_data/static/static"
+    "_data/static/public"
   ]
 }

@@ -18,12 +18,30 @@
       }
     }
 
-    .template-preview {
-      background: $__primary-sub-bg-color-light;
-      box-shadow: none;
+    .template-layers {
+      background: $color-white;
 
-      iframe {
+      .template-layers-title {
+        border-bottom: 0.0625rem solid #EAEAEA;
+      }
+
+      .template-layers-item {
+        &:hover {
+          background: $__primary-input-bg-color-light;
+        }
+      }
+    }
+
+    .preview-container {
+      background: $__primary-sub-bg-color-light;
+
+      .template-preview {
         background: $__primary-sub-bg-color-light;
+        box-shadow: 0 0 20px 0 #EAEAEA;
+
+        iframe {
+          background: $__primary-sub-bg-color-light;
+        }
       }
     }
 
@@ -46,7 +64,8 @@
 
       .design-configs-container {
         .text-config {
-          .text-config-title {
+          .text-co
+          nfig-title {
             color: $__primary-input-color-light;
           }
         }

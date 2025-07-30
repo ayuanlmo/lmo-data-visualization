@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Grid from "@hi-ui/grid";
 import TemplatePreview from "../components/Preview";
 import ProgressBar from "../components/ProgressBar";
@@ -12,12 +12,36 @@ import {setCurrentTemplate} from "../lib/Store/AppStore";
 import Task, {ICreateTaskRef} from "../components/Task";
 import AudioPreview from "../components/AudioPreview";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import TemplateLayers from "../components/TemplateLayers";
+import {useEventListener} from "../bin/Hooks";
 
 const AppDesign = (): React.JSX.Element => {
     const dispatch: Dispatch = useDispatch();
     const currentTemplate = useSelector((state: RootState) => state.app.currentTemplate);
     const taskRef: React.RefObject<ICreateTaskRef> = useRef<ICreateTaskRef>(null);
     const navigate: NavigateFunction = useNavigate();
+    const [templatePreviewXL, setTemplatePreviewXL] = useState(16);
+    const [designConfigsXL, setDesignConfigsXL] = useState(4);
+
+    useEventListener('resize', (): void => {
+        initGridLayout();
+    });
+
+    const initGridLayout = (): void => {
+        if (devicePixelRatio > 1.5) {
+            setTemplatePreviewXL(14);
+            setDesignConfigsXL(6);
+        }
+
+        if (devicePixelRatio === 1) {
+            setTemplatePreviewXL(16);
+            setDesignConfigsXL(4);
+        }
+    };
+
+    useEffect((): void => {
+        initGridLayout();
+    }, []);
 
     useEffect((): void => {
         if (currentTemplate.id === '') {
@@ -44,24 +68,31 @@ const AppDesign = (): React.JSX.Element => {
                 }}
             />
             <Task ref={taskRef}/>
-            <div className={'app_position_relative'}>
-                <div style={{
-                    padding: "1.5rem"
-                }}>
-                    <Grid.Row style={{
-                        height: '98%'
-                    }} justify={'space-between'}>
-                        <Grid.Col span={{lg: 12, xl: 16, md: 24, sm: 24, xs: 24}}>
-                            <TemplatePreview/>
-                            <ProgressBar/>
-                            <AudioPreview/>
-                        </Grid.Col>
-                        <Grid.Col span={{lg: 10, xl: 6, md: 24, sm: 24, xs: 24}}>
-                            <DesignConfigs/>
-                        </Grid.Col>
-                    </Grid.Row>
-                </div>
+            <div className={'app_position_relative'} style={{
+                height: 'calc(100vh - 13.24rem);',
+                padding: '1.25rem'
+            }}>
 
+                <Grid.Row style={{
+                    height: '98%'
+                }} justify={'space-between'}>
+                    <Grid.Col
+                        style={{
+                            width: '100%'
+                        }}
+                        span={{lg: 4, xl: 3, md: 4, sm: 24, xs: 24}}
+                    >
+                        <TemplateLayers/>
+                    </Grid.Col>
+                    <Grid.Col span={{lg: 10, xl: templatePreviewXL, md: 10, sm: 24, xs: 24}}>
+                        <TemplatePreview/>
+                        <ProgressBar/>
+                        <AudioPreview/>
+                    </Grid.Col>
+                    <Grid.Col span={{lg: 8, xl: designConfigsXL, md: 8, sm: 24, xs: 24}}>
+                        <DesignConfigs/>
+                    </Grid.Col>
+                </Grid.Row>
             </div>
         </div>
     );

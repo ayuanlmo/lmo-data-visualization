@@ -22,8 +22,9 @@ export default class Resources {
             attributes: {
                 exclude: ['templatePath', 'url', 'template', 'taskConfig']
             },
-            offset: (Number(pageIndex) - 1) * Number(pageIndex),
-            limit: Number(pageSize)
+            offset: (Number(pageIndex) - 1) * Number(pageSize),
+            limit: Number(pageSize),
+            order: ['id']
         }).then(({rows, count}): void => {
             res.json(createSuccessMessage({
                 rows,
