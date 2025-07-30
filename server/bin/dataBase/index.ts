@@ -63,6 +63,8 @@ const dbHost: string = process.env.DATA_BASE_HOST ?? '';
 const DANGEROUS_SQL_SERVER_ACCOUNT: string = 'sa' as const;
 
 if (dbType === 'mssql' && dbUserName?.trim().toLowerCase() === DANGEROUS_SQL_SERVER_ACCOUNT && !AppConfig.__DEV_SERVER)
+    throw new Error('Please do not use "sa" as your database username');
+
 const DB: Sequelize = dbType === 'mssql' ?
     new Sequelize(dbName, dbUserName, dbPassWord, {
         host: dbHost,
