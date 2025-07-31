@@ -10,6 +10,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "adm-zip": "^0.5.16",
     "cli-color": "^2.0.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -31,6 +32,7 @@
     "prod": "tsc && gulp cjs"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
     "@types/express": "^4.17.21",
     "@types/express-ws": "^3.0.4",
     "@types/multer": "^1.4.11",
