@@ -15,7 +15,7 @@ const AppConfig = {
     __DEV_SERVER: process.env.NODE_ENV !== 'prod',
     __LIVE_SERVER: process.env.NODE_ENV === 'live-server',
     __PROTECTED_STATIC_FILES: ['.ts', '.bin', 'config.json', 'package.json', 'tsconfig.json', '.pug'],
-    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory', 'createCustomTemplate']
+    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory', 'createCustomTemplate', 'uploadTemplate']
 } as const;
 
 export default AppConfig;

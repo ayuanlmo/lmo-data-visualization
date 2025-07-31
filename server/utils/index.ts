@@ -1,6 +1,7 @@
 import errorMessage from "../const/ErrorMessage";
 import {existsSync, readdirSync, rmdirSync, statSync, unlinkSync} from "node:fs";
 import path from "path";
+import fs from "fs";
 
 export interface IResponseMessage {
     code: number;
@@ -56,6 +57,20 @@ namespace Utils {
 
         rmdirSync(dir);
         return true;
+    }
+
+    export const isZipFile = (filePath: string): boolean => {
+        try {
+            const buffer: Buffer = fs.readFileSync(filePath);
+            const signature: Buffer = buffer.slice(0, 4);
+            
+            return signature[0] === 0x50 && signature[1] === 0x4B &&
+                (signature[2] === 0x03 || signature[2] === 0x05 || signature[2] === 0x07) &&
+                (signature[3] === 0x04 || signature[3] === 0x06 || signature[3] === 0x08);
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
     }
 }
 

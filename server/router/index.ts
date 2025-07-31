@@ -37,6 +37,7 @@ _Router
     .get('/resources', (req: Request, res: Response): void => Resources.getResources(req, res))
     .delete('/resources/:id', (req: Request, res: Response): void => Resources.deleteResources(req, res))
     .get('/serverInfo', (req: Request, res: Response): void => ServerBase.GetServerBaseInfo(req, res))
+    .post('/uploadTemplate', multer.single('template'), (req: Request, res: Response): void => TemplateController.uploadTemplate(req, res))
 ;
 
 export default _Router;

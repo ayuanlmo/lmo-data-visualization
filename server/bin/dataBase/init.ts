@@ -5,7 +5,15 @@ import Cli from "../../lib/Cli";
 import {DB_COLOR_TABLE_DEFAULT_DATA} from './defaultData';
 import {Process} from "../Process";
 
-const ignoreFolder: string[] = ['.DS_Store', '$Recycle.Bin', 'System Volume Information', 'ProgramData'];
+export const ignoreFolder: string[] = ['.DS_Store', '$Recycle.Bin', 'System Volume Information', 'ProgramData'];
+export const templateLocalFiles = [
+    'conf.js',
+    'data.json',
+    'cover.png',
+    'cover.gif',
+    'config.json',
+    'index.js'
+];
 
 const initDefaultData = async (): Promise<void> => {
     const templateOneData = await TemplateModel.findOne();
@@ -64,14 +72,7 @@ const initTemplate = () => {
                     Cli.warn('模板初始化文件加载失败', e);
                 }
                 // 检查当前模板是否存在必要的依赖
-            } else if (checkArrayIncludes(templateItem, [
-                'conf.js',
-                'data.json',
-                'cover.png',
-                'cover.gif',
-                'config.json',
-                'index.js'
-            ])) {
+            } else if (checkArrayIncludes(templateItem, templateLocalFiles)) {
                 try {
                     const templateRoot: string = `/static/public/templates/${i}`;
                     const templateConfig: {
@@ -109,7 +110,7 @@ const initTemplate = () => {
     return templateData;
 }
 
-function checkArrayIncludes(arr1: Array<string>, arr2: Array<string>): boolean {
+export function checkArrayIncludes(arr1: Array<string>, arr2: Array<string>): boolean {
     for (let i: number = 0; i < arr2.length; i++) {
         if (!arr1.includes(arr2[i]))
             return false;
