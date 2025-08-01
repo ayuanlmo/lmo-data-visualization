@@ -67,6 +67,8 @@ export default class TemplateController {
                 id: {[Op.like]: `${id}`}
             }
         }).then((template): void => {
+            if (!template)
+                return void res.json(createErrorMessage('ext006'));
             const {dataValues}: any = template;
             const originalTemplate: string = path.resolve(`./_data/static/public/${template?.dataValues.path.replace('/static', '').replace('/index.html', '')}`);
             const templatePathName: string = require('uuid').v4();
