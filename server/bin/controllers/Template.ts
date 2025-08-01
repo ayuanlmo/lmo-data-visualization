@@ -11,6 +11,7 @@ import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
 import deleteFolderRecursive = Utils.deleteFolderRecursive;
 import isZipFile = Utils.isZipFile;
+import calculatePagination = Utils.calculatePagination;
 
 export default class TemplateController {
     public static getTemplates(req: Request, res: Response): void {
@@ -23,6 +24,7 @@ export default class TemplateController {
         const whereCondition: any = {
             name: {[Op.like]: `%${name}%`}
         };
+        const [offset, limit] = calculatePagination(Number(pageIndex), Number(pageSize));
 
         if (type !== "")
             whereCondition.type = type;
@@ -31,8 +33,8 @@ export default class TemplateController {
             where: {
                 ...whereCondition
             },
-            offset: (Number(pageIndex) - 1) * Number(pageIndex),
-            limit: Number(pageSize)
+            offset,
+            limit
         }).then(({rows, count}): void => {
             res.json(createSuccessMessage({
                 rows,

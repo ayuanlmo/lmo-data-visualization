@@ -12,6 +12,7 @@ import Cli from "../../lib/Cli";
 import socketClient from "../Socket";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
+import calculatePagination = Utils.calculatePagination;
 
 interface IQueryCriteria {
     [key: string]: any;
@@ -188,14 +189,15 @@ export default class File {
             name: {[Op.like]: `%${name}%`},
             type: {[Op.like]: `%${type}%`}
         }
+        const [offset, limit] = calculatePagination(Number(pageIndex), Number(pageSize));
 
         if (categoryId !== '')
             where.categoryId = categoryId;
 
         UpLoadFilesModel.findAndCountAll({
             where: where,
-            offset: (Number(pageIndex) - 1) * Number(pageIndex),
-            limit: Number(pageSize)
+            offset,
+            limit
         }).then(({rows, count}): void => {
             res.json(createSuccessMessage({
                 rows,

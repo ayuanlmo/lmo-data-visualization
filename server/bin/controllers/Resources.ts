@@ -6,14 +6,16 @@ import path from "path";
 import fs from "node:fs";
 import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
+import calculatePagination = Utils.calculatePagination;
 
 export default class Resources {
     public static getResources(req: Request, res: Response): void {
         const {
             name = '',
-            pageIndex = 0,
+            pageIndex = 1,
             pageSize = 10,
         } = req.query;
+        const [offset, limit] = calculatePagination(Number(pageIndex), Number(pageSize));
 
         ResourcesModel.findAndCountAll({
             where: {
@@ -22,8 +24,8 @@ export default class Resources {
             attributes: {
                 exclude: ['templatePath', 'url', 'template', 'taskConfig']
             },
-            offset: (Number(pageIndex) - 1) * Number(pageSize),
-            limit: Number(pageSize),
+            offset,
+            limit,
             order: ['id']
         }).then(({rows, count}): void => {
             res.json(createSuccessMessage({

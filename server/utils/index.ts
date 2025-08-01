@@ -63,7 +63,7 @@ namespace Utils {
         try {
             const buffer: Buffer = fs.readFileSync(filePath);
             const signature: Buffer = buffer.slice(0, 4);
-            
+
             return signature[0] === 0x50 && signature[1] === 0x4B &&
                 (signature[2] === 0x03 || signature[2] === 0x05 || signature[2] === 0x07) &&
                 (signature[3] === 0x04 || signature[3] === 0x06 || signature[3] === 0x08);
@@ -72,6 +72,16 @@ namespace Utils {
             return false;
         }
     }
+
+    export const calculatePagination = (pageIndex: unknown, pageSize: unknown): [number, number] => {
+        const numIndex: number = typeof pageIndex === 'string' && pageIndex.trim() === '' ? NaN : Number(pageIndex);
+        const numSize: number = typeof pageSize === 'string' && pageSize.trim() === '' ? NaN : Number(pageSize);
+        const page: number = isNaN(numIndex) || numIndex < 1 ? 1 : Math.floor(numIndex);
+        const size: number = isNaN(numSize) || numSize < 1 ? 10 : Math.floor(numSize);
+        const offset = (page - 1) * size;
+
+        return [offset, size];
+    };
 }
 
 
