@@ -48,7 +48,7 @@ export interface IUpLoadFilesModel extends BaseModel {
     hash: string;
 }
 
-export interface IUpLoadFilesCategoryModel extends BaseModel {
+interface IUpLoadFilesCategoryModel extends BaseModel {
     id: string;
     name: string;
     parentId: string;
