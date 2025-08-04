@@ -131,7 +131,7 @@ const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('l
     videoCover: DataTypes.STRING,
     clarity: DataTypes.STRING,
     status: DataTypes.STRING,
-    taskConfig: DataTypes.STRING
+    taskConfig: DataTypes.STRING('max')
 }, {
     timestamps: false
 });
