@@ -23,7 +23,7 @@ interface IOtherConfigProxyHandlers {
 }
 
 void function (): void {
-    class BaseBarChart extends LmoTemplate implements ILMOTemplateImplementsMethods {
+    class BaseLineChart extends LmoTemplate implements ILMOTemplateImplementsMethods {
         private option: any;
         private names: string[];
         private years: string[];
@@ -331,5 +331,5 @@ void function (): void {
         }
     }
 
-    return void new BaseBarChart();
+    return void new BaseLineChart();
 }();
