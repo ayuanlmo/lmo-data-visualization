@@ -7,6 +7,8 @@ import router from "../router";
 import Cli from "../lib/Cli";
 import {IWsApp, WebSocketServer} from "./WebSocketServer";
 import TemplateSocket from "./TemplateSocket";
+import morgan from "morgan";
+import {HTTPLogStream} from "../lib/Log";
 import Express = require("express");
 import CreateErrorMessage = Utils.createErrorMessage;
 
@@ -45,6 +47,7 @@ export default class HttpServer {
         this.App.set('view engine', 'pug');
         this.App.set('views', path.resolve(__dirname, '../', 'views'));
         this.App.use((require('cors')()));
+        this.App.use(morgan('combined', {stream: HTTPLogStream}));
         this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
             this.onLineUsers++;
             new WebSocketServer(ws, this.onLineUsers, this.WsPool);
