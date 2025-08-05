@@ -69,7 +69,7 @@ const AppDesign = (): React.JSX.Element => {
             />
             <Task ref={taskRef}/>
             <div className={'app_position_relative'} style={{
-                height: 'calc(100vh - 13.24rem);',
+                height: 'calc(100vh - 13.24rem)',
                 padding: '1.25rem'
             }}>
 
