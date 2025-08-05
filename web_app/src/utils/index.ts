@@ -179,6 +179,22 @@ namespace Utils {
             }
         };
     };
+
+    export function normalizeColor(color: string): string {
+        if (!color) return '#000000';
+        const hex = color.replace('#', '').toLowerCase();
+
+        if (hex.length === 3) {
+            return `#${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+        }
+
+        if (hex.length === 6 && /^[0-9a-f]{6}$/.test(hex)) {
+            return `#${hex}`;
+        }
+
+        console.warn(`Invalid color format: ${color}, using #000000`);
+        return '#000000';
+    }
 }
 
 export default Utils;
