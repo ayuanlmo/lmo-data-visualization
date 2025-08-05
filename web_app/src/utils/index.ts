@@ -142,6 +142,43 @@ namespace Utils {
     export function isMobileDevice(): boolean {
         return !!navigator.userAgent.match(/Mobile/i)?.length;
     }
+
+    export const throttle = <T extends (...args: any[]) => any>(
+        func: T,
+        delay: number,
+        options: {
+            leading?: boolean;
+            trailing?: boolean;
+        } = {}
+    ): (...funcArgs: Parameters<T>) => void => {
+        const {leading = true, trailing = true} = options;
+        let timerId: ReturnType<typeof setTimeout> | null = null;
+        let lastExecTime = 0;
+
+        return (...args: Parameters<T>): void => {
+            const now = Date.now();
+
+            if (leading && now - lastExecTime >= delay) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                func.apply(this, args);
+                lastExecTime = now;
+                return;
+            }
+
+            if (trailing && !timerId) {
+                timerId = setTimeout(() => {
+                    if (!leading || now - lastExecTime >= delay) {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
+                        func.apply(this, args);
+                        lastExecTime = now;
+                    }
+                    timerId = null;
+                }, delay - (now - lastExecTime));
+            }
+        };
+    };
 }
 
 export default Utils;
