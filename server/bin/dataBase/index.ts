@@ -4,6 +4,7 @@ import initDefaultData from "./init";
 import {Process} from "../Process";
 import AppConfig from "../../conf/AppConfig";
 import path from "path";
+import {patchSequelize} from "./patchSequelize";
 
 export interface ITemplateModel extends BaseModel {
     id: string;
@@ -59,6 +60,7 @@ const dbName: string = process.env.DATA_BASE_NAME ?? '';
 const dbUserName: string = process.env.DATA_BASE_USER_NAME ?? '';
 const dbPassWord: string = process.env.DATA_BASE_PASSWORD ?? '';
 const dbHost: string = process.env.DATA_BASE_HOST ?? '';
+const usePatch: boolean = process.env.USE_PATCH_CAPTURE_SQL_ERRORS === '1';
 
 const DANGEROUS_SQL_SERVER_ACCOUNT: string = 'sa' as const;
 
@@ -195,6 +197,9 @@ export const close = async (): Promise<void> => {
         process.exit(0);
     }
 })();
+
+if (usePatch)
+    patchSequelize(DB);
 
 export default DB;
 export {TemplateModel};
