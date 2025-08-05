@@ -49,17 +49,20 @@ export default class Resources {
             if (!resource)
                 return void res.json(createErrorMessage('ext005'));
 
-            const videoPath: string = path.resolve(__dirname, `../../_data/static/public/${resource?.dataValues.filePath.replace('/static', '')}`);
-            const gifPath: string = path.resolve(__dirname, `../../_data/static/public/${resource?.dataValues.gifPath.replace('/static', '')}`);
-            const videoCover: string = path.resolve(__dirname, `../../_data/static/public/${resource?.dataValues.videoCover.replace('/static', '')}`);
+            if (resource.dataValues.filePath !== null && resource.dataValues.gifPath !== null && resource.dataValues.videoCover !== null) {
+                const videoPath: string = path.resolve(__dirname, `../../_data/static/public/${resource?.dataValues.filePath.replace('/static', '')}`);
+                const gifPath: string = path.resolve(__dirname, `../../_data/static/public/${resource?.dataValues.gifPath.replace('/static', '')}`);
+                const videoCover: string = path.resolve(__dirname, `../../_data/static/public/${resource?.dataValues.videoCover.replace('/static', '')}`);
+                if (fs.existsSync(videoPath))
+                    fs.unlinkSync(videoPath);
+                if (fs.existsSync(gifPath))
+                    fs.unlinkSync(gifPath);
+                if (fs.existsSync(videoCover))
+                    fs.unlinkSync(videoCover);
+            }
+
             const templatePath: string = resource?.dataValues.templatePath;
 
-            if (fs.existsSync(videoPath))
-                fs.unlinkSync(videoPath);
-            if (fs.existsSync(gifPath))
-                fs.unlinkSync(gifPath);
-            if (fs.existsSync(videoCover))
-                fs.unlinkSync(videoCover);
             if (fs.existsSync(templatePath)) {
                 fs.readdirSync(templatePath).forEach((file: string): void => {
                     fs.unlinkSync(path.resolve(templatePath, file));
@@ -74,6 +77,8 @@ export default class Resources {
             }).then((): void => {
                 res.status(204).send();
             });
+        }).catch((): void => {
+            res.json(createErrorMessage('ext00d'));
         });
     }
 }
