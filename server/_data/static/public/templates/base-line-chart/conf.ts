@@ -23,7 +23,7 @@ const config: ITemplateConfig = {
             value: ['#28C8D5', '#1CA8E3', '#1CA8E3', '#5169CA', '#5837A6', '#BF39A7', '#E54574', '#F47F22']
         },
         animation: {
-            chatAnimationIsControllable: true
+            chartAnimationIsControllable: false
         },
         ...{
             ...TemplateDefaultConfig,

@@ -12,7 +12,7 @@ const config: ITemplateConfig = {
             value: ['#5169CA']
         },
         animation: {
-            chatAnimationIsControllable: true
+            chartAnimationIsControllable: false
         },
         ...{
             ...TemplateDefaultConfig,
