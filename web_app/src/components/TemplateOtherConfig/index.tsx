@@ -51,7 +51,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
         if (!currentTemplateOtherConfig) return;
         if (Array.isArray(currentTemplateOtherConfig.configs) || Array.isArray(currentTemplateOtherConfig?.group))
             setValues(currentTemplateOtherConfig.values);
-    }, []);
+    }, [currentTemplateOtherConfig]);
 
     useEffect((): void => {
         dispatch(setCurrentTemplateOtherConfigValues({
@@ -132,7 +132,9 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     </YExtendTemplate>
                     <YExtendTemplate show={item.type === 'color'}>
                         <ColorPicker
-                            value={item.value as string}
+                            //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-expect-error
+                            value={values[item.key] as string}
                             onChange={(e: string): void => {
                                 setValue(item.key, e);
                             }}
