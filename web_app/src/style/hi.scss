@@ -199,7 +199,11 @@
   }
 
   .hi-v4-radio--type-button {
-    background-color: #334358 !important;
+    background-color: #444444 !important;
+
+    .hi-v4-radio__label {
+      color: $__primary-bg-color-light;
+    }
   }
 
   .hi-v4-radio--type-button:hover, .hi-v4-radio--type-button[data-checked] {
