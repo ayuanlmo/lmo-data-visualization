@@ -251,7 +251,7 @@ export default class Task {
 
     private static getTemplateHTMLString(): Promise<string> {
         return new Promise((resolve: (data: string) => void, reject: (data: string) => void): void => {
-            httpGet(`http://localhost:3000/static/templates`, (res: IncomingMessage): void => {
+            httpGet(`http://localhost:${AppConfig.__SERVER_PORT}/static/templates`, (res: IncomingMessage): void => {
                 res.on('data', (htmlData: Buffer): void => resolve(htmlData.toString()));
                 res.on('error', (): void => reject(''));
             });
