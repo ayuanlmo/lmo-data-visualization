@@ -6,10 +6,11 @@ import Utils from "../../utils";
 import AppConfig from "../../conf/AppConfig";
 import UpLoadFileTypes from "../../const/UpLoadFileTypes";
 import {ReadStream, WriteStream} from "node:fs";
-import {UpLoadFilesCategoryModel, UpLoadFilesModel} from "../dataBase";
+import {IUpLoadFilesCategoryModel, IUpLoadFilesModel, UpLoadFilesCategoryModel, UpLoadFilesModel} from "../dataBase";
 import {Op} from "sequelize";
 import Cli from "../../lib/Cli";
 import socketClient from "../Socket";
+import Logger from "../../lib/Log";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 import calculatePagination = Utils.calculatePagination;
@@ -19,7 +20,7 @@ interface IQueryCriteria {
 }
 
 export default class File {
-    public static upload(req: Request, res: Response): void {
+    public static async upload(req: Request, res: Response): Promise<void> {
         const file: Express.Multer.File | undefined = req.file;
 
         if (!file)
@@ -33,74 +34,90 @@ export default class File {
             categoryId = null
         } = req.body ?? {};
 
-        const fileExtension: string = path.extname(file.originalname);
-        const fr: ReadStream = fs.createReadStream(file.path);
-        const fileName: string = '/' + file.filename + `${fileExtension}`;
-        const fileFolderPath: string = file.destination + fileName;
-        const fw: WriteStream = fs.createWriteStream(file.destination + fileName);
-        const filePath: string = `${AppConfig.__STATIC_PATH}/uploads` + fileName;
-        const fileId: string = require('uuid').v4();
-        const data = {
-            id: fileId,
-            name: name,
-            path: filePath,
-            cover: '',
-            type: file.mimetype,
-            createTime: new Date().getTime().toString(),
-            categoryId: categoryId,
-            hash: ''
-        }
+        try {
+            const fileExtension: string = path.extname(file.originalname);
+            const fr: ReadStream = fs.createReadStream(file.path);
+            const fileName: string = '/' + file.filename + `${fileExtension}`;
+            const fileFolderPath: string = file.destination + fileName;
+            const fw: WriteStream = fs.createWriteStream(file.destination + fileName);
+            const filePath: string = `${AppConfig.__STATIC_PATH}/uploads` + fileName;
+            const fileId: string = require('uuid').v4();
+            const data = {
+                id: fileId,
+                name: name,
+                path: filePath,
+                cover: '',
+                type: file.mimetype,
+                createTime: new Date().getTime().toString(),
+                categoryId: categoryId,
+                hash: ''
+            }
 
-        fr.pipe(fw);
-        fw.on('finish', (): void => {
-            fs.unlink(file.path, (err: NodeJS.ErrnoException | null): void => {
-                if (err)
-                    return void res.json(createErrorMessage('ext00e'));
-                else {
-                    File.getFilesHash(fileFolderPath).then((hash: string): void => {
-                        data.hash = hash;
-                        UpLoadFilesModel.findOne({
-                            where: {
-                                hash: hash
-                            }
-                        }).then((f): void => {
-                            if (f?.dataValues) {
+            fr.pipe(fw);
+            fw.on('finish', (): void => {
+                fs.unlink(file.path, async (err: NodeJS.ErrnoException | null): Promise<void> => {
+                    if (err) {
+                        Logger.error(err.message);
+                        return void res.json(createErrorMessage('ext00e'));
+                    } else {
+                        try {
+                            const filesHash: string = await File.getFileHash(fileFolderPath);
+
+                            data.hash = filesHash;
+
+                            const fileItem: IUpLoadFilesModel | null = await UpLoadFilesModel.findOne({
+                                where: {
+                                    hash: filesHash
+                                }
+                            });
+
+                            if (fileItem) {
+                                const {dataValues} = fileItem;
+
                                 fs.unlinkSync(fileFolderPath);
-                                res.json(createSuccessMessage(f.dataValues ?? {}));
-                            } else
-                                UpLoadFilesModel.create(data).then((): void => {
-                                    res.json(createSuccessMessage(data));
-                                }).catch((): void => {
-                                    res.json(createErrorMessage('ext00d'));
-                                });
-                        });
+                                res.json(createSuccessMessage(dataValues ?? {}));
+                            } else {
+                                await UpLoadFilesModel.create(data);
 
-                        if (file.mimetype.includes('audio')) {
-                            const audioCoverName: string = fileId + '-v.t.png';
-                            const audioCoverStaticPath: string = `${AppConfig.__STATIC_PATH}/uploads/` + audioCoverName;
-                            const audioCoverPath: string = path.resolve(__dirname, '../../_data/static/public/uploads/' + audioCoverName);
+                                res.json(createSuccessMessage(data));
 
-                            try {
-                                socketClient.sendMessage({
-                                    type: 'GENERATING-AUDIO-VISUALIZATIONS',
-                                    data: JSON.stringify({
-                                        audioPath: path.resolve(file.destination + fileName),
-                                        optPath: audioCoverPath
-                                    })
-                                });
+                                if (file.mimetype.includes('audio')) {
+                                    const audioCoverName: string = fileId + '-v.t.png';
+                                    const audioCoverStaticPath: string = `${AppConfig.__STATIC_PATH}/uploads/` + audioCoverName;
+                                    const audioCoverPath: string = path.resolve(__dirname, '../../_data/static/public/uploads/' + audioCoverName);
 
-                                data.cover = audioCoverStaticPath;
-                            } catch (e) {
-                                Cli.debug(e);
+                                    try {
+                                        socketClient.sendMessage({
+                                            type: 'GENERATING-AUDIO-VISUALIZATIONS',
+                                            data: JSON.stringify({
+                                                audioPath: path.resolve(file.destination + fileName),
+                                                optPath: audioCoverPath
+                                            })
+                                        });
+
+                                        data.cover = audioCoverStaticPath;
+                                    } catch (e) {
+                                        Cli.debug(e);
+                                    }
+                                }
                             }
+                        } catch (e) {
+                            Logger.error(e);
+                            res.json(createErrorMessage('ext00d'));
                         }
-                    });
-                }
+                    }
+                });
             });
-        });
+            fw.on('error', (e): void => {
+                Logger.error(e.message);
+            });
+        } catch (e) {
+            Logger.error(e);
+            return void res.json(createErrorMessage('ext00e'));
+        }
     }
 
-    public static getFilesHash(filePath: string): Promise<string> {
+    public static getFileHash(filePath: string): Promise<string> {
         return new Promise((resolve): void => {
             const hash: crypto.Hash = crypto.createHash('md5');
             const input: fs.ReadStream = fs.createReadStream(filePath);
@@ -117,7 +134,7 @@ export default class File {
 
     }
 
-    public static delete(req: Request, res: Response): void {
+    public static async delete(req: Request, res: Response): Promise<void> {
         const {
             id = ""
         } = req.body;
@@ -125,28 +142,31 @@ export default class File {
         if (id === '')
             return void res.json(createErrorMessage('ext003'));
 
-        UpLoadFilesModel.findOne({
-            where: {id: id}
-        }).then((data) => {
-            if (Object.keys(data ?? {}).length === 0)
+        try {
+            const file = await UpLoadFilesModel.findByPk(id);
+
+            if (!file)
                 return void res.json(createErrorMessage('ext004'));
 
-            const filePath: string = path.resolve(__dirname, `../../_data/static/public/${data?.dataValues.path.replace('/static', '')}`);
-
-            UpLoadFilesModel.destroy({
+            const {dataValues} = file;
+            const filePath: string = path.resolve(__dirname, `../../_data/static/public/${dataValues.path.replace('/static', '')}`);
+            const deleteRows: number = await UpLoadFilesModel.destroy({
                 where: {id: id}
-            }).then((rows: number): void => {
-                if (rows > 0) {
-                    if (fs.existsSync(filePath))
-                        fs.unlinkSync(filePath);
-                    res.status(204).send();
-                } else
-                    res.json(createErrorMessage('ext00d'));
             });
-        });
+
+            if (deleteRows > 0) {
+                if (fs.existsSync(filePath))
+                    fs.unlinkSync(filePath);
+                res.status(204).send();
+            } else
+                res.json(createErrorMessage('ext00d'));
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static edit(req: Request, res: Response): void {
+    public static async edit(req: Request, res: Response): Promise<void> {
         const {id} = req.params;
         const {
             name = '',
@@ -156,28 +176,30 @@ export default class File {
         if (id === '')
             return void res.json(createErrorMessage('ext003'));
 
-        UpLoadFilesModel.findOne({
-            where: {id: id}
-        }).then((data) => {
-            if (data) {
-                UpLoadFilesModel.update({
-                    name,
-                    categoryId
-                }, {
-                    where: {id: id}
-                }).then((editRes): void => {
-                    if (editRes)
-                        res.status(204).send();
-                    else
-                        res.json(createErrorMessage('ext00d'));
-                });
-            } else {
-                res.json(createErrorMessage('ext00e'));
-            }
-        });
+        try {
+            const file = await UpLoadFilesModel.findByPk(id);
+
+            if (!file)
+                return void res.json(createErrorMessage('ext00e'));
+
+            const [affectedCount] = await UpLoadFilesModel.update({
+                name,
+                categoryId
+            }, {
+                where: {id: id}
+            });
+
+            if (affectedCount > 0)
+                res.status(204).send();
+            else
+                res.json(createErrorMessage('ext00d'));
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static getFiles(req: Request, res: Response): void {
+    public static async getFiles(req: Request, res: Response): Promise<void> {
         const {
             name = '',
             pageIndex = 0,
@@ -185,39 +207,45 @@ export default class File {
             categoryId = '',
             type = ''
         } = req.query ?? {};
-        const where: IQueryCriteria = {
+        const whereCondition: IQueryCriteria = {
             name: {[Op.like]: `%${name}%`},
             type: {[Op.like]: `%${type}%`}
-        }
+        };
         const [offset, limit] = calculatePagination(Number(pageIndex), Number(pageSize));
 
         if (categoryId !== '')
-            where.categoryId = categoryId;
+            whereCondition.categoryId = categoryId;
 
-        UpLoadFilesModel.findAndCountAll({
-            where: where,
-            offset,
-            limit
-        }).then(({rows, count}): void => {
+        try {
+            const {rows, count} = await UpLoadFilesModel.findAndCountAll({
+                where: whereCondition,
+                offset,
+                limit
+            });
+
             res.json(createSuccessMessage({
                 rows,
                 total: count
             }));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static getFileCategory(_req: Request, res: Response): void {
-        UpLoadFilesCategoryModel.findAll().then((data) => {
+    public static async getFileCategory(_req: Request, res: Response): Promise<void> {
+        try {
+            const category = await UpLoadFilesCategoryModel.findAll();
             const map: any = {};
             const tree: any[] = [];
             const ids: Array<string> = [];
 
-            data.forEach(i => {
+            category.forEach((i: IUpLoadFilesCategoryModel): void => {
                 map[i.dataValues.id] = {...i.dataValues, children: []};
                 ids.push(i.dataValues.id);
             });
 
-            data.forEach(i => {
+            category.forEach((i: IUpLoadFilesCategoryModel): void => {
                 if (i.dataValues.parentId !== null)
                     map[i.dataValues.parentId].children.push(map[i.dataValues.id]);
                 else
@@ -228,48 +256,48 @@ export default class File {
                 tree,
                 ids
             }));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static addFileCategory(req: Request, res: Response): void {
+    public static async addFileCategory(req: Request, res: Response): Promise<void> {
         const {
             name = '',
             parentId = null,
             id = ''
         } = req.body ?? {};
 
-        if (name === '' || name.length > 16)
+        if (name === '' && name.length > 16)
             return void res.json(createErrorMessage('ext00e'));
 
-        if (name !== '' && id !== '') {
-            return void UpLoadFilesCategoryModel.findOne({
-                where: {id: id}
-            }).then(category => {
-                if (category)
-                    UpLoadFilesCategoryModel.update({
-                        name
-                    }, {
-                        where: {id: id}
-                    }).then((): void => {
-                        res.status(204).send();
-                    });
-            });
+        try {
+            if (name !== '' && id !== '') {
+                const category: IUpLoadFilesCategoryModel | null = await UpLoadFilesCategoryModel.findByPk(id);
+
+                if (category) {
+                    await UpLoadFilesCategoryModel.update({name}, {where: {id}});
+
+                    return void res.status(204).send();
+                }
+            }
+            if (name !== '' && parentId !== '') {
+                await UpLoadFilesCategoryModel.create({
+                    id: require('uuid').v4(),
+                    name,
+                    parentId
+                });
+                return void res.status(204).send();
+            } else
+                return void res.json(createErrorMessage('ext00e'));
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
         }
-        if (name !== '' && parentId !== '') {
-            return void UpLoadFilesCategoryModel.create({
-                id: require('uuid').v4(),
-                name,
-                parentId
-            }).then((): void => {
-                res.status(204).send();
-            }).catch((): void => {
-                res.json(createErrorMessage('ext00e'));
-            });
-        } else
-            res.json(createErrorMessage('ext00e'));
     }
 
-    public static deleteFileCategory(req: Request, res: Response): void {
+    public static async deleteFileCategory(req: Request, res: Response): Promise<void> {
         const {
             id = ""
         } = req.params;
@@ -277,25 +305,26 @@ export default class File {
         if (id === "")
             return void res.json(createErrorMessage('ext003'));
 
-        UpLoadFilesCategoryModel.findOne({
-            where: {id}
-        }).then((item): void => {
-            if (item) {
-                UpLoadFilesCategoryModel.findAll({
-                    where: {parentId: id}
-                }).then((Category: any): void => {
-                    if (Category.length > 0)
-                        return void res.json(createErrorMessage('ext00e'));
-                    else {
-                        UpLoadFilesCategoryModel.destroy({
-                            where: {id}
-                        }).then((): void => {
-                            res.status(204).send();
-                        });
-                    }
-                });
-            } else
+        try {
+            const category: IUpLoadFilesCategoryModel | null = await UpLoadFilesCategoryModel.findByPk(id);
+
+            if (!category)
                 return void res.json(createErrorMessage('ext00e'));
-        });
+
+            const rows: IUpLoadFilesCategoryModel[] = await UpLoadFilesCategoryModel.findAll({
+                where: {parentId: id}
+            });
+
+            if (rows.length > 0)
+                return void res.json(createErrorMessage('ext00e'));
+
+            await UpLoadFilesCategoryModel.destroy({
+                where: {id}
+            });
+            res.status(204).send();
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 }
