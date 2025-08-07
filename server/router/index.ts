@@ -34,8 +34,8 @@ _Router
     .post('/clearCatch', (req: Request, res: Response): void => Catch.clearCatch(req, res))
     .get('/player/:id', (req: Request, res: Response): void => void new Player(req, res))
     .post('/createTask', (req: Request, res: Response): void => Task.createTask(req, res))
-    .get('/resources', (req: Request, res: Response): void => Resources.getResources(req, res))
-    .delete('/resources/:id', (req: Request, res: Response): void => Resources.deleteResources(req, res))
+    .get('/resources', (req: Request, res: Response): Promise<void> => Resources.getResources(req, res))
+    .delete('/resources/:id', (req: Request, res: Response): Promise<void> => Resources.deleteResources(req, res))
     .get('/serverInfo', (req: Request, res: Response): void => ServerBase.GetServerBaseInfo(req, res))
     .post('/uploadTemplate', multer.single('template'), (req: Request, res: Response): void => TemplateController.uploadTemplate(req, res))
 ;
