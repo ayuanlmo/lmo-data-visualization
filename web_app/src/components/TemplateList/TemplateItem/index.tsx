@@ -31,6 +31,7 @@ export interface ITemplate {
     id: string;
     name: string;
     type: 0 | 1;
+    dsp: 0 | 1;
 }
 
 export interface ITemplateItemProps {
@@ -107,8 +108,8 @@ const TemplateItem = (props: ITemplateItemProps): React.JSX.Element => {
         <Grid.Col span={colSpan}>
             <YExtendTemplate show={editModalVisible}>
                 <Form
+                    labelPlacement="top"
                     initialValues={editFormValue}
-                    labelWidth={'6rem'}
                     rules={{
                         name: [{required: true, type: "string", message: t('pleaseInput')}],
                         description: [{required: true, type: "string", message: t('pleaseInput')}]
