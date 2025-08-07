@@ -1,12 +1,13 @@
 import {Op} from "sequelize";
 import {Request, Response} from "express";
-import {TemplateModel} from "../dataBase";
+import {ITemplateModel, TemplateModel} from "../dataBase";
 import Utils from "../../utils";
 import initDefaultData, {checkArrayIncludes, templateLocalFiles} from "../dataBase/init";
 import path from "path";
 import {copyFileSync, existsSync, mkdirSync, readdirSync, ReadStream, WriteStream} from "node:fs";
 import fs from "fs";
 import AdmZip from "adm-zip";
+import Logger from "../../lib/Log";
 import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
 import deleteFolderRecursive = Utils.deleteFolderRecursive;
@@ -14,7 +15,7 @@ import isZipFile = Utils.isZipFile;
 import calculatePagination = Utils.calculatePagination;
 
 export default class TemplateController {
-    public static getTemplates(req: Request, res: Response): void {
+    public static async getTemplates(req: Request, res: Response): Promise<void> {
         const {
             name = '',
             pageIndex = 0,
@@ -29,46 +30,55 @@ export default class TemplateController {
         if (type !== "")
             whereCondition.type = type;
 
-        TemplateModel.findAndCountAll({
-            where: {
-                ...whereCondition
-            },
-            offset,
-            limit
-        }).then(({rows, count}): void => {
+        try {
+            const {rows, count} = await TemplateModel.findAndCountAll({
+                where: whereCondition,
+                offset,
+                limit,
+                order: ['createTime']
+            });
             res.json(createSuccessMessage({
                 rows,
                 total: count
             }));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00e'));
+        }
     }
 
-    public static getTemplate(req: Request, res: Response): void {
+    public static async getTemplate(req: Request, res: Response): Promise<void> {
         const {id = ''} = req.params;
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
+            if (!template)
+                return void res.json(createErrorMessage('ext006'));
+
             res.json(createSuccessMessage(template ?? {}));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static copyTemplate(req: Request, res: Response): void {
+    public static async copyTemplate(req: Request, res: Response): Promise<void> {
         const {
             id = '',
             name = '',
             description = ''
         } = req.body;
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
+        try {
+            if (id === '')
+                return void res.json(createErrorMessage('ext003'));
+
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
             if (!template)
                 return void res.json(createErrorMessage('ext006'));
+
             const {dataValues}: any = template;
             const originalTemplate: string = path.resolve(`./_data/static/public/${template?.dataValues.path.replace('/static', '').replace('/index.html', '')}`);
             const templatePathName: string = require('uuid').v4();
@@ -100,64 +110,59 @@ export default class TemplateController {
                 type: '0'
             };
 
-            TemplateModel.create(data).then((): void => {
-                res.status(204).send();
-            }).catch((): void => {
-                res.json(createErrorMessage('ext00d'));
-            });
-        });
+            await TemplateModel.create(data);
+            res.status(204).send();
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static editTemplate(req: Request, res: Response): void {
-
+    public static async editTemplate(req: Request, res: Response): Promise<void> {
         const {id = '', name = '', description = ''} = req.body ?? {};
 
         if (id === '')
             return void res.json(createErrorMessage('ext005'));
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
             if (!template)
                 return void res.json(createErrorMessage('ext006'));
-
-            const dataValues = template.dataValues;
-
-            if (dataValues.type === 1)
+            if (template.type === 1)
                 return void res.json(createErrorMessage('ext007'));
 
-            TemplateModel.update({
-                name: name === '' ? dataValues.name : name,
-                description: description === '' ? dataValues.description : description,
-            }, {
-                where: {
-                    id: {[Op.like]: `${id}`}
-                }
-            }).then(([cont]): void => {
-                if (cont === 1)
-                    res.status(204).send();
-                else
-                    res.json(createErrorMessage('ext00d1'));
-            }).catch((): void => {
-                res.json(createErrorMessage('ext00d'));
+            const updateData: Partial<typeof template> = {};
+
+            if (name !== undefined && name !== '')
+                updateData.name = name;
+            if (description !== undefined && description !== '')
+                updateData.description = description;
+
+            const [affectedCount] = await TemplateModel.update(updateData, {
+                where: {id}
             });
-        });
+
+            if (affectedCount === 1)
+                return void res.status(204).send();
+            else
+                return void res.json(createErrorMessage('ext00d1'));
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static deleteTemplate(req: Request, res: Response): void {
+    public static async deleteTemplate(req: Request, res: Response): Promise<void> {
         const {id = ''} = req.params ?? {};
 
         if (id === '')
             return void res.json(createErrorMessage('ext005'));
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
-            if (template === null)
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
+            if (!template)
                 return void res.json(createErrorMessage('ext005'));
 
             const {dataValues}: any = template;
@@ -167,15 +172,13 @@ export default class TemplateController {
 
             const originalTemplate: string = path.resolve(`./_data/static/public/${dataValues.path.replace('/static', '').replace('/index.html', '')}`);
 
-            TemplateModel.destroy({
-                where: {id: id}
-            }).then((): void => {
-                deleteFolderRecursive(originalTemplate);
-                res.status(204).send();
-            }).catch(() => {
-                res.json(createErrorMessage('ext00d'));
-            });
-        });
+            await TemplateModel.destroy({where: {id: id}});
+            deleteFolderRecursive(originalTemplate);
+            res.status(204).send();
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
     public static refreshTemplate(_req: Request, res: Response): void {
@@ -197,9 +200,8 @@ export default class TemplateController {
         const fw: WriteStream = fs.createWriteStream(filePath);
 
         fr.pipe(fw);
-        fw.on('finish', () => {
+        fw.on('finish', (): void => {
             fs.unlink(file.path, (err: NodeJS.ErrnoException | null): void => {
-                console.log(file.destination + fileName);
                 if (err)
                     return void res.json(createErrorMessage('ext00e'));
                 else {
