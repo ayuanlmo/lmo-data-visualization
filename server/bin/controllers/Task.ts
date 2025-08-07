@@ -177,7 +177,7 @@ export default class Task {
                         id: dbId,
                         name: customTemplateName,
                         description: customTemplateDesc,
-                        path: `${templateStaticPath}/${existsSync(htmlPath) ? 'index.html' : existsSync(htmPath) ? 'index.htm' : '/'}`,
+                        path: `${templateStaticPath}${existsSync(htmlPath) ? '/index.html' : existsSync(htmPath) ? '/index.htm' : '/'}`,
                         createTime: new Date().getTime(),
                         cover: templateStaticPath + '/cover.png',
                         gifCover: templateStaticPath + '/cover.gif',
