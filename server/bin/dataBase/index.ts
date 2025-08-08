@@ -67,18 +67,54 @@ const DANGEROUS_SQL_SERVER_ACCOUNT: string = 'sa' as const;
 if (dbType === 'mssql' && dbUserName?.trim().toLowerCase() === DANGEROUS_SQL_SERVER_ACCOUNT && !AppConfig.__DEV_SERVER)
     throw new Error('Please do not use "sa" as your database username');
 
-const DB: Sequelize = dbType === 'mssql' ?
-    new Sequelize(dbName, dbUserName, dbPassWord, {
-        host: dbHost,
-        dialect: 'mssql',
-        dialectModule: require('tedious'),
-        logging: AppConfig.__DEV_SERVER
-    }) :
-    new Sequelize({
+interface DatabaseConfig {
+    dialect: 'mssql' | 'sqlite';
+    host?: string;
+    username?: string;
+    password?: string;
+    database?: string;
+    storage?: string;
+    dialectModule?: any;
+    logging?: boolean | ((sql: string) => void);
+    pool?: {
+        max: number;
+        min: number;
+        acquire: number;
+        idle: number;
+    };
+}
+
+const buildDatabaseConfig = (): DatabaseConfig => {
+    const commonConfig = {
+        logging: AppConfig.__DEV_SERVER,
+    };
+    const pool = {
+        max: 5,
+        min: 2,
+        acquire: 30000,
+        idle: 30000
+    };
+
+    if (dbType === 'mssql')
+        return {
+            ...commonConfig,
+            dialect: 'mssql',
+            dialectModule: require('tedious'),
+            host: dbHost,
+            username: dbUserName,
+            password: dbPassWord,
+            database: dbName,
+            pool
+        };
+    return {
+        ...commonConfig,
         dialect: 'sqlite',
         storage: path.resolve('./_data/db/dv_data.ting'),
-        logging: AppConfig.__DEV_SERVER
-    });
+        pool
+    };
+};
+
+const DB: Sequelize = new Sequelize(buildDatabaseConfig());
 
 const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('lmo_Templates', {
     id: {
