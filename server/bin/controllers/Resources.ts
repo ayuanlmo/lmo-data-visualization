@@ -74,11 +74,10 @@ export default class Resources {
                     });
                     fs.rmdirSync(templatePath);
                 }
-
-                await ResourcesModel.destroy({where: {id}});
-
-                res.status(204).send();
             }
+            await ResourcesModel.destroy({where: {id}});
+
+            res.status(204).send();
         } catch (e) {
             Logger.error(e);
             res.json(createErrorMessage('ext00d'));
