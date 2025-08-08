@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync} from "node:fs";
 import path from "path";
 import Utils from "../../utils";
-import {ResourcesModel, TemplateModel} from "../dataBase";
+import {ITemplateModel, ResourcesModel, TemplateModel} from "../dataBase";
 import AppConfig from "../../conf/AppConfig";
 import {WebSocketServer} from "../WebSocketServer";
 import TaskScheduler from "../TaskScheduler";
@@ -10,6 +10,7 @@ import {get as httpGet, IncomingMessage} from "http";
 import MemoryCache from "../../lib/MemoryCache";
 import sharp from 'sharp';
 import fs from "fs";
+import Logger from "../../lib/Log";
 import createErrorMessage = Utils.createErrorMessage;
 import createSuccessMessage = Utils.createSuccessMessage;
 
@@ -38,7 +39,7 @@ export default class Task {
      * 但这种只适用于非full模式。所以在非full模式下使用生成audio标签来完成音频的插入。而在full模式下，需要在合成服务单独处理音频。
      *
      * **/
-    public static createTask(req: Request, res: Response): void {
+    public static async createTask(req: Request, res: Response): Promise<void> {
         const {
             currentTemplateConfig = {}, // 当前模板配置
             saveAsCustomTemplate = false, // 保存为自定义模板
@@ -62,11 +63,9 @@ export default class Task {
             return void res.json(createErrorMessage('ext009'));
         }
 
-        TemplateModel.findOne({
-            where: {
-                id
-            }
-        }).then(async (template) => {
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
             if (!template)
                 return void res.json(createErrorMessage('ext004'));
 
@@ -76,6 +75,9 @@ export default class Task {
             const dirPath: string = path.resolve(`./_data/static/public/${pathName}/${templatePathName}`);
             const templateStaticPath: string = `/static/${pathName}/${templatePathName}`;
             const dbId: string = require('uuid').v4();
+            const serverUrl: URL = new URL(`${process.env.SERVER_HOST ?? 'localhost'}:${AppConfig.__SERVER_PORT}`);
+            console.log('serverUrl', serverUrl.toString());
+            console.log('serverUrl', serverUrl);
             const serverHttpUrl: string = `http://${process.env.SERVER_HOST ?? 'localhost'}:${AppConfig.__SERVER_PORT}`;
             const htmlPath: string = path.resolve(dirPath, 'index.html');
             const htmPath: string = path.resolve(dirPath, 'index.htm');
@@ -113,7 +115,7 @@ export default class Task {
                 // 保存为自定义模板时为模板增加封面图
                 if (saveAsCustomTemplate) {
                     if (!cover.includes(';base64,'))
-                        return res.json(createErrorMessage('ext0010'));
+                        return void res.json(createErrorMessage('ext0010'));
 
                     const base64Cover = cover.split(';base64,').pop();
                     const base64Buffer = Buffer.from(base64Cover, 'base64');
@@ -185,11 +187,13 @@ export default class Task {
                     };
                     fs.writeFileSync(path.resolve(`${dirPath}/.initialized.t.bin`), Buffer.from(JSON.stringify(dbData)));
 
-                    TemplateModel.create(dbData).then(() => {
+                    try {
+                        await TemplateModel.create(dbData);
                         res.status(204).send();
-                    }).catch(() => {
+                    } catch (e) {
+                        Logger.error(e);
                         res.json(createErrorMessage('ext00d'));
-                    });
+                    }
                 } else {
                     // 生成合成任务，并通知合成服务器
                     try {
@@ -240,13 +244,17 @@ export default class Task {
                             }));
                         })();
                     } catch (e) {
+                        Logger.error(e);
                         res.json(createErrorMessage('ext00d'));
                     }
                 }
 
             } else
                 res.json(createErrorMessage('ext00e'));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
     private static getTemplateHTMLString(): Promise<string> {
