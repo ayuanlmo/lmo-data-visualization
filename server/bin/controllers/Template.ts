@@ -1,16 +1,21 @@
 import {Op} from "sequelize";
 import {Request, Response} from "express";
-import {TemplateModel} from "../dataBase";
+import {ITemplateModel, TemplateModel} from "../dataBase";
 import Utils from "../../utils";
-import initDefaultData from "../dataBase/init";
+import initDefaultData, {checkArrayIncludes, templateLocalFiles} from "../dataBase/init";
 import path from "path";
-import {copyFileSync, existsSync, mkdirSync, readdirSync} from "node:fs";
+import {copyFileSync, existsSync, mkdirSync, readdirSync, ReadStream, WriteStream} from "node:fs";
+import fs from "fs";
+import AdmZip from "adm-zip";
+import Logger from "../../lib/Log";
 import createSuccessMessage = Utils.createSuccessMessage;
 import createErrorMessage = Utils.createErrorMessage;
 import deleteFolderRecursive = Utils.deleteFolderRecursive;
+import isZipFile = Utils.isZipFile;
+import calculatePagination = Utils.calculatePagination;
 
 export default class TemplateController {
-    public static getTemplates(req: Request, res: Response): void {
+    public static async getTemplates(req: Request, res: Response): Promise<void> {
         const {
             name = '',
             pageIndex = 0,
@@ -20,48 +25,60 @@ export default class TemplateController {
         const whereCondition: any = {
             name: {[Op.like]: `%${name}%`}
         };
+        const [offset, limit] = calculatePagination(Number(pageIndex), Number(pageSize));
 
         if (type !== "")
             whereCondition.type = type;
 
-        TemplateModel.findAndCountAll({
-            where: {
-                ...whereCondition
-            },
-            offset: (Number(pageIndex) - 1) * Number(pageIndex),
-            limit: Number(pageSize)
-        }).then(({rows, count}): void => {
+        try {
+            const {rows, count} = await TemplateModel.findAndCountAll({
+                where: whereCondition,
+                offset,
+                limit,
+                order: ['createTime']
+            });
             res.json(createSuccessMessage({
                 rows,
                 total: count
             }));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00e'));
+        }
     }
 
-    public static getTemplate(req: Request, res: Response): void {
+    public static async getTemplate(req: Request, res: Response): Promise<void> {
         const {id = ''} = req.params;
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
+            if (!template)
+                return void res.json(createErrorMessage('ext006'));
+
             res.json(createSuccessMessage(template ?? {}));
-        });
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static copyTemplate(req: Request, res: Response): void {
+    public static async copyTemplate(req: Request, res: Response): Promise<void> {
         const {
             id = '',
             name = '',
             description = ''
         } = req.body;
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
+        try {
+            if (id === '')
+                return void res.json(createErrorMessage('ext003'));
+
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
+            if (!template)
+                return void res.json(createErrorMessage('ext006'));
+
             const {dataValues}: any = template;
             const originalTemplate: string = path.resolve(`./_data/static/public/${template?.dataValues.path.replace('/static', '').replace('/index.html', '')}`);
             const templatePathName: string = require('uuid').v4();
@@ -93,64 +110,59 @@ export default class TemplateController {
                 type: '0'
             };
 
-            TemplateModel.create(data).then((): void => {
-                res.status(204).send();
-            }).catch((): void => {
-                res.json(createErrorMessage('ext00d'));
-            });
-        });
+            await TemplateModel.create(data);
+            res.status(204).send();
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static editTemplate(req: Request, res: Response): void {
-
+    public static async editTemplate(req: Request, res: Response): Promise<void> {
         const {id = '', name = '', description = ''} = req.body ?? {};
 
         if (id === '')
             return void res.json(createErrorMessage('ext005'));
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
             if (!template)
                 return void res.json(createErrorMessage('ext006'));
-
-            const dataValues = template.dataValues;
-
-            if (dataValues.type === 1)
+            if (template.type === 1)
                 return void res.json(createErrorMessage('ext007'));
 
-            TemplateModel.update({
-                name: name === '' ? dataValues.name : name,
-                description: description === '' ? dataValues.description : description,
-            }, {
-                where: {
-                    id: {[Op.like]: `${id}`}
-                }
-            }).then(([cont]): void => {
-                if (cont === 1)
-                    res.status(204).send();
-                else
-                    res.json(createErrorMessage('ext00d1'));
-            }).catch((): void => {
-                res.json(createErrorMessage('ext00d'));
+            const updateData: Partial<typeof template> = {};
+
+            if (name !== undefined && name !== '')
+                updateData.name = name;
+            if (description !== undefined && description !== '')
+                updateData.description = description;
+
+            const [affectedCount] = await TemplateModel.update(updateData, {
+                where: {id}
             });
-        });
+
+            if (affectedCount === 1)
+                return void res.status(204).send();
+            else
+                return void res.json(createErrorMessage('ext00d1'));
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
-    public static deleteTemplate(req: Request, res: Response): void {
+    public static async deleteTemplate(req: Request, res: Response): Promise<void> {
         const {id = ''} = req.params ?? {};
 
         if (id === '')
             return void res.json(createErrorMessage('ext005'));
 
-        TemplateModel.findOne({
-            where: {
-                id: {[Op.like]: `${id}`}
-            }
-        }).then((template): void => {
-            if (template === null)
+        try {
+            const template: ITemplateModel | null = await TemplateModel.findByPk(id);
+
+            if (!template)
                 return void res.json(createErrorMessage('ext005'));
 
             const {dataValues}: any = template;
@@ -160,20 +172,100 @@ export default class TemplateController {
 
             const originalTemplate: string = path.resolve(`./_data/static/public/${dataValues.path.replace('/static', '').replace('/index.html', '')}`);
 
-            TemplateModel.destroy({
-                where: {id: id}
-            }).then((): void => {
-                deleteFolderRecursive(originalTemplate);
-                res.status(204).send();
-            }).catch(() => {
-                res.json(createErrorMessage('ext00d'));
-            });
-        });
+            await TemplateModel.destroy({where: {id: id}});
+            deleteFolderRecursive(originalTemplate);
+            res.status(204).send();
+        } catch (e) {
+            Logger.error(e);
+            res.json(createErrorMessage('ext00d'));
+        }
     }
 
     public static refreshTemplate(_req: Request, res: Response): void {
         initDefaultData().then((): void => {
             res.status(204).send();
+        });
+    }
+
+    public static uploadTemplate(req: Request, res: Response): void {
+        const file: Express.Multer.File | undefined = req.file;
+
+        if (!file)
+            return void res.json(createErrorMessage('ext001'));
+
+        const fileExtension: string = path.extname(file.originalname);
+        const fr: ReadStream = fs.createReadStream(file.path);
+        const fileName: string = '/' + file.filename + `${fileExtension}`;
+        const filePath: string = file.destination + fileName;
+        const fw: WriteStream = fs.createWriteStream(filePath);
+
+        fr.pipe(fw);
+        fw.on('finish', (): void => {
+            fs.unlink(file.path, (err: NodeJS.ErrnoException | null): void => {
+                if (err)
+                    return void res.json(createErrorMessage('ext00e'));
+                else {
+                    try {
+                        const originPath: string = path.join(__dirname, '../../_data/static/public/templates/');
+                        const fileFolderName: string = require('uuid').v4();
+                        const templatePathName: string = path.join(originPath, fileFolderName);
+
+                        fs.mkdirSync(templatePathName);
+
+                        if (fs.existsSync(filePath)) {
+                            if (!isZipFile(filePath)) {
+                                deleteFolderRecursive(templatePathName);
+                                return void res.json(createErrorMessage('ext0012'));
+                            }
+                            const zip: AdmZip = new AdmZip(filePath);
+                            const zipEntries: string[] = [];
+
+                            zip.getEntries().forEach((i: AdmZip.IZipEntry) => {
+                                if (!i.isDirectory)
+                                    zipEntries.push(i.entryName);
+                            });
+                            zip.extractAllToAsync(templatePathName, true, true, (error) => {
+                                if (error)
+                                    res.json(createErrorMessage('ext00e'));
+                                else {
+                                    fs.unlinkSync(filePath);
+
+                                    if (checkArrayIncludes(zipEntries, templateLocalFiles)) {
+                                        const templateConfig = JSON.parse(fs.readFileSync(path.resolve(templatePathName + `/config.json`), 'utf-8'));
+                                        const isHTMLTemplate: boolean = fs.existsSync(path.resolve(templatePathName, 'index.html'));
+                                        const isHTTemplate: boolean = fs.existsSync(path.resolve(templatePathName, 'index.htm'));
+                                        const templateData = {
+                                            id: require('uuid').v4(),
+                                            ...templateConfig,
+                                            cover: `/static/${fileFolderName}/cover.png`,
+                                            gifCover: `/static/${fileFolderName}/cover.gif`,
+                                            path: `/static/${fileFolderName}${isHTMLTemplate ? '/index.html' : isHTTemplate ? '/index.htm' : '/'}`,
+                                            createTime: new Date().getTime(),
+                                            index: 0,
+                                            dsp: 1
+                                        };
+
+                                        TemplateModel.create(templateData).then((): void => {
+                                            res.json(createSuccessMessage({
+                                                ...templateData
+                                            }));
+                                        });
+                                    } else {
+                                        deleteFolderRecursive(templatePathName);
+                                        res.json(createErrorMessage('ext0011'));
+                                    }
+                                }
+                            });
+                        } else {
+                            deleteFolderRecursive(templatePathName);
+                            res.json(createErrorMessage('ext00e'));
+                        }
+                    } catch (e) {
+                        console.log(e);
+                        res.json(createErrorMessage('ext00e'));
+                    }
+                }
+            });
         });
     }
 }

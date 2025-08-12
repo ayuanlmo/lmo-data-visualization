@@ -48,10 +48,10 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
 
     public addAnimationEventListener(type: TAnimationState, listener: Function) {
         const {config} = this.conf;
-        const chatAnimationIsControllable: boolean =
-            (config.animation && config.animation.chatAnimationIsControllable) ?? false;
+        const chartAnimationIsControllable: boolean =
+            (config.animation && config.animation.chartAnimationIsControllable) ?? false;
 
-        if (!this.isSynthesisMode && chatAnimationIsControllable)
+        if (!this.isSynthesisMode && chartAnimationIsControllable)
             this.animationEventEmitter.on(type, listener);
     }
 
@@ -294,7 +294,7 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
         const activeElements: (HTMLElement | null)[] = elementIds.map(id => document.getElementById(id)).filter(el => el !== null);
 
         if (!targetEl) return;
-        
+
         activeElements.forEach(el => {
             if (el)
                 el.classList.remove('active', 'square-container');

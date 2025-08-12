@@ -4,6 +4,7 @@ import initDefaultData from "./init";
 import {Process} from "../Process";
 import AppConfig from "../../conf/AppConfig";
 import path from "path";
+import {patchSequelize} from "./patchSequelize";
 
 export interface ITemplateModel extends BaseModel {
     id: string;
@@ -48,7 +49,7 @@ export interface IUpLoadFilesModel extends BaseModel {
     hash: string;
 }
 
-interface IUpLoadFilesCategoryModel extends BaseModel {
+export interface IUpLoadFilesCategoryModel extends BaseModel {
     id: string;
     name: string;
     parentId: string;
@@ -59,24 +60,61 @@ const dbName: string = process.env.DATA_BASE_NAME ?? '';
 const dbUserName: string = process.env.DATA_BASE_USER_NAME ?? '';
 const dbPassWord: string = process.env.DATA_BASE_PASSWORD ?? '';
 const dbHost: string = process.env.DATA_BASE_HOST ?? '';
+const usePatch: boolean = process.env.USE_PATCH_CAPTURE_SQL_ERRORS === '1';
 
 const DANGEROUS_SQL_SERVER_ACCOUNT: string = 'sa' as const;
 
 if (dbType === 'mssql' && dbUserName?.trim().toLowerCase() === DANGEROUS_SQL_SERVER_ACCOUNT && !AppConfig.__DEV_SERVER)
     throw new Error('Please do not use "sa" as your database username');
 
-const DB: Sequelize = dbType === 'mssql' ?
-    new Sequelize(dbName, dbUserName, dbPassWord, {
-        host: dbHost,
-        dialect: 'mssql',
-        dialectModule: require('tedious'),
-        logging: AppConfig.__DEV_SERVER
-    }) :
-    new Sequelize({
+interface DatabaseConfig {
+    dialect: 'mssql' | 'sqlite';
+    host?: string;
+    username?: string;
+    password?: string;
+    database?: string;
+    storage?: string;
+    dialectModule?: any;
+    logging?: boolean | ((sql: string) => void);
+    pool?: {
+        max: number;
+        min: number;
+        acquire: number;
+        idle: number;
+    };
+}
+
+const buildDatabaseConfig = (): DatabaseConfig => {
+    const commonConfig = {
+        logging: AppConfig.__DEV_SERVER,
+    };
+    const pool = {
+        max: 5,
+        min: 2,
+        acquire: 30000,
+        idle: 30000
+    };
+
+    if (dbType === 'mssql')
+        return {
+            ...commonConfig,
+            dialect: 'mssql',
+            dialectModule: require('tedious'),
+            host: dbHost,
+            username: dbUserName,
+            password: dbPassWord,
+            database: dbName,
+            pool
+        };
+    return {
+        ...commonConfig,
         dialect: 'sqlite',
         storage: path.resolve('./_data/db/dv_data.ting'),
-        logging: AppConfig.__DEV_SERVER
-    });
+        pool
+    };
+};
+
+const DB: Sequelize = new Sequelize(buildDatabaseConfig());
 
 const TemplateModel: ModelCtor<ITemplateModel> = DB.define<ITemplateModel>('lmo_Templates', {
     id: {
@@ -131,7 +169,7 @@ const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('l
     videoCover: DataTypes.STRING,
     clarity: DataTypes.STRING,
     status: DataTypes.STRING,
-    taskConfig: DataTypes.STRING
+    taskConfig: DataTypes.STRING('max')
 }, {
     timestamps: false
 });
@@ -195,6 +233,9 @@ export const close = async (): Promise<void> => {
         process.exit(0);
     }
 })();
+
+if (usePatch)
+    patchSequelize(DB);
 
 export default DB;
 export {TemplateModel};

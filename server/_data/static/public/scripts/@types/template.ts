@@ -80,7 +80,7 @@ export interface IConfig {
         arrangement: string;
     };
     animation?: {
-        chatAnimationIsControllable: boolean;
+        chartAnimationIsControllable: boolean;
     };
     video: {
         duration: number;

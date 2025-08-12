@@ -55,6 +55,10 @@
 
     .progress-bar {
       background: $__primary-bg-color-dark;
+
+      .progress-bar-time {
+        color: $__primary-sub-bg-color-light;
+      }
     }
 
     .design-configs {

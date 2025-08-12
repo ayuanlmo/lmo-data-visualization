@@ -27,7 +27,7 @@ const defaultCurrentTemplateConfigData = {
             volume: 100
         },
         animation: {
-            chatAnimationIsControllable: false
+            chartAnimationIsControllable: false
         }
     },
     otherConfig: {

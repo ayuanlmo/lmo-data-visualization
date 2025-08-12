@@ -49,9 +49,19 @@ const TemplateOtherConfig = (): React.JSX.Element => {
 
     useEffect((): void => {
         if (!currentTemplateOtherConfig) return;
-        if (Array.isArray(currentTemplateOtherConfig.configs) || Array.isArray(currentTemplateOtherConfig?.group))
-            setValues(currentTemplateOtherConfig.values);
-    }, []);
+
+        const initialValues: { [key: string]: number | string | boolean } = {};
+        const allConfigs: IConfigTypes[] = [
+            ...currentTemplateOtherConfig.configs || [],
+            ...currentTemplateOtherConfig.group?.flatMap((g: TTemplateOtherConfigGroupItem) => g.configs) || []
+        ];
+
+        allConfigs.forEach((config: IConfigTypes): void => {
+            initialValues[config.key] = currentTemplateOtherConfig.values?.[config.key] ?? config.value;
+        });
+
+        setValues(initialValues);
+    }, [currentTemplateOtherConfig]);
 
     useEffect((): void => {
         dispatch(setCurrentTemplateOtherConfigValues({
@@ -64,6 +74,8 @@ const TemplateOtherConfig = (): React.JSX.Element => {
     }, [values]);
 
     const getTemplate = (item: IConfigTypes, key: number) => {
+        const currentValue = currentTemplateOtherConfig.values?.[item.key] ?? item.value;
+
         return (
             <Fragment key={key}>
                 <Grid.Col span={colspan}>
@@ -73,7 +85,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     <YExtendTemplate show={item.type === 'switch'}>
                         <Switch
                             size={'lg'}
-                            defaultChecked={item.value as boolean}
+                            defaultChecked={currentValue as boolean}
                             onChange={(e: boolean): void => {
                                 setValue(item.key, e);
                             }}
@@ -82,7 +94,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     <YExtendTemplate show={item.type === 'select'}>
                         <Select
                             clearable={false}
-                            defaultValue={item.value as string}
+                            defaultValue={currentValue as string}
                             onChange={(e: React.ReactText | string): void => {
                                 setValue(item.key, e);
                             }}
@@ -97,7 +109,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     <YExtendTemplate show={item.type === 'input'}>
                         <Input
                             trimValueOnBlur={true}
-                            defaultValue={item.value as string}
+                            defaultValue={currentValue as string}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
                                 setValue(item.key, e.target.value as string);
                             }}
@@ -105,7 +117,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     </YExtendTemplate>
                     <YExtendTemplate show={item.type === 'input-number'}>
                         <NumberInput
-                            defaultValue={item.value as number}
+                            defaultValue={currentValue as number}
                             onChange={(e: number | null): void => {
                                 setValue(item.key, e ?? 0 as number);
                             }}
@@ -115,7 +127,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                         <Radio.Group
                             type={"button"}
                             autoWidth={true}
-                            defaultValue={item.value as string}
+                            defaultValue={currentValue as string}
                             data={
                                 Array.isArray(item.options) ?
                                     item.options.map(i => {
@@ -132,7 +144,7 @@ const TemplateOtherConfig = (): React.JSX.Element => {
                     </YExtendTemplate>
                     <YExtendTemplate show={item.type === 'color'}>
                         <ColorPicker
-                            value={item.value as string}
+                            value={currentValue as string}
                             onChange={(e: string): void => {
                                 setValue(item.key, e);
                             }}

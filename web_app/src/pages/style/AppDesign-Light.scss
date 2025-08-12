@@ -48,6 +48,10 @@
     .progress-bar {
       background: $__primary-sub-bg-color-light;
       box-shadow: none;
+
+      .progress-bar-time {
+        color: #3D3D3D;
+      }
     }
 
     .design-configs {

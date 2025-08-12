@@ -15,7 +15,10 @@ const AppConfig = {
     __DEV_SERVER: process.env.NODE_ENV !== 'prod',
     __LIVE_SERVER: process.env.NODE_ENV === 'live-server',
     __PROTECTED_STATIC_FILES: ['.ts', '.bin', 'config.json', 'package.json', 'tsconfig.json', '.pug'],
-    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory', 'createCustomTemplate']
+    __PROTECTED_ROUTERS: ['uploadFile', 'template/copy', 'createTask', 'uploadFileCategory', 'createCustomTemplate', 'uploadTemplate'],
+    __APP_LOG_MAX_FILE: 14,
+    __APP_LOG_LEVEL: 'warn',
+    __APP_LOG_FILE_MAX_SIZE: 20 * 1024 * 1024,
 } as const;
 
 export default AppConfig;

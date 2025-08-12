@@ -45,6 +45,7 @@ import Cli from "./Cli";
     }, 1000 * 60);
 
     mkdir(path.resolve('./_data/static'));
+    mkdir(path.resolve('./_data/log'));
     mkdir(path.resolve('./_data/static/public/previewTemplate'));
     mkdir(path.resolve('./_data/static/public/templates'));
     mkdir(path.resolve('./_data/static/public/scripts'));
