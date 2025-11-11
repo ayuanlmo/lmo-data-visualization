@@ -1,4 +1,3 @@
-import errorMessage from "../const/ErrorMessage";
 import {existsSync, readdirSync, rmdirSync, statSync, unlinkSync} from "node:fs";
 import path from "path";
 import fs from "fs";
@@ -6,16 +5,19 @@ import fs from "fs";
 export interface IResponseMessage {
     code: number;
     message: string;
-    errorCode?: string;
     success: boolean;
     data: any;
     _t: number;
     _app: string;
 }
 
-export type ErrorMessage = typeof errorMessage;
+export type TErrorCode = 500 | 404 | 401;
 
-export type ErrorCode = 500 | 404 | 401;
+export interface IErrorMessage {
+    code?: TErrorCode;
+    message?: string;
+    data?: any;
+}
 
 namespace Utils {
     export const createSuccessMessage = (data = {}, msg: string = 'success', code = 200): IResponseMessage => {
@@ -29,12 +31,13 @@ namespace Utils {
         }
     }
 
-    export const createErrorMessage = <T extends keyof ErrorMessage>(errCode: T, code: ErrorCode = 500, data: object | Array<any> = {}): IResponseMessage => {
+    export const createErrorMessage = (options: IErrorMessage): IResponseMessage => {
+        const {code = 500, message = '', data = {}} = options;
+
         return {
-            code: code,
-            message: errorMessage[errCode].message,
-            errorCode: errCode,
-            data: data,
+            code,
+            message,
+            data,
             success: false,
             _t: new Date().getTime(),
             _app: 'lmo_dv_sa_t'
