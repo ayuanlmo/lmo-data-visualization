@@ -173,6 +173,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.25.0.tgz#9fdc9237504d797b6e7b8f66e78ea7f570d256ad"
   integrity sha512-CzdIU9jdP0dg7HdyB+bHvDJGagUv+qtzZt5rYCWwW6tITNqV9odjp6Qu41gkG0ca5UfdDUWrKkiAnHHdGRnOrA==
 
+"@babel/runtime@^7.27.6":
+  version "7.28.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.4.tgz#a70226016fabe25c5783b2f22d3e1c9bc5ca3326"
+  integrity sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==
+
 "@babel/types@^7.6.1", "@babel/types@^7.9.6":
   version "7.25.0"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.25.0.tgz#e6e3656c581f28da8452ed4f69e38008ec0ba41b"
@@ -2489,6 +2494,18 @@ humanize-ms@^1.2.1:
   integrity sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==
   dependencies:
     ms "^2.0.0"
+
+i18next-http-middleware@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/i18next-http-middleware/-/i18next-http-middleware-3.8.2.tgz#6210a03ba54137d94d8da70d68777e982102efa5"
+  integrity sha512-Z0i85W9dlX4dbceQD3EX2vj/PChebMjDCSLxE7ZJZ5Fgm8LPQmBmB9iJeE7oX3LH7Zzdu/a/28LCHOVHqaeW0Q==
+
+i18next@^25.6.2:
+  version "25.6.2"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-25.6.2.tgz#d6de1a4be58242c7f0f1436ab2fa66c8f87b2e29"
+  integrity sha512-0GawNyVUw0yvJoOEBq1VHMAsqdM23XrHkMtl2gKEjviJQSLVXsrPqsoYAxBEugW5AB96I2pZkwRxyl8WZVoWdw==
+  dependencies:
+    "@babel/runtime" "^7.27.6"
 
 iconv-lite@0.4.24:
   version "0.4.24"
