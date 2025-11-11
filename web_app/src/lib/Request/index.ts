@@ -2,11 +2,18 @@ import axios from 'axios';
 import Nprogress from "../Nprogress";
 import Notification from "../Notification";
 import i18n from "../../i18n";
+import MyStorage from "../Storage";
 
 axios.defaults.baseURL = '/api/api';
 
 axios.interceptors.request.use(conf => {
     Nprogress.start();
+
+    conf.params = {
+        ...conf.params,
+        lang: MyStorage.get('lang') || 'zh-CN'
+    };
+    
     return conf;
 });
 axios.interceptors.response.use((response): Promise<any> => {
