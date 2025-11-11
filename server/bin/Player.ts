@@ -21,12 +21,16 @@ export default class Player {
             }
         }).then(data => {
             if (!data)
-                return res.json(createErrorMessage('ext004'));
+                return res.json(createErrorMessage({
+                    message: req.t('errors.fileNotFoundById')
+                }));
 
             const {path, type} = data.dataValues;
             const filePath: string = resolve(__dirname, '../', '_data/static/public/uploads/' + path.split('/static/uploads')[1]);
             if (!fs.existsSync(filePath))
-                return void res.json(createErrorMessage('ext001'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.fileMissing')
+                }));
             const size: number = fs.statSync(filePath).size;
             const p: Array<string> = (req.headers.range ?? '').replace(/bytes=/, '').split('-');
             const start: number = parseInt(p[0], 10);

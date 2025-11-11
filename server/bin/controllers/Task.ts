@@ -52,7 +52,9 @@ export default class Task {
         } = req.body;
 
         if (id === '')
-            return void res.json(createErrorMessage('ext003'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         if (!MemoryCache.get('SYNTHESIS_SERVICES_CONNECT_STATUS') && !saveAsCustomTemplate && !preview) {
             WebSocketServer.sendMessage(JSON.stringify({
@@ -60,14 +62,18 @@ export default class Task {
                 message: {}
             }));
 
-            return void res.json(createErrorMessage('ext009'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.synthesisServerUnreachable')
+            }));
         }
 
         try {
             const template: ITemplateModel | null = await TemplateModel.findByPk(id);
 
             if (!template)
-                return void res.json(createErrorMessage('ext004'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.fileNotFoundById')
+                }));
 
             const pathName: string = preview ? 'previewTemplate' : 'templates';
             const originalTemplate: string = path.resolve(`./_data/static/public/${template?.dataValues.path.replace('/static', '').replace('/index.html', '')}`);
@@ -110,12 +116,16 @@ export default class Task {
                     // 写出模板数据文件
                     writeFileSync(path.resolve(dirPath, 'data.json'), JSON.stringify(currentTemplateConfig?.data));
                 else
-                    return void res.json(createErrorMessage('ext00e'));
+                    return void res.json(createErrorMessage({
+                        message: req.t('errors.serverError')
+                    }));
 
                 // 保存为自定义模板时为模板增加封面图
                 if (saveAsCustomTemplate) {
                     if (!cover.includes(';base64,'))
-                        return void res.json(createErrorMessage('ext0010'));
+                        return void res.json(createErrorMessage({
+                            message: req.t('errors.templateCoverNotBase64')
+                        }));
 
                     const base64Cover = cover.split(';base64,').pop();
                     const base64Buffer = Buffer.from(base64Cover, 'base64');
@@ -128,7 +138,9 @@ export default class Task {
                             .resize(460, 258)
                             .toFile(path.resolve(dirPath, 'cover.gif'));
                     } catch (e) {
-                        res.json(createErrorMessage('ext00e'));
+                        res.json(createErrorMessage({
+                            message: req.t('errors.serverError')
+                        }));
                         console.log(e);
                     }
                 }
@@ -192,7 +204,9 @@ export default class Task {
                         res.status(204).send();
                     } catch (e) {
                         Logger.error(e);
-                        res.json(createErrorMessage('ext00d'));
+                        res.json(createErrorMessage({
+                            message: req.t('errors.databaseError')
+                        }));
                     }
                 } else {
                     // 生成合成任务，并通知合成服务器
@@ -245,15 +259,21 @@ export default class Task {
                         })();
                     } catch (e) {
                         Logger.error(e);
-                        res.json(createErrorMessage('ext00d'));
+                        res.json(createErrorMessage({
+                            message: req.t('errors.databaseError')
+                        }));
                     }
                 }
 
             } else
-                res.json(createErrorMessage('ext00e'));
+                res.json(createErrorMessage({
+                    message: req.t('errors.databaseError')
+                }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 

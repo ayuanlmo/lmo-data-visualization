@@ -9,6 +9,9 @@ import {IWsApp, WebSocketServer} from "./WebSocketServer";
 import TemplateSocket from "./TemplateSocket";
 import morgan from "morgan";
 import {HTTPLogStream} from "../lib/Log";
+import i18next from 'i18next';
+import middleware from 'i18next-http-middleware';
+import {i18nResources, supportedLngs} from "../lib/i18n";
 import Express = require("express");
 import CreateErrorMessage = Utils.createErrorMessage;
 
@@ -19,6 +22,22 @@ interface IExpressApp extends Express.Application {
 interface IWsAppType extends WithWebsocketMethod {
     getWss?: (url: string) => Array<IWsApp>;
 }
+
+(async () => {
+    await i18next
+        .use(middleware.LanguageDetector)
+        .init({
+            fallbackLng: 'zh-CN',
+            lng: 'zh-CN',
+            supportedLngs,
+            detection: {
+                lookupQuerystring: 'lang'
+            },
+            resources: {
+                ...i18nResources
+            }
+        });
+})();
 
 export default class HttpServer {
     public readonly WsApp: IWsAppType;
@@ -48,6 +67,7 @@ export default class HttpServer {
         this.App.set('views', path.resolve(__dirname, '../', 'views'));
         this.App.use((require('cors')()));
         this.App.use(morgan('combined', {stream: HTTPLogStream}));
+        this.App.use(middleware.handle(i18next));
         this.App.ws?.(AppConfig.__SOCKET_CONNECT, (ws: IWsApp): void => {
             this.onLineUsers++;
             new WebSocketServer(ws, this.onLineUsers, this.WsPool);
@@ -65,7 +85,10 @@ export default class HttpServer {
                 const paths: Array<string> = req.url.split('/');
 
                 if (AppConfig.__PROTECTED_STATIC_FILES.some((i: string): boolean => paths[paths.length - 1].includes(i)))
-                    return void res.status(200).json(CreateErrorMessage('ext00n', 404));
+                    return void res.status(200).json(CreateErrorMessage({
+                        message: '404',
+                        code: 404
+                    }));
 
                 if (req.url.includes('/static/templates') && !req.url.includes('index.html') && !req.url.includes('.'))
                     return void res.render('template/index.pug', {
@@ -77,7 +100,9 @@ export default class HttpServer {
 
             if (AppConfig.__LIVE_SERVER) {
                 if (methods.some((i: string): boolean => req.method === i) || AppConfig.__PROTECTED_ROUTERS.some((i: string): boolean => req.url.includes(i) && req.method !== 'GET'))
-                    return void res.json(CreateErrorMessage('ext00el'));
+                    return void res.json(CreateErrorMessage({
+                        message: req.t('errors.liveServerForbidden')
+                    }));
                 else
                     next();
             } else
@@ -104,10 +129,15 @@ export default class HttpServer {
             }
         });
         this.App.use((_req: Request, res: Response): void => {
-            res.status(200).json(CreateErrorMessage('ext00n', 404));
+            res.status(200).json(CreateErrorMessage({
+                message: '404',
+                code: 404
+            }));
         });
         this.App.use((_err: any, req: Request, res: Response): void => {
-            res.status(200).json(CreateErrorMessage('ext00e'));
+            res.status(200).json(CreateErrorMessage({
+                message: req.t('errors.serverError')
+            }));
         });
         this.App.listen(AppConfig.__SERVER_PORT, (): void => {
             Cli.log('Server started on port ', AppConfig.__SERVER_PORT)

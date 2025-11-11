@@ -37,7 +37,9 @@ export default class Resources {
             }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -45,13 +47,17 @@ export default class Resources {
         const {id = ''} = req.params;
 
         if (id === '')
-            res.json(createErrorMessage('ext003'));
+            res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         try {
             const resources: IResourcesModel | null = await ResourcesModel.findByPk(id);
 
             if (!resources)
-                return void res.json(createErrorMessage('ext005'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.invalidId')
+                }));
 
             const {dataValues} = resources;
             if (dataValues.filePath !== null && dataValues.gifPath !== null && dataValues.videoCover !== null) {
@@ -80,7 +86,9 @@ export default class Resources {
             res.status(204).send();
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 }

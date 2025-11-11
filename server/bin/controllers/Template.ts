@@ -43,7 +43,9 @@ export default class TemplateController {
             }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00e'));
+            res.json(createErrorMessage({
+                message: req.t('errors.serverError')
+            }));
         }
     }
 
@@ -54,12 +56,16 @@ export default class TemplateController {
             const template: ITemplateModel | null = await TemplateModel.findByPk(id);
 
             if (!template)
-                return void res.json(createErrorMessage('ext006'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.templateNotFound')
+                }));
 
             res.json(createSuccessMessage(template ?? {}));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -72,12 +78,16 @@ export default class TemplateController {
 
         try {
             if (id === '')
-                return void res.json(createErrorMessage('ext003'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.invalidId')
+                }));
 
             const template: ITemplateModel | null = await TemplateModel.findByPk(id);
 
             if (!template)
-                return void res.json(createErrorMessage('ext006'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.templateNotFound')
+                }));
 
             const {dataValues}: any = template;
             const originalTemplate: string = path.resolve(`./_data/static/public/${template?.dataValues.path.replace('/static', '').replace('/index.html', '')}`);
@@ -114,7 +124,9 @@ export default class TemplateController {
             res.status(204).send();
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -122,15 +134,21 @@ export default class TemplateController {
         const {id = '', name = '', description = ''} = req.body ?? {};
 
         if (id === '')
-            return void res.json(createErrorMessage('ext005'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         try {
             const template: ITemplateModel | null = await TemplateModel.findByPk(id);
 
             if (!template)
-                return void res.json(createErrorMessage('ext006'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.templateNotFound')
+                }));
             if (template.type === 1)
-                return void res.json(createErrorMessage('ext007'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.templateNotEditable')
+                }));
 
             const updateData: Partial<typeof template> = {};
 
@@ -146,10 +164,14 @@ export default class TemplateController {
             if (affectedCount === 1)
                 return void res.status(204).send();
             else
-                return void res.json(createErrorMessage('ext00d1'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.updateFailed')
+                }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -157,18 +179,24 @@ export default class TemplateController {
         const {id = ''} = req.params ?? {};
 
         if (id === '')
-            return void res.json(createErrorMessage('ext005'));
+            res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         try {
             const template: ITemplateModel | null = await TemplateModel.findByPk(id);
 
             if (!template)
-                return void res.json(createErrorMessage('ext005'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.templateNotFound')
+                }));
 
             const {dataValues}: any = template;
 
             if (dataValues.type === 1)
-                return void res.json(createErrorMessage('ext008'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.templateReadFailed')
+                }));
 
             const originalTemplate: string = path.resolve(`./_data/static/public/${dataValues.path.replace('/static', '').replace('/index.html', '')}`);
 
@@ -177,7 +205,9 @@ export default class TemplateController {
             res.status(204).send();
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -191,7 +221,9 @@ export default class TemplateController {
         const file: Express.Multer.File | undefined = req.file;
 
         if (!file)
-            return void res.json(createErrorMessage('ext001'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.fileMissing')
+            }));
 
         const fileExtension: string = path.extname(file.originalname);
         const fr: ReadStream = fs.createReadStream(file.path);
@@ -203,7 +235,9 @@ export default class TemplateController {
         fw.on('finish', (): void => {
             fs.unlink(file.path, (err: NodeJS.ErrnoException | null): void => {
                 if (err)
-                    return void res.json(createErrorMessage('ext00e'));
+                    return void res.json(createErrorMessage({
+                        message: req.t('errors.serverError')
+                    }));
                 else {
                     try {
                         const originPath: string = path.join(__dirname, '../../_data/static/public/templates/');
@@ -215,7 +249,9 @@ export default class TemplateController {
                         if (fs.existsSync(filePath)) {
                             if (!isZipFile(filePath)) {
                                 deleteFolderRecursive(templatePathName);
-                                return void res.json(createErrorMessage('ext0012'));
+                                return void res.json(createErrorMessage({
+                                    message: req.t('errors.templateNotZip')
+                                }));
                             }
                             const zip: AdmZip = new AdmZip(filePath);
                             const zipEntries: string[] = [];
@@ -226,7 +262,9 @@ export default class TemplateController {
                             });
                             zip.extractAllToAsync(templatePathName, true, true, (error) => {
                                 if (error)
-                                    res.json(createErrorMessage('ext00e'));
+                                    res.json(createErrorMessage({
+                                        message: req.t('errors.serverError')
+                                    }));
                                 else {
                                     fs.unlinkSync(filePath);
 
@@ -252,17 +290,23 @@ export default class TemplateController {
                                         });
                                     } else {
                                         deleteFolderRecursive(templatePathName);
-                                        res.json(createErrorMessage('ext0011'));
+                                        res.json(createErrorMessage({
+                                            message: req.t('errors.templateReadFailed')
+                                        }));
                                     }
                                 }
                             });
                         } else {
                             deleteFolderRecursive(templatePathName);
-                            res.json(createErrorMessage('ext00e'));
+                            res.json(createErrorMessage({
+                                message: req.t('errors.serverError')
+                            }));
                         }
                     } catch (e) {
                         console.log(e);
-                        res.json(createErrorMessage('ext00e'));
+                        res.json(createErrorMessage({
+                            message: req.t('errors.serverError')
+                        }));
                     }
                 }
             });

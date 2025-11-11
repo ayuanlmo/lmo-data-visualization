@@ -24,10 +24,14 @@ export default class File {
         const file: Express.Multer.File | undefined = req.file;
 
         if (!file)
-            return void res.json(createErrorMessage('ext001'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.fileMissing')
+            }));
 
         if (!UpLoadFileTypes.includes(file.mimetype))
-            return void res.json(createErrorMessage('ext002'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.fileUnsupportedType')
+            }));
 
         const {
             name = file.filename,
@@ -58,7 +62,9 @@ export default class File {
                 fs.unlink(file.path, async (err: NodeJS.ErrnoException | null): Promise<void> => {
                     if (err) {
                         Logger.error(err.message);
-                        return void res.json(createErrorMessage('ext00e'));
+                        return void res.json(createErrorMessage({
+                            message: req.t('errors.serverError')
+                        }));
                     } else {
                         try {
                             const filesHash: string = await File.getFileHash(fileFolderPath);
@@ -103,7 +109,9 @@ export default class File {
                             }
                         } catch (e) {
                             Logger.error(e);
-                            res.json(createErrorMessage('ext00d'));
+                            res.json(createErrorMessage({
+                                message: req.t('errors.databaseError')
+                            }));
                         }
                     }
                 });
@@ -113,7 +121,9 @@ export default class File {
             });
         } catch (e) {
             Logger.error(e);
-            return void res.json(createErrorMessage('ext00e'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.serverError')
+            }));
         }
     }
 
@@ -140,13 +150,17 @@ export default class File {
         } = req.body;
 
         if (id === '')
-            return void res.json(createErrorMessage('ext003'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         try {
             const file = await UpLoadFilesModel.findByPk(id);
 
             if (!file)
-                return void res.json(createErrorMessage('ext004'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.fileNotFoundById')
+                }));
 
             const {dataValues} = file;
             const filePath: string = path.resolve(__dirname, `../../_data/static/public/${dataValues.path.replace('/static', '')}`);
@@ -159,10 +173,14 @@ export default class File {
                     fs.unlinkSync(filePath);
                 res.status(204).send();
             } else
-                res.json(createErrorMessage('ext00d'));
+                res.json(createErrorMessage({
+                    message: req.t('errors.invalidId')
+                }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -174,13 +192,17 @@ export default class File {
         } = req.body;
 
         if (id === '')
-            return void res.json(createErrorMessage('ext003'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         try {
-            const file = await UpLoadFilesModel.findByPk(id);
+            const file: IUpLoadFilesModel | null = await UpLoadFilesModel.findByPk(id);
 
             if (!file)
-                return void res.json(createErrorMessage('ext00e'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.serverError')
+                }));
 
             const [affectedCount] = await UpLoadFilesModel.update({
                 name,
@@ -192,10 +214,14 @@ export default class File {
             if (affectedCount > 0)
                 res.status(204).send();
             else
-                res.json(createErrorMessage('ext00d'));
+                res.json(createErrorMessage({
+                    message: req.t('errors.databaseError')
+                }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -229,11 +255,13 @@ export default class File {
             }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
-    public static async getFileCategory(_req: Request, res: Response): Promise<void> {
+    public static async getFileCategory(req: Request, res: Response): Promise<void> {
         try {
             const category = await UpLoadFilesCategoryModel.findAll();
             const map: any = {};
@@ -258,7 +286,9 @@ export default class File {
             }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -270,7 +300,9 @@ export default class File {
         } = req.body ?? {};
 
         if (name === '' && name.length > 16)
-            return void res.json(createErrorMessage('ext00e'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.serverError')
+            }));
 
         try {
             if (name !== '' && id !== '') {
@@ -290,10 +322,14 @@ export default class File {
                 });
                 return void res.status(204).send();
             } else
-                return void res.json(createErrorMessage('ext00e'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.serverError')
+                }));
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 
@@ -303,20 +339,26 @@ export default class File {
         } = req.params;
 
         if (id === "")
-            return void res.json(createErrorMessage('ext003'));
+            return void res.json(createErrorMessage({
+                message: req.t('errors.invalidId')
+            }));
 
         try {
             const category: IUpLoadFilesCategoryModel | null = await UpLoadFilesCategoryModel.findByPk(id);
 
             if (!category)
-                return void res.json(createErrorMessage('ext00e'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.serverError')
+                }));
 
             const rows: IUpLoadFilesCategoryModel[] = await UpLoadFilesCategoryModel.findAll({
                 where: {parentId: id}
             });
 
             if (rows.length > 0)
-                return void res.json(createErrorMessage('ext00e'));
+                return void res.json(createErrorMessage({
+                    message: req.t('errors.serverError')
+                }));
 
             await UpLoadFilesCategoryModel.destroy({
                 where: {id}
@@ -324,7 +366,9 @@ export default class File {
             res.status(204).send();
         } catch (e) {
             Logger.error(e);
-            res.json(createErrorMessage('ext00d'));
+            res.json(createErrorMessage({
+                message: req.t('errors.databaseError')
+            }));
         }
     }
 }
