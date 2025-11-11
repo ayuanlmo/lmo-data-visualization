@@ -26,7 +26,7 @@ namespace Utils {
             message: msg,
             success: true,
             data: data,
-            _t: new Date().getTime(),
+            _t: getNowTimestamp(),
             _app: 'lmo_dv_sa_t'
         }
     }
@@ -39,7 +39,7 @@ namespace Utils {
             message,
             data,
             success: false,
-            _t: new Date().getTime(),
+            _t: getNowTimestamp(),
             _app: 'lmo_dv_sa_t'
         }
     }
@@ -75,6 +75,8 @@ namespace Utils {
             return false;
         }
     }
+
+    export const getNowTimestamp = (): number => Date.now();
 
     export const calculatePagination = (pageIndex: unknown, pageSize: unknown): [number, number] => {
         const numIndex: number = typeof pageIndex === 'string' && pageIndex.trim() === '' ? NaN : Number(pageIndex);

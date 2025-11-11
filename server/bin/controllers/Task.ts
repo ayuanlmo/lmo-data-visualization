@@ -192,7 +192,7 @@ export default class Task {
                         name: customTemplateName,
                         description: customTemplateDesc,
                         path: `${templateStaticPath}${existsSync(htmlPath) ? '/index.html' : existsSync(htmPath) ? '/index.htm' : '/'}`,
-                        createTime: new Date().getTime(),
+                        createTime: Utils.getNowTimestamp(),
                         cover: templateStaticPath + '/cover.png',
                         gifCover: templateStaticPath + '/cover.gif',
                         type: 0
@@ -230,7 +230,7 @@ export default class Task {
                                 filePath: '',
                                 name: taskName === '' ? require('uuid').v4() : taskName,
                                 templatePath: dirPath,
-                                createTime: new Date().getTime(),
+                                createTime: Utils.getNowTimestamp(),
                                 url: templateServerUrl,
                                 clarity: currentTemplateConfig.config.video.clarity ?? '1080P',
                                 status: 'pending',

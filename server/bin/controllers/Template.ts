@@ -13,6 +13,7 @@ import createErrorMessage = Utils.createErrorMessage;
 import deleteFolderRecursive = Utils.deleteFolderRecursive;
 import isZipFile = Utils.isZipFile;
 import calculatePagination = Utils.calculatePagination;
+import getNowTimestamp = Utils.getNowTimestamp;
 
 export default class TemplateController {
     public static async getTemplates(req: Request, res: Response): Promise<void> {
@@ -115,7 +116,7 @@ export default class TemplateController {
                 path: `${templateStaticPath}/${existsSync(htmlPath) ? 'index.html' : existsSync(htmPath) ? 'index.htm' : '/'}`,
                 cover: templateStaticPath + '/cover.png',
                 gifCover: templateStaticPath + '/cover.gif',
-                createTime: new Date().getTime(),
+                createTime: getNowTimestamp(),
                 id: require('uuid').v4(),
                 type: '0'
             };
@@ -278,7 +279,7 @@ export default class TemplateController {
                                             cover: `/static/${fileFolderName}/cover.png`,
                                             gifCover: `/static/${fileFolderName}/cover.gif`,
                                             path: `/static/${fileFolderName}${isHTMLTemplate ? '/index.html' : isHTTemplate ? '/index.htm' : '/'}`,
-                                            createTime: new Date().getTime(),
+                                            createTime: getNowTimestamp(),
                                             index: 0,
                                             dsp: 1
                                         };

@@ -52,7 +52,7 @@ export default class File {
                 path: filePath,
                 cover: '',
                 type: file.mimetype,
-                createTime: new Date().getTime().toString(),
+                createTime: Utils.getNowTimestamp().toString(),
                 categoryId: categoryId,
                 hash: ''
             }

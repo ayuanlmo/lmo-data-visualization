@@ -4,6 +4,7 @@ import path from "path";
 import Cli from "../../lib/Cli";
 import {DB_COLOR_TABLE_DEFAULT_DATA} from './defaultData';
 import {Process} from "../Process";
+import Utils from "../../utils";
 
 export const ignoreFolder: string[] = ['.DS_Store', '$Recycle.Bin', 'System Volume Information', 'ProgramData'];
 export const templateLocalFiles = [
@@ -89,7 +90,7 @@ const initTemplate = () => {
                         cover: `${templateRoot.replace('/public', '')}/cover.png`,
                         gifCover: `${templateRoot.replace('/public', '')}/cover.gif`,
                         path: `${templateRoot.replace('/public', '')}${isHTMLTemplate ? '/index.html' : isHTMTemplate ? '/index.htm' : '/'}`,
-                        createTime: new Date().getTime()
+                        createTime: Utils.getNowTimestamp()
                     };
 
                     templateData.push(item);
