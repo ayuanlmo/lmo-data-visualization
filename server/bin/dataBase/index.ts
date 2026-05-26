@@ -56,6 +56,9 @@ export interface IUpLoadFilesCategoryModel extends BaseModel {
 }
 
 const dbType: string = process.env.DATA_BASE_TYPE ?? 'sqlite';
+
+/** sqlite 用 TEXT，mssql 用 NVARCHAR(MAX) */
+const LONG_TEXT = DataTypes.TEXT;
 const dbName: string = process.env.DATA_BASE_NAME ?? '';
 const dbUserName: string = process.env.DATA_BASE_USER_NAME ?? '';
 const dbPassWord: string = process.env.DATA_BASE_PASSWORD ?? '';
@@ -86,7 +89,7 @@ interface DatabaseConfig {
 
 const buildDatabaseConfig = (): DatabaseConfig => {
     const commonConfig = {
-        logging: AppConfig.__DEV_SERVER,
+        logging: AppConfig.__DEV_SERVER ? (sql: string) => Cli.debug(sql) : false,
     };
     const pool = {
         max: 5,
@@ -169,7 +172,7 @@ const ResourcesModel: ModelCtor<IResourcesModel> = DB.define<IResourcesModel>('l
     videoCover: DataTypes.STRING,
     clarity: DataTypes.STRING,
     status: DataTypes.STRING,
-    taskConfig: DataTypes.STRING('max')
+    taskConfig: LONG_TEXT
 }, {
     timestamps: false
 });
