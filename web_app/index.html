@@ -2,21 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
-    <link href="%PUBLIC_URL%/logo.svg" rel="icon"/>
+    <link href="/logo.svg" rel="icon"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="#000000" name="theme-color"/>
     <meta
             content="<%= __LMO_BUILD_CONFIG.__LMO_APP_NAME %>"
             name="description"
     />
-    <link href="%PUBLIC_URL%/logo192.png" rel="apple-touch-icon"/>
-    <link href="%PUBLIC_URL%/manifest.json" rel="manifest"/>
+    <link href="/logo192.png" rel="apple-touch-icon"/>
+    <link href="/manifest.json" rel="manifest"/>
     <title><%= __LMO_BUILD_CONFIG.__LMO_APP_NAME %></title>
 </head>
 <body>
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="__lmo_app"></div>
-</body>
 <script>
     void function () {
         const st = new Date().getTime();
@@ -34,4 +33,6 @@
         addEventListener('load', onLoad);
     }();
 </script>
+<script src="/src/index.tsx" type="module"></script>
+</body>
 </html>

@@ -1,6 +1,5 @@
 import React, {lazy, StrictMode, Suspense} from "react";
 import {createRoot, Root} from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Store from "./lib/Store/";
@@ -42,8 +41,6 @@ import "./lib/Socket";
     );
 })();
 
-reportWebVitals();
-
 ((_GLOBAL: Window): void => {
     'use strict';
 
@@ -63,4 +60,4 @@ reportWebVitals();
         document.body.append(audio);
     })();
 
-})(this ?? window);
+})(window);
