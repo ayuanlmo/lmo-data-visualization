@@ -43,3 +43,5 @@ pnpm-debug.log*
 /server/_data/static/public/previewTemplate/
 /server/_data/static/public/output/
 /server/_data/static/public/uploads/
+# IDE 运行配置（.run）不纳入版本控制
+/.run/
