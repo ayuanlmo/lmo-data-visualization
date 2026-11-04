@@ -1,77 +1,69 @@
-import errorMessage from "../const/ErrorMessage";
-import {existsSync, readdirSync, rmdirSync, statSync, unlinkSync} from "node:fs";
-import path from "path";
-import fs from "fs";
+import * as fsx from "./../lib/fsx.js";
+
+// fs 操作实现在 lib/fsx.ts；下方 Utils 命名空间内以同名成员委派，
+// 保持既有调用点（Utils.deleteFolderRecursive / Utils.isZipFile）不变。
 
 export interface IResponseMessage {
     code: number;
     message: string;
-    errorCode?: string;
     success: boolean;
     data: any;
     _t: number;
     _app: string;
+    /** 仅 live-server 拒绝场景输出 'ext00el'（web_app 拦截器契约） */
+    errorCode?: string;
 }
 
-export type ErrorMessage = typeof errorMessage;
+// 业务码由 AppError.contractCode 统一提供，类型为宽数值。
+export type TErrorCode = number;
 
-export type ErrorCode = 500 | 404 | 401;
+export interface IErrorMessage {
+    code?: TErrorCode;
+    message?: string;
+    data?: any;
+    /** live-server 拒绝需回传 errorCode:'ext00el'（web_app Request 拦截器依赖） */
+    errorCode?: string;
+}
 
 namespace Utils {
+    // 委派至 lib/fsx.ts
+    export const deleteFolderRecursive = fsx.deleteFolderRecursive;
+    export const isZipFile = fsx.isZipFile;
+
     export const createSuccessMessage = (data = {}, msg: string = 'success', code = 200): IResponseMessage => {
         return {
             code: code,
             message: msg,
             success: true,
             data: data,
-            _t: new Date().getTime(),
+            _t: getNowTimestamp(),
             _app: 'lmo_dv_sa_t'
         }
     }
 
-    export const createErrorMessage = <T extends keyof ErrorMessage>(errCode: T, code: ErrorCode = 500, data: object | Array<any> = {}): IResponseMessage => {
+    export const createErrorMessage = (options: IErrorMessage): IResponseMessage => {
+        const {code = 500, message = '', data = {}, errorCode} = options;
+
         return {
-            code: code,
-            message: errorMessage[errCode].message,
-            errorCode: errCode,
-            data: data,
+            code,
+            message,
+            data,
             success: false,
-            _t: new Date().getTime(),
-            _app: 'lmo_dv_sa_t'
+            _t: getNowTimestamp(),
+            _app: 'lmo_dv_sa_t',
+            // 仅在显式传入时输出，保证其余错误响应结构不变
+            ...(errorCode ? {errorCode} : {})
         }
     }
 
-    export const deleteFolderRecursive = (dir: string): boolean => {
-        if (!existsSync(dir)) return false;
-        const files = readdirSync(dir);
+    export const getNowTimestamp = (): number => Date.now();
 
-        for (let file of files) {
-            const filePath = path.join(dir, file);
-            const stats = statSync(filePath);
-
-            if (stats.isDirectory())
-                deleteFolderRecursive(file);
-            else
-                unlinkSync(filePath);
-        }
-
-        rmdirSync(dir);
-        return true;
-    }
-
-    export const isZipFile = (filePath: string): boolean => {
-        try {
-            const buffer: Buffer = fs.readFileSync(filePath);
-            const signature: Buffer = buffer.slice(0, 4);
-
-            return signature[0] === 0x50 && signature[1] === 0x4B &&
-                (signature[2] === 0x03 || signature[2] === 0x05 || signature[2] === 0x07) &&
-                (signature[3] === 0x04 || signature[3] === 0x06 || signature[3] === 0x08);
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    }
+    /**
+     * LIKE 元字符转义。查询字符串中的 `%`/`_`/`\` 若不转义直接拼入 Op.like，
+     * 可绕过模糊语义（用户输入 % 即拉全表）。转义后作为字面量匹配。
+     */
+    export const escapeLike = (value: string): string =>
+        String(value ?? '').replace(/[\%_\\]/g, '\\$&');
 
     export const calculatePagination = (pageIndex: unknown, pageSize: unknown): [number, number] => {
         const numIndex: number = typeof pageIndex === 'string' && pageIndex.trim() === '' ? NaN : Number(pageIndex);

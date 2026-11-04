@@ -1,0 +1,17 @@
+# Docker 构建上下文排除项
+# 上下文为仓库根（server/Dockerfile 与 web_app/Dockerfile 都在 pnpm workspace 上构建），
+# 因此必须排除宿主机的 node_modules / 构建产物，避免覆盖镜像内 pnpm install 的结果并压缩上下文体积。
+**/node_modules
+server/dist
+web_app/build
+server/_data/db
+server/_data/logs
+
+.git
+.gitignore
+.idea
+.qoder
+.run
+doc
+*.log
+tmp-*

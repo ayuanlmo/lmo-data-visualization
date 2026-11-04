@@ -9,6 +9,8 @@
 node_modules
 sql
 dist
+.bin
+tmp
 _data/db
 _data/static/public/output
 _data/static/public/previewTemplate

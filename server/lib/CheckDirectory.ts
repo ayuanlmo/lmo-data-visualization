@@ -1,11 +1,14 @@
 import path from "path";
 import * as fs from "fs";
-import Cli from "./Cli";
+import Cli from "./Cli.js";
+import {dataPath, dataRoot, packageRoot} from "./dataDir.js";
 
 ((): void => {
     function mkdir(dir: string): void {
         if (!fs.existsSync(dir))
-            fs.mkdirSync(dir);
+            // recursive：嵌套目录（如 _data/static/public/xxx）需递归创建，
+            // 否则父目录不存在时 mkdirSync 会直接抛 ENOENT 使进程崩溃
+            fs.mkdirSync(dir, {recursive: true});
         else {
             try {
                 fs.accessSync(dir, fs.constants.R_OK | fs.constants.W_OK | fs.constants.X_OK);
@@ -21,7 +24,7 @@ import Cli from "./Cli";
 
     setInterval((): void => {
         const currentTime: number = new Date().getTime();
-        const origin: string = path.resolve('./_data/static/public/previewTemplate');
+        const origin: string = dataPath('static', 'public', 'previewTemplate');
         fs.readdir(path.resolve(origin), (err: NodeJS.ErrnoException | null, files: Array<string>): void => {
             if (err) return;
 
@@ -42,13 +45,19 @@ import Cli from "./Cli";
                 }
             });
         });
-    }, 1000 * 60);
+    // unref：该定时器只做过期预览产物清理，不应单独撑住事件循环——
+    // 否则任何只为了建目录而导入本模块的短生命周期进程（测试、脚本）会挂在退出前。
+    }, 1000 * 60).unref();
 
-    mkdir(path.resolve('./_data/static'));
-    mkdir(path.resolve('./_data/log'));
-    mkdir(path.resolve('./_data/static/public/previewTemplate'));
-    mkdir(path.resolve('./_data/static/public/templates'));
-    mkdir(path.resolve('./_data/static/public/scripts'));
-    mkdir(path.resolve('./_data/static/public/styles'));
-    mkdir(path.resolve('./_data/static/public/output'));
+    // 全部子目录由数据根（dataRoot）派生：既不再跟 cwd 走，也让 DATA_DIR（包含测试的临时目录）能整体重定向。
+    Cli.log(`数据根: ${dataRoot}（包根: ${packageRoot}）`);
+    mkdir(dataPath('db'));
+    mkdir(dataPath('static'));
+    mkdir(dataPath('log'));
+    mkdir(dataPath('static/public/previewTemplate'));
+    mkdir(dataPath('static/public/templates'));
+    mkdir(dataPath('static/public/scripts'));
+    mkdir(dataPath('static/public/styles'));
+    mkdir(dataPath('static/public/uploads'));
+    mkdir(dataPath('static/public/output'));
 })();

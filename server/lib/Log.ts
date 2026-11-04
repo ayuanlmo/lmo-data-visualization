@@ -1,49 +1,54 @@
-import {createStream, RotatingFileStream} from "rotating-file-stream";
-import {resolve} from "path";
-import {createLogger, format, Logger, transports} from "winston";
-import AppConfig from "../conf/AppConfig";
+import { resolve } from "node:path";
+import { Writable } from "node:stream";
+import pino, { Logger as PinoLogger } from "pino";
+import AppConfig from "./../conf/AppConfig.js";
+import {dataPath} from "./dataDir.js";
 
-const {combine, timestamp, label, printf} = format;
-const logDir: string = resolve(__dirname, "../_data/log");
-const HTTPLogStream: RotatingFileStream = createStream((time: number | Date): any => {
-    if (!time) return "lmo-app-log.h.t.log";
-    if (time instanceof Date) {
-        const pad = (num: number): string => (num > 9 ? "" : "0") + num;
-        const year: number = time.getFullYear();
-        const month: string = time.getFullYear() + "" + pad(time.getMonth() + 1);
-        const day: string = pad(time.getDate());
+/**
+ * 基于 pino + pino-roll 的日志层。
+ * - 文件滚动：pino-roll 「按天 + 20MB + 最多 14 份」；
+ * - level 由 env 控制：APP_LOG_LEVEL 覆盖，否则开发环境 debug、生产 warn；
+ * - 开发环境同时输出到 stdout，生产仅落盘 + stdout（便于 pm2 采集）。
+ */
+const logDir: string = dataPath('log');
+const level: string =
+    process.env.APP_LOG_LEVEL ?? (AppConfig.__DEV_SERVER ? 'debug' : 'warn');
 
-        return `lmo-app-log.${year}${month}${day}.o.h.t.log`;
+const logger: PinoLogger = pino({
+    level,
+    transport: {
+        targets: [
+            {
+                target: "pino/file",
+                level,
+                options: { destination: 1 }
+            },
+            {
+                target: "pino-roll",
+                level,
+                options: {
+                    file: resolve(logDir, "lmo-app"),
+                    frequency: "daily",
+                    size: "20M",
+                    mkdir: true,
+                    extension: "log",
+                    limit: { count: AppConfig.__APP_LOG_MAX_FILE }
+                }
+            }
+        ]
     }
-}, {
-    interval: '1d',
-    path: logDir,
-    maxFiles: AppConfig.__APP_LOG_MAX_FILE,
-    compress: 'gzip'
-});
-const customFormat = printf(info => {
-    return `${info.timestamp} ${info.level}: ${info.message}`;
 });
 
-const logger: Logger = createLogger({
-    level: AppConfig.__APP_LOG_LEVEL,
-    format: combine(
-        label({label: 'app-log'}),
-        timestamp(),
-        customFormat
-    ),
-    transports: [
-        new transports.File({
-            filename: 'lmo-app.t.log',
-            dirname: logDir,
-            level: AppConfig.__APP_LOG_LEVEL,
-            maxFiles: AppConfig.__APP_LOG_MAX_FILE,
-            maxsize: AppConfig.__APP_LOG_FILE_MAX_SIZE,
-            tailable: true
-        }),
-        new transports.Console(),
-    ],
+/**
+ * HTTP 访问日志流：把每一行访问日志作为 info 事件写入 pino。
+ */
+const HTTPLogStream: Writable = new Writable({
+    write(chunk: Buffer, _encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+        const line: string = chunk.toString().trimEnd();
+        if (line.length > 0) logger.info(line);
+        callback();
+    }
 });
 
 export default logger;
-export {HTTPLogStream};
+export { HTTPLogStream };

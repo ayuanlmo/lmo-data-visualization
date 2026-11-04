@@ -87,19 +87,41 @@
       width: 100%;
       height: 3rem;
       position: relative;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
 
       .template-layers-item-container {
         position: absolute;
         top: .75rem;
         left: 1.25rem;
-        width: (calc(100% - (1.25rem * 2)));
+        width: calc(100% - (1.25rem * 2));
 
-        .template-layers-item-content {
-          height: 100%;
-          width: 100%;
-          justify-content: space-between;
+          .template-layers-item-content {
+            height: 100%;
+            width: 100%;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
 
           .template-layers-item-icon {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            
             svg {
               width: 0.875rem;
               height: 0.875rem;
@@ -109,9 +131,21 @@
           .template-layers-item-name {
             font-size: 0.875rem;
             margin-left: .38rem;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
           }
 
           .template-layers-item-options {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            
             svg {
               cursor: pointer;
             }

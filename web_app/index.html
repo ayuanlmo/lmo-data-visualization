@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <link href="/logo.svg" rel="icon"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <meta content="#000000" name="theme-color"/>
+    <meta
+            content="<%= __LMO_BUILD_CONFIG.__LMO_APP_NAME %>"
+            name="description"
+    />
+    <link href="/logo192.png" rel="apple-touch-icon"/>
+    <link href="/manifest.json" rel="manifest"/>
+    <title><%= __LMO_BUILD_CONFIG.__LMO_APP_NAME %></title>
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="__lmo_app"></div>
+<script>
+    void function () {
+        const st = new Date().getTime();
+
+        const onLoad = () => {
+            console.log('Startup time :', (new Date().getTime() - st) / 1000);
+            console.log(`Build time : <%= __LMO_BUILD_CONFIG.__LMO_APP_BUILD_TIME %>`);
+            console.log('\n我多么想念你走在我身边的样子\n\n');
+            console.log('Hi, there👋，欢迎使用 <%= __LMO_BUILD_CONFIG.__LMO_APP_NAME %>');
+            console.log('\n' + ' %c <%= __LMO_BUILD_CONFIG.__LMO_APP_NAME %>' + ' %c https://dv.ayuanlmo.cn/' + '\n', 'color: #fff; font-weight: bold; background: #409EFF; padding:12px 0;font-size:14px;', 'background: #F9F3E3; padding:6px 0;');
+            console.log('\n' + ' %c GitHub:' + ' %c https://github.com/ayuanlmo/lmo-data-visualization' + '\n', 'color: #fff; background: purple;font-size:14px;border-radius:4px;', 'color:#fff;');
+            removeEventListener('load', onLoad);
+        }
+
+        addEventListener('load', onLoad);
+    }();
+</script>
+<script src="/src/index.tsx" type="module"></script>
+</body>
+</html>

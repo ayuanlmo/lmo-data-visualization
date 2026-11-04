@@ -96,6 +96,9 @@
 
   .hi-v4-modal__title {
     color: #fff;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
   }
 
@@ -321,6 +324,9 @@
 
   .hi-v4-modal__title {
     color: $__primary-input-color-light;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
   }
 

@@ -1,10 +1,9 @@
-import {Request, Response} from "express";
-import Utils from "../../utils";
-import MemoryCache from "../../lib/MemoryCache";
+import type {FastifyReply, FastifyRequest} from "fastify";
+import Utils from "./../../utils/index.js";
 import createSuccessMessage = Utils.createSuccessMessage;
 
 export default class ServerBase {
-    public static GetServerBaseInfo(req: Request, res: Response): void {
+    public static GetServerBaseInfo(_request: FastifyRequest, reply: FastifyReply): void {
         const memoryUsage = process.memoryUsage();
         const uptime = process.uptime();
         const [days, hours, minutes, seconds] = [
@@ -15,7 +14,7 @@ export default class ServerBase {
         ];
         const {node, v8} = process.versions;
 
-        res.json(createSuccessMessage({
+        reply.send(createSuccessMessage({
             main: {
                 memory: {
                     rss: Number((memoryUsage.rss / 1024 / 1024).toFixed(2)),
@@ -27,7 +26,8 @@ export default class ServerBase {
                 upTime: {
                     days, hours, minutes, seconds
                 },
-                synthesisServicesConnectStatus: MemoryCache.get('SYNTHESIS_SERVICES_CONNECT_STATUS')
+                // 合成服务恒在线（同进程）；字段保留以维持前端 ServerInfo.tsx 契约
+                synthesisServicesConnectStatus: true
             },
             rtVersion: {
                 node,

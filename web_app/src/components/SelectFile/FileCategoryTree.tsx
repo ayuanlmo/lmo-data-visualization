@@ -38,7 +38,7 @@ const FileCategoryTree = (props: ITreeActionProps): React.JSX.Element => {
         });
     };
     const convertNameToTitle = (node: ICategory): ICategory => {
-        if (!node.hasOwnProperty('title'))
+        if (!('title' in node))
             node.title = node.name;
         if (node.children && Array.isArray(node.children) && node.children.length > 0) {
             node.children.forEach((i: ICategory): void => {

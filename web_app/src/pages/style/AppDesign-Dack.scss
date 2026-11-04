@@ -27,10 +27,11 @@
         color: $color-white;
       }
 
-      svg {
-        path {
-          fill: #9CAEC7 !important;
-        }
+      .template-layers-item-icon svg path,
+      .template-layers-item-options svg path {
+        fill: #9CAEC7;
+        -webkit-transition: fill 0.2s ease;
+        transition: fill 0.2s ease;
       }
 
       .template-layers-item {

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2020",
     "lib": [
       "dom",
       "dom.iterable",
@@ -13,12 +13,27 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    // HiUI v4 系列（@hi-ui/hiui 及其子包）的 package.json exports 表只暴露 require/default，
+    // 未给出 types 条件，也没有 ./lib/types 子路径；若按 exports 解析会丢掉全部组件类型。
+    // 关闭 exports 解析后回退到物理路径（与 CRA 时期的 node10 解析一致）。
+    // vite.config.ts 走现代 exports 解析，见 tsconfig.node.json。
+    "resolvePackageJsonExports": false,
+    "resolvePackageJsonImports": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": [
+      "vite/client",
+      "node"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "include": [
     "src"

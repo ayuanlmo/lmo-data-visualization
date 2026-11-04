@@ -121,7 +121,7 @@ const Resources: React.ForwardRefExoticComponent<React.RefAttributes<IResourcesR
                                     return (
                                         <Grid.Col
                                             key={i.id}
-                                            span={6}
+                                            span={{lg: 6, xl: 6, md: 8, sm: 12, xs: 24}}
                                         >
                                             <ResourcesItem
                                                 data={i}

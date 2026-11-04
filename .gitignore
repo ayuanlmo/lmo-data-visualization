@@ -31,3 +31,24 @@ yarn-error.log*
 pnpm-debug.log*
 
 .env
+# 合成用浏览器预置产物（Chrome for Testing，约 500MB）
+/server/.bin/
+/server/tmp/
+# 本地临时排查脚本与验证缓存
+/server/_data/tmp_*
+/server/_data/btest/
+# 运行时数据产物（sqlite 库、日志、临时/生成目录），不纳入版本控制
+/server/_data/db/
+/server/_data/log/
+/server/_data/static/public/previewTemplate/
+/server/_data/static/public/output/
+/server/_data/static/public/uploads/
+# IDE 运行配置（.run）不纳入版本控制
+/.run/
+# 自定义/合成时由源模板拷贝生成的模板目录（UUID 命名 8-4-4-4-12），不入库；内置命名模板保留
+/server/_data/static/public/templates/????????-????-????-????-????????????/
+# scripts 下由同名 .ts 在服务器运行时编译产生的 .js 不入库（d3/echarts/interact 等手写库保留）
+/server/_data/static/public/scripts/**/*.js
+!/server/_data/static/public/scripts/d3.js
+!/server/_data/static/public/scripts/echarts.min.js
+!/server/_data/static/public/scripts/interact.min.js

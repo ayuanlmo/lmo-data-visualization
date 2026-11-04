@@ -1,9 +1,12 @@
-import {ColorModel, TemplateModel} from "./index";
+import {v4 as uuidv4} from "uuid";
+import {ColorModel, TemplateModel} from "./index.js";
 import fs, {constants} from 'fs';
 import path from "path";
-import Cli from "../../lib/Cli";
-import {DB_COLOR_TABLE_DEFAULT_DATA} from './defaultData';
-import {Process} from "../Process";
+import Cli from "./../../lib/Cli.js";
+import Logger from "./../../lib/Log.js";
+import {DB_COLOR_TABLE_DEFAULT_DATA} from './defaultData.js';
+import Utils from "./../../utils/index.js";
+import {staticPublicRoot} from "./../../lib/dataDir.js";
 
 export const ignoreFolder: string[] = ['.DS_Store', '$Recycle.Bin', 'System Volume Information', 'ProgramData'];
 export const templateLocalFiles = [
@@ -24,7 +27,7 @@ const initDefaultData = async (): Promise<void> => {
             return {
                 ...i,
                 cssCode: '',
-                id: require('uuid').v4(),
+                id: uuidv4(),
                 value: JSON.stringify(i.value)
             }
         });
@@ -44,8 +47,7 @@ const initDefaultData = async (): Promise<void> => {
 
 // 初始化模板
 const initTemplate = () => {
-    const templatePath: string = path.resolve('./_data/static/public/templates');
-    const templateFiles: string[] = fs.readdirSync(templatePath);
+    const templatePath: string = path.join(staticPublicRoot, 'templates');
     const templateData: {
         cover: string;
         path: string;
@@ -55,6 +57,16 @@ const initTemplate = () => {
         type: number;
         id: any;
     }[] = [];
+
+    // 模板根目录缺失/不可读时不抛错终止启动，降级为空列表
+    let templateFiles: string[] = [];
+
+    try {
+        templateFiles = fs.readdirSync(templatePath);
+    } catch (e) {
+        Cli.warn(`模板目录不可读，跳过初始化：${templatePath}`, e);
+        return templateData;
+    }
 
     templateFiles.map((i: string): void => {
         if (ignoreFolder.includes(i) || i.startsWith('.')) return;
@@ -84,12 +96,12 @@ const initTemplate = () => {
                     const isHTMLTemplate: boolean = fs.existsSync(path.resolve(templateOrigin, 'index.html'));
                     const isHTMTemplate: boolean = fs.existsSync(path.resolve(templateOrigin, 'index.htm'));
                     const item = {
-                        id: require('uuid').v4(),
+                        id: uuidv4(),
                         ...templateConfig,
                         cover: `${templateRoot.replace('/public', '')}/cover.png`,
                         gifCover: `${templateRoot.replace('/public', '')}/cover.gif`,
                         path: `${templateRoot.replace('/public', '')}${isHTMLTemplate ? '/index.html' : isHTMTemplate ? '/index.htm' : '/'}`,
-                        createTime: new Date().getTime()
+                        createTime: Utils.getNowTimestamp()
                     };
 
                     templateData.push(item);
@@ -101,9 +113,9 @@ const initTemplate = () => {
                 }
             }
         } catch (e) {
+            // 单个模板初始化失败只记日志，不终止全局
             Cli.warn(`模板初始化失败，请检查[${templatePath + `/${i}`}]是否存在且拥有读写权。\n`, e);
-            Cli.log('程序已退出...');
-            Process.exit(1);
+            Logger.warn(`跳过模板 ${i} 的初始化`);
         }
     });
 

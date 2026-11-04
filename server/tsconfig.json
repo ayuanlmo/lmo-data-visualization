@@ -2,11 +2,9 @@
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./dist/lmo.t",
-    "target": "es5",
+    "target": "ES2022",
     "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+      "ESNext"
     ],
     "outDir": "dist",
     "allowJs": true,
@@ -16,8 +14,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": false
@@ -29,6 +27,7 @@
     "router",
     "utils",
     "global.d.ts",
+    "shims.d.ts",
     "main.ts"
   ],
   "exclude": [

@@ -40,7 +40,7 @@ namespace Utils {
 
         const type = typeof data;
 
-        if (typeHandlers.hasOwnProperty(type)) {
+        if (Object.prototype.hasOwnProperty.call(typeHandlers, type)) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             return typeHandlers[type](data);
@@ -159,9 +159,7 @@ namespace Utils {
             const now = Date.now();
 
             if (leading && now - lastExecTime >= delay) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-expect-error
-                func.apply(this, args);
+                func(...args);
                 lastExecTime = now;
                 return;
             }
@@ -169,9 +167,7 @@ namespace Utils {
             if (trailing && !timerId) {
                 timerId = setTimeout(() => {
                     if (!leading || now - lastExecTime >= delay) {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-expect-error
-                        func.apply(this, args);
+                        func(...args);
                         lastExecTime = now;
                     }
                     timerId = null;

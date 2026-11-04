@@ -52,7 +52,7 @@ const AppDesign = (): React.JSX.Element => {
                     dispatch(setCurrentTemplate(currentTemplate));
                 else
                     navigate('/');
-            } catch (e) {
+            } catch {
                 navigate('/');
             }
         }

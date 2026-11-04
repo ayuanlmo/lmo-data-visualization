@@ -1,30 +1,29 @@
-import {Request, Response} from "express";
-import {ColorModel} from "../dataBase";
-import Utils from "../../utils";
+import type {FastifyReply, FastifyRequest} from "fastify";
+import {ColorModel} from "./../dataBase/index.js";
+import Utils from "./../../utils/index.js";
 import {Op} from "sequelize";
+import MemoryCache from "./../../lib/MemoryCache.js";
 import createSuccessMessage = Utils.createSuccessMessage;
-import MemoryCache from "../../lib/MemoryCache";
 
 export type TColorType = 'theme' | 'background';
 
 export default class Color {
-    public static getColors(req: Request, res: Response): void {
-        const {
-            type = 'theme' as TColorType
-        } = req.query ?? {};
+    public static getColors(request: FastifyRequest, reply: FastifyReply): void {
+        const q = (request.query ?? {}) as Record<string, any>;
+        const type: string = (q.type as TColorType) ?? 'theme';
         const query: string = type === 'theme' ? '__theme_color' : '__background_color';
         const data = MemoryCache.get(query);
 
         if (data)
-            return void res.json(createSuccessMessage(data));
+            return void reply.send(createSuccessMessage(data));
 
         ColorModel.findAndCountAll({
             where: {
-                type: {[Op.like]: `%${type}%`}
+                type: {[Op.like]: `%${Utils.escapeLike(type)}%`}
             }
         }).then(({rows, count}): void => {
             MemoryCache.set(query, {rows, total: count});
-            res.json(createSuccessMessage({
+            reply.send(createSuccessMessage({
                 rows,
                 total: count
             }));
