@@ -1,0 +1,40 @@
+{
+  "name": "lmo-data-visualization",
+  "version": "1.0.0",
+  "private": true,
+  "description": "lmo-data-visualization monorepo (server + web_app)",
+  "author": "ayuanlmo",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/ayuanlmo/lmo-data-visualization",
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:smoke": "vitest run smoke",
+    "ci": "pnpm -r typecheck && pnpm test",
+    "server:dev": "pnpm --filter lmo-data-visualization-server-application dev",
+    "web:dev": "pnpm --filter lmo-data-visualization_web_app dev",
+    "web:build": "pnpm --filter lmo-data-visualization_web_app build",
+    "web:preview": "pnpm --filter lmo-data-visualization_web_app preview"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.3",
+    "typescript": "^7.0.2",
+    "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "ffmpeg-static",
+      "sharp",
+      "sqlite3"
+    ]
+  }
+}

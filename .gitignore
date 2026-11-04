@@ -31,3 +31,15 @@ yarn-error.log*
 pnpm-debug.log*
 
 .env
+# 合成用浏览器预置产物（Chrome for Testing，约 500MB）
+/server/.bin/
+/server/tmp/
+# 本地临时排查脚本与验证缓存
+/server/_data/tmp_*
+/server/_data/btest/
+# 运行时数据产物（sqlite 库、日志、临时/生成目录），不纳入版本控制
+/server/_data/db/
+/server/_data/log/
+/server/_data/static/public/previewTemplate/
+/server/_data/static/public/output/
+/server/_data/static/public/uploads/
