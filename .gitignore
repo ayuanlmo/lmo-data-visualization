@@ -45,3 +45,10 @@ pnpm-debug.log*
 /server/_data/static/public/uploads/
 # IDE 运行配置（.run）不纳入版本控制
 /.run/
+# 自定义/合成时由源模板拷贝生成的模板目录（UUID 命名 8-4-4-4-12），不入库；内置命名模板保留
+/server/_data/static/public/templates/????????-????-????-????-????????????/
+# scripts 下由同名 .ts 在服务器运行时编译产生的 .js 不入库（d3/echarts/interact 等手写库保留）
+/server/_data/static/public/scripts/**/*.js
+!/server/_data/static/public/scripts/d3.js
+!/server/_data/static/public/scripts/echarts.min.js
+!/server/_data/static/public/scripts/interact.min.js
