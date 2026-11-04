@@ -1,7 +1,7 @@
-import AppConfig from "../conf/AppConfig";
-import HttpServer from "./HttpServer";
+import AppConfig from "./../conf/AppConfig.js";
+import HttpServer from "./HttpServer.js";
 import os from "node:os";
-import {close as closeDataBase} from "./dataBase";
+import {close as closeDataBase} from "./dataBase/index.js";
 
 export namespace Process {
     export const sendMessage = (message: string): boolean | undefined => process.send?.(message);

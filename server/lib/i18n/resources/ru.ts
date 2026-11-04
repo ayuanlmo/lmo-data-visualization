@@ -14,6 +14,7 @@ export default {
         templateReadFailed: 'Не удалось прочитать шаблон',
         templateNotZip: 'Шаблон должен быть ZIP-архивом',
         templateCoverNotBase64: 'Обложка должна быть строкой в формате Base64',
-        synthesisServerUnreachable: 'Не удаётся подключиться к серверу синтеза'
+        synthesisServerUnreachable: 'Не удаётся подключиться к серверу синтеза',
+        bodyTooLarge: 'Слишком большое тело запроса (максимум {{max}} МБ)'
     }
 };

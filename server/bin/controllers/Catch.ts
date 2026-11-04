@@ -1,9 +1,9 @@
-import {Request, Response} from "express";
-import MemoryCache from "../../lib/MemoryCache";
+import type {FastifyReply, FastifyRequest} from "fastify";
+import MemoryCache from "./../../lib/MemoryCache.js";
 
 export default class Catch {
-    public static clearCatch(_req: Request, res: Response): void {
+    public static clearCatch(_request: FastifyRequest, reply: FastifyReply): void {
         MemoryCache.clear();
-        res.status(204).send();
+        reply.code(204).send();
     }
 }

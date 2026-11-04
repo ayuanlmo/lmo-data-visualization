@@ -15,5 +15,6 @@ export default {
         templateNotZip: 'The template must be a ZIP file',
         templateCoverNotBase64: 'Cover image must be a Base64 string',
         synthesisServerUnreachable: 'Unable to connect to the synthesis server',
+        bodyTooLarge: 'Request body too large (max {{max}}MB)',
     }
 };

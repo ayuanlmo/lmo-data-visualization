@@ -14,6 +14,7 @@ export default {
         templateReadFailed: 'テンプレートを読み取れませんでした',
         templateNotZip: 'テンプレートはZIPファイルである必要があります',
         templateCoverNotBase64: 'カバー画像はBase64文字列である必要があります',
-        synthesisServerUnreachable: '合成サーバーに接続できません'
+        synthesisServerUnreachable: '合成サーバーに接続できません',
+        bodyTooLarge: 'リクエストボディが大きすぎます（最大 {{max}}MB）'
     }
 };

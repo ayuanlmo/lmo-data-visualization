@@ -14,6 +14,7 @@ export default {
         templateReadFailed: '템플릿을 읽을 수 없습니다',
         templateNotZip: '템플릿은 압축(ZIP) 파일이어야 합니다',
         templateCoverNotBase64: '표지 이미지는 Base64 문자열이어야 합니다',
-        synthesisServerUnreachable: '합성 서버에 연결할 수 없습니다'
+        synthesisServerUnreachable: '합성 서버에 연결할 수 없습니다',
+        bodyTooLarge: '요청 본문이 너무 큽니다 (최대 {{max}}MB)'
     }
 };

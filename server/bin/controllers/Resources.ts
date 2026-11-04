@@ -1,27 +1,28 @@
-import {Request, Response} from "express";
-import {IResourcesModel, ResourcesModel} from "../dataBase";
+import type {FastifyReply, FastifyRequest} from "fastify";
+import {IResourcesModel, ResourcesModel} from "./../dataBase/index.js";
 import {Op} from "sequelize";
-import Utils from "../../utils";
+import Utils from "./../../utils/index.js";
 import path from "path";
 import fs from "node:fs";
-import Logger from "../../lib/Log";
+import Logger from "./../../lib/Log.js";
+import {AppError, ErrorCode, rethrowAppError} from "./../../lib/AppError.js";
+import {staticPublicRoot} from "./../../lib/dataDir.js";
+
 import createSuccessMessage = Utils.createSuccessMessage;
-import createErrorMessage = Utils.createErrorMessage;
 import calculatePagination = Utils.calculatePagination;
 
 export default class Resources {
-    public static async getResources(req: Request, res: Response): Promise<void> {
-        const {
-            name = '',
-            pageIndex = 1,
-            pageSize = 10,
-        } = req.query;
+    public static async getResources(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+        const q = (request.query ?? {}) as Record<string, any>;
+        const name: string = q.name ?? '';
+        const pageIndex = q.pageIndex ?? 1;
+        const pageSize = q.pageSize ?? 10;
         const [offset, limit] = calculatePagination(Number(pageIndex), Number(pageSize));
 
         try {
             const {rows, count} = await ResourcesModel.findAndCountAll({
                 where: {
-                    name: {[Op.like]: `%${name}%`},
+                    name: {[Op.like]: `%${Utils.escapeLike(name)}%`},
                 },
                 attributes: {
                     exclude: ['templatePath', 'url', 'template', 'taskConfig']
@@ -31,39 +32,34 @@ export default class Resources {
                 order: [['createTime', 'DESC']]
             });
 
-            res.json(createSuccessMessage({
+            reply.send(createSuccessMessage({
                 rows,
                 total: count
             }));
         } catch (e) {
+            rethrowAppError(e);
             Logger.error(e);
-            res.json(createErrorMessage({
-                message: req.t('errors.databaseError')
-            }));
+            throw new AppError(ErrorCode.DATABASE_ERROR);
         }
     }
 
-    public static async deleteResources(req: Request, res: Response): Promise<void> {
-        const {id = ''} = req.params;
+    public static async deleteResources(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+        const {id = ''} = request.params as { id?: string };
 
         if (id === '')
-            res.json(createErrorMessage({
-                message: req.t('errors.invalidId')
-            }));
+            throw new AppError(ErrorCode.INVALID_ID);
 
         try {
             const resources: IResourcesModel | null = await ResourcesModel.findByPk(id);
 
             if (!resources)
-                return void res.json(createErrorMessage({
-                    message: req.t('errors.invalidId')
-                }));
+                throw new AppError(ErrorCode.INVALID_ID);
 
             const {dataValues} = resources;
             if (dataValues.filePath !== null && dataValues.gifPath !== null && dataValues.videoCover !== null) {
-                const videoPath: string = path.resolve(__dirname, `../../_data/static/public/${dataValues.filePath.replace('/static', '')}`);
-                const gifPath: string = path.resolve(__dirname, `../../_data/static/public/${dataValues.gifPath.replace('/static', '')}`);
-                const videoCover: string = path.resolve(__dirname, `../../_data/static/public/${dataValues.videoCover.replace('/static', '')}`);
+                const videoPath: string = path.join(staticPublicRoot, dataValues.filePath.replace('/static', ''));
+                const gifPath: string = path.join(staticPublicRoot, dataValues.gifPath.replace('/static', ''));
+                const videoCover: string = path.join(staticPublicRoot, dataValues.videoCover.replace('/static', ''));
 
                 if (fs.existsSync(videoPath))
                     fs.unlinkSync(videoPath);
@@ -83,12 +79,11 @@ export default class Resources {
             }
             await ResourcesModel.destroy({where: {id}});
 
-            res.status(204).send();
+            return void reply.code(204).send();
         } catch (e) {
+            rethrowAppError(e);
             Logger.error(e);
-            res.json(createErrorMessage({
-                message: req.t('errors.databaseError')
-            }));
+            throw new AppError(ErrorCode.DATABASE_ERROR);
         }
     }
 }

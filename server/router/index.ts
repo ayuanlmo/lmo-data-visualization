@@ -1,43 +1,58 @@
-import {Request, Response, Router} from "express";
-import TemplateController from "../bin/controllers/Template";
-import File from "../bin/controllers/File";
-import Color from "../bin/controllers/Color";
-import Catch from "../bin/controllers/Catch";
-import Player from "../bin/Player";
-import Task from "../bin/controllers/Task";
-import Resources from "../bin/controllers/Resources";
-import ServerBase from "../bin/controllers/ServerBase";
-import Multer = require("multer");
+import type {FastifyBaseLogger, FastifyInstance} from "fastify";
+import type {ZodTypeProvider} from "fastify-type-provider-zod";
+import TemplateController from "./../bin/controllers/Template.js";
+import File from "./../bin/controllers/File.js";
+import Color from "./../bin/controllers/Color.js";
+import Catch from "./../bin/controllers/Catch.js";
+import Player from "./../bin/Player.js";
+import Task from "./../bin/controllers/Task.js";
+import Resources from "./../bin/controllers/Resources.js";
+import ServerBase from "./../bin/controllers/ServerBase.js";
+import {
+    colorQuery,
+    createTaskBody,
+    fileCategoryBody,
+    fileEditBody,
+    idOnlyBody,
+    idParam,
+    templateCopyBody,
+    templateEditBody,
+    templateListQuery,
+    uploadFileListQuery,
+} from "./schemas.js";
 
-// @ts-ignore
-export const multer: Multer.Multer = Multer({
-    dest: require('path').resolve('./_data/static/public/uploads'),
-});
-const _Router: Router = Router();
+// /api 路由表：URL/方法/响应契约保持稳定，入参叠加 Zod 校验。
+export type ZodApp = FastifyInstance<any, any, any, FastifyBaseLogger, ZodTypeProvider>;
 
-_Router
-    .get('/template', (req: Request, res: Response): Promise<void> => TemplateController.getTemplates(req, res))
-    .get('/template/:id', (req: Request, res: Response): Promise<void> => TemplateController.getTemplate(req, res))
-    .put('/template', (req: Request, res: Response): Promise<void> => TemplateController.editTemplate(req, res))
-    .delete('/template/:id', (req: Request, res: Response): Promise<void> => TemplateController.deleteTemplate(req, res))
-    .post('/template/copy', (req: Request, res: Response): Promise<void> => TemplateController.copyTemplate(req, res))
-    .post('/template/refresh', (req: Request, res: Response): void => TemplateController.refreshTemplate(req, res))
-    .post('/createCustomTemplate', (req: Request, res: Response): Promise<void> => Task.createTask(req, res))
-    .post('/uploadFile', multer.single('media'), (req: Request, res: Response): Promise<void> => File.upload(req, res))
-    .put('/editFileInfo/:id', (req: Request, res: Response): Promise<void> => File.edit(req, res))
-    .delete('/deleteFile', (req: Request, res: Response): Promise<void> => File.delete(req, res))
-    .get('/uploadFile', (req: Request, res: Response): Promise<void> => File.getFiles(req, res))
-    .get('/uploadFileCategory', (req: Request, res: Response): Promise<void> => File.getFileCategory(req, res))
-    .post('/uploadFileCategory', (req: Request, res: Response): Promise<void> => File.addFileCategory(req, res))
-    .delete('/uploadFileCategory/:id', (req: Request, res: Response): Promise<void> => File.deleteFileCategory(req, res))
-    .get('/color', (req: Request, res: Response): void => Color.getColors(req, res))
-    .post('/clearCatch', (req: Request, res: Response): void => Catch.clearCatch(req, res))
-    .get('/player/:id', (req: Request, res: Response): void => void new Player(req, res))
-    .post('/createTask', (req: Request, res: Response): Promise<void> => Task.createTask(req, res))
-    .get('/resources', (req: Request, res: Response): Promise<void> => Resources.getResources(req, res))
-    .delete('/resources/:id', (req: Request, res: Response): Promise<void> => Resources.deleteResources(req, res))
-    .get('/serverInfo', (req: Request, res: Response): void => ServerBase.GetServerBaseInfo(req, res))
-    .post('/uploadTemplate', multer.single('template'), (req: Request, res: Response): void => TemplateController.uploadTemplate(req, res))
-;
+export function registerApiRoutes(app: ZodApp): void {
+    app
+        .get('/template', {schema: {querystring: templateListQuery}}, (req, reply) => TemplateController.getTemplates(req, reply))
+        .get('/template/:id', {schema: {params: idParam}}, (req, reply) => TemplateController.getTemplate(req, reply))
+        .put('/template', {schema: {body: templateEditBody}}, (req, reply) => TemplateController.editTemplate(req, reply))
+        .delete('/template/:id', {schema: {params: idParam}}, (req, reply) => TemplateController.deleteTemplate(req, reply))
+        .post('/template/copy', {schema: {body: templateCopyBody}}, (req, reply) => TemplateController.copyTemplate(req, reply))
+        .post('/template/refresh', (req, reply) => TemplateController.refreshTemplate(req, reply))
+        .post('/createCustomTemplate', {schema: {body: createTaskBody}}, (req, reply) => Task.createTask(req, reply))
+        .post('/uploadFile', (req, reply) => File.upload(req, reply))
+        .put('/editFileInfo/:id', {
+            schema: {
+                params: idParam,
+                body: fileEditBody
+            }
+        }, (req, reply) => File.edit(req, reply))
+        .delete('/deleteFile', {schema: {body: idOnlyBody}}, (req, reply) => File.delete(req, reply))
+        .get('/uploadFile', {schema: {querystring: uploadFileListQuery}}, (req, reply) => File.getFiles(req, reply))
+        .get('/uploadFileCategory', (req, reply) => File.getFileCategory(req, reply))
+        .post('/uploadFileCategory', {schema: {body: fileCategoryBody}}, (req, reply) => File.addFileCategory(req, reply))
+        .delete('/uploadFileCategory/:id', {schema: {params: idParam}}, (req, reply) => File.deleteFileCategory(req, reply))
+        .get('/color', {schema: {querystring: colorQuery}}, (req, reply) => Color.getColors(req, reply))
+        .post('/clearCatch', (req, reply) => Catch.clearCatch(req, reply))
+        .get('/player/:id', {schema: {params: idParam}}, (req, reply) => Player.stream(req, reply))
+        .post('/createTask', {schema: {body: createTaskBody}}, (req, reply) => Task.createTask(req, reply))
+        .get('/resources', {schema: {querystring: templateListQuery}}, (req, reply) => Resources.getResources(req, reply))
+        .delete('/resources/:id', {schema: {params: idParam}}, (req, reply) => Resources.deleteResources(req, reply))
+        .get('/serverInfo', (req, reply) => ServerBase.GetServerBaseInfo(req, reply))
+        .post('/uploadTemplate', (req, reply) => TemplateController.uploadTemplate(req, reply));
+}
 
-export default _Router;
+export default registerApiRoutes;

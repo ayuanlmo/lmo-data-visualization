@@ -14,6 +14,7 @@ export default {
         templateReadFailed: '无法读取模板',
         templateNotZip: '模板应该是一个压缩文件',
         templateCoverNotBase64: '封面图应该为 Base64 字符串',
-        synthesisServerUnreachable: '无法连接合成服务器'
+        synthesisServerUnreachable: '无法连接合成服务器',
+        bodyTooLarge: '请求体过大，最大允许 {{max}}MB'
     }
 }

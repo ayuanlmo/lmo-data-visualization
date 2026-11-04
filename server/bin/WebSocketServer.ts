@@ -1,9 +1,6 @@
-import AppConfig from "../conf/AppConfig";
-import OS from "node:os";
-
-const platform: string = OS.platform();
-const cpuName: string = OS.cpus()[0].model;
-const arch: string = OS.arch();
+import AppConfig from "./../conf/AppConfig.js";
+import {WsHub} from "./../lib/wsHub.js";
+import {abortRenderMessage} from "../router/schemas.js";
 
 export interface IWsApp {
     send: (msg: string) => void;
@@ -14,65 +11,45 @@ export interface IWsApp {
 export class WebSocketServer {
     private readonly WsApp: IWsApp;
     private readonly OnLineUsers: number;
-    private readonly Pool: Array<IWsApp>;
 
-    constructor(Ws: IWsApp, OnLineUsers: number, Pool: Array<IWsApp>) {
+    constructor(Ws: IWsApp, OnLineUsers: number) {
         this.WsApp = Ws;
         this.OnLineUsers = OnLineUsers;
-        this.Pool = Pool;
         this.initConnect();
     }
 
+    /** 经 WsHub 定向广播。 */
     public static sendMessage(message: string): void {
-        const _: any = global;
-
-        _.WebSocketPool?.getWss()?.clients?.forEach((ws: IWsApp): void => {
-            ws.send?.(message);
-        });
+        WsHub.broadcastToClients(message);
     }
 
     private initConnect(): void {
         this.WsApp.send?.(JSON.stringify({
             type: 'connect',
             success: true,
-            onLineUser: this.OnLineUsers,
-            serverInfo: {
-                __isX86Windows: platform === 'win32' && arch === 'x64',
-                __isArmWindows: platform === 'win32' && arch === 'arm64',
-                __isLinux: platform === 'linux',
-                __isIntelMac: platform === 'darwin' && arch === 'x64',
-                __isAppleSiliconMac: platform === 'darwin' && arch === 'arm64' && cpuName.includes('Apple'),
-                __enCoding: 'CPU.H264',
-                __cpuEnCode: {
-                    __AMD: cpuName.includes('AMD'),
-                    __Intel: cpuName.includes('Intel'),
-                    __AppleSilicon: cpuName.includes('Apple')
-                }
-            }
+            onLineUser: this.OnLineUsers
         }));
-        const _: any = global;
 
         this.WsApp.on('message', (msg: string): void => {
             if (msg === AppConfig.__SOCKET_PONG_KEY)
                 return this.WsApp.send(AppConfig.__SOCKET_PONG_MESSAGE);
 
-            try {
-                const data = JSON.parse(msg);
+            // 结构化消息过 Zod，仅接受 {cmd:'__ABORT_RENDER', id}；其余一律不回显（避免反射回显）
+            let parsed: unknown;
 
-                if ('cmd' in data) {
-                    if (data.cmd === '__ABORT_RENDER') {
-                        _.TemplateWsPool?.clients?.forEach((ws: IWsApp): void => {
-                            ws.send?.(JSON.stringify({
-                                id: data.id,
-                                _signal: "__ABORT_RENDER"
-                            }));
-                        });
-                    }
-                } else
-                    this.WsApp.send(msg);
-            } catch (e) {
-                this.WsApp.send(msg);
+            try {
+                parsed = JSON.parse(msg);
+            } catch {
+                return; // 非 JSON：忽略
             }
+
+            const result = abortRenderMessage.safeParse(parsed);
+
+            if (result.success)
+                WsHub.broadcastToTemplates(JSON.stringify({
+                    id: result.data.id,
+                    _signal: "__ABORT_RENDER"
+                }));
         });
     }
 }

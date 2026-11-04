@@ -14,6 +14,7 @@ export default {
         templateReadFailed: '無法讀取模板',
         templateNotZip: '模板應為壓縮檔（ZIP）',
         templateCoverNotBase64: '封面圖應為 Base64 字串',
-        synthesisServerUnreachable: '無法連接合成伺服器'
+        synthesisServerUnreachable: '無法連接合成伺服器',
+        bodyTooLarge: '請求體過大，最大允許 {{max}}MB'
     }
 };
