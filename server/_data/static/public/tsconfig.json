@@ -13,7 +13,10 @@
     "resolveJsonModule": true,
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
-    "newLine": "crlf"
+    "newLine": "crlf",
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "templates",
