@@ -2,8 +2,10 @@ version: '3.8'
 
 services:
   web_app:
-    image: nginx:alpine
-    build: ./web_app
+    image: lmo-web-app:nginx-alpine
+    build:
+      context: .
+      dockerfile: web_app/Dockerfile
     ports:
       - "${LMO_APP_MAIN_PORT:-80}:80"
     depends_on:
@@ -11,43 +13,38 @@ services:
     networks:
       - lmo_app_network
 
-  service_app:
-    image: node:18
-    build: ./service
-    environment:
-      - SERVICE_HOST=service_app
-      - SERVER_HOST=server_app
-      - SERVICE_PORT=3002
-      - ALLOW_UNSAFE_CONTEXT=1
-    ports:
-      - "${LMO_APP_SERVICE_PORT:-30003}:3002"
-    volumes:
-      - lmo-server-data:/lmo-app/server/_data
-    networks:
-      - lmo_app_network
-
   server_app:
-    image: node:20-alpine
-    build: ./server
+    image: lmo-server:node24
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+      args:
+        # 国内 / 网络受限时换镜像源，否则构建期要拉 157MB 的官方 CDN（实测慢 50 倍）。
+        # 例：LMO_APP_CHROME_MIRROR_BASE=https://cdn.npmmirror.com/binaries/chrome-for-testing
+        CHROME_MIRROR_BASE: ${LMO_APP_CHROME_MIRROR_BASE:-}
     environment:
       - NODE_ENV=prod
       - SERVER_HOST=server_app
-      - SERVICE_HOST=service_app
-      - SERVICE_PORT=3002
       - PORT=3000
+      # 非 multipart 请求体上限（MB）。createTask 会同时带封面截图与背景图两张 base64 图，故默认给到 64。
+      # 需高于 nginx 侧 web_app/nginx.conf 的 `client_max_body_size 100M` 时，两边一起调。
+      - REQUEST_BODY_LIMIT_MB=${LMO_APP_REQUEST_BODY_LIMIT_MB:-64}
+      - ALLOW_UNSAFE_CONTEXT=1
       - DATA_BASE_TYPE=${LMO_APP_DATA_BASE_TYPE:-sqlite}
       - DATA_BASE_NAME=${LMO_APP_DATA_BASE_NAME:-lmo-dv}
       - DATA_BASE_USER_NAME=${LMO_APP_DATA_BASE_USER_NAME:-your_username}
       - DATA_BASE_PASSWORD=${LMO_APP_DATA_BASE_PASSWORD:-your_password}
       - DATA_BASE_HOST=${LMO_APP_DATA_BASE_HOST:-localhost}
+      # 合成依赖逃生口：默认为空 = 用镜像内预置的 Chrome 与 ffmpeg-static。
+      # 仅在需要临时改指系统 ffmpeg（绕过构建期下载到的残缺二进制）时设置 LMO_APP_FFMPEG_PATH / LMO_APP_FFPROBE_PATH。
+      - FFMPEG_PATH=${LMO_APP_FFMPEG_PATH:-}
+      - FFPROBE_PATH=${LMO_APP_FFPROBE_PATH:-}
     ports:
       - "${LMO_APP_SERVER_PORT:-30000}:3000"
     volumes:
       - lmo-server-data:/lmo-app/server/_data
     networks:
       - lmo_app_network
-    depends_on:
-      - service_app
 
 networks:
   lmo_app_network:

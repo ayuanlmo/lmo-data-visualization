@@ -9,19 +9,18 @@
 </div>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Node.js -blue.svg?logo=node.js" alt="TypeScript">
-    <img src="https://img.shields.io/badge/TypeScript-4.9.5 -blue.svg?logo=typescript" alt="TypeScript">
-    <img src="https://img.shields.io/badge/craco-7.1.0 -blue.svg?" alt="craco">
+    <img src="https://img.shields.io/badge/Node.js -24-blue.svg?logo=node.js" alt="Node.js">
+    <img src="https://img.shields.io/badge/pnpm-10.34.9 -blue.svg?logo=pnpm" alt="pnpm">
+    <img src="https://img.shields.io/badge/TypeScript-7.0.2 -blue.svg?logo=typescript" alt="TypeScript">
+    <img src="https://img.shields.io/badge/Vite-7.3.7 -blue.svg?logo=vite" alt="Vite">
     <img src="https://img.shields.io/badge/React-18.2.0 -blue.svg?logo=react" alt="React">
     <img src="https://img.shields.io/badge/React_Redux-18.2.0 -blue.svg?logo=redux" alt="React-Redux">
-    <img src="https://img.shields.io/badge/SASS-1.71.0 -blue.svg?logo=sass" alt="sass">
+    <img src="https://img.shields.io/badge/SASS-1.94.0 -blue.svg?logo=sass" alt="sass">
     <img src="https://img.shields.io/badge/axios-1.6.7 -blue.svg?logo=axios" alt="axios">
-    <img src="https://img.shields.io/badge/Hi_UI-4.3.3 -blue.svg?logo=xiaomi" alt="Hi-UI">
-    <img src="https://img.shields.io/badge/nodemon-3.1.0 -blue.svg?logo=nodemon" alt="nodemon">
-    <img src="https://img.shields.io/badge/ts_node-10.9.2 -blue.svg?logo=ts-node" alt="ts-node">
-    <img src="https://img.shields.io/badge/Express-4.3.3 -blue.svg?logo=express" alt="Express">
-    <img src="https://img.shields.io/badge/Gulp-4.0.2 -blue.svg?logo=gulp" alt="gulp">
-    <img src="https://img.shields.io/badge/Pug-3.0.3 -blue.svg?logo=pug" alt="Express">
+    <img src="https://img.shields.io/badge/Hi_UI-4.5.3 -blue.svg?logo=xiaomi" alt="Hi-UI">
+    <img src="https://img.shields.io/badge/tsx-4.20.3 -blue.svg?logo=tsx" alt="tsx">
+    <img src="https://img.shields.io/badge/Fastify-5.12.7 -blue.svg?logo=fastify" alt="Fastify">
+    <img src="https://img.shields.io/badge/Pug-3.0.3 -blue.svg?logo=pug" alt="Pug">
     <img src="https://img.shields.io/badge/uuid-9.0.1 -blue.svg?" alt="uuid">
     <img src="https://img.shields.io/badge/sqlite3-5.1.7 -blue.svg?logo=sqlite" alt="sqlite3">
     <img src="https://shields.io/badge/Microsoft_SQL_Server-inactive?logo=sqlserver" alt="Microsoft SQL Server"/>
@@ -77,32 +76,50 @@
 
 ---
 
+## 🛠 本地开发
+
+仓库为 pnpm workspace（`server` + `web_app`），统一在仓库根执行：
+
+```bash
+corepack enable            # 启用 pnpm（版本由根 packageManager 锁定）
+pnpm install               # 安装两个包的全部依赖
+
+PORT=49237 pnpm --filter lmo-data-visualization-server-application dev   # 后端（HTTP + /connect WebSocket）
+pnpm --filter lmo-data-visualization_web_app dev                         # 前端（默认 http://localhost:8081）
+```
+
+前端 dev server 已配置代理，无需修改后端 CORS：
+
+| 代理路径          | 目标                                  | 说明                              |
+|---------------|-------------------------------------|---------------------------------|
+| `/api`        | `http://localhost:${LMO_SERRVER_APP_DEV_PORT:-49237}` | 转发时去掉 `/api` 前缀，与 nginx 行为一致 |
+| `/connect`    | 同上（`ws: true`）                        | WebSocket 长连接                   |
+
+可用环境变量：`LMO_WEB_APP_DEV_PORT`（前端端口，默认 `8081`）、`LMO_SERRVER_APP_DEV_PORT`（被代理的后端端口，默认 `49237`）。
+IDE 用户可直接使用 `.run` 下的 `Run-ServerApp` / `Run-ReactApp` 配置。
+
+其他根级脚本：`pnpm -r typecheck`（含前端两个 tsconfig）、`pnpm --filter lmo-data-visualization_web_app lint`、`pnpm --filter lmo-data-visualization_web_app build`。
+
+---
+
 ## 🤤 部署指南
 
 ### 👍 使用Docker Compose部署
 
 本项目提供了一个 `docker-compose.yml` 文件来简化服务的启动过程。首先，请确保已准备好以下基础镜像：
 
-- `nginx:alpine`
-- `node:20-alpine`
-- `node:18`
+- `nginx:alpine`（web_app 运行阶段）
+- `node:24`（web_app 与 server 的构建阶段，Debian 版以提供 Chromium/ffmpeg 所需的 glibc）
 
 然后执行以下命令拉取所需镜像：
 
 ```bash
 docker pull nginx:alpine
-docker pull node:20-alpine
-docker pull node:18
+docker pull node:24
 
 ```
 
-在编排开始之前，您还需要构建一下`web_app`。由于考虑此容器的大小，所以这是必须的。
-
-```bash
-cd /web_app
-yarn
-yarn build
-```
+`web_app` 的构建已改为 Dockerfile 多阶段构建，容器内会自动完成 `pnpm install` 与 `vite build`，无需在宿主机预先手动构建。
 
 ---
 
@@ -113,7 +130,6 @@ yarn build
 | 变量名                    | 默认值     | 说明                     | 是否必须 |
 |------------------------|---------|------------------------|------|
 | `LMO_APP_MAIN_PORT`    | `80`    | Web 应用对外暴露的端口          | 否    |
-| `LMO_APP_SERVICE_PORT` | `30003` | Service (合成)服务映射到主机的端口 | 否    |
 | `LMO_APP_SERVER_PORT`  | `30000` | Server 服务映射到主机的端口      | 否    |
 
 ---
@@ -146,10 +162,10 @@ yarn build
 |------------------------|---------------|------------------|
 | `NODE_ENV`             | `prod`        | Node.js 环境模式     |
 | `SERVER_HOST`          | `server_app`  | Server 服务的容器主机名  |
-| `SERVICE_HOST`         | `service_app` | Service 服务的容器主机名 |
-| `SERVICE_PORT`         | `3002`        | Service 内部监听端口   |
 | `PORT`                 | `3000`        | Server 内部监听端口    |
 | `ALLOW_UNSAFE_CONTEXT` | `1`           | 允许非安全上下文访问       |
+
+> 合成流程已并入 server 进程（不再存在独立的 service 合成服务器），因此无需为合成服务单独配置主机与端口。
 
 ---
 
@@ -165,7 +181,6 @@ yarn build
 ```env
 
 LMO_APP_MAIN_PORT=80 # web_app服务端口
-LMO_APP_SERVICE_PORT=30003 # 合成服务端口
 LMO_APP_SERVER_PORT=30000 # 服务器端口
 
 # 数据库配置
@@ -197,6 +212,11 @@ docker-compose up -d --build
 
 ### 以源代码方式部署
 
+#### 环境要求
+
+- Node.js `>= 24`
+- pnpm `10`（仓库根 `packageManager` 已锁定版本，启用 corepack 即可：`corepack enable`）
+
 #### 克隆代码
 
 ```bash
@@ -207,15 +227,14 @@ git clone https://github.com/ayuanlmo/lmo-data-visualization.git
 #### 服务器主程序
 
 ```bash
+# clone code
 cd /lmo-data-visualization
-# 
-cd /server
-# 安装依赖
-yarn
+# 安装整个 workspace 的依赖
+pnpm install
 # 编译主服务端代码
-yarn prod
+pnpm --filter lmo-data-visualization-server-application build
 # 启动主服务端
-pm2 start ./dist/main.js
+pm2 start ./server/dist/main.js
 ```
 
 ---
@@ -240,44 +259,18 @@ LMO_APP_DATA_BASE_HOST=your_db_host # 数据库地址
 
 ---
 
-#### 合成服务器
-
-```bash
-# 
-cd /service
-# 安装依赖
-yarn
-# 编译合成服务端代码
-yarn c
-# 启动合成服务
-pm2 start ./dist/main.js
-```
-
-#### 合成服务器环境变量
-
-```env
-SERVER_HOST=localhost  # 服务器地址(可选，默认值localhost)
-ALLOW_UNSAFE_CONTEXT=1 # 允许非安全上下文访问(可选 默认值0)
-SERVICE_PORT=3002      # 合成服务端口(可选 默认值3002)
-```
-
-> `ALLOW_UNSAFE_CONTEXT` 默认值为 0，表示不允许在非安全上下文中访问。但在容器等特定运行环境中，建议将其设置为
-> 1，以让合成服务器能访问到模板资源。
->
-> 即便启用了非安全上下文访问，合成服务器也会在每个任务初始化前对 `SERVER_HOST` 的合法性进行校验。
-
 #### web_app
 
 ```bash
 # 
-cd /web_app
-# 安装依赖
-yarn
-# 编译web_app代码
-yarn build
+cd /lmo-data-visualization
+# 安装依赖（workspace 根执行）
+pnpm install
+# 编译 web_app 代码（产物位于 web_app/build）
+pnpm --filter lmo-data-visualization_web_app build
 # 
-cd /dist
-# (将dist目录下所有文件及文件夹拷贝或移动到你的http服务器(例如：nginx)目录)
+cd web_app/build
+# (将build目录下所有文件及文件夹拷贝或移动到你的http服务器(例如：nginx)目录)
 ```    
 
 #### nginx配置文件参考
@@ -628,8 +621,8 @@ sudo yum install alsa-lib # CentOS / Red Hat
 
 ## 😱 注意事项
 
-1. 不建议对外暴露合成服务器端口
-2. 主服务和合成服务器必须运行在同一台服务器上
+1. 合成（headless Chromium + ffmpeg）在 server 进程内执行，不要将 server 端口直接暴露到公网
+2. 模板与素材的临时目录与 server 处于同一文件系统，因此合成必须与主服务运行在同一台服务器（或同一挂载卷）上
 3. 使用期间产生的文件，请不要手动删除
 
 ---

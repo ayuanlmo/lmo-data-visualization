@@ -8,7 +8,6 @@
     <node-interpreter value="project" />
     <envs>
       <env name="PORT" value="49237" />
-      <env name="SERVICE_PORT" value="49238" />
     </envs>
     <method v="2" />
   </configuration>
