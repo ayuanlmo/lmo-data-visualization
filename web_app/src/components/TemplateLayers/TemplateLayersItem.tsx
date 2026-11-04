@@ -23,7 +23,7 @@ const TemplateLayersItem: React.FC<ITemplateLayersItemProps> = React.memo(({data
 
         const updatedData: ITemplateSelectTextElement = {
             ...data,
-            display: !data.display ?? true
+            display: !data.display
         };
 
         PostMessage.send({

@@ -7,7 +7,7 @@ import Socket from "../lib/Socket";
 export namespace Hooks {
     const __UNDEF: undefined = void false;
 
-    export const useThrottle = (cb: Function, delay: number = 100) => {
+    export const useThrottle = (cb: (...args: any[]) => any, delay: number = 100) => {
         const timer: React.MutableRefObject<number | undefined> = useRef(__UNDEF);
 
         return useCallback((...args: any): void => {
