@@ -36,21 +36,7 @@
 ✨`lmo-DataVisualization`（以下简称`“lmo-dv”` 或 `“dv”`），一款开源可视化数据制作工具。 使用内置模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
 同时提供了sdk，可以根据需求编写不同的模板以满足业务需求。
 
-这是lmo-dv的第3个大版本，该版本完全重新设计、重做。因此与旧版本不兼容。
-
 ---
-
-### 👍 相比之前的版本，有什么区别？
-
-- 基于`React.js` + `TypeScript`
-- 内置`ffmpeg`
-- 内置`sqlite`数据库
-- 交互式的设计器
-- 重新设计的界面、模板、素材库、资源库
-- css动画录制支持
-- gif录制支持
-- 新的模板sdk
-- 容器支持
 
 ## 🤩 内置功能
 
@@ -90,15 +76,16 @@ pnpm --filter lmo-data-visualization_web_app dev                         # 前�
 
 前端 dev server 已配置代理，无需修改后端 CORS：
 
-| 代理路径          | 目标                                  | 说明                              |
-|---------------|-------------------------------------|---------------------------------|
-| `/api`        | `http://localhost:${LMO_SERRVER_APP_DEV_PORT:-49237}` | 转发时去掉 `/api` 前缀，与 nginx 行为一致 |
-| `/connect`    | 同上（`ws: true`）                        | WebSocket 长连接                   |
+| 代理路径   | 目标                                                  | 说明                                      |
+|------------|-------------------------------------------------------|-------------------------------------------|
+| `/api`     | `http://localhost:${LMO_SERRVER_APP_DEV_PORT:-49237}` | 转发时去掉 `/api` 前缀，与 nginx 行为一致 |
+| `/connect` | 同上（`ws: true`）                                    | WebSocket 长连接                          |
 
 可用环境变量：`LMO_WEB_APP_DEV_PORT`（前端端口，默认 `8081`）、`LMO_SERRVER_APP_DEV_PORT`（被代理的后端端口，默认 `49237`）。
 IDE 用户可直接使用 `.run` 下的 `Run-ServerApp` / `Run-ReactApp` 配置。
 
-其他根级脚本：`pnpm -r typecheck`（含前端两个 tsconfig）、`pnpm --filter lmo-data-visualization_web_app lint`、`pnpm --filter lmo-data-visualization_web_app build`。
+其他根级脚本：`pnpm -r typecheck`（含前端两个 tsconfig）、`pnpm --filter lmo-data-visualization_web_app lint`、
+`pnpm --filter lmo-data-visualization_web_app build`。
 
 ---
 
@@ -127,30 +114,30 @@ docker pull node:24
 
 ##### 🚦 服务端口相关
 
-| 变量名                    | 默认值     | 说明                     | 是否必须 |
-|------------------------|---------|------------------------|------|
-| `LMO_APP_MAIN_PORT`    | `80`    | Web 应用对外暴露的端口          | 否    |
-| `LMO_APP_SERVER_PORT`  | `30000` | Server 服务映射到主机的端口      | 否    |
+| 变量名                | 默认值  | 说明                        | 是否必须 |
+|-----------------------|---------|-----------------------------|----------|
+| `LMO_APP_MAIN_PORT`   | `80`    | Web 应用对外暴露的端口      | 否       |
+| `LMO_APP_SERVER_PORT` | `30000` | Server 服务映射到主机的端口 | 否       |
 
 ---
 
 ##### 💾 数据库配置（Database）
 
-| 变量名                           | 默认值             | 说明                       | 是否敏感 | mssql必选项 |
-|-------------------------------|-----------------|--------------------------|------|----------|
-| `LMO_APP_DATA_BASE_TYPE`      | `sqlite`        | 数据库类型（可选 sqlite, mssql ） | ❌    | ❌        |
-| `LMO_APP_DATA_BASE_NAME`      | `lmo-dv`        | 数据库名称（适用于mssql）          | ❌    | ✅        |
-| `LMO_APP_DATA_BASE_USER_NAME` | `your_username` | 数据库用户名（适用于mssql）         | 	⚠️  | ✅        |
-| `LMO_APP_DATA_BASE_PASSWORD`  | `your_password` | 数据库密码（适用于mssql）          | 	⚠️  | ✅        |
-| `LMO_APP_DATA_BASE_HOST`      | `localhost`     | 数据库主机地址（适用于mssql）        | ⚠️   | ✅        |
+| 变量名                        | 默认值          | 说明                              | 是否敏感 | mssql必选项 |
+|-------------------------------|-----------------|-----------------------------------|----------|-------------|
+| `LMO_APP_DATA_BASE_TYPE`      | `sqlite`        | 数据库类型（可选 sqlite, mssql ） | ❌       | ❌          |
+| `LMO_APP_DATA_BASE_NAME`      | `lmo-dv`        | 数据库名称（适用于mssql）         | ❌       | ✅          |
+| `LMO_APP_DATA_BASE_USER_NAME` | `your_username` | 数据库用户名（适用于mssql）       | 	⚠️       | ✅          |
+| `LMO_APP_DATA_BASE_PASSWORD`  | `your_password` | 数据库密码（适用于mssql）         | 	⚠️       | ✅          |
+| `LMO_APP_DATA_BASE_HOST`      | `localhost`     | 数据库主机地址（适用于mssql）     | ⚠️       | ✅          |
 
 ---
 
 ##### 📁 数据卷挂载路径
 
-| 变量名            | 默认值         | 说明                   | 是否必须 |
-|----------------|-------------|----------------------|------|
-| `LMO_APP_DATA` | `/lmo-data` | 宿主机上的数据挂载目录（用于持久化存储） | 	✅   |
+| 变量名         | 默认值      | 说明                                     | 是否必须 |
+|----------------|-------------|------------------------------------------|----------|
+| `LMO_APP_DATA` | `/lmo-data` | 宿主机上的数据挂载目录（用于持久化存储） | 	✅       |
 
 ---
 
@@ -158,12 +145,12 @@ docker pull node:24
 
 这些变量虽然未通过环境变量注入，但作为补充信息列出：
 
-| 变量名                    | 默认值           | 说明               |
-|------------------------|---------------|------------------|
-| `NODE_ENV`             | `prod`        | Node.js 环境模式     |
-| `SERVER_HOST`          | `server_app`  | Server 服务的容器主机名  |
-| `PORT`                 | `3000`        | Server 内部监听端口    |
-| `ALLOW_UNSAFE_CONTEXT` | `1`           | 允许非安全上下文访问       |
+| 变量名                 | 默认值       | 说明                    |
+|------------------------|--------------|-------------------------|
+| `NODE_ENV`             | `prod`       | Node.js 环境模式        |
+| `SERVER_HOST`          | `server_app` | Server 服务的容器主机名 |
+| `PORT`                 | `3000`       | Server 内部监听端口     |
+| `ALLOW_UNSAFE_CONTEXT` | `1`          | 允许非安全上下文访问    |
 
 > 合成流程已并入 server 进程（不再存在独立的 service 合成服务器），因此无需为合成服务单独配置主机与端口。
 
