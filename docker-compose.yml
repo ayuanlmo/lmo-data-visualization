@@ -1,4 +1,5 @@
-version: '3.8'
+# Compose v2 起 `version` 字段已废弃（会打印 obsolete 告警并忽略），故不再声明。
+# 依赖 BuildKit 的 COPY 源裁剪：两个服务共用 context: . ，排除规则统一写在仓库根的 .dockerignore。
 
 services:
   web_app:
@@ -42,6 +43,13 @@ services:
     ports:
       - "${LMO_APP_SERVER_PORT:-30000}:3000"
     volumes:
+      # 用 Docker 管理的命名卷，不用 type: none + o: bind 的「伪卷」，两个实测原因：
+      #  1) bind 型卷要求 daemon 主机上预先存在 device 路径。Docker Desktop 的 daemon 在独立 VM 里，
+      #     VM 内没有 /lmo-data，容器直接起不来：
+      #     failed to mount local volume: mount /lmo-data:..., no such file or directory
+      #  2) 内置模板与静态资源就在镜像的 _data/static 下。只有「Docker 自己管理的空命名卷」会被
+      #     填充镜像目录内容；bind 型卷不填充，挂上去就是把镜像里的模板遮盖成空目录。
+      # 需要把数据放到指定宿主路径时，见仓库根 README.md「📁 数据持久化与备份」的 override 写法。
       - lmo-server-data:/lmo-app/server/_data
     networks:
       - lmo_app_network
@@ -51,9 +59,10 @@ networks:
     driver: bridge
 
 volumes:
+  # 默认交给 Docker 管理（local driver，不带 driver_opts）：首次挂载时把镜像内
+  # /lmo-app/server/_data 的内容（内置模板 + scripts/styles）填进卷，之后一直复用。
+  # 备份 / 迁移：
+  #   docker run --rm -v lmo-data-visualization_lmo-server-data:/v -v "$PWD":/out alpine \
+  #     tar -C /v -cf /out/lmo-data.tar .
+  # 升级镜像后想让新增内置模板进卷：备份后 docker volume rm 同名卷，重启即重新填充。
   lmo-server-data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${LMO_APP_DATA:-/lmo-data}
-      o: bind
