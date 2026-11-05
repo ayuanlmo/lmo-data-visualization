@@ -18,27 +18,29 @@ COPY web_app/package.json ./web_app/
 RUN pnpm install --frozen-lockfile --filter lmo-data-visualization-server-application
 
 # Chromium 运行时依赖 + 中文字体
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        libnss3 \
-        libglib2.0-0 \
-        libatk1.0-0 \
-        libatk-bridge2.0-0 \
-        libcups2 \
-        libdrm2 \
-        libxkbcommon0 \
-        libxcomposite1 \
-        libxdamage1 \
-        libxfixes3 \
-        libxrandr2 \
-        libgbm1 \
-        libpango-1.0-0 \
-        libcairo2 \
-        libasound2t64 \
-        fonts-wqy-microhei && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    fc-cache -f -v
+
+RUN set -eux; \
+    UPDATE_OK=0; \
+    for i in 1 2 3 4 5; do \
+        if apt-get update -o Acquire::Retries=3 -o Acquire::http::Timeout=30; then UPDATE_OK=1; break; fi; \
+        echo "apt-get update 第 $i 次失败，5s 后重试"; sleep 5; \
+    done; \
+    if [ "$UPDATE_OK" != 1 ]; then echo "apt 源持续不可用：请为 docker 构建配置代理，或改用 Debian 镜像源"; exit 1; fi; \
+    resolve() { for n in "$@"; do if apt-cache show "$n" >/dev/null 2>&1; then echo "$n"; return 0; fi; done; return 1; }; \
+    PKGS="libnss3 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libcairo2 fonts-wqy-microhei"; \
+    for risky in libglib2.0-0 libcups2 libasound2 libatk1.0-0 libatk-bridge2.0-0 libpango-1.0-0; do \
+        PKGS="$PKGS $(resolve "${risky}t64" "$risky")"; \
+    done; \
+    echo "本次实际安装的包: $PKGS"; \
+    INSTALL_OK=0; \
+    for i in 1 2 3 4 5; do \
+        if apt-get install -y --no-install-recommends -o Acquire::Retries=3 -o Acquire::http::Timeout=30 $PKGS; then INSTALL_OK=1; break; fi; \
+        echo "apt-get install 第 $i 次失败（常见于 .deb 拉取 502），5s 后只补缺包重试"; sleep 5; \
+    done; \
+    if [ "$INSTALL_OK" != 1 ]; then echo "apt 仓库持续不可用：请为 docker 构建配置代理，或改用 Debian 镜像源"; exit 1; fi; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/*; \
+    fc-cache -f
 
 # 拷贝源码并构建
 COPY server ./server

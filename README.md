@@ -36,7 +36,21 @@
 ✨`lmo-DataVisualization`（以下简称`“lmo-dv”` 或 `“dv”`），一款开源可视化数据制作工具。 使用内置模板，将各种业务数据转换为视频动画，使数据更加形象、生动。
 同时提供了sdk，可以根据需求编写不同的模板以满足业务需求。
 
+这是lmo-dv的第3个大版本，该版本完全重新设计、重做。因此与旧版本不兼容。
+
 ---
+
+### 👍 相比之前的版本，有什么区别？
+
+- 基于`React.js` + `TypeScript`
+- 内置`ffmpeg`
+- 内置`sqlite`数据库
+- 交互式的设计器
+- 重新设计的界面、模板、素材库、资源库
+- css动画录制支持
+- gif录制支持
+- 新的模板sdk
+- 容器支持
 
 ## 🤩 内置功能
 
@@ -76,16 +90,15 @@ pnpm --filter lmo-data-visualization_web_app dev                         # 前�
 
 前端 dev server 已配置代理，无需修改后端 CORS：
 
-| 代理路径   | 目标                                                  | 说明                                      |
-|------------|-------------------------------------------------------|-------------------------------------------|
-| `/api`     | `http://localhost:${LMO_SERRVER_APP_DEV_PORT:-49237}` | 转发时去掉 `/api` 前缀，与 nginx 行为一致 |
-| `/connect` | 同上（`ws: true`）                                    | WebSocket 长连接                          |
+| 代理路径          | 目标                                  | 说明                              |
+|---------------|-------------------------------------|---------------------------------|
+| `/api`        | `http://localhost:${LMO_SERRVER_APP_DEV_PORT:-49237}` | 转发时去掉 `/api` 前缀，与 nginx 行为一致 |
+| `/connect`    | 同上（`ws: true`）                        | WebSocket 长连接                   |
 
 可用环境变量：`LMO_WEB_APP_DEV_PORT`（前端端口，默认 `8081`）、`LMO_SERRVER_APP_DEV_PORT`（被代理的后端端口，默认 `49237`）。
 IDE 用户可直接使用 `.run` 下的 `Run-ServerApp` / `Run-ReactApp` 配置。
 
-其他根级脚本：`pnpm -r typecheck`（含前端两个 tsconfig）、`pnpm --filter lmo-data-visualization_web_app lint`、
-`pnpm --filter lmo-data-visualization_web_app build`。
+其他根级脚本：`pnpm -r typecheck`（含前端两个 tsconfig）、`pnpm --filter lmo-data-visualization_web_app lint`、`pnpm --filter lmo-data-visualization_web_app build`。
 
 ---
 
@@ -114,30 +127,75 @@ docker pull node:24
 
 ##### 🚦 服务端口相关
 
-| 变量名                | 默认值  | 说明                        | 是否必须 |
-|-----------------------|---------|-----------------------------|----------|
-| `LMO_APP_MAIN_PORT`   | `80`    | Web 应用对外暴露的端口      | 否       |
-| `LMO_APP_SERVER_PORT` | `30000` | Server 服务映射到主机的端口 | 否       |
+| 变量名                    | 默认值     | 说明                     | 是否必须 |
+|------------------------|---------|------------------------|------|
+| `LMO_APP_MAIN_PORT`    | `80`    | Web 应用对外暴露的端口          | 否    |
+| `LMO_APP_SERVER_PORT`  | `30000` | Server 服务映射到主机的端口      | 否    |
 
 ---
 
 ##### 💾 数据库配置（Database）
 
-| 变量名                        | 默认值          | 说明                              | 是否敏感 | mssql必选项 |
-|-------------------------------|-----------------|-----------------------------------|----------|-------------|
-| `LMO_APP_DATA_BASE_TYPE`      | `sqlite`        | 数据库类型（可选 sqlite, mssql ） | ❌       | ❌          |
-| `LMO_APP_DATA_BASE_NAME`      | `lmo-dv`        | 数据库名称（适用于mssql）         | ❌       | ✅          |
-| `LMO_APP_DATA_BASE_USER_NAME` | `your_username` | 数据库用户名（适用于mssql）       | 	⚠️       | ✅          |
-| `LMO_APP_DATA_BASE_PASSWORD`  | `your_password` | 数据库密码（适用于mssql）         | 	⚠️       | ✅          |
-| `LMO_APP_DATA_BASE_HOST`      | `localhost`     | 数据库主机地址（适用于mssql）     | ⚠️       | ✅          |
+| 变量名                           | 默认值             | 说明                       | 是否敏感 | mssql必选项 |
+|-------------------------------|-----------------|--------------------------|------|----------|
+| `LMO_APP_DATA_BASE_TYPE`      | `sqlite`        | 数据库类型（可选 sqlite, mssql ） | ❌    | ❌        |
+| `LMO_APP_DATA_BASE_NAME`      | `lmo-dv`        | 数据库名称（适用于mssql）          | ❌    | ✅        |
+| `LMO_APP_DATA_BASE_USER_NAME` | `your_username` | 数据库用户名（适用于mssql）         | 	⚠️  | ✅        |
+| `LMO_APP_DATA_BASE_PASSWORD`  | `your_password` | 数据库密码（适用于mssql）          | 	⚠️  | ✅        |
+| `LMO_APP_DATA_BASE_HOST`      | `localhost`     | 数据库主机地址（适用于mssql）        | ⚠️   | ✅        |
 
 ---
 
-##### 📁 数据卷挂载路径
+##### 🎬 合成与请求体积相关
 
-| 变量名         | 默认值      | 说明                                     | 是否必须 |
-|----------------|-------------|------------------------------------------|----------|
-| `LMO_APP_DATA` | `/lmo-data` | 宿主机上的数据挂载目录（用于持久化存储） | 	✅       |
+| 变量名                           | 默认值 | 说明                                                                 |
+|-------------------------------|-----|----------------------------------------------------------------------|
+| `LMO_APP_CHROME_MIRROR_BASE`  | 空   | **仅构建期生效**（compose 已透传为 build arg）。Chrome for Testing 下载基址，镜像必须保持 `<基址>/<构建号>/<平台>/chrome-<平台>.zip` 目录结构。国内 / 网络受限时建议设为 `https://cdn.npmmirror.com/binaries/chrome-for-testing`，不设则走官方 CDN（约 157MB，实测慢 50 倍）。改动后需 `docker-compose build` 重新生成镜像 |
+| `LMO_APP_REQUEST_BODY_LIMIT_MB` | `64`  | 非 multipart 请求体上限（MB）。`createTask` 会同时带封面与背景两张 base64 图，所以默认给到 64；调高时要与 `web_app/nginx.conf` 的 `client_max_body_size 100M` 一起改 |
+| `LMO_APP_FFMPEG_PATH`          | 空   | 逃生口：指向系统 ffmpeg 以绕过镜像内构建期下载到的残缺二进制。留空 = 用镜像内预置的 ffmpeg-static，日常无需设置 |
+| `LMO_APP_FFPROBE_PATH`         | 空   | 同上，ffprobe 的逃生口。留空 = 沿用依赖内置的 ffprobe-static                             |
+
+---
+
+##### 📁 数据持久化与备份
+
+`server_app` 的数据目录 `/lmo-app/server/_data` 默认挂在一个 **Docker 自管理的命名卷** `lmo-server-data` 上。首次启动时 Docker 会把镜像内该目录的内容（内置模板、global scripts、样式）填进卷，之后卷里就是运行时的真数据：
+
+| 子目录 | 内容 |
+|---|---|
+| `db/` | sqlite 数据库文件（`LMO_APP_DATA_BASE_TYPE=sqlite` 时） |
+| `log/` | 服务日志 |
+| `static/public/templates/` | 内置模板，以及用户新建的自定义模板（目录名为 UUID） |
+| `static/public/{output,uploads,previewTemplate}/` | 合成产物、上传素材、预览临时页 |
+
+> **`LMO_APP_DATA` 已废弃**。旧写法把卷配成 `driver_opts: {type: none, o: bind, device: /lmo-data}`，实测有两个致命问题：
+> ① bind 型卷要求 **Docker daemon 主机**上预先存在该路径，而 Docker Desktop 的 daemon 跑在独立 VM 里，VM 内没有 `/lmo-data`，容器直接起不来（`failed to mount local volume: ... no such file or directory`）；
+> ② bind 型卷不填充镜像内容，挂上去等于把镜像里的内置模板遮盖成空目录，模板列表会变空。
+> 现在即使设了这个变量也不起作用。
+
+要把数据放到指定宿主路径，用 override 文件（注意：bind 挂载同样不会被填充，首次启动前需自行把 `server/_data/static` 拷进去，否则模板列表为空）：
+
+```yaml
+# docker-compose.override.yml
+services:
+  server_app:
+    volumes:
+      - /your/host/path:/lmo-app/server/_data
+```
+
+备份与迁移：
+
+```bash
+# 打包卷内容到当前目录
+docker run --rm -v lmo-data-visualization_lmo-server-data:/v -v "$PWD":/out alpine \
+  tar czf /out/lmo-data-backup.tgz -C /v .
+
+# 还原到卷
+docker run --rm -v lmo-data-visualization_lmo-server-data:/v -v "$PWD":/in alpine \
+  tar xzf /in/lmo-data-backup.tgz -C /v
+```
+
+> 升级提醒：改了镜像内的内置模板或 global scripts 后，**已存在的命名卷不会被刷新**（卷里仍是旧内容）。需要时删卷重建（会丢数据库与产物，先备份），或手动把新文件写进卷。
 
 ---
 
@@ -145,14 +203,39 @@ docker pull node:24
 
 这些变量虽然未通过环境变量注入，但作为补充信息列出：
 
-| 变量名                 | 默认值       | 说明                    |
-|------------------------|--------------|-------------------------|
-| `NODE_ENV`             | `prod`       | Node.js 环境模式        |
-| `SERVER_HOST`          | `server_app` | Server 服务的容器主机名 |
-| `PORT`                 | `3000`       | Server 内部监听端口     |
-| `ALLOW_UNSAFE_CONTEXT` | `1`          | 允许非安全上下文访问    |
+| 变量名                    | 默认值           | 说明               |
+|------------------------|---------------|------------------|
+| `NODE_ENV`             | `prod`        | Node.js 环境模式     |
+| `SERVER_HOST`          | `server_app`  | Server 服务的容器主机名  |
+| `PORT`                 | `3000`        | Server 内部监听端口    |
+| `ALLOW_UNSAFE_CONTEXT` | `1`           | 允许非安全上下文访问       |
 
 > 合成流程已并入 server 进程（不再存在独立的 service 合成服务器），因此无需为合成服务单独配置主机与端口。
+
+---
+
+##### 🔌 WebSocket 连不上（合成功报“网络错误”、进度不更新）
+
+需要经 nginx 升级的只有一条：`ws://<host>/connect`（`web_app/src/lib/Socket` 发起，负责任务受理 / 进度 / 终态广播）。
+
+> 服务端还有一条 WS `/template`，它是**内部通道，不要代理给前端**：只有模板页面处于合成模式（URL 带 `?__type=h`，见`scripts/bin/BaseTemplateMethods.ts` 的 `isSynthesisMode`）才会建这条连接，而那类页面是由 server 进程内的 headless Chrome 从 `http://server_app:3000/static/templates/<id>/index.html?__type=h` 直接加载的，根本不经过 nginx。设计页里的预览 iframe 不带 `__type=h`，走 `postMessage`，也不建 WS。把它暴露到 80 端口等于白送一个无鉴权的内部中止渲染通道。
+
+改 nginx 配置后务必 `docker-compose build web_app` 重新烘镜像（该文件在构建阶段 COPY 进去，仅 `up -d` 不会更新）。
+
+两个实测过的坑：
+
+1. **`proxy_pass` 末尾多一个斜杠就会断**。`location /connect { proxy_pass http://server_app:3000/connect/; }` 会让 nginx 把匹配段整体替换为 `/connect/`，上游收到的是带尾斜杠的路径。Fastify 默认不忽略尾斜杠（以前的 Express 会），于是落到 notFound 处理器。开发环境的 vite 代理不会加这个斜杠，所以“本地好好、容器里连不上”。
+2. **握手失败不报错，只看得到 200**。本项目的响应封套把 404 也包成 HTTP 200（`{"code":404,...}`），nginx 访问日志与浏览器 Network 面板看着全绿。诊断要看升级响应的第一行是不是 `101 Switching Protocols`，而不是状态码：
+
+```bash
+# 从任意容器内发起原始握手（把 host 换成 nginx 服务名或 127.0.0.1）
+node -e 'const n=require("node:net"),k=require("node:buffer").Buffer.alloc(16,65).toString("base64");
+ const s=n.connect(80,"web_app",()=>s.write(`GET /connect HTTP/1.1\r\nHost: x\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: ${k}\r\nSec-WebSocket-Version: 13\r\n\r\n`));
+ s.on("data",d=>{console.log(d.toString().split("\r\n")[0]);process.exit()});'
+# 期待：HTTP/1.1 101 Switching Protocols（收到 200 就是没升级）
+```
+
+> 另：`Sec-WebSocket-Key` 必须是 16 字节随机数的 Base64（24 个字符），长度不对 `ws` 库会直接回 400，排查时别被自己骗了。
 
 ---
 
@@ -178,8 +261,6 @@ LMO_APP_DATA_BASE_NAME=lmo-dv  # 数据库名称
 LMO_APP_DATA_BASE_USER_NAME=root # 数据库用户名
 LMO_APP_DATA_BASE_PASSWORD=your_password # 数据库密码
 LMO_APP_DATA_BASE_HOST=localhost # 数据库地址
-
-LMO_APP_DATA=/lmo-data # 数据挂载路径
 
 ```
 
