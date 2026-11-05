@@ -35,6 +35,7 @@ pnpm-debug.log*
 /server/.bin/
 /server/tmp/
 # 本地临时排查脚本与验证缓存
+/tmp_*
 /server/_data/tmp_*
 /server/_data/btest/
 # 运行时数据产物（sqlite 库、日志、临时/生成目录），不纳入版本控制

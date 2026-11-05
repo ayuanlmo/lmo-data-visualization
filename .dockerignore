@@ -1,17 +1,40 @@
-# Docker 构建上下文排除项
-# 上下文为仓库根（server/Dockerfile 与 web_app/Dockerfile 都在 pnpm workspace 上构建），
-# 因此必须排除宿主机的 node_modules / 构建产物，避免覆盖镜像内 pnpm install 的结果并压缩上下文体积。
 **/node_modules
 server/dist
 web_app/build
+
+# ---- 合成运行时目录：必须排除，是本次构建失败的根因 ----
+server/tmp
+**/tmp/browser
+**/tmp/synthesizer
+
+# ---- 预置的二进制缓存（镜像内由 pnpm browser:install 重新下载并校验）----
+**/.bin
+
+# ---- 运行时数据：数据库、日志 ----
 server/_data/db
+server/_data/log
 server/_data/logs
 
+# ---- 运行时数据：生成物与上传件（compose 以卷挂载持久化，不能烙进镜像）----
+server/_data/static/public/output
+server/_data/static/public/uploads
+server/_data/static/public/previewTemplate
+server/_data/static/public/templates/????????-????-????-????-????????????
+
+# ---- 本地一次性排查脚本与验证缓存 ----
+server/_data/tmp_*
+server/_data/btest
+
+# ---- 版本控制 / IDE / 文档 ----
 .git
 .gitignore
+.gitattributes
 .idea
+.vscode
 .qoder
 .run
 doc
 *.log
 tmp-*
+tmp_*
+**/tmp_volume_probe.sh
