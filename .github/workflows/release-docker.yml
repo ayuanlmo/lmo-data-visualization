@@ -1,0 +1,279 @@
+name: Release Docker Image
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: Release tag to publish (e.g. v1.1.0)
+        required: true
+        type: string
+      force_latest:
+        description: Push the latest label even if this release is not the Latest one
+        required: false
+        type: boolean
+        default: false
+      dry_run:
+        description: Build only, no login and no push (validates the Dockerfiles; needs no Docker Hub credentials)
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# 同一时刻只允许一条发布流水线动 latest，避免两个 release 并发把 latest 指乱。
+# cancel-in-progress 关掉：镜像推送到一半被取消会留下半套标签。
+concurrency:
+  group: release-docker
+  cancel-in-progress: false
+
+env:
+  REGISTRY: docker.io
+  # 仓库名前缀不写在这里：见下面「组装镜像名」步骤，它支持用仓库 Variable IMAGE_PREFIX 覆盖，
+  # 以便拿一次性仓库做全链路测试而不污染正式镜像名。
+
+jobs:
+  # 先单独判一次「该不该构建」，把结论做成 output。
+  # 拆成独立 job 的好处：release 事件里「非 Latest 被跳过」在 Actions 列表上是一眼可见的绿勾，
+  # 而不是两个 build job 各自红着脸失败。
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      tag: ${{ steps.decide.outputs.tag }}
+      version: ${{ steps.decide.outputs.version }}
+      publish_latest: ${{ steps.decide.outputs.publish_latest }}
+      dry_run: ${{ steps.decide.outputs.dry_run }}
+      reason: ${{ steps.decide.outputs.reason }}
+    steps:
+      - name: Decide gating and image version
+        id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || github.event.inputs.tag_name }}
+          FORCE_LATEST: ${{ github.event.inputs.force_latest }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${TAG:-}" ]; then
+            echo "::error::Not a release event and no tag_name input, cannot determine the version"
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          if [ "$VERSION" = "$TAG" ]; then
+            echo "::notice::tag \"$TAG\" has no leading v, using \"$VERSION\" as the image label"
+          fi
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9A-Za-z][0-9A-Za-z._-]{0,127}$'; then
+            echo "::error::After stripping a leading v, \"$VERSION\" is not a valid Docker tag (letters, digits and . _ - only, cannot start with . or -)"
+            exit 1
+          fi
+
+          # 用 API 而不是只信 webhook payload：workflow_dispatch 手动补发时没有 payload，
+          # 顺带把 draft / prerelease 一起拿回来。分隔符用 | 不用制表符，避免跨工具被当空白折叠。
+          REL="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" --jq '[.id,.draft,.prerelease]|map(tostring)|join("|")' 2>/dev/null || true)"
+          if [ -z "$REL" ]; then
+            if [ "${DRY_RUN:-}" = "true" ]; then
+              # dry-run 只验构建，允许「只有 git tag、没有 release」这种情形，方便第一次跑通
+              REL="0|false|false"
+            else
+              echo "::error::No release found for tag ${TAG}; create / publish it first"
+              exit 1
+            fi
+          fi
+          # 用参数展开切分，不用 heredoc：heredoc 的结束符必须顶格写，而顶格会破坏
+          # YAML 块标量的缩进（actionlint 报 could not parse as YAML）。
+          ID="${REL%%|*}"
+          REST="${REL#*|}"
+          DRAFT="${REST%%|*}"
+          PRERELEASE="${REST#*|}"
+
+          LATEST_ID="$(gh api "repos/${GITHUB_REPOSITORY}/releases/latest" --jq .id 2>/dev/null || true)"
+
+          PUBLISH_LATEST=false
+          REASON=""
+          if [ "$DRAFT" = "true" ]; then
+            REASON="draft release, not building"
+          elif [ "${FORCE_LATEST:-}" = "true" ]; then
+            PUBLISH_LATEST=true
+            REASON="force_latest checked, treated as Latest (original verdict kept below)"
+          elif [ -z "$LATEST_ID" ]; then
+            REASON="no full release yet (/releases/latest returned 404), this one is a prerelease, not building"
+          elif [ "$ID" = "$LATEST_ID" ]; then
+            PUBLISH_LATEST=true
+            REASON="same id as /releases/latest ($ID), this is Latest"
+          else
+            REASON="not Latest: this id=$ID, /releases/latest id=$LATEST_ID"
+          fi
+
+          # dry-run 仅用于验证构建链路：强制越过 Latest 判定放行，但后面不会登录也不会 push。
+          DRY_RUN_N=false
+          if [ "${DRY_RUN:-}" = "true" ]; then
+            DRY_RUN_N=true
+            PUBLISH_LATEST=true
+            REASON="${REASON}; dry-run bypassed the Latest verdict, build only without push"
+          fi
+
+          {
+            echo "tag=$TAG"
+            echo "version=$VERSION"
+            echo "publish_latest=$PUBLISH_LATEST"
+            echo "dry_run=$DRY_RUN_N"
+            echo "reason=$REASON"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## Release gating"
+            echo "- release tag: \`${TAG}\` -> image label \`${VERSION}\`"
+            echo "- draft=\`${DRAFT}\` prerelease=\`${PRERELEASE}\`"
+            echo "- Latest verdict: ${REASON}"
+            echo "- push the latest label: \`${PUBLISH_LATEST}\`"
+            echo "- dry-run (no login, no push): \`${DRY_RUN_N}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$PUBLISH_LATEST" != "true" ]; then
+            echo "::notice::Skipping build: ${REASON}"
+            echo "  $REASON"
+          fi
+
+  build:
+    needs: gate
+    if: needs.gate.outputs.publish_latest == 'true'
+    runs-on: ubuntu-latest
+    # server 层要 pnpm install + 下载 Chrome(157MB) + tsc，给足余量；卡死时不至于挂 6h
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: server
+            dockerfile: server/Dockerfile
+            suffix: server
+          - service: web_app
+            dockerfile: web_app/Dockerfile
+            suffix: webapp
+    steps:
+      - name: Check out the tag
+        uses: actions/checkout@v4
+        with:
+          # 构建内容必须与 release 一致，所以检出 tag，而不是触发分支的 HEAD
+          ref: refs/tags/${{ needs.gate.outputs.tag }}
+          persist-credentials: false
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        # dry-run 不登录：这样即使仓库还没配 DOCKERHUB_* 也能跑 L2
+        if: needs.gate.outputs.dry_run != 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Compose the image name
+        id: img
+        env:
+          NAMESPACE: ${{ vars.DOCKERHUB_NAMESPACE || secrets.DOCKERHUB_USERNAME }}
+          VERSION: ${{ needs.gate.outputs.version }}
+          PREFIX: ${{ vars.IMAGE_PREFIX || 'lmo-data-visualization_' }}
+          DRY_RUN: ${{ needs.gate.outputs.dry_run }}
+        run: |
+          set -euo pipefail
+          if [ -z "${NAMESPACE}" ]; then
+            if [ "${DRY_RUN}" = "true" ]; then
+              # L2 不推送，没必要要求凭据；给个合法占位命名空间，保证 tags 能过格式校验
+              NAMESPACE="dry-run-local"
+            else
+              echo "::error::DOCKERHUB_USERNAME (or DOCKERHUB_NAMESPACE) is missing, cannot build the repository path"
+              exit 1
+            fi
+          fi
+          IMAGE="${NAMESPACE}/${PREFIX}${{ matrix.suffix }}"
+          echo "name=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "About to push: ${IMAGE}:${VERSION} and ${IMAGE}:latest"
+
+      # 不做层缓存：单镜像成品 3.9GB，GitHub Actions 每仓库只有 10GB 缓存额度，
+      # 两三个 release 就把额度吃满并反复驱逐，收益远小于噪音。发布频率低，每次全新构建更可控。
+      # 若要开启，把下面两行取消注释（type=gha 需要前面的 setup-buildx 已就位）：
+      #   cache-from: type=gha,scope=${{ github.workflow }}-${{ matrix.service }}
+      #   cache-to: type=gha,mode=max,scope=${{ github.workflow }}-${{ matrix.service }}
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v6
+        with:
+          # 上下文必须是仓库根：两个 Dockerfile 都要 COPY 根级 package.json /
+          # pnpm-lock.yaml / .npmrc，排除规则统一看仓库根的 .dockerignore
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: ${{ needs.gate.outputs.dry_run != 'true' }}
+          platforms: linux/amd64
+          tags: |
+            ${{ steps.img.outputs.name }}:${{ needs.gate.outputs.version }}
+            ${{ steps.img.outputs.name }}:latest
+          # CHROME_MIRROR_BASE 只有 server/Dockerfile 认，web_app 传了会得空值并告警 unused，
+          # 所以按服务名条件传入。
+          build-args: ${{ matrix.service == 'server' && format('CHROME_MIRROR_BASE={0}', vars.CHROME_MIRROR_BASE) || '' }}
+          # 关掉 provenance/SBOM attestation：否则 Docker Hub 上每个 tag 会多挂一份
+          # unknown/unknown 的 attest 清单，纯托管镜像没必要，也方便老版本 docker 直接 pull
+          provenance: false
+          sbom: false
+
+      - name: Read back the remote manifest to confirm the labels
+        if: needs.gate.outputs.dry_run != 'true'
+        # 不把 ${{ }} 直接写进 shell 字符串：经 env 传递既避开 shellcheck 的 SC2016，
+        # 也根掉“outputs 里含引号就把脚本拼坏”的注入面。
+        env:
+          VERSION: ${{ needs.gate.outputs.version }}
+          IMAGE: ${{ steps.img.outputs.name }}
+        run: |
+          set -euo pipefail
+          echo "=== ${IMAGE}:${VERSION} ==="
+          docker buildx imagetools inspect "${IMAGE}:${VERSION}"
+          echo "=== ${IMAGE}:latest ==="
+          docker buildx imagetools inspect "${IMAGE}:latest" \
+            | grep -E 'Digest|Platform: linux/amd64' || true
+
+  # 两个镜像都成功后，把 release 里能直接复制的启动命令写进摘要
+  summary:
+    needs: [gate, build]
+    if: always() && needs.build.result == 'success' && needs.gate.outputs.dry_run != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write usage notes
+        env:
+          VERSION: ${{ needs.gate.outputs.version }}
+          NAMESPACE: ${{ vars.DOCKERHUB_NAMESPACE || secrets.DOCKERHUB_USERNAME }}
+          PREFIX: ${{ vars.IMAGE_PREFIX || 'lmo-data-visualization_' }}
+        run: |
+          set -euo pipefail
+          {
+            echo "## Images published: \`${VERSION}\`"
+            echo ""
+            echo '```bash'
+            echo "docker pull ${NAMESPACE}/${PREFIX}server:${VERSION}"
+            echo "docker pull ${NAMESPACE}/${PREFIX}webapp:${VERSION}"
+            echo "# or track the newest full release"
+            echo "docker pull ${NAMESPACE}/${PREFIX}server:latest"
+            echo "docker pull ${NAMESPACE}/${PREFIX}webapp:latest"
+            echo '```'
+            echo ""
+            echo "To run these published images with compose, use an override file that swaps the local build for the remote image:"
+            echo ""
+            echo '```yaml'
+            echo "# docker-compose.release.yml"
+            echo "services:"
+            echo "  server_app:"
+            echo "    image: ${NAMESPACE}/${PREFIX}server:${VERSION}"
+            echo "    build: !reset null"
+            echo "  web_app:"
+            echo "    image: ${NAMESPACE}/${PREFIX}webapp:${VERSION}"
+            echo "    build: !reset null"
+            echo '```'
+            echo ""
+            echo "\`!reset\` needs Compose v2.24+ (it deletes the build key from the base file, so a missing image cannot silently start a local build)."
+            echo "On older Compose, pull explicitly before starting:"
+            echo "\`docker compose -f docker-compose.yml -f docker-compose.release.yml pull && ... up -d --no-build\`"
+          } >> "$GITHUB_STEP_SUMMARY"
