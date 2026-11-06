@@ -155,7 +155,8 @@ export default class TaskService {
         const {templateStaticPath, htmlPath, htmPath, templatePathName} = ctx;
 
         return {
-            path: `${templateStaticPath}/${existsSync(htmlPath) ? 'index.html' : existsSync(htmPath) ? 'index.htm' : '/'}?__type=h`,
+            // 无入口文件时必须拼出 `<目录>/<id>/?__type=h`（那个/由模板串里的字面量提供）。
+            path: `${templateStaticPath}/${existsSync(htmlPath) ? 'index.html' : existsSync(htmPath) ? 'index.htm' : ''}?__type=h`,
             id: templatePathName
         };
     }

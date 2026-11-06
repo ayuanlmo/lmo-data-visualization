@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import Fastify, { type FastifyReply, type FastifyRequest } from "fastify";
 import cors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
@@ -28,6 +30,12 @@ import CreateErrorMessage = Utils.createErrorMessage;
 // 两者以前都靠 __dirname 相对层级硬算，跑编译产物时会多钻一层 dist/ 而整体失效。
 const VIEWS_DIR: string = packagePath('views');
 const STATIC_ROOT: string = staticPublicRoot;
+
+// 模板目录名的允许形式：UUID 与内置模板目录名（base-bar-chart 等）。
+// 首字符限定为字母数字，顺带挡掉 "." 与 ".." —— 这个值要拿去拼磁盘路径，不能直接使用。
+const SAFE_TEMPLATE_ID: RegExp = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+// 模板自带入口文件的候选（与 TaskService、controllers/Template.ts 里的判定保持一致）。
+const TEMPLATE_ENTRY_FILES: Array<string> = ['index.html', 'index.htm'];
 
 // 结构化的 ws 连接类型（避免对 'ws' 包的直接类型依赖，兼容 pnpm 严格解析）
 interface WsLikeSocket {
@@ -158,8 +166,9 @@ export async function createApp() {
         }
     });
 
-    // 模板预览（无扩展名）：渲染 template/index.pug
-    const renderTemplatePreview = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
+    // 模板目录访问：/static/<templates|previewTemplate>/<id>[/]，无扩展名，渲染 template/index.pug。
+    // 尾/必须单独注册，否则使用内置引擎的模板会出现404情况
+    const renderTemplateEngine = async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
         const q = request.query as Record<string, unknown>;
         await (reply as any).view('template/index.pug', {
             title: 'lmo-DV template',
@@ -167,8 +176,33 @@ export async function createApp() {
             queryParams: JSON.stringify(q ?? {})
         });
     };
-    app.get('/static/templates', renderTemplatePreview);
-    app.get('/static/templates/:id', renderTemplatePreview);
+
+    /**
+     * 目录根（带尾/）请求：模板自带入口文件时必须让位给真实文件，否则会把「HTML 模板」
+     * 也渲染成通用引擎壳，设计预览与合成的内容都会跟着变。
+     */
+    const renderTemplateDir = (kind: 'templates' | 'previewTemplate') =>
+        async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
+            const {id}: {id: string} = request.params as {id: string};
+
+            if (SAFE_TEMPLATE_ID.test(id)) {
+                for (const entry of TEMPLATE_ENTRY_FILES) {
+                    if (existsSync(join(STATIC_ROOT, kind, id, entry)))
+                        return reply.sendFile(`${kind}/${id}/${entry}`);
+                }
+            }
+            return renderTemplateEngine(request, reply);
+        };
+
+    app.get('/static/templates', renderTemplateEngine);
+    // 无/形式沿用原行为（直接渲染引擎壳）：这类 URL 下 pug 里的 `./index.js` 会解析到上一层，
+    // 本就不是模板资源的可用入口，DB 也从不对有入口文件的模板发这种地址，所以维持不变以免误伤。
+    app.get('/static/templates/:id', renderTemplateEngine);
+    app.get('/static/templates/:id/', renderTemplateDir('templates'));
+    // 预览任务目录：TaskService.resolveContext 在 input.preview 时用这一层，模板文件是拷贝过去的，
+    // 源模板带 index.html 时这里也会有，因此同样要先让位给真实入口文件。
+    app.get('/static/previewTemplate/:id', renderTemplateEngine);
+    app.get('/static/previewTemplate/:id/', renderTemplateDir('previewTemplate'));
 
     // /api 路由（含 Zod 校验），前缀 /api
     await app.register(async (instance) => registerApiRoutes(instance), {prefix: '/api'});
