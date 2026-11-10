@@ -1,13 +1,13 @@
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
 import {Op} from "sequelize";
-import type { FastifyRequest, FastifyReply } from "fastify";
-import type { MultipartFile } from "@fastify/multipart";
+import type {FastifyReply, FastifyRequest} from "fastify";
+import type {MultipartFile} from "@fastify/multipart";
 import {pipeline} from "node:stream/promises";
 import {ITemplateModel, TemplateModel} from "./../dataBase/index.js";
 import Utils from "./../../utils/index.js";
 import initDefaultData, {checkArrayIncludes, templateLocalFiles} from "./../dataBase/init.js";
 import path from "path";
-import {copyFileSync, existsSync, mkdirSync, readdirSync} from "node:fs";
+import {cpSync, existsSync, mkdirSync} from "node:fs";
 import fs from "fs";
 import AdmZip from "adm-zip";
 import Logger from "./../../lib/Log.js";
@@ -20,6 +20,25 @@ import calculatePagination = Utils.calculatePagination;
 import getNowTimestamp = Utils.getNowTimestamp;
 
 const UPLOADS_DIR: string = path.join(staticPublicRoot, 'uploads');
+
+/**
+ * 把「单根目录」的解压结果拍平到 root：用户在文件管理器里右键模板文件夹压缩时，
+ * zip 内所有条目都带一层 `folder/` 前缀，直接解压会得到 root/folder/conf.js 而不是 root/conf.js，
+ * 导致后续必备文件校验和 config.json 读取全部落空。仅当 root 下恰好只有一个子目录时才拍平，
+ * 避免误伤本身就包含多目录结构的合法模板。
+ */
+const flattenSingleRootFolder = (root: string): void => {
+    const entries = fs.readdirSync(root, {withFileTypes: true});
+
+    if (entries.length !== 1 || !entries[0].isDirectory()) return;
+
+    const innerPath: string = path.join(root, entries[0].name);
+
+    for (const child of fs.readdirSync(innerPath))
+        fs.renameSync(path.join(innerPath, child), path.join(root, child));
+
+    fs.rmdirSync(innerPath);
+};
 
 export default class TemplateController {
     public static async getTemplates(request: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -54,7 +73,7 @@ export default class TemplateController {
     }
 
     public static async getTemplate(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-        const {id = ''} = request.params as {id?: string};
+        const {id = ''} = request.params as { id?: string };
 
         try {
             const template: ITemplateModel | null = await TemplateModel.findByPk(id);
@@ -71,7 +90,7 @@ export default class TemplateController {
     }
 
     public static async copyTemplate(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-        const body = (request.body ?? {}) as {id?: string; name?: string; description?: string};
+        const body = (request.body ?? {}) as { id?: string; name?: string; description?: string };
         const id: string = body.id ?? '';
         const name: string = body.name ?? '';
         const description: string = body.description ?? '';
@@ -96,11 +115,14 @@ export default class TemplateController {
             if (existsSync(originalTemplate)) {
                 if (!existsSync(dirPath))
                     mkdirSync(dirPath);
-                readdirSync(originalTemplate).forEach((file: string): void => {
-                    const ignoreFiles: Array<string> = ['.initialized.t.bin', 'config.json'];
+                // 递归拷贝：模板可能带 assets/ 等嵌套资源目录，copyFileSync 遇目录抛 EISDIR。
+                // filter 排除会在 DB 中重新生成的文件（按 basename 判定，含任意层级同名文件）。
+                const ignoreFiles: Array<string> = ['.initialized.t.bin', 'config.json'];
 
-                    if (!ignoreFiles.includes(file))
-                        copyFileSync(path.resolve(`${originalTemplate}/${file}`), path.resolve(`${dirPath}/${file}`));
+                cpSync(originalTemplate, dirPath, {
+                    recursive: true,
+                    filter: (src: string): boolean =>
+                        src === originalTemplate || !ignoreFiles.includes(path.basename(src))
                 });
             }
 
@@ -126,7 +148,7 @@ export default class TemplateController {
     }
 
     public static async editTemplate(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-        const body = (request.body ?? {}) as {id?: string; name?: string; description?: string};
+        const body = (request.body ?? {}) as { id?: string; name?: string; description?: string };
         const id: string = body.id ?? '';
         const name: string = body.name ?? '';
         const description: string = body.description ?? '';
@@ -165,7 +187,7 @@ export default class TemplateController {
     }
 
     public static async deleteTemplate(request: FastifyRequest, reply: FastifyReply): Promise<void> {
-        const {id = ''} = request.params as {id?: string};
+        const {id = ''} = request.params as { id?: string };
 
         if (id === '')
             throw new AppError(ErrorCode.INVALID_ID);
@@ -239,22 +261,33 @@ export default class TemplateController {
             }
 
             const zip: AdmZip = new AdmZip(filePath);
-            const zipEntries: string[] = [];
 
-            zip.getEntries().forEach((i: AdmZip.IZipEntry): void => {
-                if (!i.isDirectory)
-                    zipEntries.push(i.entryName);
-            });
+            // zip-slip 防线：条目名含 .. 段（含反斜杠变体）即整包拒绝，防止解压越出模板目录
+            for (const entry of zip.getEntries()) {
+                if (entry.entryName.split(/[\\/]/).includes('..')) {
+                    deleteFolderRecursive(templatePathName);
+                    fs.unlinkSync(filePath);
+                    throw new AppError(ErrorCode.TEMPLATE_READ_FAILED);
+                }
+            }
+
             zip.extractAllTo(templatePathName, true);
             fs.unlinkSync(filePath);
 
-            if (checkArrayIncludes(zipEntries, templateLocalFiles)) {
+            // 「右键文件夹→压缩」产出单根目录包（folder/conf.js…），拍平后统一按根目录校验
+            flattenSingleRootFolder(templatePathName);
+
+            // 以解压后的文件系统为准校验必备文件（zipEntries 无法反映拍平/嵌套形态）
+            if (checkArrayIncludes(fs.readdirSync(templatePathName), templateLocalFiles)) {
                 const templateConfig = JSON.parse(fs.readFileSync(path.resolve(templatePathName + `/config.json`), 'utf-8'));
                 const isHTMLTemplate: boolean = fs.existsSync(path.resolve(templatePathName, 'index.html'));
                 const isHTTemplate: boolean = fs.existsSync(path.resolve(templatePathName, 'index.htm'));
                 const templateData = {
                     id: uuidv4(),
                     ...templateConfig,
+                    // 上传的模板一律按用户模板入库：即使 zip 内 config.json 抄了内置模板的 type:1，
+                    // 也不允许产生不可编辑/不可删除的行
+                    type: 0,
                     cover: `/static/templates/${fileFolderName}/cover.png`,
                     gifCover: `/static/templates/${fileFolderName}/cover.gif`,
                     path: `/static/templates/${fileFolderName}${isHTMLTemplate ? '/index.html' : isHTTemplate ? '/index.htm' : '/'}`,

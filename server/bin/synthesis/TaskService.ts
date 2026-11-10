@@ -1,17 +1,17 @@
-import { v4 as uuidv4 } from "uuid";
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {v4 as uuidv4} from "uuid";
+import {cpSync, existsSync, mkdirSync, readFileSync, writeFileSync} from "node:fs";
 import fs from "fs";
 import path from "path";
 import pug from "pug";
 import sharp from "sharp";
-import type { FastifyReply } from "fastify";
+import type {FastifyReply} from "fastify";
 import Utils from "../../utils/index.js";
 import AppConfig from "../../conf/AppConfig.js";
 import Logger from "../../lib/Log.js";
-import { AppError, ErrorCode } from "../../lib/AppError.js";
-import { packagePath, staticPublicRoot } from "../../lib/dataDir.js";
-import { ITemplateModel, ResourcesModel, TemplateModel } from "../dataBase/index.js";
-import { WebSocketServer } from "../WebSocketServer.js";
+import {AppError, ErrorCode} from "../../lib/AppError.js";
+import {packagePath, staticPublicRoot} from "../../lib/dataDir.js";
+import {ITemplateModel, ResourcesModel, TemplateModel} from "../dataBase/index.js";
+import {WebSocketServer} from "../WebSocketServer.js";
 import TaskScheduler from "../TaskScheduler.js";
 
 export interface ITaskFinishResult {
@@ -61,7 +61,7 @@ export default class TaskService {
      */
     public static async onTaskFinished(
         taskId: string,
-        result: {id?: string; videoCover?: string; gifPath?: string} | undefined,
+        result: { id?: string; videoCover?: string; gifPath?: string } | undefined,
         isError: boolean
     ): Promise<ITaskFinishResult> {
         const id: string = result?.id ?? taskId;
@@ -130,10 +130,12 @@ export default class TaskService {
         //  否则模板引用的子模块、图片等资源会丢失）
         const regeneratedFiles: Array<string> = ['conf.js', 'data.json', 'config.json', '.initialized.t.bin'];
 
-        readdirSync(originalTemplate).forEach((file: string): void => {
-            if (regeneratedFiles.includes(file)) return;
-
-            copyFileSync(path.resolve(`${originalTemplate}/${file}`), path.resolve(`${dirPath}/${file}`));
+        // 递归拷贝：模板可能带 assets/ 等嵌套资源目录，copyFileSync 遇目录抛 EISDIR，
+        // 改用 cpSync；filter 排除下面会基于当前配置重新生成的文件（按 basename 判定，含任意层级同名文件）。
+        cpSync(originalTemplate, dirPath, {
+            recursive: true,
+            filter: (src: string): boolean =>
+                src === originalTemplate || !regeneratedFiles.includes(path.basename(src))
         });
 
         // 写出模板配置文件 "conf.js"
@@ -151,7 +153,7 @@ export default class TaskService {
     }
 
     /** 预览模式响应体（相对静态路径 + 模板 id）。 */
-    public static getPreviewResponse(ctx: ITaskContext): {path: string; id: string} {
+    public static getPreviewResponse(ctx: ITaskContext): { path: string; id: string } {
         const {templateStaticPath, htmlPath, htmPath, templatePathName} = ctx;
 
         return {
@@ -244,7 +246,7 @@ export default class TaskService {
     }
 
     /** 生成合成任务配置（taskConfig + 待落库 dbData）。 */
-    public static buildTaskConfig(ctx: ITaskContext): {taskConfig: Record<string, any>; dbData: Record<string, any>} {
+    public static buildTaskConfig(ctx: ITaskContext): { taskConfig: Record<string, any>; dbData: Record<string, any> } {
         const {dbId, dirPath, templateStaticPath, htmlPath, htmPath, serverHttpUrl, input} = ctx;
         const video = input.currentTemplateConfig?.config?.video ?? {};
 
