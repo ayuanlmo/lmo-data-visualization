@@ -13,7 +13,7 @@ axios.interceptors.request.use(conf => {
         ...conf.params,
         lang: MyStorage.get('lang') || 'zh-CN'
     };
-    
+
     return conf;
 });
 axios.interceptors.response.use((response): Promise<any> => {
@@ -80,6 +80,15 @@ namespace Request {
             method: 'post',
             data: data,
             headers: {'Content-Type': 'application/json'}
+        });
+    };
+
+    export const uploadTemplate = (data: FormData) => {
+        return axios({
+            url: '/uploadTemplate',
+            method: 'post',
+            data: data,
+            headers: {'Content-Type': 'multipart/form-data'}
         });
     };
 
