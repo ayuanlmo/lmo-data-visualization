@@ -65,7 +65,6 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
                     throw e;
             }
         })();
-        this.render();
     }
 
     private initSocket(): void {
@@ -120,6 +119,9 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
                 this.sendMessage('TEMPLATE_DATA', json);
                 this.conf.data = json;
                 this.tryRender();
+            })
+            .catch((e: unknown): void => {
+                console.error('[BaseTemplateMethods] data.json 加载失败', e);
             });
     }
 
@@ -310,13 +312,13 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
     private initDrag(): void {
         if (this.isSynthesisMode) return;
 
-        function getElementById(id: string): HTMLElement {
-            return document.getElementById(id) as HTMLElement;
+        function getElementById(id: string): HTMLElement | null {
+            return document.getElementById(id);
         }
 
-        getElementById('main-title').setAttribute('data-name', 'mainTitle');
-        getElementById('sub-title').setAttribute('data-name', 'subTitle');
-        getElementById('from-source').setAttribute('data-name', 'fromSource');
+        getElementById('main-title')?.setAttribute('data-name', 'mainTitle');
+        getElementById('sub-title')?.setAttribute('data-name', 'subTitle');
+        getElementById('from-source')?.setAttribute('data-name', 'fromSource');
 
         const elements: string[] = ['main-title', 'sub-title', 'from-source'];
         const classListObServerConfig = {attributes: true, attributeFilter: ['class']};
@@ -355,7 +357,7 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
                         element.style.top = newY + 'px';
                         x = event.clientX;
                         y = event.clientY;
-                        moveDebounce(newY, newX, element);
+                        moveDebounce(newX, newY, element);
                     }
                 })
                 .resizable({
@@ -409,9 +411,9 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
 
                 elements.forEach((i: string): void => {
                     const targetId = e.target.classList.contains('text-value') ? e.target.parentElement.id : e.target.id;
-                    const _: HTMLElement = document.getElementById(i) as HTMLElement;
+                    const _: HTMLElement | null = document.getElementById(i);
 
-                    if (i !== targetId && Array.from(_.classList).includes('active')) {
+                    if (_ && i !== targetId && Array.from(_.classList).includes('active')) {
                         _.classList.remove('active');
                         _.classList.remove('square-container');
                     }
@@ -432,8 +434,10 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
             initGlobalEvent();
         };
 
-        elements.map((i: string): void => {
-            const el: HTMLElement = document.getElementById(i) as HTMLElement;
+        elements.forEach((i: string): void => {
+            const el: HTMLElement | null = document.getElementById(i);
+
+            if (!el) return;
 
             initInteract(el);
             initEvent(el);
@@ -477,7 +481,9 @@ export default abstract class BaseTemplateMethods implements ILMOTemplate {
                 elements.forEach((i: string): void => {
                     // @ts-ignore
                     const idName = e.target.parentElement.id;
-                    const el: HTMLElement = getElementById(i) as HTMLElement;
+                    const el: HTMLElement | null = getElementById(i);
+
+                    if (!el) return;
 
                     if (i !== idName && elements.includes(idName) || idName === '') {
                         const classList: DOMTokenList = el.classList;
